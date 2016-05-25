@@ -1,0 +1,64 @@
+--MEDICAL--
+
+first_aid  (bonus FAKs)
+    surgery (bonus FAKs in powered hospital)
+    first_aid_adv
+
+cure (bonus to antidote)
+    cure_adv (bonus to antidote in powered hospital)
+
+diagnosis   (see condition)
+    diagnosis_adv (see hp)
+
+life_support (cannot die from infection)
+
+
+--SCIENCE--
+
+research
+    research_adv
+
+injection  (+10% for syringe)
+    injection_adv  (+10% for syringe)
+    brain_rot (overcome brain rot in powered lab)
+
+
+
+how will virsuses, healing items, cure items, and scanning items work?
+
+FAK = 1d5 (weight shotgun?  9w)
+bandage = 1d3  (weight 4w)
+antidote =     (weight 3w) (high chance to heal infection)
+
+bandage  (remaining amount)
+FAK      (remaining amount)
+antidote (remaining amount)
+syringe
+
+weak/mild/strong infection
+1d2, 1d3, 1d4
+
+
+FAKs bonus 
+1d5, 2d5, 3d5
+30%, 40%, 50%
+
+bandage
+1d3, 1d3+1, 1d3+2
+
+antidote (completely cures infection)
+50%, 75%, 100%
+
+condition of equipment: better use (transmitters send longer messages, generators last longer, terminals ???)  less ap cost?
+
+durability = # of uses, and bonuses  
+USES ARE SOLID, NO CHANCE... ie. medkit (4 = 4 uses)
+
+FAK/bandage =  (range) -1, 0, +1, +2
+antidote = -10%, 0%, +10%, +20%
+syringe =   -5%, 0%,  +5%, +10%
+
+
+ranged = how many kills?       = 8
+melee_blade = how many kills?  = 2
+melee_blunt = how many kills?  = 5
