@@ -1,0 +1,13 @@
+----------------------
+-- CODE PROCESS FLOWCHART DESIGN --
+----------------------
+
+Files fall into one of the following categories:
+  List - A reference table containing objects data values (names, descriptions, # of uses, to-hit%, etc.)
+  Class - A table containing an object's usable methods
+  Activate - Objects trigger function that performs the in-game results (ie. use a FAK, activate a skill)
+    **Outcome - Same principle as Activate files, but with actions instead of objects
+  Criteria - A server file that checks if object/action can be made
+  Check - A client file that checks if object/action is available
+  HelperFunction - A large (usually) function that assists in a task (ie. player.combat is used to resolve the combat)
+  

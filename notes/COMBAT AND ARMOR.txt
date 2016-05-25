@@ -1,0 +1,54 @@
+attacks
+
+
+1d4
+
+1d3+2
+
+
+
+bullet
+pierce
+blunt   
+scorch
+
+
+[1][2][3][4]
+
+types of armor
+
+riot armor      [heavy]   {+3 blunt,  +1 bullet, +1 pierce}
+chainmail       [heavy]   {+4 pierce, +1 blunt}
+combat armor    [heavy]   {+1 blunt,  +1 bullet, +1 pierce, +1 scorch}
+
+kevlar vest     [medium]  {+2 bullet, +1 blunt}
+firesuit        [medium]  {+3 scorch}
+
+leather jacket  [light]   {+1 blunt, +1 pierce}
+
+
+
+scorch weapons
+
+flaregun  (high damage)            2d5+5^++2   [weight 7]
+molatav cocktail  (medium damage)  3d3+3^++2   [weight 4]
+rpg   (MEGA HIGH DAMAGE)           5d8+10^++2  [weight 25]
+
+5d2 = 5-10
+5d3 = 5-15
+5d4 = 5-20
+5d5 = 5-25
+5d8 = 5-40
+
+zombie
+
+stomach acid                       3d2^++1
+
+1d3       - 3 dmg  (updgrade 2d3, then 2d4, then 2d5)
+1d4+1     - 5 dmg  (upgrade 1d4+2, 1d4+3)
+3d2   - 6 dmg      (upgrade 3d3, ^+1, ^++1)
+
+brute = high potential damage
+pierce = good damage, weapons break easy
+bullet = HIGH DAMAGE MUST BE RELOADED
+scorch = high crit, lots of rerolls

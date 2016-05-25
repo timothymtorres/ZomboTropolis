@@ -1,0 +1,17 @@
+different kinds of poison
+
+lethargic - (makes you tired) lose ap (or won't regain ap after certain period?) (ap regain rate lowered?)
+sickness - (reduces max hp to a low level) for a high duration
+infection - [suffer frequent low damage] 
+venom - [suffer rare high damage]
+
+
+
+
+antidote - venom
+cure - disease
+
+
+infection 1d2 ^-1, frequency 1d3, duration ~
+
+venom 2d3, frequency 2d5, duration 1d4+2

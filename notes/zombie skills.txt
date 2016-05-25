@@ -1,0 +1,67 @@
+[60 skills total - 4 classes: brute, sentient, hunter, hive]
+
+base attacks:  
+  claw	1d3	to-hit [25%]	(5% crit) 
+  bite	1d4+1	to-hit [20%]	(5% crit)
+
+--GENERAL--
+
+melee (+5%)
+    bite
+        infect
+    claw
+eat corpse
+hp bonus
+gesture
+feeding groan
+food sacs (increase hunger capacity)
+ankle bite (FREE BITE ATTACK)
+eat roadkill (birds, dogs, etc.) (randomly, grants small boost to hunger)
+
+
+--BRUTE--  (dumping body costs 2 ap)
+
+melee_adv (+10%)
+    claws (+15%)
+        ambitdexterious/double_claw (double dice)
+	destroy_objects (x2 damage to doors/equipment)
+	barricade_smash (better barricade destruction)
+beserk groan
+
+
+--SENTIENT-- (understand spraypaint, radio, identify zombies)
+  open doors
+  talk (to zombies? humans?)
+  stand up
+  feeding drag
+  graffiti with blood
+
+--HUNTER--
+  1 ap movement
+  detect injuried
+  detect bodies
+  detect recent encounters
+  mark/tag human
+  ability to climb through ruins
+  ability to climb through buildings from ruins? (chance%?)
+  
+
+--HIVE--
+
+  infect
+hive groan
+dying groan
+ruin
+ransack
+destroy objects (more damage?  higher chance?)
+stomaic acid
+    stomaic acid +
+
+
+[containanment themselves in research lab/hospital to gain virus/dieseases]
+
+power claw = +1
+power bite = +1
+gesture/point
+
+acid = 5d2/15%/30%crit
