@@ -1,0 +1,58 @@
+barricade = 0-63  (1, 2, 3, 4)
+
++1 to all sizes of barricades
+can barricade past very strongly
+can reinforce (extend max barricade limit by shuffling barricades in place)
+
+low barricade = more room?
+
+0/16 
+
+3d4 (3-12)  0-20
+3d3 (3- 9) 21-30
+2d4 (2- 8) 31-40
+2d3 (2- 6) 41-50
+1d4 (1- 4) 51-60
+1d3 (1- 3) 61-63
+
+barricades.hp = 64 [6 bits]
+door.hp = 4  [2 bits]
+
+
+barricade == 1, 2, 3, 4
+or.... 2, 3, 4, 5 (engineer +1)
+
+-- how to attack barricades
+-- how easy is it to place/search/carry barricades
+
+
+weight?  engine block, old desk, broken table, 
+
+small  -1u/1c/2w  2.0w=1c   1ap=1c    
+medium -1u/2c/5w  2.5w=1c   1ap=2c    
+large  -1u/3c/9w  3.0w=1c   1ap=3c    
+heavy  -1u/4c/14w 3.5w=1c   1ap=4c    
+
+searching = 75% (50 ap = 37.5 found)
+place items 37.5 spent
+result.... 64 barricades after 90 ap?
+
+small =  40%
+medium = 30%
+large =  20%
+heavy =  10%
+
+average cade = 2c
+
+.4% = 40c
+.3% = 60c
+.2% = 60c
+.1% = 40c
+
+200c/100 = 2c/1
+
+6 pistols, 2 shotguns
+50/6 = 8 points per pistol
+20 points per shotgun
+generator/transmitter = 25 points
+
