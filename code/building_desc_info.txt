@@ -1,0 +1,12 @@
+Police Station
+
+Desc
+
+Lights/Ruin/decorations
+
+Spraypaint
+
+Deadbodies/Players
+
+
+You are standing [outside/inside] [building name], building desc.  The building has been [cade level].
