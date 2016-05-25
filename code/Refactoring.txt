@@ -1,0 +1,16 @@
+instead of tile.outside_players/tile.inside_players do
+
+tile.players = {}
+tile.players.inside = {}
+tile.players.outside = {}
+OR
+tile.inside = {}
+tile.outside = {}
+
+instead of 
+tile.players[player] = player
+
+do as an array
+tile.players[#tile.players] = player
+
+in all classes remove getClass(), getClassName(), getName() and put it into middleclass functions as a external lib...
