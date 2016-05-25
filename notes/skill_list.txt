@@ -1,0 +1,83 @@
+tier 1 = +to-hit
+tier 2 = +to-hit, reload/reroll
+tier 3 = +to-hit, reload/reroll, durability, condition_check
+
+**RELOAD for ranged weapons, REROLL for melee weapons**
+
+  melee/ranged          =  +5%
+  melee/ranged advanced = +10%
+  group category        = +10%  (or +15%?)
+  select category       = +15%  (or +20%?)
+
+
+
+--GENERAL-- [12 skills]
+
+melee
+    cutting
+    swinging
+    martial_arts
+    	martial_arts_adv
+ranged
+roof_travel
+hp_bonus
+ip_bonus
+looting [search +01%]
+diagnosis
+tagging (spraypaint)
+
+
+--MILITARY-- [12 skills] (can see condition of weapons)
+
+ranged_adv
+    guns
+	light_guns
+	heavy_guns
+    archery
+	archery_adv
+melee_adv
+    chopping
+    slicing
+    smashing
+    smacking
+
+explosives	
+
+
+
+--ENGINEERING-- [12 skills] (can see conditon of cades, engineering items, equipment)
+
+construction (build new doors)
+    repairs  (repair doors/equipment)
+        repairs_adv  (repair doors/equipment)
+	renovate     (repair ruins)
+    barricading  (civilian skill? maybe default?)
+	barricading_adv
+	reinforce		
+tech (install equipment)
+    power_tech
+    radio_tech
+    computer_tech
+reserve      (toolbox durability increased)
+
+
+
+--MEDICAL-- [9 skills] (can see condition of medical items)
+
+healing
+    major_healing  [cannot heal self with bonus]
+        major_healing_adv [cannot heal self with bonus]
+    minor_healing
+        minor_healing_adv
+chemistry
+    serium [antidote]
+    stimulants  [amphediente]
+    ???    [hp booster, ip booster?]
+diagnosis_adv  [can see infected]
+
+??? not sure what skills
+
+
+--SCIENCE-- [1 skill] (can see condition of science items/gadgets)
+
+bookworm
