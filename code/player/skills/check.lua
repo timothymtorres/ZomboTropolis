@@ -41,4 +41,8 @@ function check.mark_prey(player)
   
 end
 
+function check.tracking(player)
+  
+end
+
 return check

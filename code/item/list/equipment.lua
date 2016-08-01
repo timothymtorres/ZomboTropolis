@@ -25,6 +25,10 @@ equipment.fuel = {}
 equipment.fuel.full_name = 'fuel tank'
 equipment.fuel.weight = 10
 
+equipment.barricade = {}
+equipment.barricade.full_name = 'barricade'
+equipment.barricade.weight = 7
+
 for item in pairs(equipment) do equipment[item].class_category = 'equipment' end
 
 return equipment

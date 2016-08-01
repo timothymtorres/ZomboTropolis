@@ -8,6 +8,7 @@ local TRACKING_TIME, TRACKING_ADV_TIME = '5d20+150', '5d30+200'
 function tracking:initialize(player) 
   self.player = player
   self.list = {}
+  self.is_tracking = false
 end
 
 --------------------------------
@@ -17,6 +18,7 @@ end
 function tracking:addScent(target)
   local has_advanced_tracking = self.player.skills:check('track_adv')
   local scent_time = (has_advanced_tracking and TRACKING_ADV_TIME) or TRACKING_TIME
+  self.is_tracking = true
   
   -- check if target is already on our list
   for i, scent in ipairs(self.list) do
@@ -47,27 +49,18 @@ function tracking:removeScent(target)
       -- include some kind of notification msg for losing the scent as a zombie?      
     end
   end
+  if #self.list == 0 then self.is_tracking = false end
 end
 
-local tracking_params = {
-  advanced = {
-    descriptions = {'very far away', 'far away', 'in the distance', 'in the area', 'in a nearby area', 'close', 'very close', 'here'},
-    range = {35, 25, 15, 10, 6, 3, 1, 0},
-    --TICKS_LEFT FOR ADVANCED?  DETERMINE HOW MUCH TIME SCENT HAS REMAINING (later feature)
-    --ticks_left = {'the scent is...' 'scarce', 'lingers', 'light', 'heavy'},
-  },
-  basic = {
-    descriptions = {'far away', 'in the distance', 'in the area', 'close'},
-    range = {25, 15, 6, 3},
-  },
+local tracking_range = {
+  advanced = {35, 25, 15, 10, 6, 3, 1, 0},
+  basic = {25, 15, 6, 3},
+  -- Include ticks_left feature for advanced?  (ie. scent lingers, scent is faint, scent is strong)
 }
 
--- You sniff the air for prey.
--- John Doe is [desc]. 
-
-local function selectTrackingMessage(distance, params)
-  for i, range in ipairs(params.range) do
-    if distance >= range then return params.descriptions[i] end
+local function selectTrackingRangeIndex(distance, skill)
+  for i, range in ipairs(tracking_range[skill]) do
+    if distance >= range then return tracking_range[skill][i] end
   end
 end
 
@@ -76,17 +69,37 @@ local function getDistanceApart(mob_1, mob_2)
   return math.max(x_dist, y_dist)
 end
 
-function tracking:getScentDesc()
-  local track_msgs = {'You sniff the air for prey.'}
-  for i, scent in ipairs(self.list) do
-    local distance, has_advanced_tracking = getDistanceApart(self.player, scent.prey), self.player.skills:check('track_adv')
-    local params = has_advanced_tracking and tracking_params.advanced or tracking_params.basic
-    track_msgs[#track_msgs+1] = scent.prey:getUserName()..' is '..selectTrackingMessage(distance, params)..'.'
+function tracking:getPrey()
+  local prey, tracking_range_indexs
+  if self.is_tracking then
+    prey, tracking_range_indexs = {}, {}
+    for i, scent in ipairs(self.list) do
+      local distance, has_advanced_tracking = getDistanceApart(self.player, scent.prey), self.player.skills:check('track_adv')
+      local skill = has_advanced_tracking and tracking_range.advanced or tracking_range.basic
+      prey[#prey+1] = scent.prey
+      tracking_range_indexs[#tracking_range_indexs+1] = selectTrackingRangeIndex(distance, skill)
+    end
   end
+  return prey, tracking_range_indexs
 end
 
+--[[
+function tracking:getScentDesc()
+  local track_msgs = {'You sniff the air for prey.'}
+  if self.is_tracking then
+    for i, scent in ipairs(self.list) do
+      local distance, has_advanced_tracking = getDistanceApart(self.player, scent.prey), self.player.skills:check('track_adv')
+      local params = has_advanced_tracking and tracking_params.advanced or tracking_params.basic
+      track_msgs[#track_msgs+1] = scent.prey:getUserName()..' is '..selectTrackingMessage(distance, params)..'.'
+    end
+  else
+    track_msgs[#track_msgs+1] = 'There are no humans you are currently tracking.'
+  end
+end
+--]]
+
 function tracking:elapse()
-  if self.player.isMobType('zombie') then
+  if self.player.isMobType('zombie') and self.is_tracking then
     for i, scent in ipairs(self.list) do
       scent.ticks = scent.ticks - 1      
       if scent.ticks <= 0 then self:removeScent(scent.prey) end
@@ -98,7 +111,7 @@ end
 --FOR HUMANS BEING TRACKED
 --------------------------
 
-function tracking:beingTracked(hunter) self.list[hunter] = true end
+function tracking:addTracker(hunter) self.list[hunter] = true end
 
 function tracking:removeTracker(hunter) self.list[hunter] = nil end
 

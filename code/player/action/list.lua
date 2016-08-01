@@ -99,6 +99,7 @@ local action_list = {
         ruin =           {name='ruin',          cost=1},
         -- hunter skills
         mark_prey =      {name='mark prey',     cost=1},
+        tracking =       {name='tracking',      cost=1},
       },
     },
   },

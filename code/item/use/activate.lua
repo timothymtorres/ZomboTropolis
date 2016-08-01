@@ -128,6 +128,10 @@ end
 --- EQUIPMENT
 --]]
 
+function activate.barricade(player, condition)
+  
+end
+
 function activate.fuel(player, condition)
   local building_tile = player:getTile()
   building_tile.generator:refuel()
@@ -170,9 +174,5 @@ end
 function activate.bottle(player, condition)
   player:updateHP(1)
 end
-
---[[
---- BARRICADES
---]]
 
 return activate

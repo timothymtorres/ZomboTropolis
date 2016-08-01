@@ -8,7 +8,7 @@ local action_category = {
   fields = {'default', 'item', 'skill', 'equipment'},
   default = {'move', 'attack', 'search', 'speak', 'enter', 'exit', 'respawn', 'feed'},
   item = {},
-  skill = {'drag_prey', 'groan', 'gesture', 'armor', 'ruin', 'mark_prey'},
+  skill = {'drag_prey', 'groan', 'gesture', 'armor', 'ruin', 'mark_prey', 'tracking'},
   equipment = {},
 }
 
