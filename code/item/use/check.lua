@@ -51,6 +51,10 @@ end
 --- EQUIPMENT
 --]]
 
+function check.barricade(player)
+  
+end
+
 function check.fuel(player)
   local p_tile = player:getTile()
   assert(playerInsideBuilding(player), 'Must be inside building to refuel')

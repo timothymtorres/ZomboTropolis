@@ -4,6 +4,7 @@ local infection = require('code.player.condition.infection')
 local burn = require('code.player.condition.burn')
 local decay = require('code.player.condition.decay')
 local entangle = require('code.player.condition.entangle')
+local tracking = require('code.player.condition.tracking')
 
 -- poison|infection  confusion|blindness|sickness
 -- burn|delimbed|decayed|beheaded|maimed
@@ -21,6 +22,7 @@ function condition:initialize(player)
   end
   
   self.entangle = entangle:new()
+  self.tracking = tracking:new()
 end
 
 function condition:isActive(effect)  
@@ -30,6 +32,7 @@ end
 local condition_list = {
   human = {'poison', 'infection'},
   zombie = {'burn', 'decay'},
+  -- tracking:elapse() is used ONLY during server ticks, not during players actions
 }
 
 function condition:elapse(player, ap)

@@ -106,6 +106,12 @@ local tabButtons = {
         onPress = handleTabBarEvent
     },  
     {
+        label = 'Events',
+        id = 'events',
+        --selected = true,
+        onPress = handleTabBarEvent
+    },
+    {
         label = "Map",
         id = 'map',
       --selected = true,

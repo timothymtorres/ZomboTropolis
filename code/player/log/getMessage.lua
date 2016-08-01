@@ -115,7 +115,8 @@ end
 function description.drag_prey(player, target, drag_successful)
   if drag_successful then
     msg[1] = 'You drag '..target:getUsername()..' outside.'
-    msg[3] = 'A zombie drags you outside.'
+    msg[2] = 'A zombie drags you outside.'
+    msg[3] = 'A zombie drags '..target:getUsername()..' outside.'
   else
     msg[1] = 'You attempt to drag '..target:getUsername()..' outside but are unsuccessful.'
   end
@@ -138,6 +139,27 @@ function description.armor(player, armor_type)
   elseif armor_type == 'stretch' then
     msg[1] = 'Your skin becomes loose and rubbery causing projectiles to slow as they make contact.'
   end
+end
+
+local tracking_description = {
+  advanced = {'very far away', 'far away', 'in the distance', 'in the area', 'in a nearby area', 'close', 'very close', 'here'},
+  basic = {'far away', 'in the distance', 'in the area', 'close'},
+}
+
+function description.tracking(player, prey, prey_range_indexs)
+  msg[1] = 'You sniff the air for prey.'
+  msg[3] = 'A zombie smells the air for prey.'
+  
+  if prey then
+    local has_advanced_tracking = player.skills:check('track_adv')  
+    for i, target in ipairs(prey) do
+      local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
+      local index = prey_range_indexs[i]
+      msg[1] = msg[1]..'\n'..target:getUserName()..' is '..description[index]..'.'
+    end
+  else
+    msg[1] = msg[1] .. 'There are no humans you are currently tracking.'
+  end  
 end
 
 function description.speak(player, message)

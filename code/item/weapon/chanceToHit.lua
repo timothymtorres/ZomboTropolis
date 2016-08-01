@@ -73,6 +73,10 @@ local function chanceToHit(player, target, weapon)
   local attack_chance = base_chance + skill_bonus + condition_bonus
 --print('attack_chance='..attack_chance, 'skill bonus='..skill_bonus..'/condition bonus='..condition_bonus..'/base_chance='..base_chance)
 --print('dice.chance('..attack_chance..') =', dice.chance(attack_chance))
+
+  -- if attacking building or equipment (from the outside) there is a severe penalty, the to-hit chance is halved
+  if target:getClassName() ~= 'player' and player:isStaged('outside') then attack_chance = attack_chance*0.5 end 
+
   return attack_chance
 end
 

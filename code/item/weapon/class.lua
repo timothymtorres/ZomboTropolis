@@ -53,12 +53,13 @@ function weapon:getObjectDamage(type) return (self.object_damage and self.object
 --function weapon:getWeaponID() return self.weapon_ID end
 
 local modifier = {
+  power_claw =   0.15,                      -- to-hit% bonus (for equipment and buildings)    
   zombie_melee={-0.05,  0.00, 0.05, 0.10},  -- to-hit%
   projectile = {-0.10, -0.05, 0.00, 0.05},  -- to-hit%
-  
+   
        blunt = {-2, -1, 0, 1},              -- range
       pierce = {-2, -1, 0, 1},              -- bonus
-      scorch = {-2, -1, 0, 1},              -- dice
+      scorch = {-2, -1, 0, 1},              -- dice               
 }
 
 function weapon:getAccuracy(player, target)
@@ -70,6 +71,8 @@ function weapon:getAccuracy(player, target)
         if player.condition.entangle:isImpaleActive() then accuracy_bonus = modifier.zombie_melee[4]
         else accuracy_bonus = modifier.zombie_melee[3]
         end
+      elseif target:getClassName() ~= 'player' then -- equipment or building
+        if player.skills:check('power_claw') then accuracy_bonus = modifier.power_claw end
       end
       --if maimed condition then accuracy_bonus = modifier.zombie_melee[1]
     end
