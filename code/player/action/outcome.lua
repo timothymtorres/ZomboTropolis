@@ -81,6 +81,13 @@ function Outcome.attack(player, target, weapon)
           -- insert some type of event?
         end
       end
+      
+      local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and player)
+      local human = (player:isMobType('human') and player) or (target:isMobType('human') and player)
+      
+      if zombie.skills:check('track') then
+        zombie.condition.tracking:addScent(human)
+      end
     end
     
     local hp_loss = -1*damage

@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local b_list = require('code.item.list.barricade')
 local e_list = require('code.item.list.equipment')
 local g_list = require('code.item.list.gadget')
 local j_list = require('code.item.list.junk')
@@ -118,6 +117,6 @@ function item:dataToClass(...) -- this should be a middleclass function (fix lat
 end
 
 -- turn our list of objs into item class
-item:dataToClass(b_list, e_list, g_list, j_list, m_list, w_list, a_list)
+item:dataToClass(e_list, g_list, j_list, m_list, w_list, a_list)
 
 return item

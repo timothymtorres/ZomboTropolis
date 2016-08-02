@@ -22,7 +22,7 @@ function condition:initialize(player)
   end
   
   self.entangle = entangle:new()
-  self.tracking = tracking:new()
+  self.tracking = tracking:new(player)
 end
 
 function condition:isActive(effect)  

@@ -21,7 +21,7 @@ local lookupItem = require('code.item.search')  -- refactored? (delete)
 
 local player = class('player')
 
-local default =     {hp=1, ep=50, ip= 0, xp=   0, ap=50}
+local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ep=10, ip=10, xp=   0, ap=0}
 local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, xp=false}

@@ -30,7 +30,7 @@ function tracking:addScent(target)
   end
   
   self.list[#self.list+1] = {prey = target, ticks = dice.rollAndTotal(scent_time)}
-  target.tracking:isMarked(self.player)
+  target.condition.tracking:addTracker(self.player)
   
   local target_limit = has_advanced_tracking and TRACKING_ADV_TARGET_LIMIT or TRACKING_TARGET_LIMIT
   
@@ -54,13 +54,13 @@ end
 
 local tracking_range = {
   advanced = {35, 25, 15, 10, 6, 3, 1, 0},
-  basic = {25, 15, 6, 3},
+  basic = {25, 15, 6, 0},
   -- Include ticks_left feature for advanced?  (ie. scent lingers, scent is faint, scent is strong)
 }
 
-local function selectTrackingRangeIndex(distance, skill)
-  for i, range in ipairs(tracking_range[skill]) do
-    if distance >= range then return tracking_range[skill][i] end
+local function selectTrackingRangeIndex(distance, skill_proficiency)
+  for tracking_index, range in ipairs(tracking_range[skill_proficiency]) do
+    if distance >= range then return tracking_index end
   end
 end
 
@@ -75,28 +75,13 @@ function tracking:getPrey()
     prey, tracking_range_indexs = {}, {}
     for i, scent in ipairs(self.list) do
       local distance, has_advanced_tracking = getDistanceApart(self.player, scent.prey), self.player.skills:check('track_adv')
-      local skill = has_advanced_tracking and tracking_range.advanced or tracking_range.basic
+      local skill_proficiency = has_advanced_tracking and 'advanced' or 'basic'
       prey[#prey+1] = scent.prey
-      tracking_range_indexs[#tracking_range_indexs+1] = selectTrackingRangeIndex(distance, skill)
+      tracking_range_indexs[#tracking_range_indexs+1] = selectTrackingRangeIndex(distance, skill_proficiency)
     end
   end
   return prey, tracking_range_indexs
 end
-
---[[
-function tracking:getScentDesc()
-  local track_msgs = {'You sniff the air for prey.'}
-  if self.is_tracking then
-    for i, scent in ipairs(self.list) do
-      local distance, has_advanced_tracking = getDistanceApart(self.player, scent.prey), self.player.skills:check('track_adv')
-      local params = has_advanced_tracking and tracking_params.advanced or tracking_params.basic
-      track_msgs[#track_msgs+1] = scent.prey:getUserName()..' is '..selectTrackingMessage(distance, params)..'.'
-    end
-  else
-    track_msgs[#track_msgs+1] = 'There are no humans you are currently tracking.'
-  end
-end
---]]
 
 function tracking:elapse()
   if self.player.isMobType('zombie') and self.is_tracking then

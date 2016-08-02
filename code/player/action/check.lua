@@ -81,10 +81,14 @@ end
 function check.skill(player, skill) --, target)
   assert(player.skills:check(skill), 'Must have required skill to use ability')
   if enzyme_list[skill] then
+print('enzyme_list[skill] 1st', skill)
     local cost, ep = player:getCost('ep', skill), player:getStat('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
+print('enzyme_list[skill] 2nd', skill)
   end
+print('skillcheck[skill] before', skill)
   if skillCheck[skill] then skillCheck[skill](player) end  
+print('skillcheck[skill] after', skill)  
 end
 
 return check
