@@ -149,10 +149,7 @@ local tracking_description = {
 function description.track(player, prey, prey_range_indexs)
   msg[1] = 'You sniff the air for prey.'
   msg[3] = 'A zombie smells the air for prey.'
-  
-for k,v in pairs(prey) do print(k,v) end
-for k,v in pairs(prey_range_indexs) do print(k,v) end
-  
+    
   if prey then
     local has_advanced_tracking = player.skills:check('track_adv')  
     for i, target in ipairs(prey) do

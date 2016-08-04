@@ -11,11 +11,9 @@ local function determineAvailableActions(player, all_actions, check, available_a
   local ap = player:getStat('ap')
   
   for action in pairs(all_actions) do
-print('determine action - ', action)
     local cost = player:getCost('ap', action)   
     if ap >= cost then
       local action_passed_requirements, fail_msg = pcall(check, player, action) --check(player, action)
-print(action_passed_requirements, fail_msg)
       if action_passed_requirements then available_actions[#available_actions + 1] = action end
     end
   end
