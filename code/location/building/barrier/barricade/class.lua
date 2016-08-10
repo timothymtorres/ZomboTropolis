@@ -4,20 +4,45 @@ local barrier = require('code.location.building.barrier.class')
 
 local barricade = class('barricade', barrier)
 local DEFAULT_HP, DEFAULT_POTENTIAL_HP = 0, 15
+local MIN_POTENTIAL_HP = 15
 local MAX_HP = 63
+
+local fortification_status = {
+  {desc = 'empty',              range =  0},  --   0
+  {desc = 'loose',              range =  6},  --   1-06 [6]
+  {desc = 'light',              range = 13},  --   7-13 [7]
+  {desc = 'regular',            range = 21},  --  14-21 [8]
+  {desc = 'strong',             range = 30},  --  22-30 [9]
+  {desc = 'very strong',        range = 40},  --  31-40 [10]
+  {desc = 'heavily',            range = 51},  --  41-51 [11]
+  {desc = 'extremely heavily',  range = 63},  --  52-63 [12]
+}
+
+local room_available = {
+  {desc = 'none',     range = 0},             --    0
+  {desc = 'little',   range = 3},             --   1-03
+  {desc = 'moderate', range = 6},             --   4-06
+  {desc = 'large',    range = 63},            --   7-63
+}
 
 function barricade:initialize(type)
   barrier.initialize(self) 
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
+  
+  self.hp_desc = fortification_status[1].desc
+  self.potential_hp_desc = room_available[1].desc
 end  
 
 barricade.max_hp = MAX_HP
 
+function barricade:getDesc() return self.hp_desc, self.potential_hp_desc end
+
 function barricade:updateHP(num) 
   self.hp = math.min( math.max(self.hp+num, 0), self.potential_hp) 
   -- if damage done to barricade, need to subtract it from potential_hp as well (default_potential_hp is the lowest it can go)
-  if num < 0 then self.potential_hp = math.max(self.potential_hp - num, DEFAULT_POTENTIAL_HP) end 
+  if num < 0 then self.potential_hp = math.max(self.potential_hp - num, MIN_POTENTIAL_HP) end 
+  self:updateDesc()
 end
 
 function barricade:isDestroyed() return self.hp == 0 end
@@ -31,7 +56,6 @@ local reinforce_potential_params = {
   {margin =     3, range = 63}, --        53-63 [11]  
 }
 
-local MIN_POTENTIAL_HP = 15
 local MIN_HP_TO_REINFORCE = 9
 
 function barricade:canReinforce()
@@ -83,34 +107,19 @@ function barricade:reinforce()
   end  
   
   local reinforce_dice = dice:new(dice_str, 0)
-  self.potential_hp = math.min(self.potential_hp + reinforce_dice.roll(), MAX_HP) 
-  -- we should probably return something to notify if the reinforce action failed (ie. rolled a 0)
+  local roll_result = reinforce_dice.roll()
+  if roll_result > 0 then
+    self.potential_hp = math.min(self.potential_hp + roll_result, MAX_HP) 
+    self:updateDesc()
+  else -- reinforce action failed (roll == 0)
+    -- we should probably return something to notify if the reinforce action failed (ie. rolled a 0)
+  end
 end
 
-local fortification_status = {
-  {desc = 'empty',              range =  0},  --   0
-  {desc = 'loose',              range =  6},  --   1-06 [6]
-  {desc = 'light',              range = 13},  --   7-13 [7]
-  {desc = 'regular',            range = 21},  --  14-21 [8]
-  {desc = 'strong',             range = 30},  --  22-30 [9]
-  {desc = 'very strong',        range = 40},  --  31-40 [10]
-  {desc = 'heavily',            range = 51},  --  41-51 [11]
-  {desc = 'extremely heavily',  range = 63},  --  52-63 [12]
-}
-
-local room_available = {
-  {desc = 'none',     range = 0},             --    0
-  {desc = 'little',   range = 3},             --   1-03
-  {desc = 'moderate', range = 6},             --   4-06
-  {desc = 'large',    range = 63},            --   7-63
-}
-
-function barricade:getDesc()
-  local fort_desc, fort_avail_desc
-  
+function barricade:updateDesc()
   for i, fort in ipairs(fortification_status) do
     if fort.range >= self.hp then
-      fort_desc = fort.desc
+      self.hp_desc = fort.desc
       break
     end
   end    
@@ -119,12 +128,10 @@ function barricade:getDesc()
   
   for i, room in ipairs(room_available) do
     if room.range >= hp_gap then
-      fort_avail_desc = room.desc
+      self.potential_hp_desc = room.desc
       break
     end
   end
-  
-  return fort_desc, fort_avail_desc
 end
 
 function barricade:canPlayerFortify(player)
@@ -134,13 +141,12 @@ function barricade:canPlayerFortify(player)
   
   if cade_past_v_strong then return player.skills:check('barricade_adv')  -- can barricade all
   elseif cade_past_regular then return player.skills:check('barricade')   -- can barricade up to very strong
-  else return true                                                        -- can barricade up to regular
-  end
+  else return true end                                                    -- can barricade up to regular
 end
 
 local bypass_skill_bonus, zombie_multiplier = 5, 20
 
-function barricade:fortifyAttempt(player, zombie_n, human_n)
+function barricade:fortifyAttempt(player, zombie_n, human_n)  -- this code will be implemented later, probably needs chance tweaks
   local zombie_blockade_value = (zombie_multiplier*zombie_n) - human_n
   local skill_bonus = (player.skills:check('barricade') and bypass_skill_bonus) or 0
   local skill_bonus_adv = (player.skills:check('barricade_adv') and bypass_skill_bonus) or 0

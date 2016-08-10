@@ -14,11 +14,13 @@ function door:initialize()
  door.max_hp = max_hp
 
 --  DOOR LEVELS
-local destroyed, broken, smashed, normal = 0, 1, 2, 3
+local door_desc = {[0] = 'destroyed', [1] = 'broken', [2] = 'smashed', [3] = 'normal'}
+
+function door:getDesc() return door_desc[self.hp] end
 
 function door:repair() self:updateHP(3) end
 
-function door:toggle() self.is_closed = not self.is_open end
+function door:toggle() self.is_open = not self.is_open end
 
 function door:isDestroyed() return self.hp == 0 end
 
