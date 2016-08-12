@@ -11,12 +11,9 @@ function barrier:initialize() end
 
 function barrier:getHP() return self.hp end
 
-function barrier:updateHP(num) 
-  for k,v in pairs(self) do print(k,v) end
-  print(self.static)
-  print(self.max_hp)
-  
-  self.hp = math.min( math.max(self.hp+num, 0), self.max_hp) 
+function barrier:updateHP(num)   
+  self.hp = math.min( math.max(self.hp+num, 0), self.max_hp)
+  self:updateDesc()
 end
 
 return barrier
