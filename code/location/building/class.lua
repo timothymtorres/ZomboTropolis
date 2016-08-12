@@ -48,6 +48,24 @@ end
 
 function building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade') or (self.door:getHP() > 0 and 'door') end  -- should this be a class?
 
+function building:getBarrierDesc() 
+  local cade_str, space_str = self.barricade:getDesc()
+  local door_str = self.door:getDesc()
+  
+  local no_cades_exist = (cade_str == 'secured')
+  local is_entrance_open = no_cades_exist and (door_str == 'destroyed' or self.door:isOpen())
+  local is_door_damaged = door_str ~= 'undamaged'
+  
+  cade_str = (is_entrance_open and 'left wide open') or cade_str
+  door_str = (is_door_damaged and 'is '..door_str..' and ') or ''
+  
+  local door_desc = 'The building door '..door_str
+  local cade_desc = 'has been '..cade_str..'. '
+  local space_desc = 'There is '..space_str..' room available for fortifications.'
+  
+  return door_desc..cade_desc..space_desc
+end
+
 function building:getEquipment()
   local machines = {}
   for machine in pairs(equipment.subclasses) do 

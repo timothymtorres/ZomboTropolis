@@ -4,7 +4,7 @@ local barrier = require('code.location.building.barrier.class')
 local door = class('door', barrier)  
 local default_hp, max_hp = 3, 3
 
-local door_desc = {[0] = 'destroyed', [1] = 'broken', [2] = 'smashed', [3] = 'normal'}
+local door_desc = {[0] = 'destroyed', [1] = 'smashed', [2] = 'dented', [3] = 'undamaged'}
 
 function door:initialize()
   barrier.initialize(self)
@@ -19,7 +19,7 @@ function door:initialize()
 
 function door:updateDesc() self.hp_desc = door_desc[self.hp] end
 
-function door:getDesc() return door_desc[self.hp] end
+function door:getDesc() return self.hp_desc end
 
 function door:repair() self:updateHP(3) end
 

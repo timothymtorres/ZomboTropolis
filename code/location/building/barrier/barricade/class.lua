@@ -8,7 +8,7 @@ local MIN_POTENTIAL_HP = 15
 local MAX_HP = 63
 
 local fortification_status = {
-  {desc = 'empty',              range =  0},  --   0
+  {desc = 'secured',            range =  0},  --   0
   {desc = 'loose',              range =  6},  --   1-06 [6]
   {desc = 'light',              range = 13},  --   7-13 [7]
   {desc = 'regular',            range = 21},  --  14-21 [8]
@@ -19,10 +19,10 @@ local fortification_status = {
 }
 
 local room_available = {
-  {desc = 'none',     range = 0},             --    0
-  {desc = 'little',   range = 3},             --   1-03
-  {desc = 'moderate', range = 6},             --   4-06
-  {desc = 'large',    range = 63},            --   7-63
+  {desc = 'no',        range = 0},             --    0
+  {desc = 'little',    range = 4},             --   1-04
+  {desc = 'some',      range = 8},             --   5-08
+  {desc = 'plenty',    range = 63},            --   7-63
 }
 
 function barricade:initialize(type)
