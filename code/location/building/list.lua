@@ -10,8 +10,6 @@ building.external_desc = {
   surroundings = {'surrounded by wrecked cars', 'surrounded by a metal fence', 'surrounded by trees', 'covered in vines', 'covered in moss', 'surrounded by a wooden fence'},
 }
 
-local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .75, .15
-
 -- external desc works as follows
 -- You are standing outside the [building title], a [story] [adjective] [color] [material] [details] [surroundings].
 
@@ -40,6 +38,8 @@ street/outside_building = 50-75% to find mostly barricades
 wasteland/forest = 05% 
 
 --]]-----------  SEARCH ODDS  ------------
+
+local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .75, .15
 
 --[[
 ---  GENERIC

@@ -31,7 +31,7 @@ function barricade:initialize(type)
   self.potential_hp = DEFAULT_POTENTIAL_HP
   
   self.hp_desc = fortification_status[1].desc
-  self.potential_hp_desc = room_available[1].desc
+  self.potential_hp_desc = room_available[4].desc
 end  
 
 barricade.max_hp = MAX_HP

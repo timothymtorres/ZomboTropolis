@@ -454,6 +454,10 @@ function scene:create( event )
     if main_player:isStaged('outside') then desc_text = location:getDesc('external')
     elseif main_player:isStaged('inside') then desc_text = location:getDesc('internal')
     end
+  
+    if location:isBuilding() then
+      desc_text = desc_text..'\n\n'..location:getBarrierDesc()
+    end
    
     local text_object = display.newText(desc_text, 0, 0, 285, 0, native.systemFont, 12, "right")
     text_object:setTextColor(0)
