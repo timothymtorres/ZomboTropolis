@@ -34,12 +34,9 @@ factory = 30-40%
 library/school = 20%
 home = 10%
 
-street/outside_building = 50-75% to find mostly barricades
-wasteland/forest = 05% 
-
 --]]-----------  SEARCH ODDS  ------------
 
-local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .75, .15
+local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .50, .15
 
 --[[
 ---  GENERIC
@@ -48,7 +45,7 @@ local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .75, .15
 building.default = {}
 building.default.full_name = 'building'
 building.default.building_type = 'generic'
-building.default.search_odds = {inside = 0.15, outside = 0.75}
+building.default.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = INSIDE_SEARCH_ODDS}
 building.default.item_chance =  {
  -- MEDICAL =  15%
         FAK = .05,
