@@ -155,7 +155,7 @@ function barricade:fortifyAttempt(player, zombie_n, human_n)  -- this code will 
   return zombie_blockade_value <= dice.roll(zombie_blockade_value + bypass_chance)
 end
 
-local cade_dice = {'1d3^+1', '1d3', '1d3^-1', '1d3-1^-1'} -- Averages [2.5, 2, 1.5, 1.1]
+local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]
 
 function barricade:fortify(player, cade_condition)
   local dice_str = cade_dice[cade_condition]
