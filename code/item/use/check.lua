@@ -52,7 +52,10 @@ end
 --]]
 
 function check.barricade(player)
-  
+  local p_tile = player:getTile()
+  assert(playerInsideBuilding(player), 'Must be inside building to barricade')
+  assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
+  assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')  
 end
 
 function check.fuel(player)

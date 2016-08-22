@@ -129,7 +129,8 @@ end
 --]]
 
 function activate.barricade(player, condition)
-  
+  local building_tile = player:getTile()
+  building_tile.barricade:fortify(player, condition)
 end
 
 function activate.fuel(player, condition)

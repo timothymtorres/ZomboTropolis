@@ -40,8 +40,6 @@ end
 
 function building:install(equipment_type, condition) self[equipment_type]:install(condition) end
 
-function building:barricade(size) self.barricade:updateHP(size) end
-
 function building:blackout()
   -- 3x3 area do blackout event on tile(s)
 end

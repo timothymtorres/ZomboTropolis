@@ -135,7 +135,7 @@ local modifier = {
 
 function tile:getSearchOdds(player, setting, location_status) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
-  local modifier_sum = modifier.building_condition[location_status] + (player.skill:check('looting') and modifier.looting_skill or 0)
+  local modifier_sum = modifier.building_condition[location_status] + (player.skills:check('looting') and modifier.looting_skill or 0)
   return search_chance + (search_chance * modifier_sum)
 end
 
