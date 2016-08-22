@@ -63,6 +63,15 @@ local skill_flags = {
   -- Engineering
   repairs =              1,
   repairs_adv =          2,
+  barricade =            4,
+  barricade_adv =        8,
+  reinforce =           16,
+  renovate =            32,
+  tech =                64,
+  power_tech =         128,
+  radio_tech =         256,
+  computer_tech =      512,
+  
   
   
   --------------

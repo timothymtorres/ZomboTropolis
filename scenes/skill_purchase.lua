@@ -93,7 +93,7 @@ function scene:create( event )
    local sceneGroup = self.view
    local parent = event.parent
    local params = event.params
-   
+
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
     local bar_h = 30
