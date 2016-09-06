@@ -172,9 +172,13 @@ function tile:search(player, setting)
   local odds = self:getSearchOdds(player, setting, location_state)
   local search_success = dice.chance(odds)
   
+print()
+print('item_chance is - ')
+for k,v in pairs(self.item_chance) do print(k, v) end
+for k,v in pairs(self.item_chance[setting]) do print(k,v) end
   if not search_success then return false end
-  
-  local items = self[setting].item_chance 
+
+  local items = self.item_chance[setting] 
   local item_type = select_item(items)
 print('tile:search - ', item_type)
 print('location_state - ', location_state)
