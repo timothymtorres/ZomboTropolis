@@ -187,13 +187,10 @@ end
 function player:getActions(category) return catalogAvailableActions[category](self) end
 
 function player:getWeapons()
-print()
-print('player:getWeapons')
   local list = {}
   
   if self:isMobType('human') then
     for inv_ID, item_INST in ipairs(self.inventory) do
-print('player:getWeapons inv loop', inv_ID, item_INST)
       if item_INST:isWeapon() then
         local item_name, condition = item_INST:getClassName(), item_INST:getCondition()
         local weap_INST = weapon[item_name]:new(condition)
