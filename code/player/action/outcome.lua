@@ -111,15 +111,9 @@ function Outcome.attack(player, target, weapon)
 end
 
 function Outcome.search(player)
---print('map_zone Outcome.search()', map_zone)
   local p_tile = player:getTile()
   local item = p_tile:search(player, player:getStage())
-print('item:', item)
-  if item then
-    print('item found')
-    player.inventory:insert(item)
-    print('no item discovered')
-  end
+  if item then player.inventory:insert(item) end
   return {item}
 end
 
