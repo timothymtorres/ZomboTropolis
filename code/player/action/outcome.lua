@@ -70,7 +70,7 @@ function Outcome.attack(player, target, weapon)
         damage = damage - resistance
         
         local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1
-        local armor_is_damaged = target.armor:passDgygynkurabilityCheck(degrade_chance)        
+        local armor_is_damaged = target.armor:passDurabilityCheck(degrade_chance)        
         -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
         
         local retailation_damage = target.armor:getProtection('damage_melee_attacker')
@@ -123,6 +123,7 @@ function Outcome.discard(player, inv_ID)
   return {item}
 end
 
+--[[
 function Outcome.barricade(player)
   local building = player:getBuilding()
   local result = building:barricade()
@@ -132,6 +133,7 @@ function Outcome.barricade(player)
     print('failed barricade')
   end
 end
+--]]
 
 function Outcome.speak(player, message) -- , target)
   local tile = player:getTile()
