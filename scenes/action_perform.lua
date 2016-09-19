@@ -44,6 +44,7 @@ end
 
 local speak_msg 
 local targets, weapons, wheel, armor_list
+local action_params 
 
 local function getActionText(action)
   local p_tile = main_player:getTile()
@@ -74,7 +75,7 @@ local function getActionText(action)
     end
     --]]
   elseif action == 'barricade' then
-  
+    str = 'Barricade the '.. p_tile:getName() .. ' ' .. p_tile:getClassName() .. '?'
   elseif action == 'groan' then
     str = 'Emit groan?'
   elseif action == 'gesture' or action == 'drag_prey' then
@@ -119,7 +120,8 @@ local function getActionParams(action)
     --]]
     params = {speak_msg}
   elseif action == 'barricade' then
-    
+    local inventory_ID = action_params.inv_id
+    params = {inventory_ID}
   end
   return params
 end
@@ -236,6 +238,7 @@ function scene:create( event )
    local sceneGroup = self.view
    --local parent = event.parent
    local params = event.params
+   action_params = event.params
    local action = event.params.id
    
    container_xtra_w = extra_widget_sizes[action] and extra_widget_sizes[action].width or 0
@@ -273,6 +276,11 @@ function scene:create( event )
     local performButtonEvent = function(event)
       if ('ended' == event.phase) then
         if active_timer then timer.cancel(active_timer) end
+        
+        print('')
+        print('getting action params:')
+        for k,v in pairs(getActionParams(action)) do print(k,v) end
+        
         main_player:takeAction(action, unpack(getActionParams(action)))
         composer.hideOverlay('fade', 400)       
         composer.gotoScene('scenes.action')
