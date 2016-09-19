@@ -184,17 +184,14 @@ function criteria.default(action, player, ...)
   if criteria[action] then criteria[action](player, ...) end
 end
 
-function criteria.item(item, player, target, inv_ID)
---print(player, item_name, target, inv_ID)
+function criteria.item(item, player, inv_ID, ...)
   assert(inv_ID, 'Missing inventory ID for item')
   assert(player.inventory:check(inv_ID), 'Item not in inventory')  
   
-  local item, inv_item = lookupItem(item), player.inventory:lookup(inv_ID)
---print(item, inv_item) 
-  assert(inv_item:getID() == item:getID(), "Item in inventory doesn't match one being used")
+  local item_INST = player.inventory:lookup(inv_ID)
+  assert(item == item_INST:getClassName(), "Item in inventory doesn't match one being used")
   
-  local item_name = item:getName()
-  if itemCriteria[item_name] then itemCriteria[item_name](player, target) end  
+  if itemCriteria[item] then itemCriteria[item](player, item_INST, ...) end  
 end
 
 error_list[#error_list+1] = 'Missing inventory ID for item'
