@@ -155,32 +155,4 @@ function criteria.newspaper(player) end  -- need light?
 
 function criteria.bottle(player) end
 
---[[
---- BARRICADES
---]]
-
-function criteria.small(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.medium(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')    
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.large(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.heavy(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
 return criteria
