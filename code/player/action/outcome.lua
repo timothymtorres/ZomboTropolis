@@ -67,10 +67,7 @@ function Outcome.attack(player, target, weapon)
       if target.armor:isPresent() then  -- what if weapon is harmless?
         local damage_type = weapon:getDamageType()
         local resistance = target.armor:getProtection(damage_type)
-        damage = damage - resistance
-        
-        local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1
-        local armor_is_damaged = target.armor:passDurabilityCheck(degrade_chance)        
+        damage = damage - resistance    
         -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
         
         local retailation_damage = target.armor:getProtection('damage_melee_attacker')
@@ -80,6 +77,9 @@ function Outcome.attack(player, target, weapon)
           player:updateStat('hp', retailation_hp_loss)
           -- insert some type of event?
         end
+        
+        local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1  -- might wanna change this later?  Damage affects degrade chance?       
+        if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
       end
       
       local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and player)
@@ -122,18 +122,6 @@ function Outcome.discard(player, inv_ID)
   player:remove(inv_ID)
   return {item}
 end
-
---[[
-function Outcome.barricade(player)
-  local building = player:getBuilding()
-  local result = building:barricade()
-  if result then
-    print('barricaded building')
-  else
-    print('failed barricade')
-  end
-end
---]]
 
 function Outcome.speak(player, message) -- , target)
   local tile = player:getTile()
@@ -203,14 +191,12 @@ function Outcome.default(action, player, ...)
   return Outcome[action](player, ...)
 end
 
-function Outcome.item(item, player, target, inv_ID)
-  local item = lookupItem(item)
-  local item_name = item:getName()
---print('item_name Outcome.item', item_name)
-  -- condition degrade on use?
-  -- CONVERT INV_ID INTO CONDITION!!!
-  return itemActivate[item_name](player, target, inv_ID) 
-  -- degrade item
+function Outcome.item(item, player, inv_ID, target)
+  local item_INST = player.inventory:lookup(inv_ID)
+  local item_condition = item_INST:getCondition()
+  local result = itemActivate[item](player, item_condition, target) 
+  if item_INST:failDurabilityCheck(player) then item_INST:degrade() end
+  return result
 end
 
 function Outcome.equipment(equipment, player, operation, ...)  -- condition degrade on use?

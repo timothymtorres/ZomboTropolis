@@ -191,7 +191,7 @@ function criteria.item(item, player, inv_ID, ...)
   local item_INST = player.inventory:lookup(inv_ID)
   assert(item == item_INST:getClassName(), "Item in inventory doesn't match one being used")
   
-  if itemCriteria[item] then itemCriteria[item](player, item_INST, ...) end  
+  if itemCriteria[item] then itemCriteria[item](player, ...) end  
 end
 
 error_list[#error_list+1] = 'Missing inventory ID for item'
