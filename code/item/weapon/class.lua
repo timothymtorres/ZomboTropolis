@@ -19,6 +19,8 @@ function weapon:isSkillRequired() return (self.skill_required and true) or false
 
 function weapon:isCombustionSource() return self.combustion_source or false end
 
+function weapon:isSingleUse() return self.one_use or false end
+
 function weapon:hasConditionEffect(player)
   if self:getClassName() == 'claw' and not player.skills:check('grapple') then 
     return false -- if attacking with claws and missing grapple skill then no condition effect  

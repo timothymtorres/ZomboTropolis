@@ -54,23 +54,20 @@ function item:hasUses() return self.designated_uses and true or false end
 
 function item:isWeapon() return self.designated_weapon or false end
 
+function item:isSingleUse() return self.one_use or false end
+
 function item:failDurabilityCheck(player)
   -- skill mastery provides +20% durability bonus to items
   local durability = (player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5)) or self.durability  
   return dice.roll(durability) <= 1
 end
 
-function item:degrade(num, player, inv_ID)
-  self.condition = self.condition + num
-  -- is condition 1-4 or 0-3?!  Might need to fix this...
+function item:updateCondition(num, player, inv_ID)
+  self.condition = self.condition + num -- is condition 1-4 or 0-3?!  Might need to fix this...  Also add math.max(whatever the limit is...)
   if self.condition < 0 then -- item is destroyed
     player.inventory:remove(inv_ID)
     -- include announcement msg?
   end
-end
-
-function item:enchance(num)
-  
 end
 
 function item:isConditionVisible(player) end

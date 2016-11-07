@@ -58,7 +58,7 @@ end
 
 local ARMOR_DAMAGE_MOD = 2.5
 
-function Outcome.attack(player, target, weapon)
+function Outcome.attack(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
   
@@ -102,11 +102,24 @@ function Outcome.attack(player, target, weapon)
         target.condition[effect]:add(duration, bonus_effect)
       end
     end     
-  else
-    if player:isMobType('zombie') and player.skills:check('grapple') then
-      player.condition.entangle:remove()
+    
+    if player:isMobType('human') and not weapon:isOrganic() then
+      local item_INST = player.inventory:lookup(inv_ID)
+      if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
+      elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID)
+      end
     end
-  end  
+  else
+    if player:isMobType('zombie') and player.skills:check('grapple') then 
+      player.condition.entangle:remove() 
+    elseif player:isMobType('human') and weapon:getStyle() == 'ranged' then
+      local item_INST = player.inventory:lookup(inv_ID)
+      if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
+      elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID)
+      end
+    end
+  end
+  
   return {attack, damage, critical}
 end
 
@@ -195,7 +208,8 @@ function Outcome.item(item, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item](player, item_condition, target) 
-  if item_INST:failDurabilityCheck(player) then item_INST:degrade() end
+  if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
+  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) end
   return result
 end
 

@@ -17,7 +17,7 @@ end
 
 function item_armor:degrade(player)
   local item_INST = player.inventory:lookup(self.inv_ID)
-  item_INST:degrade()
+  item_INST:updateCondition(-1, player, self.inv_ID)
   
   self.condition = self.condition - 1
   if 0 > self.condition then -- armor is destroyed
