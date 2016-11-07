@@ -15,7 +15,10 @@ function item_armor:equip(name, condition, inv_ID)
   self.durability = item_armor_list[name].durability
 end
 
-function item_armor:degrade()
+function item_armor:degrade(player)
+  local item_INST = player.inventory:lookup(self.inv_ID)
+  item_INST:degrade()
+  
   self.condition = self.condition - 1
   if 0 > self.condition then -- armor is destroyed
     local player = self.player

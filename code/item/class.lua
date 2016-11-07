@@ -54,21 +54,23 @@ function item:hasUses() return self.designated_uses and true or false end
 
 function item:isWeapon() return self.designated_weapon or false end
 
-local DEGRADE_CHANCE = 1
-
-function item:passDurabilityCheck(has_mastery_skill)
+function item:failDurabilityCheck(player)
   -- skill mastery provides +20% durability bonus to items
-  local durability = (has_mastery_skill and math.floor(self.durability*1.2 + 0.5)) or self.durability
-  return dice:roll(durability) > 1
+  local durability = (player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5)) or self.durability  
+  return dice.roll(durability) <= 1
 end
 
-function item:updateCondition(num, player, inv_ID)
+function item:degrade(num, player, inv_ID)
   self.condition = self.condition + num
   -- is condition 1-4 or 0-3?!  Might need to fix this...
   if self.condition < 0 then -- item is destroyed
     player.inventory:remove(inv_ID)
     -- include announcement msg?
   end
+end
+
+function item:enchance(num)
+  
 end
 
 function item:isConditionVisible(player) end
@@ -94,13 +96,6 @@ print('getFlag()', ID, 2)
   return flag
 end
 
---[[
-function item:getID() 
-print(item, self:getClassName())
-print(item[self:getClassName()], item[self:getClassName()].ID)
-  return item[self:getClassName()].ID end
---]]
-
 function item:getUses() return self.uses end
 
 function item:getCondition() return self.condition end
@@ -112,6 +107,8 @@ function item:getConditionState() return condition_states[self.condition] or '??
 function item:getClassCategory() return self.class_category end
 
 function item:getWeight() return self.weight end
+
+function item:getMasterSkill() return self.master_skill end
 
 function item:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
