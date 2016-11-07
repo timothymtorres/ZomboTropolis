@@ -6,7 +6,7 @@ local order = {
   -- EQUIPMENT
   'barricade', 'transmitter', 'generator', 'terminal', 'fuel', 
   -- GADGET
-  'radio', 'cellphone', 'sampler', 'GPS',
+  'radio', 'GPS', --'cellphone', 'sampler'
   -- JUNK
   'book', 'bottle', 'newspaper',
   -- AMMO
