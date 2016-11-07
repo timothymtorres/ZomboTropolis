@@ -32,7 +32,7 @@ end
 
 function activate.gesture(player, target) end
 
-function activate.tracking(player)
+function activate.track(player)
   local targets, targets_ranges = player.condition.tracking:getPrey()
   return {targets, targets_ranges}
 end

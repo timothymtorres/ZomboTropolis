@@ -6,8 +6,7 @@ local medical = {}
   weight = num
   designated_weapon = true/nil
   class_category = 'medical'/'research'
-  condition_omitted = nil/true  (if omitted, item has no condition levels)  
-  special = nil/4/16  (bit_flags for special) [radio_freq, ammo, color, battery_life, etc.]  
+  one_use = true
 --]]
 
 medical.FAK = {}
@@ -30,5 +29,9 @@ medical.syringe.full_name = 'revival syringe'
 medical.syringe.weight = 5
 medical.syringe.designated_weapon = true
 medical.syringe.class_category = 'research'
+
+for item in pairs(medical) do 
+  medical[item].one_use = true
+end
 
 return medical

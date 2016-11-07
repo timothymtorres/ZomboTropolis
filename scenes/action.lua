@@ -51,24 +51,8 @@ elseif main_player:isMobType('human') then
   item = main_player:getActions('item')  
 end
 
-
-
 local menu_w = width - 20
 local actionMenu, tabBar, selectedTab, itemListMenu, menu
-
---[[
-local function onCategoryTap(event)
-    local row = event.target
-    print("tapped Category", row.id)
-    
-    for k,v in pairs(rowTitles) do rowTitles[k]=nil end
-    
-    listItems[row.id].collapsed = not listItems[row.id].collapsed
-    list:deleteAllRows()
-    populateList()
-end
---]]
-
 
 local function populateItemList()
   menu:insertRow{isCategory=true, params = {name = '[ITEM]', condition = '[CONDITION]', weight = '[SIZE]', canBeTapped=false}}  
@@ -77,9 +61,9 @@ local function populateItemList()
     local item = itemListMenu[i].item
     menu:insertRow{params = {name = item:getClassName(), condition = item:getConditionState(), weight = item:getWeight(), canBeTapped=true}}
     if itemListMenu[i].collapsed then
-      menu:insertRow{params = {discard=true, activate=item:canBeActivated(), canBeTapped=false, item_options=true}}
+      menu:insertRow{params = {name=item:getClassName(), inventory_index=i, discard=true, activate=item:canBeActivated(), canBeTapped=false, item_options=true}}
     end
-  end    
+  end
 end
 
 local function onCategoryTap(event)
@@ -102,18 +86,40 @@ local function onRowRender( event )
     local rowWidth = row.contentWidth
     
     if row.params.item_options then
-      -- row.params.discard
-      --[[local rowTitle = display.newText( row, 'Discard='..tostring(row.params.discard)..' Activate='..tostring(row.params.activate), 10, 0, nil, 14 )  -- THIS LINE IS IMPORTANT
-      rowTitle:setFillColor(0)
-      rowTitle.anchorX = 0
-      rowTitle.y = rowHeight * 0.5       
-      --]]
+      print('')
+      print('row.params are:')
+      for k,v in pairs(row.params) do print(k,v) end
       
       -- Function to handle button events
       local function handleButtonEvent( event )
 
           if ( "ended" == event.phase ) then
               print( "Button was pressed and released" )
+              local item_name = row.params.name
+              print(item_name, 'action cost is - ', main_player:getCost('ap', item_name))
+              
+              local options = {
+                 isModal = true,
+                 effect = "fade",
+                 time = 400,
+                 params = {}
+              }             
+              
+              local mob_type = main_player:getMobType()
+              local action_data, params = action_list[mob_type][item_name], options.params
+              params.id = action_data.name
+              params.inv_id = event.target.id
+              params.name = action_data.name
+              params.desc = action_data.desc
+              params.icon = action_data.icon
+              params.cost = main_player:getCost('ap', item_name)
+              
+              print('')
+              print('The params going into options are:')
+              for k,v in pairs(options.params) do print(k,v) end
+              
+              composer.showOverlay( "scenes.action_perform", options)        
+              print( "Button was pressed and released" )              
           end
       end
 
@@ -122,7 +128,7 @@ local function onRowRender( event )
       {
           left = 20,
           top = 0,
-          id = "button1",
+          id = row.params.inventory_index,
           label = "Use",
           shape = 'roundedRect',
           height = 40,

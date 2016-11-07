@@ -29,7 +29,7 @@ local skill_list = {
       military = {'ranged_adv', 'guns', 'light_guns', 'heavy_guns', 'archery', 'archery_adv', 'melee_adv', 'chopping', 'slicing', 'smashing', 'smacking', 'explosives'},
       medical = {'healing', 'major_healing', 'major_healing_adv', 'minor_healing', 'minor_healing_adv', 'chemistry', 'serium', 'stimulants', 'antibodies', 'recovery', 'recovery_adv', 'diagnosis_adv'},
       research = {'bookworm'},
-      engineering = {'repairs', 'repairs_adv',}, --'construction', 'renovate', 'barricade', 'barricade_adv', 'reinforce', 'tech', 'power_tech', 'radio_tech', 'computer_tech', 'reserve'},
+      engineering = {'repairs', 'repairs_adv', 'barricade', 'barricade_adv', 'reinforce', 'renovate', 'tech', 'power_tech', 'radio_tech', 'computer_tech'}, --'construction', 'reserve'},
     },
   },
   info = {
@@ -552,23 +552,61 @@ local skill_list = {
       research = {
         lab_tech =       {name='lab tech',        desc='Gain ability to use science equipment',},
         researcher =     {name='researcher',      desc='Gain ability to tag zombies and track via terminals',},
-        computer_tech =  {},  -- terminals installed/repaired/use at less ap
         bookworm =       {name='bookworm',},
       },
       engineering = {
-        --construction =   {name = 'construction',},
-        repairs =        {name='basic repairs',   desc='Gain ability to repair equipment',},
-        repairs_adv=     {name='advanced repairs',desc='Gain ability to repair ruined buildings',},
+        repairs =        {
+          name='basic repairs',   
+          desc='Gain ability to repair equipment',
+          icon='spanner',
+        },  
+        repairs_adv=     {
+          name='advanced repairs',
+          desc='Repair equipment at cheaper cost',
+          icon='auto-repair',
+        },
+        barricade =      {
+          name='barricade',
+          desc='Gain ability to barricade past regular and increased barricade strength',
+          icon='wooden-door',
+        },
+        barricade_adv=   {
+          name='barricade advanced',
+          desc='Gain ability to barricade past very strongly and a bonus reroll for barricade strength',
+          icon='closed-doors',
+        },
+        reinforce =      {
+          name='reinforce',
+          desc='Gain ability to reinforce barricades for more available space',
+          icon='push',
+        },
+        renovate =       {
+          name='renovate',
+          desc='Gain ability to repair ruins',
+          icon='hammer-nails'
+        },      
+        tech =           {
+          name='tech',
+          desc='Gain ability to install equipment',
+          icon='processor',
+        },  
+        power_tech =     {
+          name='power tech',
+          desc='Installing generators requires less ap',
+          icon='light-bulb',
+        },
+        radio_tech =     {
+          name='radio tech',
+          desc='Installing radio transmitters requires less ap',
+          icon='radar-dish',
+        },
+        computer_tech =  {
+          name='computer tech',
+          desc='Installing computer terminals requires less ap',
+          icon='keyboard',
+        },        
         --[[
-        renovate =       {name='renovate'}, -- repair ruins
-        barricade =      {name='barricade',},  -- barricade past very strongly?
-        barricade_adv=   {name='barricade +',        desc='Build better barricades',},  -- +1 to all barricades
-        reinforce =      {name='reinforce',},  -- extend max barricade limit more easier          
-        tech =           {name='tech',},  
-        power_tech =     {name='power tech',}, -- generators installed/repaired at less ap
-        radio_tech =     {name='radio tech',},
-        computer_tech =  {name='computer tech',},
-          
+        construction =   {name='construction'}, -- ???
         reserve =        {name='reserve',}, -- toolbox durability increased       
         --]]
       },

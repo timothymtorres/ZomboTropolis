@@ -8,7 +8,7 @@ local activate = {}
 --- MEDICAL
 --]]
 
-function activate.FAK(player, target, condition)
+function activate.FAK(player, condition, target)
   local FAK = lookupMedical('FAK')
   local FAK_dice = dice:new(FAK:getDice())
   local tile = player:getTile()  
@@ -35,7 +35,7 @@ function activate.FAK(player, target, condition)
   print('You heal with '..FAK:getName()..' for '..hp_gained..' hp.')
 end
 
-function activate.bandage(player, target, condition)
+function activate.bandage(player, condition, target)
   local bandage = lookupMedical('bandage')
   local bandage_dice = dice:new(bandage:getDice())  
  
@@ -57,7 +57,7 @@ function activate.bandage(player, target, condition)
   print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
 end
 
-function activate.antidote(player, target, condition)
+function activate.antidote(player, condition, target)
   local antidote = lookupMedical('antidote')
   local cure_chance = antidote:getAccuracy()  
   -- modify chance based on skills?
@@ -72,7 +72,7 @@ function activate.antidote(player, target, condition)
   end
 end  
 
-function activate.syringe(player, target, condition)
+function activate.syringe(player, condition, target)
   local syringe = lookupMedical('syringe')
   local inject_chance = syringe:getAccuracy()
   -- modify chance based on skills?
@@ -95,7 +95,7 @@ end
 --- GADGETS
 --]]
 
-function activate.radio(player, old_freq, new_freq, condition)
+function activate.radio(player, condition, old_freq, new_freq)
   player.inventory:updateRadio(player, 'remove', old_freq, condition)
   player.inventory:updateRadio(player, 'insert', new_freq, condition)
 end
@@ -104,7 +104,7 @@ function activate.cellphone(player, condition)
 
 end
 
-function activate.sampler(player, target, condition)
+function activate.sampler(player, condition, target)
 
 end
 
@@ -129,7 +129,8 @@ end
 --]]
 
 function activate.barricade(player, condition)
-  
+  local building_tile = player:getTile()
+  building_tile.barricade:fortify(player, condition)
 end
 
 function activate.fuel(player, condition)

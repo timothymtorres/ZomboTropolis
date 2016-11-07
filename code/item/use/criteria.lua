@@ -107,8 +107,15 @@ end
 --]]
 
 function criteria.barricade(player)
-  
+  local p_tile = player:getTile()
+  assert(playerInsideBuilding(player), 'Must be inside building to barricade')
+  assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
+  assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')
 end
+
+error_list[#error_list+1] = 'Must be inside building to barricade'
+error_list[#error_list+1] = 'There is no room available for fortifications'
+error_list[#error_list+1] = 'Unable to make stronger fortification without required skills'
 
 function criteria.fuel(player)
   local p_tile = player:getTile()
@@ -147,33 +154,5 @@ function criteria.book(player) end  -- need light?
 function criteria.newspaper(player) end  -- need light?
 
 function criteria.bottle(player) end
-
---[[
---- BARRICADES
---]]
-
-function criteria.small(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.medium(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')    
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.large(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
-
-function criteria.heavy(player) 
-  assert(playerInsideBuilding(player), 'Must be inside building to use barricade')  
-end
-
-error_list[#error_list+1] = 'Must be inside building to use barricade'
 
 return criteria

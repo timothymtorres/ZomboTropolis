@@ -19,7 +19,7 @@ local enzyme_list = {
   sticky =   {cost=2},
   -- hunter skills
   mark_prey =      {cost=1},
-  tracking =       {cost=3, modifier={tracking_adv = -1}},
+  track =       {cost=3, modifier={track_adv = -1}},
   leap =           {cost=2, modifier={leap_adv = -1},},
   -- sentient skills
   open_door =      {cost=1},

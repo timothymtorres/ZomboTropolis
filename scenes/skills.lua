@@ -146,7 +146,7 @@ local skill_buttons, categoryText, scrollView = {}, {}
 local function handleButtonEvent( event )
     skill_buttons[event.target.id]:setFillColor(unpack(getButtonColor(event.target.id)))
     
-    if ( "ended" == event.phase ) then
+    if ( "ended" == event.phase ) then      
         local skill, params = skill_list[event.target.id], options.params
         params.id = event.target.id
         params.name = skill.name

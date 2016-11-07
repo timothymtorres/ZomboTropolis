@@ -146,16 +146,16 @@ local tracking_description = {
   basic = {'far away', 'in the distance', 'in the area', 'close'},
 }
 
-function description.tracking(player, prey, prey_range_indexs)
+function description.track(player, prey, prey_range_indexs)
   msg[1] = 'You sniff the air for prey.'
   msg[3] = 'A zombie smells the air for prey.'
-  
+    
   if prey then
     local has_advanced_tracking = player.skills:check('track_adv')  
     for i, target in ipairs(prey) do
       local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
       local index = prey_range_indexs[i]
-      msg[1] = msg[1]..'\n'..target:getUserName()..' is '..description[index]..'.'
+      msg[1] = msg[1]..'\n'..target:getUsername()..' is '..description[index]..'.'
     end
   else
     msg[1] = msg[1] .. 'There are no humans you are currently tracking.'

@@ -85,13 +85,10 @@ function tile:getMap() return self.map_zone end
 function tile:getPos() return self.y, self.x end
 
 function tile:getState()  -- update later for ruins
-  local state
-  if self:isBuilding() and self:isPowered() then 
-    state = 'powered'
-  else 
-    state = 'unpowered' 
+  if self:isBuilding() and self:isPowered() then return 'powered'
+  elseif self:isBuilding() and self:isRuined() then return 'ruined' 
+  else return 'unpowered' 
   end
-  return state
 end
 
 function tile:getDesc(setting)
@@ -131,8 +128,6 @@ end
 
 --function tile:getTileType() return self.tile_type end
 
-function tile:getSearchOdds(setting) return (setting and self.search_odds[setting]) or self.search_odds.outside end
-
 function tile:getPlayers(setting) 
   local players
   if setting == 'inside' then 
@@ -151,6 +146,17 @@ function tile:isBuilding() return self.inside_players and true or false end
 
 function tile:isClass(tile_class) return self:getClassName() == tile_class end
 
+local modifier = {
+  building_condition = {unpowered = 0.00, powered = 0.20, ruined = -0.80},
+  looting_skill = 0.05
+}
+
+function tile:getSearchOdds(player, setting, location_status) 
+  local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
+  local modifier_sum = modifier.building_condition[location_status] + (player.skills:check('looting') and modifier.looting_skill or 0)
+  return search_chance + (search_chance * modifier_sum)
+end
+
 local function select_item(list)
   local chance, total = math.random(), 0
 
@@ -160,19 +166,22 @@ local function select_item(list)
   end
 end
 
-function tile:search(setting)
-  local odds = self:getSearchOdds(setting)
-print('odds are:', odds)
-print('setting is:', setting)
+function tile:search(player, setting)
+  local location_state = self:getState()  
+  
+  local odds = self:getSearchOdds(player, setting, location_state)
   local search_success = dice.chance(odds)
   
   if not search_success then return false end
-  
-  local items = self.item_chance 
+
+  local items = self.item_chance[setting] 
   local item_type = select_item(items)
-  local location_state = self:getState()
 print('tile:search - ', item_type)
 print('location_state - ', location_state)
+
+  -- junkyards yield better barricade conditions than other locations due to the amount of junk
+  if self:getClassName() == 'junkyard' then location_state = 'powered' end
+  
   local item_INST = item[item_type]:new(location_state) 
   
 -- DO WE NEED THIS?!

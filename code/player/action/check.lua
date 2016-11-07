@@ -84,7 +84,7 @@ function check.skill(player, skill) --, target)
     local cost, ep = player:getCost('ep', skill), player:getStat('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
-  if skillCheck[skill] then skillCheck[skill](player) end  
+  if skillCheck[skill] then skillCheck[skill](player) end   
 end
 
 return check

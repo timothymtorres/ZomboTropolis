@@ -40,13 +40,29 @@ end
 
 function building:install(equipment_type, condition) self[equipment_type]:install(condition) end
 
-function building:barricade(size) self.barricade:updateHP(size) end
-
 function building:blackout()
   -- 3x3 area do blackout event on tile(s)
 end
 
 function building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade') or (self.door:getHP() > 0 and 'door') end  -- should this be a class?
+
+function building:getBarrierDesc() 
+  local cade_str, space_str = self.barricade:getDesc()
+  local door_str = self.door:getDesc()
+  
+  local no_cades_exist = (cade_str == 'secured')
+  local is_entrance_open = no_cades_exist and (door_str == 'destroyed' or self.door:isOpen())
+  local is_door_damaged = door_str ~= 'undamaged'
+  
+  cade_str = (is_entrance_open and 'left wide open') or cade_str
+  door_str = (is_door_damaged and 'is '..door_str..' and ') or ''
+  
+  local door_desc = 'The building door '..door_str
+  local cade_desc = 'has been '..cade_str..'. '
+  local space_desc = 'There is '..space_str..' room available for fortifications.'
+  
+  return door_desc..cade_desc..space_desc
+end
 
 function building:getEquipment()
   local machines = {}
@@ -78,8 +94,9 @@ function building:isFortified() return self.barricade:getHP() > 0 and self.door:
 
 function building:isPowered() return self.generator:isActive() end
 
-function building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) 
-end
+function building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
+
+function building:isRuined() return false end --self.ruin:isActive()  ruins haven't been implemented yet
 
 -- do we need this?!
 function building:isDescPresent(desc_type) return (self[desc_type] and #self[desc_type] > 0) or false end

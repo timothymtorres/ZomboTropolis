@@ -27,15 +27,9 @@ local action_list = {
       basic = {
         respawn =       {name='respawn',   cost=10},
         search =        {name='search',    cost= 1},
-        --barricade =     {name='barricade', cost= 1},
         attack =        {name='attack',    cost= 1},
         speak =         {name='speak',     cost= 1},      
         --close =         {name='close door', cost= 1},
-        --[[ Are these neccessary?
-        item =          {cost=1},
-        equipment =     {cost=1},
-        skill =         {cost=1},
-        --]]
       },
       skill = {
         repair = {
@@ -47,9 +41,10 @@ local action_list = {
         },
       },
       item = {
-        generator =     {cost=4, modifier={tech=-1, power_tech=-2},},
-        transmitter =   {cost=4, modifier={tech=-1, radio_tech=-2},},
-        terminal =      {cost=4, modifier={tech=-1, computer_tech=-2},},
+        barricade =     {name='barricade',    cost=1},
+        generator =     {name='generator',    cost=4, modifier={tech=-1, power_tech=-2},},
+        transmitter =   {name='transmitter',  cost=4, modifier={tech=-1, radio_tech=-2},},
+        terminal =      {name='terminal',     cost=4, modifier={tech=-1, computer_tech=-2},},
         
   --[[ 
   **RELOADING**
@@ -59,16 +54,16 @@ local action_list = {
   shotgun       - ? ap (2 shots)          [3 ap,  2ap, .5ap]
   bow           - ? ap (8 shots [quiver]) [8 ap,  6ap,  3ap]  
   --]]      
-        shotgun_shell = {cost=2, modifier={guns = -1, shotguns = -1},},
-        pistol_clip =   {cost=3, modifier={guns = -2, handguns = -1},},
-        speed_loader =  {cost=3, modifier={guns = -2, handguns = -1},},
-        rifle_magazine= {cost=4, modifier={guns = -3,   rifles = -1},},
-        quiver =        {cost=4, modifier={archery= -3,     bows = -1},},
-        book =          {cost=5, modifier={bookworm=-2},},
-        FAK =           {cost=1},
-        bandage =       {},
-        antidote =      {},
-        syringe =       {},      
+        shotgun_shell = {name='shotgun shell',  cost=2, modifier={guns = -1, shotguns = -1},},
+        pistol_clip =   {name='pistol clip',    cost=3, modifier={guns = -2, handguns = -1},},
+        speed_loader =  {name='speed loader',   cost=3, modifier={guns = -2, handguns = -1},},
+        rifle_magazine= {name='rifle magazine', cost=4, modifier={guns = -3,   rifles = -1},},
+        quiver =        {name='quiver',         cost=4, modifier={archery= -3,     bows = -1},},
+        book =          {name='book',           cost=5, modifier={bookworm=-2},},
+        FAK =           {name='first aid kit',  cost=1},
+        bandage =       {name='bandage',},
+        antidote =      {name='antidote',},
+        syringe =       {name='syringe',},      
       },
       equipment = {
         broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1},},
@@ -78,7 +73,7 @@ local action_list = {
     },
     zombie = {
       default = {
-        move =          {name='move',       cost=2, modifier={sprint = -1},},   
+        move =          {name='move',      cost=2, modifier={sprint = -1},},   
         enter =         {name='enter',     cost= 1},
         exit =          {name='exit',      cost= 1}, 
       },  
@@ -99,7 +94,7 @@ local action_list = {
         ruin =           {name='ruin',          cost=1},
         -- hunter skills
         mark_prey =      {name='mark prey',     cost=1},
-        tracking =       {name='tracking',      cost=1},
+        track =          {name='track',         cost=1},        
       },
     },
   },
@@ -109,7 +104,11 @@ local function fillList(list)
   for mob_type in pairs(list.info) do
     list[mob_type] = {}
     for category in pairs(list.info[mob_type]) do
-      for action, data in pairs(list.info[mob_type][category]) do list[mob_type][action] = data end
+      for action, data in pairs(list.info[mob_type][category]) do 
+        list[mob_type][action] = data
+        -- basic actions are classified as default for their category
+        list[mob_type][action].category = (category == 'basic' and 'default') or category
+      end
     end  
   end
   return list

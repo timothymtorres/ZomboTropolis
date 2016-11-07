@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local b_list = require('code.item.list.barricade')
 local e_list = require('code.item.list.equipment')
 local g_list = require('code.item.list.gadget')
 local j_list = require('code.item.list.junk')
@@ -10,6 +9,7 @@ local order = require('code.item.order')
 local bit = require('plugin.bit')
 local lshift, rshift, bor = bit.lshift, bit.rshift, bit.bor
 local check = require('code.item.use.check')
+local dice = require('code.libs.rl-dice.dice')
 
 local item = class('item')
 
@@ -23,7 +23,7 @@ local function selectFrom(spawn_list)
 end
 
 local condition_spawn_odds = {  -- used when spawning new item
-  --ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05},
+  ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05},
   unpowered = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
   powered =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
 }
@@ -54,6 +54,22 @@ function item:hasUses() return self.designated_uses and true or false end
 
 function item:isWeapon() return self.designated_weapon or false end
 
+function item:isSingleUse() return self.one_use or false end
+
+function item:failDurabilityCheck(player)
+  -- skill mastery provides +20% durability bonus to items
+  local durability = (player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5)) or self.durability  
+  return dice.roll(durability) <= 1
+end
+
+function item:updateCondition(num, player, inv_ID)
+  self.condition = self.condition + num -- is condition 1-4 or 0-3?!  Might need to fix this...  Also add math.max(whatever the limit is...)
+  if self.condition < 0 then -- item is destroyed
+    player.inventory:remove(inv_ID)
+    -- include announcement msg?
+  end
+end
+
 function item:isConditionVisible(player) end
 
 function item:getName() return self.name end
@@ -77,13 +93,6 @@ print('getFlag()', ID, 2)
   return flag
 end
 
---[[
-function item:getID() 
-print(item, self:getClassName())
-print(item[self:getClassName()], item[self:getClassName()].ID)
-  return item[self:getClassName()].ID end
---]]
-
 function item:getUses() return self.uses end
 
 function item:getCondition() return self.condition end
@@ -95,6 +104,8 @@ function item:getConditionState() return condition_states[self.condition] or '??
 function item:getClassCategory() return self.class_category end
 
 function item:getWeight() return self.weight end
+
+function item:getMasterSkill() return self.master_skill end
 
 function item:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
@@ -118,6 +129,6 @@ function item:dataToClass(...) -- this should be a middleclass function (fix lat
 end
 
 -- turn our list of objs into item class
-item:dataToClass(b_list, e_list, g_list, j_list, m_list, w_list, a_list)
+item:dataToClass(e_list, g_list, j_list, m_list, w_list, a_list)
 
 return item

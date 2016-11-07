@@ -47,7 +47,7 @@ function criteria.mark_prey(player)
   
 end
 
-function criteria.tracking(player)
+function criteria.track(player)
   
 end
 
