@@ -1,12 +1,9 @@
 local class = require('code.libs.middleclass')
 local t_list = require('code.location.tile.list')
 local b_list = require('code.location.building.list')
---local building = require('code.location.building.class')
 local item = require('code.item.class')
-local lookupItem = require('code.item.search')
 
 local tile = class('tile')
---local building = class(building, tile)
 
 function tile:initialize(map, y, x, name)
   self.y, self.x = y, x
@@ -182,10 +179,6 @@ print('location_state - ', location_state)
   if self:getClassName() == 'junkyard' then location_state = 'powered' end
   
   local item_INST = item[item_type]:new(location_state) 
-  
--- DO WE NEED THIS?!
---local item = lookupItem(item_name)   -- do we need item[#ID] or item class?
-  
   return item_INST
 end
 
