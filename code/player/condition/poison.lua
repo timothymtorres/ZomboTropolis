@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local poison = class('poison')
 
@@ -26,7 +26,7 @@ function poison:isActive()
 end
 
 function poison:add(duration, amount)
-  duration, amount = dice.rollAndTotal(duration), dice.rollAndTotal(amount)
+  duration, amount = dice.roll(duration), dice.roll(amount)
   self.units = math.min(self.units + amount, MAX_UNITS)
   self.duration_remaining = duration
 end
@@ -66,13 +66,13 @@ function poison:damage()
   for poison_LV, poison_amount in ipairs(poison_data) do
     if self.units <= poison_amount then
       local damage_roll = poison_data.dice.damage[poison_LV]
-      return dice.rollAndTotal(damage_roll)
+      return dice.roll(damage_roll)
     end
   end
 end
 
 function poison:rollDamageFrequency() 
-  local frequency_roll = dice.rollAndTotal('1d'..(self.duration_count+1)..'-1')
+  local frequency_roll = dice.roll('1d'..(self.duration_count+1)..'-1')
   return frequency_roll
 end
 
@@ -80,7 +80,7 @@ function poison:absorbIntoBloodstream()
   local absorption_roll 
   for poison_LV, poison_amount in ipairs(poison_data) do
     if self.units <= poison_amount then
-      absorption_roll = dice.rollAndTotal(poison_data.dice.absorption[poison_LV])
+      absorption_roll = dice.roll(poison_data.dice.absorption[poison_LV])
       break
     end
   end 

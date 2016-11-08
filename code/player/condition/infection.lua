@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
 
 local infection = class('infection')
 

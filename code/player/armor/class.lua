@@ -1,4 +1,4 @@
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 local class = require('code.libs.middleclass')
 
 local armor = class('armor')
@@ -7,7 +7,7 @@ function armor:initialize(player)
   self.player = player
 end
 
-function armor:failDurabilityCheck(degrade_chance) return dice.roll(self.durability) <= degrade_chance end
+function armor:failDurabilityCheck(degrade_chance) return dice.roll(self.durability) <= degrade_chance end 
 
 function armor:getProtection(damage_type) return self.protection[damage_type] or 0 end
 

@@ -4,7 +4,6 @@ local b_list = require('code.location.building.list')
 --local building = require('code.location.building.class')
 local item = require('code.item.class')
 local lookupItem = require('code.item.search')
-local dice = require('code.libs.rl-dice.dice')
 
 local tile = class('tile')
 --local building = class(building, tile)
@@ -170,7 +169,7 @@ function tile:search(player, setting)
   local location_state = self:getState()  
   
   local odds = self:getSearchOdds(player, setting, location_state)
-  local search_success = dice.chance(odds)
+  local search_success = odds >= math.random()
   
   if not search_success then return false end
 
