@@ -22,20 +22,6 @@ function medical:getDice() return self.dice end
   
 function medical:getGroup() return self.group end 
 
---function medical:getWeaponID() return self.weapon_ID end
-  
---[[
-for obj in pairs(w_list) do 
-  medical[obj] = class(obj, medical) 
-  medical[obj].initialize = function(self)
-    medical.initialize(self)
-  end
-  
-  for field, data in pairs(w_list[obj]) do medical[obj][field] = data end
-end    
---]]
-
-
 function medical:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
   for _, list in ipairs(combined_lists) do

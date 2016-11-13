@@ -122,8 +122,6 @@ function tile:getDesc(setting)
   return str
 end
 
---function tile:getTileType() return self.tile_type end
-
 function tile:getPlayers(setting) 
   local players
   if setting == 'inside' then 

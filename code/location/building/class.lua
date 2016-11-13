@@ -1,6 +1,5 @@
 local class = require('code.libs.middleclass')
 local b_list = require('code.location.building.list')
---local lookupItem = require('code.search.item')
 local tile = require('code.location.tile.class')
 local equipment = require('code.location.building.equipment.class')
 local generator = require('code.location.building.equipment.generator.class')
