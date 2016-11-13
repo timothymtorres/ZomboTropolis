@@ -9,9 +9,8 @@ local skill_flags = {
    
   -- Classes 
   military =             1,
-  medical =              2,
-  research =             4,
-  engineering =          8,  
+  research =             2,
+  engineering =          4,  
     
   -- General
   hp_bonus =             1,  -- hp_bonus MUST remain flag 1 b/c it's used for both zombies & humans on the bitflag 1 slot
@@ -41,25 +40,18 @@ local skill_flags = {
   smashing =          1024,
   explosives =        2048,
 
-  -- Medical
+  -- Research
   healing =              1,
   major_healing =        2,
-  major_healing_adv =    4,
-  minor_healing =        8,
-  minor_healing_adv =   16,
-  chemistry =           32,
-  serium =              64,
-  stimulants =         128,
-  antibodies =         256,
-  recovery =           512,
-  recovery_adv =      1024,
-  diagnosis_adv =     2048,
-
-  -- Science
-  lab_tech =             1,
-  researcher =           2,
-  bookworm =             4,
-
+  minor_healing =        4,
+  diagnosis_adv =        8,
+  gadgets =             16,
+  scanner =             32,
+  syringe =             64,
+  syringe_adv =        128,
+  terminal =           256,
+  terminal_adv =       512,
+  
   -- Engineering
   repairs =              1,
   repairs_adv =          2,
@@ -80,9 +72,8 @@ local skill_flags = {
   
   -- Classes
   brute =                1,
-  sentient =             2,
-  hunter =               4,
-  hive =                 8,
+  hunter =               2,
+  hive =                 4,
 
   -- General
   hp_bonus =             1,  -- hp_bonus MUST remain flag 1 b/c it's used for both zombies & humans on the bitflag 1 slot
@@ -119,24 +110,12 @@ local skill_flags = {
   smell_blood_adv =    128,
   night_vision =       256,
   mark_prey =          512,
-
-  -- Sentient
-  open_door =            1,
-  resurrection =         2,
-  ankle_bite =           4,
-  bite =                 8,
-  power_bite =          16,
-  bite_adv =            32,
-  jugular =             64,
-  chew =               128,
-  speech =             256,
-  digestion =          512,
   
-
   -- Hive  
-  stinger =              1,
-  venom =                2,
-  venom_adv =            4,
+  hivemind =             1,  
+  resurrection =         2,
+  bite =                 4,
+  bite_adv =             8,
   corrode =             16,
   acid =                32,
   acid_adv =            64,

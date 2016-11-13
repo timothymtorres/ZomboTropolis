@@ -14,21 +14,19 @@ local band, bor, bxor, bnot = bit.band, bit.bor, bit.bxor, bit.bnot
 local skill_list = {
   order = {
     zombie = {
-      category = {'classes', 'general', 'brute', 'hunter', 'sentient', 'hive'},
-      classes = {'brute', 'hunter', 'sentient', 'hive'},
+      category = {'classes', 'general', 'brute', 'hunter', 'hive'},
+      classes = {'brute', 'hunter', 'hive'},
       general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
-      brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},    
-      sentient = {'open_door', 'resurrection', 'ankle_bite', 'bite', 'power_bite', 'bite_adv', 'jugular', 'chew', 'speech', 'digestion'},        
+      brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},      
       hunter = {'sprint', 'leap', 'leap_adv', 'track', 'scavenge', 'track_adv', 'dodge', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
-      hive = {'stinger', 'venom', 'venom_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'homewrecker'},
+      hive = {'resurrection', 'hivemind', 'bite', 'bite_advanced', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'homewrecker'},
     },
     human = {
-      category = {'classes', 'general', 'military', 'medical', 'research', 'engineering'},
-      classes = {'military', 'medical', 'research', 'engineering'},
+      category = {'classes', 'general', 'military', 'research', 'engineering'},
+      classes = {'military', 'research', 'engineering'},
       general = {'melee', 'cutting', 'swinging', 'martial_arts', 'martial_arts_adv', 'ranged', 'roof_travel', 'hp_bonus', 'ip_bonus', 'looting', 'diagnosis', 'graffiti'},
       military = {'ranged_adv', 'guns', 'light_guns', 'heavy_guns', 'archery', 'archery_adv', 'melee_adv', 'chopping', 'slicing', 'smashing', 'smacking', 'explosives'},
-      medical = {'healing', 'major_healing', 'major_healing_adv', 'minor_healing', 'minor_healing_adv', 'chemistry', 'serium', 'stimulants', 'antibodies', 'recovery', 'recovery_adv', 'diagnosis_adv'},
-      research = {'bookworm'},
+      research = {'healing', 'major_healing', 'minor_healing', 'diagnosis_adv', 'gadgets', 'syringe', 'syringe_adv', 'dna_scanner', 'terminal', 'terminal_adv'},
       engineering = {'repairs', 'repairs_adv', 'barricade', 'barricade_adv', 'reinforce', 'renovate', 'tech', 'power_tech', 'radio_tech', 'computer_tech'}, --'construction', 'reserve'},
     },
   },
@@ -40,11 +38,6 @@ local skill_list = {
           desc='Unlock Brute skills',
           icon='lizardman',
         },
-        sentient = {
-          name='sentient',
-          desc='Unlock Sentient skills',
-          icon='frontal-lobe',
-        },
         hunter = {
           name='hunter',
           desc='Unlock Hunter skills',
@@ -53,7 +46,7 @@ local skill_list = {
         hive = {
           name='hive',
           desc='Unlock Hive skills',
-          icon='tear-tracks',
+          icon='frontal-lobe',
         },
         
       },
@@ -161,58 +154,6 @@ local skill_list = {
           icon='blade-bite',
         },         
       },
-      sentient = {
-        open_door = {
-          name='open door',
-          desc='[Not Implemented] Ability to open doors',
-          icon='brain-stem',
-        }, 
-        resurrection = {
-          name='resurrection',
-          desc='Reviving from being killed now costs 5 ap',
-          icon='haunting',
-        }, 
-        ankle_bite = {
-          name='ankle bite',
-          desc='[Not Implemented] If any humans are nearby upon reviving a free auto bite attack is performed',
-          icon='barefoot',
-        }, 
-        bite = {
-          name='bite',
-          desc='Bite attacks +10% to-hit and increased damage',
-          icon='carnivore-mouth',
-        }, 
-        power_bite = {
-          name='power bite',
-          desc='Bite attacks +15% to-hit and increased damage',
-          icon='gluttonous-smile'
-        }, 
-        bite_adv = {
-          name='bite advanced',
-          desc='Bite attacks receive a bonus reroll',
-          icon='sharp-smile',
-        }, 
-        jugular = {
-          name='jugular',
-          desc='[Not Implemented] Bite attacks do triple damage upon a critical hit',
-          icon='ragged-wound',
-        }, 
-        chew = {
-          name='chew',
-          desc='[Not Implemented] Successful bite attacks regain lost hp',
-          icon='ent-mouth',
-        }, 
-        speech = {
-          name='speech',
-          desc='Ability to communicate full speech',
-          icon='conversation',
-        }, 
-        digestion = {
-          name='digestion',
-          desc='Eating from corpses grants a higher xp bonus',
-          icon='carrion',
-        }, 
-      },
       hunter = {
         sprint = {
           name='sprint',
@@ -266,6 +207,26 @@ local skill_list = {
         },      
       },
       hive = {
+        hivemind = {
+          name='hivemind',
+          desc='Ability to communicate full speech',
+          icon='conversation',
+        },         
+        resurrection = {
+          name='resurrection',
+          desc='Reviving from being killed now costs 5 ap',
+          icon='haunting',
+        },  
+        bite = {
+          name='bite',
+          desc='Bite attacks +10% to-hit and increased damage',
+          icon='carnivore-mouth',
+        }, 
+        bite_adv = {
+          name='bite advanced',
+          desc='Bite attacks receive a bonus reroll',
+          icon='gluttonous-smile',
+        },         
         stinger =   {
           name = 'stinger',
           desc = 'Grants ability to attack with a poisonous stinger that injects venom into the bloodstream for a small duration',
@@ -331,12 +292,7 @@ local skill_list = {
           name='research',        
           desc='Unlock Research skills', 
           icon='biohazard',
-        },
-        medical = {
-          name='medical',         
-          desc='Unlock Medical skills', 
-          icon='hospital-cross',
-        },      
+        },    
       },
       general = {      
         melee = {
@@ -479,7 +435,7 @@ local skill_list = {
           icon='molotov',
         },  
       },
-      medical = {
+      research = {
         healing =        {
           name = 'healing',
           desc = 'Healing items receive bonus',
@@ -491,68 +447,48 @@ local skill_list = {
           icon = 'medical-pack-alt',
           requires={'healing'},
         },
-        major_healing_adv={
-          name = 'major healing advanced',
-          desc = 'First aid kits receive major healing bonus',
-          icon = 'scalpel',
-          requires={'major_healing'},
-        },
         minor_healing =  {
           name = 'minor healing',
           desc = 'Bandages receive minor healing bonus',
           icon = 'bandage-roll',
           requires={'healing'},
         },
-        minor_healing_adv={
-          name = 'minor healing advanced',
-          desc = 'Bandages receive major healing bonus',
-          icon = 'sewing-needle',
-          requires={'minor_healing'},
-        },
-        chemistry =      {
-          name = 'chemistry',
-          desc = 'Unlocks ability to make chemistry products',
-          icon = 'fizzing-flask',
-        },
-        serium =         {
-          name = 'serium',
-          desc = 'Making antidote costs less and better quality',
-          icon = 'corked-tube',
-          requires={'chemistry'},
-        },
-        stimulants =     {
-          name = 'stimulants',
-          desc = 'Making amphediente costs less and better quality',
-          icon = 'pill',
-          requires={'chemistry'},          
-        },
-        antibodies =     {
-          name = 'antibodies',
-          desc = 'Making syringes costs less and better quality',
-          icon = 'square-bottle',
-          requires={'chemistry'},          
-        },
-        recovery =       {
-          name = 'recovery',
-          desc = 'Unlocks ability to recover 1d2-1 health',
-          icon = 'health-normal',
-        },
-        recovery_adv =   {
-          name = 'recovery advanced',
-          desc = 'Recover ability costs less and is now 1d2',
-          icon = 'health-increase',
-          requires={'recovery'},
-        },
         diagnosis_adv =  {
           name='diagnosis advanced',       
           desc='Determine PRECISE health status',
           icon = 'anatomy',
-          requires={'diagnosis'},},     
-      },
-      research = {
-        lab_tech =       {name='lab tech',        desc='Gain ability to use science equipment',},
-        researcher =     {name='researcher',      desc='Gain ability to tag zombies and track via terminals',},
-        bookworm =       {name='bookworm',},
+          requires={'diagnosis'},
+        },
+        gadgets =  {
+          name='gadgets',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        },    
+        scanner =  {
+          name='scanner',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        }, 
+        syringe =  {
+          name='syringe',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        }, 
+        syringe_adv =  {
+          name='syringe advanced',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        }, 
+        terminal =  {
+          name='terminal',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        }, 
+        terminal_adv =  {
+          name='terminal advanced',       
+          desc='Provides a bonus when using research items',
+          icon = 'anatomy',
+        },         
       },
       engineering = {
         repairs =        {
