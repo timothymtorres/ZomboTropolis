@@ -37,7 +37,7 @@ function Outcome.move(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
-  local GPS_success
+  local GPS_usage
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
@@ -50,7 +50,7 @@ function Outcome.move(player, dir)
     if player:isMobType('human') then
       local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
       if inventory_has_GPS then 
-        GPS_success = Outcome.item('GPS', player, inv_ID) 
+        GPS_usage = Outcome.item('GPS', player, inv_ID) 
       end
     end
     
@@ -59,7 +59,7 @@ function Outcome.move(player, dir)
   end
   
   player:updatePos(dir_y, dir_x)
-  return {dir, GPS_success}
+  return {dir, GPS_usage}
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
