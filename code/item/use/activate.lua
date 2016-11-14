@@ -52,29 +52,25 @@ function activate.bandage(player, condition, target)
   print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
 end
 
-function activate.antidote(player, condition, target)
-  local antidote = medical.antidote
-  local cure_chance = antidote:getAccuracy()  
-  -- modify chance based on skills?
-  
-  local cure_success = cure_chance >= math.random()
-  -- target:updateStatusEffects?
-  -- target:event trigger
-  if cure_success then
-    print('You cure with the '..antidote:getName()..'.')
-  else
-    print('You fail to cure with the '..antidote:getName()..'.')
-  end
-end  
+local syringe_hp_ranges = {3, 6, 9, 12}
 
 function activate.syringe(player, condition, target)
   local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
-  -- modify chance based on skills?
+  if player.skills:check('syringe') then
+    inject_chance = inject_chance + 0.05
+    if player.skills:check("syringe_adv") then
+      inject_chance = inject_chance + 0.05
+    end
+  end
   
   local inject_success = inject_chance >= math.random()
-  target:killed('syringe')
+  local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
+  
+  if inject_success and target_weak_enough then target:killed() end
   -- target:event trigger
+  
+  return {inject_success, target_weak_enough} 
 end
 
 --[[

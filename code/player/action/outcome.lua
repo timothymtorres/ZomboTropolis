@@ -1,7 +1,3 @@
---[[
-local lookupItem =    require('code.item.search')
-local lookupWeapon=   require('code.item.weapon.search')
---]]
 local map =               require('code.location.map.class')
 local combat =            require('code.player.combat')
 local entangle =          require('code.player.condition.entangle')
@@ -10,6 +6,8 @@ local equipmentActivate = require('code.location.building.equipment.operation.ac
 local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
+local item =              require('code.item.class')
+
 
 Outcome = {}
 
@@ -63,8 +61,8 @@ function Outcome.attack(player, target, weapon, inv_ID)
   local attack, damage, critical = combat(player, target, weapon)
   
   if attack then 
-    if target_class == 'player' then -- what about barricades? buildings? equipment?
-      if target.armor:isPresent() then  -- what if weapon is harmless?
+    if target_class == 'player' then
+      if target.armor:isPresent() and not weapon:isHarmless() then
         local damage_type = weapon:getDamageType()
         local resistance = target.armor:getProtection(damage_type)
         damage = damage - resistance    
@@ -88,6 +86,9 @@ function Outcome.attack(player, target, weapon, inv_ID)
       if zombie.skills:check('track') then
         zombie.condition.tracking:addScent(human)
       end
+    --elseif target_class == 'building' then
+    --elseif target_class == 'barricade' then
+    --elseif target_class == equipment?
     end
     
     local hp_loss = -1*damage
@@ -208,8 +209,23 @@ function Outcome.item(item, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item](player, item_condition, target) 
-  if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) end
+  
+  if item_INST:isSingleUse() then -- no need for durability check
+    if item_INST:getClassName() == 'syringe' then
+      local inject_success, target_weak_enough = result[1], result[2]
+      if inject_success then
+        if target_weak_enough then  -- the syringe will be discarded without creating a vaccine if the target is too strong
+          local vaccine = item.vaccine:new('unpowered') -- should probably make unpowered/powered condition dependent on syringe skills
+          player.inventory:insert(vaccine)
+        end
+        player.inventory:remove(inv_ID)
+    --else the syringe is not removed from inventory since it didn't hit
+      end
+    else -- all other single use items get discarded 
+      player.inventory:remove(inv_ID) 
+    end  
+  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
+  end
   return result
 end
 
