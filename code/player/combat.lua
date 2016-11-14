@@ -1,15 +1,15 @@
 local chanceToHit = require('code.item.weapon.chanceToHit')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local function combat(player, target, weapon)
-  local attack = dice.chance(chanceToHit(player, target, weapon))
+  local attack = chanceToHit(player, target, weapon) >= math.random()
   local damage, critical
   
   if attack then -- successful!
     if target:getClassName() == 'player' then
       local weapon_dice = weapon:getDice(player)      
-      damage = dice.rollAndTotal(weapon_dice)        
-      critical = dice.chance(weapon:getCrit())
+      damage = dice.roll(weapon_dice)        
+      critical = weapon:getCrit() >= math.random()
       if critical then damage = damage*2 end
     elseif target:getClassName() == 'equipment' then
       damage = weapon:getObjectDamage('equipment')      

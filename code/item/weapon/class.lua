@@ -3,7 +3,7 @@ local item = require('code.item.class')
 local chanceToHit = require('code.item.weapon.chanceToHit')
 local w_list = require('code.item.weapon.list')
 local entangle = require('code.player.condition.entangle')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local weapon = class('weapon', item)
 

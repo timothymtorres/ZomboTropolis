@@ -1,5 +1,4 @@
 local b_list = require('code.location.building.list')
-local dice = require('code.libs.rl-dice.dice')
 
 local function buildDesc(building_class)
   local external_desc, internal_desc, powered_desc
@@ -9,11 +8,11 @@ local function buildDesc(building_class)
   local material = e_desc.material[math.random(1, #e_desc.material)]
   
   external_desc = {
-    adjective = dice.chance(odds.adjective) and e_desc.adjective[math.random(1, #e_desc.adjective)] or false,
-    color = e_desc.colored_material[material] and dice.chance(odds.color) and e_desc.color[math.random(1, #e_desc.color)] or false,
+    adjective = odds.adjective >= math.random() and e_desc.adjective[math.random(1, #e_desc.adjective)] or false,
+    color = e_desc.colored_material[material] and odds.color >= math.random() and e_desc.color[math.random(1, #e_desc.color)] or false,
     material = material,
-    details = dice.chance(odds.details) and e_desc.details[math.random(1, #e_desc.details)] or false,
-    surroundings = dice.chance(odds.surroundings) and e_desc.surroundings[math.random(1, #e_desc.surroundings)] or false,
+    details = odds.details >= math.random() and e_desc.details[math.random(1, #e_desc.details)] or false,
+    surroundings = odds.surroundings >= math.random() and e_desc.surroundings[math.random(1, #e_desc.surroundings)] or false,
   }
   
   local i_desc = b_list[building_class].internal_desc

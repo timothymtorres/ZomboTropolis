@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local burn = class('burn')
 
@@ -22,7 +22,7 @@ function burn:isActive()
 end
 
 function burn:add(fuel, combustion_source)
-  fuel = dice.rollAndTotal(fuel)
+  fuel = dice.roll(fuel)
   self.units = math.min(self.units + fuel, MAX_UNITS)
   self.on_fire = combustion_source or false
 end
@@ -49,7 +49,7 @@ function burn:damage()
   for burn_LV, burn_amount in ipairs(burn_data) do
     if self.units <= burn_amount then
       local damage_roll = burn_data.dice.damage[burn_LV]
-      return dice.rollAndTotal(damage_roll)
+      return dice.roll(damage_roll)
     end
   end
 end
@@ -58,7 +58,7 @@ function burn:consumeFuel()
   local absorption_roll 
   for burn_LV, burn_amount in ipairs(burn_data) do
     if self.units <= burn_amount then      
-      absorption_roll = dice.rollAndTotal(burn_data.dice.absorption[burn_LV])
+      absorption_roll = dice.roll(burn_data.dice.absorption[burn_LV])
       break
     end
   end 

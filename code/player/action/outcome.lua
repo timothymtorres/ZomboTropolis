@@ -9,7 +9,7 @@ local itemActivate =      require('code.item.use.activate')
 local equipmentActivate = require('code.location.building.equipment.operation.activate')
 local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
-local dice =              require('code.libs.rl-dice.dice')
+local dice =              require('code.libs.dice')
 
 Outcome = {}
 
@@ -73,7 +73,7 @@ function Outcome.attack(player, target, weapon, inv_ID)
         local retailation_damage = target.armor:getProtection('damage_melee_attacker')
         local is_melee_attack = weapon:getStyle() == 'melee'
         if is_melee_attack and retailation_damage > 0 then
-          local retailation_hp_loss = -1*dice:rollAndTotal(retailation_damage)
+          local retailation_hp_loss = -1*dice.roll(retailation_damage)
           player:updateStat('hp', retailation_hp_loss)
           -- insert some type of event?
         end
@@ -194,7 +194,7 @@ function Outcome.feed(player)
     decay_loss = corpse_effects.decay[nutrition_lvl]
   end
   
-  xp_gained, decay_loss = dice.rollAndTotal(xp_gained), dice.rollAndTotal(decay_loss)
+  xp_gained, decay_loss = dice.roll(xp_gained), dice.roll(decay_loss)
     
   player:updateStat('xp', xp_gained)
   player.condition.decay:add(-1*decay_loss)

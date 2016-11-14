@@ -1,13 +1,9 @@
 local class = require('code.libs.middleclass')
 local t_list = require('code.location.tile.list')
 local b_list = require('code.location.building.list')
---local building = require('code.location.building.class')
 local item = require('code.item.class')
-local lookupItem = require('code.item.search')
-local dice = require('code.libs.rl-dice.dice')
 
 local tile = class('tile')
---local building = class(building, tile)
 
 function tile:initialize(map, y, x, name)
   self.y, self.x = y, x
@@ -126,8 +122,6 @@ function tile:getDesc(setting)
   return str
 end
 
---function tile:getTileType() return self.tile_type end
-
 function tile:getPlayers(setting) 
   local players
   if setting == 'inside' then 
@@ -170,7 +164,7 @@ function tile:search(player, setting)
   local location_state = self:getState()  
   
   local odds = self:getSearchOdds(player, setting, location_state)
-  local search_success = dice.chance(odds)
+  local search_success = odds >= math.random()
   
   if not search_success then return false end
 
@@ -183,10 +177,6 @@ print('location_state - ', location_state)
   if self:getClassName() == 'junkyard' then location_state = 'powered' end
   
   local item_INST = item[item_type]:new(location_state) 
-  
--- DO WE NEED THIS?!
---local item = lookupItem(item_name)   -- do we need item[#ID] or item class?
-  
   return item_INST
 end
 

@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 local barrier = require('code.location.building.barrier.class')
 
 local barricade = class('barricade', barrier)
@@ -107,7 +107,7 @@ function barricade:reinforce()
   end  
   
   local reinforce_dice = dice:new(dice_str, 0)
-  local roll_result = reinforce_dice.roll()
+  local roll_result = reinforce_dice:roll()
   if roll_result > 0 then
     self.potential_hp = math.min(self.potential_hp + roll_result, MAX_HP) 
     self:updateDesc()
@@ -163,7 +163,7 @@ function barricade:fortify(player, cade_condition)
   if player.skills:check('barricade') then barricade_dice = barricade_dice / 1 end
   if player.skills:check('barricade_adv') then barricade_dice = barricade_dice ^ 1 end
   
-  self:updateHP(barricade_dice.roll())
+  self:updateHP(barricade_dice:roll())
 end
 
 return barricade

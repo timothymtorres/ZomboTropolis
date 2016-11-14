@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
 local item_armor_list = require('code.item.list.armor')
 local armor = require('code.player.armor.class')
 

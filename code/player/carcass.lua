@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local carcass = class('carcass')
 -- carcass description (very fresh|fresh|old meat)
@@ -33,7 +33,7 @@ function carcass:devour(player)
   self.carnivour_list[player] = true
   
   local infestation = player.skills:check('digestion') and INFESTATION_DIGESTION_AMT or INFESTATION_DEVOUR_AMT
-  self:infest(dice.rollAndTotal(infestation))
+  self:infest(dice.roll(infestation))
   
   if #self.carnivour_list == MAX_FEEDINGS then 
     self.infestation = MAX_INFESTATION
@@ -53,7 +53,7 @@ end
 local INFESTATION_TICK_AMT = '1d5'  -- this should be a server wide (single) roll
 
 function carcass:elapse()
-  self:infest(dice.rollAndTotal(INFESTATION_TICK_AMT))
+  self:infest(dice.roll(INFESTATION_TICK_AMT))
 end
 
 function carcass:reanimate()

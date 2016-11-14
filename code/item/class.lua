@@ -9,7 +9,7 @@ local order = require('code.item.order')
 local bit = require('plugin.bit')
 local lshift, rshift, bor = bit.lshift, bit.rshift, bit.bor
 local check = require('code.item.use.check')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local item = class('item')
 

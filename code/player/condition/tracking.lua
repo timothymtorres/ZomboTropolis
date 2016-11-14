@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.rl-dice.dice')
+local dice = require('code.libs.dice')
 
 local tracking = class('tracking')
 local TRACKING_TARGET_LIMIT, TRACKING_ADV_TARGET_LIMIT = 5, 8
@@ -23,13 +23,13 @@ function tracking:addScent(target)
   -- check if target is already on our list
   for i, scent in ipairs(self.list) do
     if scent.prey == target then -- update target to most recent 
-      self.list[#self.list+1] = {prey = target, ticks = math.max(dice.rollAndTotal(scent_time), scent.ticks)}
+      self.list[#self.list+1] = {prey = target, ticks = math.max(dice.roll(scent_time), scent.ticks)}
       table.remove(self.list, i)
       return -- no need for other stuff
     end
   end
   
-  self.list[#self.list+1] = {prey = target, ticks = dice.rollAndTotal(scent_time)}
+  self.list[#self.list+1] = {prey = target, ticks = dice.roll(scent_time)}
   target.condition.tracking:addTracker(self.player)
   
   local target_limit = has_advanced_tracking and TRACKING_ADV_TARGET_LIMIT or TRACKING_TARGET_LIMIT

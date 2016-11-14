@@ -3,7 +3,6 @@ local class = require('code.libs.middleclass')
 local tile =         require('code.location.tile.class')
 local building =     require('code.location.building.class')
 local b_list =       require('code.location.building.list')
-local lookupArea =   require('code.location.search')
 
 local map = class('map')
 
@@ -20,9 +19,8 @@ function map:initialize(size)
   for y=1, size do
     self[y] = {}
     for x=1, size do
-      
-      local location = lookupArea(tile_type)      
-      self[y][x] = location:new(self, y, x, '[insert name]')
+            
+      self[y][x] = building[tile_type]:new(self, y, x, '[insert name]')
     end
   end
 end

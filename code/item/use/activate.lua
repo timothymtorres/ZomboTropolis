@@ -1,6 +1,6 @@
-local dice = require('code.libs.rl-dice.dice')
-local lookupMedical = require('code.item.medical.search')
+local dice = require('code.libs.dice')
 local flags = require('code.player.skills.flags')
+local medical = require('code.item.medical.class')
 
 local activate = {}
 
@@ -9,8 +9,7 @@ local activate = {}
 --]]
 
 function activate.FAK(player, condition, target)
-  local FAK = lookupMedical('FAK')
-  local FAK_dice = dice:new(FAK:getDice())
+  local FAK_dice = dice:new(medical.FAK:getDice())
   local tile = player:getTile()  
  
   if player.skills:check(flags.recovery) and tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then
@@ -28,16 +27,14 @@ function activate.FAK(player, condition, target)
     FAK_dice = FAK_dice..'^^'
   end  
   
-  local heal_rolls, hp_gained = dice.roll(FAK_dice), 0
-  for _, heal in ipairs(heal_rolls) do hp_gained = hp_gained + heal end
+  local hp_gained = FAK_dice:roll()
   target:updateHP(hp_gained)
   -- target:event trigger
   print('You heal with '..FAK:getName()..' for '..hp_gained..' hp.')
 end
 
 function activate.bandage(player, condition, target)
-  local bandage = lookupMedical('bandage')
-  local bandage_dice = dice:new(bandage:getDice())  
+  local bandage_dice = dice:new(medical.bandage:getDice())  
  
   if player.skills:check(flags.recovery) then 
     bandage_dice = bandage_dice+1
@@ -50,19 +47,18 @@ function activate.bandage(player, condition, target)
     end
   end  
   
-  local heal_rolls, hp_gained = dice.roll(bandage_dice), 0
-  for _, heal in ipairs(heal_rolls) do hp_gained = hp_gained + heal end
+  local hp_gained = bandage_dice:roll()
   target:updateHP(hp_gained)
   -- target:event trigger
   print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
 end
 
 function activate.antidote(player, condition, target)
-  local antidote = lookupMedical('antidote')
+  local antidote = medical.antidote
   local cure_chance = antidote:getAccuracy()  
   -- modify chance based on skills?
   
-  local cure_success = dice.chance(cure_chance)
+  local cure_success = cure_chance >= math.random()
   -- target:updateStatusEffects?
   -- target:event trigger
   if cure_success then
@@ -73,11 +69,11 @@ function activate.antidote(player, condition, target)
 end  
 
 function activate.syringe(player, condition, target)
-  local syringe = lookupMedical('syringe')
+  local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
   -- modify chance based on skills?
   
-  local inject_success = dice.chance(inject_chance)
+  local inject_success = inject_chance >= math.random()
   target:killed('syringe')
   -- target:event trigger
 end
@@ -164,7 +160,7 @@ function activate.book(player, condition)
   local book_dice = dice:new(xp_dice_str)
   if player.skills:check(flags.bookworm) then book_dice = book_dice^1 end
   if player:isStaged('inside') and player:getSpotCondition() == 'powered' then book_dice = book_dice/2 end 
-  local gained_xp = book_dice:rollAndTotal()
+  local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
 end
 
