@@ -1,4 +1,3 @@
-local item = require('code.item.class')
 local class = require('code.libs.middleclass')
 
 local inventory = class('code.player.inventory')
@@ -16,7 +15,7 @@ function inventory:initialize()
   self.radio_receivers = {}  
 end
 
-function inventory:insert(obj_INST) self[#self+1] = obj_INST end  
+function inventory:insert(item_INST) self[#self+1] = item_INST end  
 
 function inventory:remove(inv_ID) table.remove(self, inv_ID) end
 
@@ -27,6 +26,15 @@ function inventory:check(inv_ID) return (self[inv_ID] and true) or false end
 function inventory:lookup(inv_ID)  -- get itemClass_INST
   if inv_ID == nil or self[inv_ID] == nil then return error('inventory:lookup invalid') end  
   return self[inv_ID]
+end
+
+function inventory:search(item_name)
+  for inv_ID, item_INST in ipairs(self) do
+    if item_INST:getClassName() == item_name then 
+      return true, inv_ID 
+    end
+  end
+  return false
 end
 
 function inventory:catalog()

@@ -74,14 +74,14 @@ local action_list = {
     zombie = {
       default = {
         move =          {name='move',      cost=2, modifier={sprint = -1},},   
-        enter =         {name='enter',     cost= 1},
-        exit =          {name='exit',      cost= 1}, 
+        enter =         {name='enter',     cost=1},
+        exit =          {name='exit',      cost=1}, 
       },  
       basic = {
-        respawn = {cost=10, modifier={resurrection = -5},},
-        attack = {cost=1},
-        speak = {cost=1},
-        feed =  {cost=1},
+        respawn =       {cost= 10, modifier={resurrection = -5},},
+        attack =        {cost=  1},
+        speak =         {cost=  1},
+        feed =          {cost=  1},
       },
       skill = {
         -- generic skills

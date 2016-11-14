@@ -16,7 +16,7 @@ gadget.radio.durability = 100
 gadget.GPS = {}  -- GPS for humans should have a small chance to grant a free AP for movement
 gadget.GPS.full_name = 'global position system'
 gadget.GPS.weight = 2
-gadget.GPS.durability = 300 
+gadget.GPS.durability = 50 
 
 --[[
 gadget.cellphone = {}
@@ -33,11 +33,13 @@ gadget.loudspeaker = {}
 gadget.loudspeaker.full_name = 'loudspeaker'
 gadget.loudspeaker.weight = 1
 
---used for searching?  give search bonus?!
+--]]
+
 gadget.flashlight = {}
 gadget.flashlight.full_name = 'flashlight'
 gadget.flashlight.weight = 4
---]]
+gadget.flashlight.durability = 100
+
 
 for item in pairs(gadget) do gadget[item].class_category = 'research' end
 

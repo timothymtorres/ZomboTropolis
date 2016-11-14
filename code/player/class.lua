@@ -12,12 +12,7 @@ local condition = require('code.player.condition.class')
 local carcass = require('code.player.carcass')
 local organic_armor = require('code.player.armor.organic_class')
 local item_armor = require('code.player.armor.item_class')
-local flags = require('code.player.skills.flags')
 local weapon = require('code.item.weapon.class')
---[[
-local lookupWeapon = require('code.item.weapon.search') -- refactored? (delete)
-local lookupItem = require('code.item.search')  -- refactored? (delete)
---]]
 
 local player = class('player')
 
@@ -54,7 +49,10 @@ function player:killed(cause_of_death)
 #1 - human  killed (turns into zombie)  [reset skills, xp, sp]
 #2 - zombie killed (decay)              [delete] 
 #3 - zombie killed (regular death)      [nothing]
---]]    
+--]]
+
+  self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
+
   if self:isMobType('human') then
     self.hp, self.health_state = 0, {basic=4, advanced=8}
     self:updateMobType('zombie')

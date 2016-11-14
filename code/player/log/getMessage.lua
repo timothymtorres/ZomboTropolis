@@ -28,8 +28,12 @@ end
 --]]--DIR/COMPASS LAYOUT
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
 
-function description.move(player, dir)
-  msg[1] = 'You travel '..compass[dir]..'.'
+function description.move(player, dir, GPS_usage)
+  if GPS_usage then
+    msg[1] = 'You travel '..compass[dir]..' using a GPS.'    
+  else  
+    msg[1] = 'You travel '..compass[dir]..'.'
+  end
 end
 
 function description.search(player, item)

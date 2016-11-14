@@ -1,5 +1,4 @@
 local dice = require('code.libs.dice')
-local flags = require('code.player.skills.flags')
 local medical = require('code.item.medical.class')
 
 local activate = {}
@@ -12,38 +11,38 @@ function activate.FAK(player, condition, target)
   local FAK_dice = dice:new(medical.FAK:getDice())
   local tile = player:getTile()  
  
-  if player.skills:check(flags.recovery) and tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then
+  if player.skills:check('healing') and tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then
     FAK_dice = FAK_dice*1
 --print('powered confirmed')
 --print(tile:getClassName(), tile:getName(), tile:getTileType() )
-    if player.skills:check(flags.major_healing) and tile:isClass('hospital') then 
+    if player.skills:check('major_healing') and tile:isClass('hospital') then 
       FAK_dice = FAK_dice*1 
 --print('hosptial confirmed')
     end
   end
   
-  if player.skills:check(flags.major_healing_adv) then 
+  if player.skills:check('major_healing') then 
     FAK_dice = FAK_dice^1
     FAK_dice = FAK_dice..'^^'
-  end  
+  end
   
   local hp_gained = FAK_dice:roll()
   target:updateHP(hp_gained)
   -- target:event trigger
-  print('You heal with '..FAK:getName()..' for '..hp_gained..' hp.')
+  print('You heal with the first aid kit for '..hp_gained..' hp.')
 end
 
 function activate.bandage(player, condition, target)
   local bandage_dice = dice:new(medical.bandage:getDice())  
+  local tile = player:getTile()
  
-  if player.skills:check(flags.recovery) then 
+  if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then bandage_dice = bandage_dice+1 end
+ 
+  if player.skills:check('healing') then 
     bandage_dice = bandage_dice+1
-    if player.skills:check(flags.minor_healing) then 
-      bandage_dice = bandage_dice+1
-      if player.skills:check(flags.major_healing_adv) then 
-        bandage_dice = bandage_dice^1
-        bandage_dice = bandage_dice+1
-      end        
+    if player.skills:check('minor_healing') then 
+      bandage_dice = bandage_dice+1     
+      bandage_dice = bandage_dice^1    
     end
   end  
   
@@ -53,29 +52,25 @@ function activate.bandage(player, condition, target)
   print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
 end
 
-function activate.antidote(player, condition, target)
-  local antidote = medical.antidote
-  local cure_chance = antidote:getAccuracy()  
-  -- modify chance based on skills?
-  
-  local cure_success = cure_chance >= math.random()
-  -- target:updateStatusEffects?
-  -- target:event trigger
-  if cure_success then
-    print('You cure with the '..antidote:getName()..'.')
-  else
-    print('You fail to cure with the '..antidote:getName()..'.')
-  end
-end  
+local syringe_hp_ranges = {3, 6, 9, 12}
 
 function activate.syringe(player, condition, target)
   local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
-  -- modify chance based on skills?
+  if player.skills:check('syringe') then
+    inject_chance = inject_chance + 0.05
+    if player.skills:check("syringe_adv") then
+      inject_chance = inject_chance + 0.05
+    end
+  end
   
   local inject_success = inject_chance >= math.random()
-  target:killed('syringe')
+  local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
+  
+  if inject_success and target_weak_enough then target:killed() end
   -- target:event trigger
+  
+  return {inject_success, target_weak_enough} 
 end
 
 --[[
@@ -104,8 +99,15 @@ function activate.sampler(player, condition, target)
 
 end
 
-function activate.GPS(player, condition)
+local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
 
+function activate.GPS(player, condition)
+  local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+  local free_movement_success = GPS_chance >= math.random()
+  if free_movement_success then  -- the GPS has a chance to avoid wasting ap on movement
+    player:updateStat('ap', 1) -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+  end 
+  return {free_movement_success}
 end
 
 function activate.loudspeaker(player, condition, message)
@@ -158,8 +160,7 @@ local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 function activate.book(player, condition)
   local xp_dice_str = book_xp_dice[condition-1]
   local book_dice = dice:new(xp_dice_str)
-  if player.skills:check(flags.bookworm) then book_dice = book_dice^1 end
-  if player:isStaged('inside') and player:getSpotCondition() == 'powered' then book_dice = book_dice/2 end 
+  if player:isStaged('inside') and player:getSpotCondition() == 'powered' then book_dice = book_dice^1 end 
   local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
 end
