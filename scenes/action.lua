@@ -103,7 +103,7 @@ local function onRowRender( event )
                  effect = "fade",
                  time = 400,
                  params = {}
-              }
+              }             
               
               local mob_type = main_player:getMobType()
               local action_data, params = action_list[mob_type][item_name], options.params
