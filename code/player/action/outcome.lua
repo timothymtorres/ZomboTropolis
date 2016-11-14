@@ -37,6 +37,7 @@ function Outcome.move(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
+  local GPS_success
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
@@ -45,13 +46,20 @@ function Outcome.move(player, dir)
     else
       map[dir_y][dir_x]:insert(player, 'outside')
     end
-  else
+  else  -- player is outside
+    if player:isMobType('human') then
+      local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
+      if inventory_has_GPS then 
+        GPS_success = Outcome.item('GPS', player, inv_ID) 
+      end
+    end
+    
     map[y][x]:remove(player)
     map[dir_y][dir_x]:insert(player)
   end
   
   player:updatePos(dir_y, dir_x)
-  return {dir}
+  return {dir, GPS_success}
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -224,7 +232,8 @@ function Outcome.item(item, player, inv_ID, target)
     else -- all other single use items get discarded 
       player.inventory:remove(inv_ID) 
     end  
-  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
+  elseif item_INST:failDurabilityCheck(player) then 
+    item_INST:updateCondition(-1, player, inv_ID) 
   end
   return result
 end

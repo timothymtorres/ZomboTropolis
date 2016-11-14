@@ -99,8 +99,15 @@ function activate.sampler(player, condition, target)
 
 end
 
-function activate.GPS(player, condition)
+local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
 
+function activate.GPS(player, condition)
+  local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+  local free_movement_success = GPS_chance >= math.random()
+  if free_movement_success then  -- the GPS has a chance to avoid wasting ap on movement
+    player:updateStat('ap', 1) -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+  end 
+  return {free_movement_success}
 end
 
 function activate.loudspeaker(player, condition, message)
