@@ -142,12 +142,17 @@ function tile:isClass(tile_class) return self:getClassName() == tile_class end
 
 local modifier = {
   building_condition = {unpowered = 0.00, powered = 0.20, ruined = -0.80},
-  looting_skill = 0.05
+  looting_skill = 0.05,
+  flashlight_bonus = 0.10,
 }
 
-function tile:getSearchOdds(player, setting, location_status) 
+function tile:getSearchOdds(player, setting, location_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
-  local modifier_sum = modifier.building_condition[location_status] + (player.skills:check('looting') and modifier.looting_skill or 0)
+  local condition_bonus = modifier.building_condition[location_status] + 
+  local skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
+  local flashlight_bonus = was_flashlight_used and modifier.flashlight_bonus or 0
+  
+  local modifier_sum = condition_bonus + skill_bonus + flashlight_bonus
   return search_chance + (search_chance * modifier_sum)
 end
 
@@ -160,10 +165,10 @@ local function select_item(list)
   end
 end
 
-function tile:search(player, setting)
+function tile:search(player, setting, was_flashlight_used)
   local location_state = self:getState()  
   
-  local odds = self:getSearchOdds(player, setting, location_state)
+  local odds = self:getSearchOdds(player, setting, location_state, was_flashlight_used)
   local search_success = odds >= math.random()
   
   if not search_success then return false end

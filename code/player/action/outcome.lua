@@ -134,9 +134,22 @@ end
 
 function Outcome.search(player)
   local p_tile = player:getTile()
-  local item = p_tile:search(player, player:getStage())
+  local item, flashlight
+  
+  local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
+  local player_inside_powered_building = p_tile:getStatus() == 'powered' and player:isStaged('inside')
+  
+  if player_has_flashlight and not player_inside_powered_building then -- flashlight gives no search bonus if player inside powered building  
+    item = p_tile:search(player, player:getStage(), player_has_flashlight)
+    flashlight = true
+    Outcome.item('flashlight', player, inv_ID) -- this runs a durability check on flashlight
+  else  
+    item = p_tile:search(player, player:getStage())
+    flashlight = false
+  end
+  
   if item then player.inventory:insert(item) end
-  return {item}
+  return {item, flashlight}
 end
 
 function Outcome.discard(player, inv_ID)

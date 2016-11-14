@@ -36,9 +36,11 @@ function description.move(player, dir, GPS_usage)
   end
 end
 
-function description.search(player, item)
-  if item then msg[1] = 'You search and find a '..item:getClassName()..'.'
-  else msg[1] = 'You search and find nothing.'
+function description.search(player, item, flashlight)
+  if item then 
+    msg[1] = 'You search'.. (flashlight and ' with a flashlight ' or ' ') .. 'and find a '..item:getClassName()..'.'
+  else 
+    msg[1] = 'You search' .. (flashlight and ' with a flashlight ' or ' ') .. 'and find nothing.'
   end
 end
 
