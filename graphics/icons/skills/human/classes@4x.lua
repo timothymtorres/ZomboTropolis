@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:9d8276539b7ef6660d0e1a943acb4cc8:fd941b00d25029106bc2b00dec862e7c:f566188a86459ae073a2ad0b7302ee8b$
+-- $TexturePacker:SmartUpdate:ac5daee5d8387517ac6e2cee2a0663ae:0b1950ef12ada65785d5da94b03978d7:f566188a86459ae073a2ad0b7302ee8b$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -24,14 +24,6 @@ SheetInfo.sheet =
         },
         {
             -- crossed-swords
-            x=2,
-            y=516,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- hospital-cross
             x=516,
             y=2,
             width=512,
@@ -40,16 +32,16 @@ SheetInfo.sheet =
         },
         {
             -- tinker
-            x=516,
-            y=516,
+            x=1030,
+            y=2,
             width=512,
             height=512,
 
         },
     },
     
-    sheetContentWidth = 1030,
-    sheetContentHeight = 1030
+    sheetContentWidth = 1544,
+    sheetContentHeight = 516
 }
 
 SheetInfo.frameIndex =
@@ -57,8 +49,7 @@ SheetInfo.frameIndex =
 
     ["biohazard"] = 1,
     ["crossed-swords"] = 2,
-    ["hospital-cross"] = 3,
-    ["tinker"] = 4,
+    ["tinker"] = 3,
 }
 
 function SheetInfo:getSheet()

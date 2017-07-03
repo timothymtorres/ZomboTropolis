@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:ee68493515c4569b929f0b31a9c9c6a1:5bde6d16fda800c4d752b092767a32ad:848ff5c6cb8f71d964040041056bb1b7$
+-- $TexturePacker:SmartUpdate:7035b298e0a6e6416b84377043dbeb95:64b4dd25d5ce123ee5a7ee19e0b95dce:848ff5c6cb8f71d964040041056bb1b7$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- aerosol
+            -- anatomy
             x=0,
             y=0,
             width=256,
@@ -23,15 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- fulguro-punch
-            x=0,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- muscle-fat
+            -- bandage-roll
             x=256,
             y=0,
             width=256,
@@ -39,15 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- muscle-up
-            x=256,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- pummeled
+            -- medical-pack-alt
             x=512,
             y=0,
             width=256,
@@ -55,82 +39,26 @@ SheetInfo.sheet =
 
         },
         {
-            -- punch
-            x=512,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- quick-slash
+            -- sticking-plaster
             x=768,
             y=0,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- serrated-slash
-            x=768,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- slap
-            x=1024,
-            y=0,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- snatch
-            x=1024,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- sprint
-            x=1280,
-            y=0,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- targeting
-            x=1280,
-            y=256,
             width=256,
             height=256,
 
         },
     },
     
-    sheetContentWidth = 1536,
-    sheetContentHeight = 512
+    sheetContentWidth = 1024,
+    sheetContentHeight = 256
 }
 
 SheetInfo.frameIndex =
 {
 
-    ["aerosol"] = 1,
-    ["fulguro-punch"] = 2,
-    ["muscle-fat"] = 3,
-    ["muscle-up"] = 4,
-    ["pummeled"] = 5,
-    ["punch"] = 6,
-    ["quick-slash"] = 7,
-    ["serrated-slash"] = 8,
-    ["slap"] = 9,
-    ["snatch"] = 10,
-    ["sprint"] = 11,
-    ["targeting"] = 12,
+    ["anatomy"] = 1,
+    ["bandage-roll"] = 2,
+    ["medical-pack-alt"] = 3,
+    ["sticking-plaster"] = 4,
 }
 
 function SheetInfo:getSheet()

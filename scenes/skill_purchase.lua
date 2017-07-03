@@ -16,7 +16,6 @@ local imageSheet = {
     classes = {info = require('graphics.icons.skills.human.classes@1x'),},
     general = {info = require('graphics.icons.skills.human.general@1x'),},
     military = {info = require('graphics.icons.skills.human.military@1x'),},
-    medical = {info = require('graphics.icons.skills.human.medical@1x'),},
     research = {info = require('graphics.icons.skills.human.research@1x'),},
     engineering = {info = require('graphics.icons.skills.human.engineering@1x'),},
   },
@@ -25,7 +24,6 @@ local imageSheet = {
     general = {info = require('graphics.icons.skills.zombie.general@1x'),},
     brute = {info = require('graphics.icons.skills.zombie.brute@1x'),},
     hunter = {info = require('graphics.icons.skills.zombie.hunter@1x'),},
-    sentient = {info = require('graphics.icons.skills.zombie.sentient@1x'),},
     hive = {info = require('graphics.icons.skills.zombie.hive@1x'),},        
   },
 }

@@ -113,15 +113,17 @@ local skill_flags = {
   
   -- Hive  
   hivemind =             1,  
-  resurrection =         2,
-  bite =                 4,
-  bite_adv =             8,
-  corrode =             16,
-  acid =                32,
-  acid_adv =            64,
-  ruin =               128,
-  ransack =            256,
-  homewrecker =        512,
+  bite =                 2,
+  bite_adv =             4,
+  corrode =              8,
+  acid =                16,
+  acid_adv =            32,
+  ruin =                64,
+  ransack =            128,
+  homewrecker =        256,
+  stinger =            512,
+  venom =             1024,
+  venom_adv =         2048,
 }
 
 return skill_flags

@@ -19,14 +19,14 @@ local skill_list = {
       general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
       brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},      
       hunter = {'sprint', 'leap', 'leap_adv', 'track', 'scavenge', 'track_adv', 'dodge', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
-      hive = {'resurrection', 'hivemind', 'bite', 'bite_advanced', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'homewrecker'},
+      hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'homewrecker', 'stinger', 'venom', 'venom_adv'},
     },
     human = {
       category = {'classes', 'general', 'military', 'research', 'engineering'},
       classes = {'military', 'research', 'engineering'},
       general = {'melee', 'cutting', 'swinging', 'martial_arts', 'martial_arts_adv', 'ranged', 'roof_travel', 'hp_bonus', 'ip_bonus', 'looting', 'diagnosis', 'graffiti'},
       military = {'ranged_adv', 'guns', 'light_guns', 'heavy_guns', 'archery', 'archery_adv', 'melee_adv', 'chopping', 'slicing', 'smashing', 'smacking', 'explosives'},
-      research = {'healing', 'major_healing', 'minor_healing', 'diagnosis_adv', 'gadgets', 'syringe', 'syringe_adv', 'dna_scanner', 'terminal', 'terminal_adv'},
+      research = {'healing', 'major_healing', 'minor_healing', 'diagnosis_adv', 'gadgets', 'syringe', 'syringe_adv', 'scanner', 'terminal', 'terminal_adv'},
       engineering = {'repairs', 'repairs_adv', 'barricade', 'barricade_adv', 'reinforce', 'renovate', 'tech', 'power_tech', 'radio_tech', 'computer_tech'}, --'construction', 'reserve'},
     },
   },
@@ -41,7 +41,7 @@ local skill_list = {
         hunter = {
           name='hunter',
           desc='Unlock Hunter skills',
-          icon='one-eyed',
+          icon='tear-tracks',
         },
         hive = {
           name='hive',
@@ -209,14 +209,9 @@ local skill_list = {
       hive = {
         hivemind = {
           name='hivemind',
-          desc='Ability to communicate full speech',
-          icon='conversation',
+          desc='Ability to communicate full speech and revive easier',
+          icon='brain-stem',
         },         
-        resurrection = {
-          name='resurrection',
-          desc='Reviving from being killed now costs 5 ap',
-          icon='haunting',
-        },  
         bite = {
           name='bite',
           desc='Bite attacks +10% to-hit and increased damage',
@@ -252,7 +247,7 @@ local skill_list = {
         corrode = {
           name='corrode',
           desc='Acid attack +5% to-hit, increased chance of ruined items',
-          icon='lizard-tounge',
+          icon='lizard-tongue',
         },         
         acid_adv = {
           name='acid advanced',

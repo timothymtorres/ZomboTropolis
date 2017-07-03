@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/human/engineering.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/zombie/hive.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -89,7 +89,7 @@
         <key>dataFormat</key>
         <string>corona-imagesheet</string>
         <key>textureFileName</key>
-        <filename>research{v}.png</filename>
+        <filename>hive{v}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -187,7 +187,7 @@
             <key>lua</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>research{v}.lua</filename>
+                <filename>hive{v}.lua</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -230,10 +230,18 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>research/anatomy.png</filename>
-            <filename>research/bandage-roll.png</filename>
-            <filename>research/medical-pack-alt.png</filename>
-            <filename>research/sticking-plaster.png</filename>
+            <filename>hive/brain-stem.png</filename>
+            <filename>hive/carnivore-mouth.png</filename>
+            <filename>hive/cogsplosion.png</filename>
+            <filename>hive/drop.png</filename>
+            <filename>hive/fire-breath.png</filename>
+            <filename>hive/gluttonous-smile.png</filename>
+            <filename>hive/grass.png</filename>
+            <filename>hive/groundbreaker.png</filename>
+            <filename>hive/lizard-tongue.png</filename>
+            <filename>hive/scorpion-tail.png</filename>
+            <filename>hive/vile-fluid.png</filename>
+            <filename>hive/vomiting.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

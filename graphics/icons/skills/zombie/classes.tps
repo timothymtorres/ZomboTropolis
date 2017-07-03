@@ -6,31 +6,14 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tiim/Dropbox/Public/CoronaSDK/App test/graphics/icons/skills/human/medical.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/zombie/classes.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
                 <key>scale</key>
-                <double>1</double>
+                <double>0.125</double>
                 <key>extension</key>
-                <string>@4x</string>
-                <key>spriteFilter</key>
-                <string></string>
-                <key>acceptFractionalValues</key>
-                <false/>
-                <key>maxTextureSize</key>
-                <QSize>
-                    <key>width</key>
-                    <int>-1</int>
-                    <key>height</key>
-                    <int>-1</int>
-                </QSize>
-            </struct>
-            <struct type="AutoSDSettings">
-                <key>scale</key>
-                <double>0.5</double>
-                <key>extension</key>
-                <string>@2x</string>
+                <string>@0.5x</string>
                 <key>spriteFilter</key>
                 <string></string>
                 <key>acceptFractionalValues</key>
@@ -62,9 +45,26 @@
             </struct>
             <struct type="AutoSDSettings">
                 <key>scale</key>
-                <double>0.125</double>
+                <double>0.5</double>
                 <key>extension</key>
-                <string>@0.5x</string>
+                <string>@2x</string>
+                <key>spriteFilter</key>
+                <string></string>
+                <key>acceptFractionalValues</key>
+                <false/>
+                <key>maxTextureSize</key>
+                <QSize>
+                    <key>width</key>
+                    <int>-1</int>
+                    <key>height</key>
+                    <int>-1</int>
+                </QSize>
+            </struct>
+            <struct type="AutoSDSettings">
+                <key>scale</key>
+                <double>1</double>
+                <key>extension</key>
+                <string>@4x</string>
                 <key>spriteFilter</key>
                 <string></string>
                 <key>acceptFractionalValues</key>
@@ -89,7 +89,7 @@
         <key>dataFormat</key>
         <string>corona-imagesheet</string>
         <key>textureFileName</key>
-        <filename>medical{v}.png</filename>
+        <filename>classes{v}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -107,7 +107,7 @@
             </struct>
         </struct>
         <key>shapePadding</key>
-        <uint>0</uint>
+        <uint>2</uint>
         <key>jpgQuality</key>
         <uint>80</uint>
         <key>pngOptimizationLevel</key>
@@ -119,7 +119,7 @@
         <key>textureFormat</key>
         <enum type="SettingsBase::TextureFormat">png</enum>
         <key>borderPadding</key>
-        <uint>0</uint>
+        <uint>2</uint>
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
@@ -179,10 +179,15 @@
         </struct>
         <key>dataFileNames</key>
         <map type="GFileNameMap">
+            <key>data</key>
+            <struct type="DataFile">
+                <key>name</key>
+                <filename></filename>
+            </struct>
             <key>lua</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>medical{v}.lua</filename>
+                <filename>classes{v}.lua</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -225,18 +230,9 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>medical/anatomy.png</filename>
-            <filename>medical/bandage-roll.png</filename>
-            <filename>medical/corked-tube.png</filename>
-            <filename>medical/fizzing-flask.png</filename>
-            <filename>medical/health-increase.png</filename>
-            <filename>medical/health-normal.png</filename>
-            <filename>medical/medical-pack-alt.png</filename>
-            <filename>medical/pill.png</filename>
-            <filename>medical/scalpel.png</filename>
-            <filename>medical/sewing-needle.png</filename>
-            <filename>medical/square-bottle.png</filename>
-            <filename>medical/sticking-plaster.png</filename>
+            <filename>classes/frontal-lobe.png</filename>
+            <filename>classes/lizardman.png</filename>
+            <filename>classes/tear-tracks.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

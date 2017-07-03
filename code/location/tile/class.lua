@@ -148,7 +148,7 @@ local modifier = {
 
 function tile:getSearchOdds(player, setting, location_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
-  local condition_bonus = modifier.building_condition[location_status] + 
+  local condition_bonus = modifier.building_condition[location_status]
   local skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
   local flashlight_bonus = was_flashlight_used and modifier.flashlight_bonus or 0
   

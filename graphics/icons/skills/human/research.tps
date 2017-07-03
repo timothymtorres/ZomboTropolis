@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/human/engineering.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/human/research.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">

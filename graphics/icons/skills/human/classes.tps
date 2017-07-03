@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tiim/Dropbox/Public/CoronaSDK/App test/graphics/icons/skills/human/classes/classes.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/human/classes.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -230,10 +230,9 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>crossed-swords.png</filename>
-            <filename>hospital-cross.png</filename>
-            <filename>tinker.png</filename>
-            <filename>biohazard.png</filename>
+            <filename>classes/biohazard.png</filename>
+            <filename>classes/crossed-swords.png</filename>
+            <filename>classes/tinker.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
