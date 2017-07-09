@@ -232,7 +232,7 @@ function Outcome.item(item, player, inv_ID, target)
   local result = itemActivate[item](player, item_condition, target) 
   
   if item_INST:isSingleUse() then -- no need for durability check
-    if item_INST:getClassName() == 'syringe' then
+    if item_INST:getClassName() == 'syringe' then  -- syringes are a special case
       local inject_success, target_weak_enough = result[1], result[2]
       if inject_success then
         if target_weak_enough then  -- the syringe will be discarded without creating a vaccine if the target is too strong

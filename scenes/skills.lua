@@ -198,7 +198,6 @@ function scene:create( event )
  
     for ii, skill in ipairs(skill_list.order[mob_type][category]) do      
       if row == 0 then num = num + 1 end
-print(skill)
       local skill_data = skill_list.info[mob_type][category][skill]
       --local category = skill_list.getCategory(skill)
       local sheetInfo = imageSheet[mob_type][category].info

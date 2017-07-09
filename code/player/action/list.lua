@@ -42,9 +42,9 @@ local action_list = {
       },
       item = {
         barricade =     {name='barricade',    cost=1},
-        generator =     {name='generator',    cost=4, modifier={tech=-1, power_tech=-2},},
-        transmitter =   {name='transmitter',  cost=4, modifier={tech=-1, radio_tech=-2},},
-        terminal =      {name='terminal',     cost=4, modifier={tech=-1, computer_tech=-2},},
+        generator =     {name='generator',    cost=10, modifier={tech=-2, power_tech=-4},},
+        transmitter =   {name='transmitter',  cost=10, modifier={tech=-2, radio_tech=-4},},
+        terminal =      {name='terminal',     cost=10, modifier={tech=-2, computer_tech=-4},},
         
   --[[ 
   **RELOADING**

@@ -57,7 +57,7 @@ medical.antidote.one_use = true
 medical.syringe = {}
 medical.syringe.full_name = 'syringe'
 medical.syringe.group = {'instrument', 'syringe'}
-medical.syringe.accuracy = 0.25
+medical.syringe.accuracy = 0.05
 medical.syringe.one_use = true
 
 return medical

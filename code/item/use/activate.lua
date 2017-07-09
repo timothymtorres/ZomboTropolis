@@ -58,9 +58,9 @@ function activate.syringe(player, condition, target)
   local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
   if player.skills:check('syringe') then
-    inject_chance = inject_chance + 0.05
+    inject_chance = inject_chance + 0.15
     if player.skills:check("syringe_adv") then
-      inject_chance = inject_chance + 0.05
+      inject_chance = inject_chance + 0.20
     end
   end
   
