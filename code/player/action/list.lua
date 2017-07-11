@@ -78,7 +78,7 @@ local action_list = {
         exit =          {name='exit',      cost=1}, 
       },  
       basic = {
-        respawn =       {cost= 10, modifier={resurrection = -5},},
+        respawn =       {cost= 10, modifier={hivemind = -5},},
         attack =        {cost=  1},
         speak =         {cost=  1},
         feed =          {cost=  1},

@@ -58,8 +58,8 @@ function Outcome.move(player, dir)
     map[dir_y][dir_x]:insert(player)
   end
   
-  player:updatePos(dir_y, dir_x)
-  return {dir, GPS_usage}
+  player:updatePos(dir_y, dir_x)  
+  return {GPS_usage}
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -137,7 +137,7 @@ function Outcome.search(player)
   local item, flashlight
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
-  local player_inside_powered_building = p_tile:getStatus() == 'powered' and player:isStaged('inside')
+  local player_inside_powered_building = p_tile:getState() == 'powered' and player:isStaged('inside')
   
   if player_has_flashlight and not player_inside_powered_building then -- flashlight gives no search bonus if player inside powered building  
     item = p_tile:search(player, player:getStage(), player_has_flashlight)
