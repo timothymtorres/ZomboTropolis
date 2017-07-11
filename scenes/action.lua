@@ -364,8 +364,7 @@ function scene:create( event )
     local stat_text
     if main_player:isMobType('human') then      
       local ip, max_ip = main_player:getStat('ip'), main_player:getStat('ip', 'max')
-      local infection, max_infection = main_player.condition.infection:getTime(), 1023
-      stat_text = display.newText('IP ['..ip..'/'..max_ip..']  INFECT ['..infection..'/'..max_infection..']', stat_bar_w+offset, stat_bar_h*0.5 + thickness, native.systemFontBold, 10 )
+      stat_text = display.newText('IP ['..ip..'/'..max_ip..']', stat_bar_w+offset, stat_bar_h*0.5 + thickness, native.systemFontBold, 10 )
     elseif main_player:isMobType('zombie') then
       local ep, max_ep = main_player:getStat('ep'), main_player:getStat('ep', 'max')
       local decay, max_decay = main_player.condition.decay:getTime(), 1023

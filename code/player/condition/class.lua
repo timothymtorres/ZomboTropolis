@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local poison = require('code.player.condition.poison')
 local infection = require('code.player.condition.infection')
 local burn = require('code.player.condition.burn')
 local decay = require('code.player.condition.decay')
@@ -14,7 +13,6 @@ local condition = class('condition')
 function condition:initialize(player)
   if player:isMobType('human') then
     -- insert status conditions?
-    self.poison = poison:new()
     self.infection = infection:new()
   elseif player:isMobType('zombie') then
     self.burn = burn:new()
@@ -30,7 +28,7 @@ function condition:isActive(effect)
 end
 
 local condition_list = {
-  human = {'poison', 'infection'},
+  human = {'infection'},
   zombie = {'burn', 'decay'},
   -- tracking:elapse() is used ONLY during server ticks, not during players actions
 }

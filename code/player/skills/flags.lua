@@ -120,10 +120,8 @@ local skill_flags = {
   acid_adv =            32,
   ruin =                64,
   ransack =            128,
-  homewrecker =        256,
-  stinger =            512,
-  venom =             1024,
-  venom_adv =         2048,
+  infection =          256,
+  infection_adv =      512,
 }
 
 return skill_flags

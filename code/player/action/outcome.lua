@@ -107,6 +107,16 @@ function Outcome.attack(player, target, weapon, inv_ID)
       if effect == 'entangle' then
         local impale_bonus = bonus_effect and critical
         entangle.add(player, target, impale_bonus)
+      elseif effect == 'infection' then
+        -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
+        if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
+          if not target.condition.infection:isImmune() or target.condition.infection:isActive() then  --target cannot be immune or infection already active
+            target.condition.infection:add()          
+--print('A zombie has infected the target')            
+            -- should probably add an infection message to the ZOMBIE only!  A human shouldn't be notfied immediately until damage is taken
+            -- also should probably look at refactoring the msg system for player.log to make this easier
+          end
+        end         
       else -- normal effect process
         target.condition[effect]:add(duration, bonus_effect)
       end

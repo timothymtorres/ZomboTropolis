@@ -267,6 +267,7 @@ weapon.claw.critical = 0.05
 weapon.claw.organic = 'zombie'
 weapon.claw.object_damage = {barricade=1, door=1, equipment=1}
 weapon.claw.condition_effect = 'entangle'
+weapon.claw.master_skill = 'claw_adv'
 
 weapon.bite = {}
 weapon.bite.full_name = 'bite'
@@ -277,22 +278,8 @@ weapon.bite.dice = '1d4+1'
 weapon.bite.accuracy = 0.20
 weapon.bite.critical = 0.05
 weapon.bite.organic = 'zombie'
-
---[[
---- PROJECTILE
---]]
-
-weapon.sting = {}
-weapon.sting.full_name = 'sting'
-weapon.sting.attack_style = 'ranged'
-weapon.sting.damage_type = 'bullet'
-weapon.sting.group = {'stinger'}
-weapon.sting.dice = '1d2'
-weapon.sting.accuracy = 0.15
-weapon.sting.critical = 0.05
-weapon.sting.organic = 'zombie'
-weapon.sting.condition_effect = 'poison'
-weapon.sting.skill_required = 'stinger'
+weapon.bite.condition_effect = 'infection'
+weapon.bite.master_skill = 'bite_adv'
 
 --[[
 --- BURN

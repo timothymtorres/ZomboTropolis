@@ -24,7 +24,10 @@ function weapon:isSingleUse() return self.one_use or false end
 function weapon:hasConditionEffect(player)
   if self:getClassName() == 'claw' and not player.skills:check('grapple') then 
     return false -- if attacking with claws and missing grapple skill then no condition effect  
+  elseif self:getClassName() == 'bite' and not player.skills:check('infection') then
+    return false -- if attacking with bite and missing infection skill then no condition effect
   end
+  
   return (self.condition_effect and true) or false 
 end
 
@@ -96,7 +99,7 @@ local organic_modifier = {
   },
   bite = {
     dice={'1d5+1', '1d5+2'}, 
-    included_skills={'bite', 'power_bite'},
+    included_skills={'bite', 'bite_adv'},
   },
   fist = {
     dice={'1d2'},
@@ -123,9 +126,9 @@ function weapon:getDice(player, condition)
       if skill_count > 0 then
         local dice_str = organic_modifier.dice[skill_count]
         weapon_dice = dice:new(dice_str)  
-      end
-    end 
+      end    
     -- else organic weapon has no modifier or player lacks all included skills then use weapons default dice
+    end
   end  
   
   local mastered_skill = self:getMasterSkill()
@@ -139,18 +142,6 @@ function weapon:getDice(player, condition)
   return tostring(weapon_dice) 
 end
 
-local skill_effects = {
-  poison = {
-      order = {'venom_adv', 'venom', 'stinger'},
-    stinger = {duration = '1d2+2', amount='1d5+10'},
-      venom = {duration = '1d3+2', amount='1d7+15'},
-  venom_adv = {duration = '1d4+3', amount='1d10+20'},
-  },
-  entangle = {
-    
-  }
-}
-
 function weapon:getConditionEffect(player) --, condition)  maybe for later...?   
   local effect = self.condition_effect
   local duration, bonus_effect
@@ -159,21 +150,9 @@ function weapon:getConditionEffect(player) --, condition)  maybe for later...?
     if effect == 'burn' then
       duration = weapon:getFuelAmount()
       bonus_effect = weapon:isCombustionSource()
-    elseif effect == 'decay' then
-    
     end
   elseif player:isMobType('zombie') then
-    if effect == 'poison' then
-      for _, skill in ipairs(skill_effects.poison.order) do
-        if player.skills:check(skill) then
-          duration = skill_effects.poison[skill].duration
-          bonus_effect = skill_effects.poison[skill].amount
-          break
-        end
-      end
-    elseif effect == 'infection' then
-      
-    elseif effect == 'entangle' then
+    if effect == 'entangle' then
       if player.skills:check('impale') then bonus_effect = true end -- possible to impale on crit hit
     end
   end

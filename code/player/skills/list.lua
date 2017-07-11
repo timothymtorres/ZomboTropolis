@@ -19,7 +19,7 @@ local skill_list = {
       general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
       brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},      
       hunter = {'sprint', 'leap', 'leap_adv', 'track', 'scavenge', 'track_adv', 'dodge', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
-      hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'homewrecker', 'stinger', 'venom', 'venom_adv'},
+      hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'infection', 'infection_adv'},
     },
     human = {
       category = {'classes', 'general', 'military', 'research', 'engineering'},
@@ -221,23 +221,18 @@ local skill_list = {
           name='bite advanced',
           desc='Bite attacks receive a bonus reroll',
           icon='gluttonous-smile',
-        },         
-        stinger =   {
-          name = 'stinger',
-          desc = 'Grants ability to attack with a poisonous stinger that injects venom into the bloodstream for a small duration',
-          icon = 'scorpion-tail',
-        },
-        venom =   {
-          name = 'venom',
-          desc = 'Increase the stingers to-hit 5%, higher dosage of venom injected and increased duration',
+        },        
+        infection =   {
+          name = 'infection',
+          desc = 'A successful bite attacks while a human is grappled results in infection.  Infection has a small incubation and then deals continous damage until it is cured or stalled with antibodies.',
           icon = 'drop',
-          requires={'stinger'},
+          requires={'grapple'},
         },
-        venom_adv =   {
-          name = 'venom advanced',
-          desc = 'Stinger attacks +10% to-hit, higher dosage of venom injected and increased duration',
+        infection_adv =   {
+          name = 'infection advanced',
+          desc = 'All successful bite attacks result in infection.',
           icon = 'vile-fluid',
-          requires={'venom'},
+          requires={'infection'},
         },  
         acid = {
           name='acid',
@@ -263,11 +258,6 @@ local skill_list = {
           name='ransack',
           desc='[Not Implemented] Ransack a building that is ruined',
           icon='grass',
-        }, 
-        homewrecker = {
-          name='homewrecker',
-          desc='[Not Implemented] Attacks against building equipment deals double damage',
-          icon='cogsplosion',
         },     
       },
     },
@@ -670,7 +660,9 @@ function skill_list.getFlag(skill) return skill_list[skill].flag end
 
 function skill_list.getMobType(skill) return skill_list[skill].mob_type end
 
-function skill_list.getCategory(skill) return skill_list[skill].category end
+function skill_list.getCategory(skill) 
+print('skill_list.getCategory(', skill, ')')  
+  return skill_list[skill].category end
 
 function skill_list.isClass(skill) return skill_list[skill].category == 'classes' end
 
