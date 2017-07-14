@@ -21,6 +21,10 @@ medical.syringe = {}
 medical.syringe.full_name = 'syringe'
 medical.syringe.weight = 5
 
+medical.antibodies = {}
+medical.antibodies.full_name = 'antibodies'
+medical.antibodies.weight = 5
+
 for item in pairs(medical) do 
   medical[item].one_use = true
   medical[item].class_category = 'research'

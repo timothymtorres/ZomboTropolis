@@ -52,6 +52,19 @@ function activate.bandage(player, condition, target)
   print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
 end
 
+function activate.antibodies(player, condition, target)
+  local antibodies = medical.antibodies
+  local antibodies_dice = dice:new(medical.antibodies:getDice())
+  
+  antibodies_dice = antibodies_dice + (condition*100)
+  --if player.skills:check('') then        Should we utilize a skill that affects antibodies?
+  
+  local immunity_gained = antibodies_dice:roll()
+  target.condition.infection:addImmunity(immunity_gained)
+  --target:event trigger
+  print('You give antibodies to '..target:getUsername()..' for '..immunity_gained..' ticks.')
+end
+
 local syringe_hp_ranges = {3, 6, 9, 12}
 
 function activate.syringe(player, condition, target)

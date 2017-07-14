@@ -8,6 +8,8 @@ function check.FAK(player) end -- limit FAK's so they cannot be used on self (on
 
 function check.bandage(player) end
 
+function check.antibodies(player) end
+
 function check.antidote(player) end
 
 function check.syringe(player)

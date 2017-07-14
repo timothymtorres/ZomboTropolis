@@ -34,6 +34,11 @@ error_list[#error_list+1] = 'Target has been killed'
 error_list[#error_list+1] = 'Target is out of range'
 error_list[#error_list+1] = 'Target has full health'
 
+function criteria.antibodies(player, target)
+  assert(target:isStanding(), 'Target has been killed')
+  assert(targetInRange(player, target), 'Target is out of range')
+end
+
 function criteria.antidote(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(targetInRange(player, target), 'Target is out of range')
