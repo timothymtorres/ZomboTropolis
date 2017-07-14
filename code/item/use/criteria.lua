@@ -17,40 +17,52 @@ function criteria.FAK(player, target)
   assert(targetInRange(player, target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   -- must be in a lit area
+  assert(target:isMobType('human'), 'Target must be a human')    
 end
 
 error_list[#error_list+1] = 'Target has been killed'
 error_list[#error_list+1] = 'Target is out of range'
 error_list[#error_list+1] = 'Target has full health'
+error_list[#error_list+1] = 'Target must be a human'
 
 function criteria.bandage(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(targetInRange(player, target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   -- must be in a lit area  
+  assert(target:isMobType('human'), 'Target must be a human')    
 end
 
 error_list[#error_list+1] = 'Target has been killed'
 error_list[#error_list+1] = 'Target is out of range'
 error_list[#error_list+1] = 'Target has full health'
+error_list[#error_list+1] = 'Target must be a human'
 
 function criteria.antibodies(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(targetInRange(player, target), 'Target is out of range')
-end
-
-function criteria.antidote(player, target)
-  assert(target:isStanding(), 'Target has been killed')
-  assert(targetInRange(player, target), 'Target is out of range')
+  assert(target:isMobType('human'), 'Target must be a human')    
 end
 
 error_list[#error_list+1] = 'Target has been killed'
 error_list[#error_list+1] = 'Target is out of range'
+error_list[#error_list+1] = 'Target must be a human'
+
+function criteria.antidote(player, target)
+  assert(target:isStanding(), 'Target has been killed')
+  assert(targetInRange(player, target), 'Target is out of range')
+  assert(target:isMobType('human'), 'Target must be a human')  
+end
+
+error_list[#error_list+1] = 'Target has been killed'
+error_list[#error_list+1] = 'Target is out of range'
+error_list[#error_list+1] = 'Target must be a human'
+
 
 function criteria.syringe(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(targetInRange(player, target), 'Target is out of range')
-  assert(target:isZombie(), 'Target must be a zombie')
+  assert(target:isMobType('zombie'), 'Target must be a zombie')
   assert(target:getHP()<=5, 'Target is not weak enough')
 end
 

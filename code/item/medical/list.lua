@@ -47,7 +47,7 @@ medical.herb.one_use = true
 medical.antibodies = {}
 medical.antibodies.full_name = 'antibodies'
 medical.antibodies.group = {} -- skills invovled?
-medical.antibodies.dice = '10d10+100'
+medical.antibodies.dice = '10d10'
 medical.antibodies.one_use = true
 
 medical.antidote = {}
