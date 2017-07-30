@@ -41,24 +41,24 @@ function item:toBit() end
 function item.toClass(bits) end
 --]]
 
-function item:updateUses(num) self.uses = self.uses + num end
-
 function item:canBeActivated(player)
   local item_name = self:getClassName()
   return (check[item_name] and pcall(check[item_name], player) ) or false
 end
 
-function item:hasConditions() return not self.condition_omitted end
-
-function item:hasUses() return self.designated_uses and true or false end
+function item:hasConditions() return not self.condition_omitted end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
 function item:isWeapon() return self.designated_weapon or false end
 
-function item:isSingleUse() return self.one_use or false end
+function item:isSingleUse() return self.durability == 0 end
 
 function item:failDurabilityCheck(player)
-  -- skill mastery provides +20% durability bonus to items
-  local durability = (player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5)) or self.durability  
+  local durability = self.durability
+  if self.master_skill then          -- skill mastery provides +20% durability bonus to items
+    if self.durability > 1 then      -- but not to items that are limited usage (ie. only 4 use or single use)
+      durability = player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5) or durability
+    end
+  end
   return dice.roll(durability) <= 1
 end
 
@@ -92,8 +92,6 @@ print('getFlag()', ID, 2)
   
   return flag
 end
-
-function item:getUses() return self.uses end
 
 function item:getCondition() return self.condition end
 

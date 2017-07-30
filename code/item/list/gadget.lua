@@ -33,6 +33,10 @@ gadget.loudspeaker = {}
 gadget.loudspeaker.full_name = 'loudspeaker'
 gadget.loudspeaker.weight = 1
 
+
+gadget.binoculars = {}
+gadget.binoculars.full_name = 'binoculars'
+gadget.binoculars.weight = 2
 --]]
 
 gadget.flashlight = {}

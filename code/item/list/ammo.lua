@@ -4,7 +4,7 @@ local ammo = {}
   full_name = 'insert name'
   weight = num
   class_category = 'military'
-  one_use = true
+  durability = 0/1/+num    [0 = one use, 1 = one usage each time, +num = 1/num chance of usage]
 --]]
 
 ammo.pistol_mag = {}
@@ -25,7 +25,7 @@ ammo.quiver.weight = 4
 
 for item in pairs(ammo) do 
   ammo[item].class_category = 'military' 
-  ammo[item].one_use = true  -- all ammo is single use
+  ammo[item].durability = 0  -- all ammo is single use
 end
 
 return ammo

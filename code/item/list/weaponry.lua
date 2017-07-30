@@ -94,13 +94,13 @@ weaponry.missle.weight = 25
 weaponry.flare = {}
 weaponry.flare.full_name = 'flare'
 weaponry.flare.weight = 5
-weaponry.flare.one_use = true
+weaponry.flare.durability = 0
 weaponry.flare.master_skill = 'explosives'
 
 weaponry.molotov = {}
 weaponry.molotov.full_name = 'molotov cocktail'
 weaponry.molotov.weight = 5
-weaponry.molotov.one_use = true
+weaponry.molotov.durability = 0
 weaponry.molotov.master_skill = 'explosives'
 
 for item in pairs(weaponry) do 
