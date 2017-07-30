@@ -242,20 +242,26 @@ function Outcome.default(action, player, ...)
   return Outcome[action](player, ...)
 end
 
+local antidote_skill_modifier = {none = 'ruined', syringe = 'unpowered', syringe_adv = 'powered'}
+local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
+
 function Outcome.item(item, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item](player, item_condition, target) 
   
   if item_INST:isSingleUse() then -- no need for durability check
-    if item_INST:getClassName() == 'syringe' then  -- syringes are a special case, only get used if successful
-      local inject_success, target_weak_enough = result[1], result[2]
+    if item_INST:getClassName() == 'syringe' then  -- syringes are a special case
+      local inject_success, antidote_is_created = result[1], result[2]
       if inject_success then
-        if target_weak_enough then  -- the syringe will create a vaccine if the target is weak enough
-          local vaccine = item.vaccine:new('unpowered') -- should probably make unpowered/powered condition dependent on syringe skills
-          player.inventory:insert(vaccine)
+        if antidote_is_created then  -- the syringe will create a antidote if the target is weak enough
+          local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+          local antidote = item.antidote:new(skill_modifier)
+          player.inventory:insert(antidote)
         end
-        player.inventory:remove(inv_ID)
+         
+        local syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
+        if antidote_is_created or not syringe_salvage_successful then player.inventory:remove(inv_ID) end
       end
     else -- all other single use items get discarded 
       player.inventory:remove(inv_ID) 
