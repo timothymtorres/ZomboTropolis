@@ -61,9 +61,10 @@ local action_list = {
         quiver =        {name='quiver',         cost=4, modifier={archery= -3,     bows = -1},},
         book =          {name='book',           cost=5, modifier={bookworm=-2},},
         FAK =           {name='first aid kit',  cost=1},
-        bandage =       {name='bandage',},
-        antidote =      {name='antidote',},
-        syringe =       {name='syringe',},      
+        bandage =       {name='bandage',        cost=1},
+        antidote =      {name='antidote',       cost=1},
+        antibodies=     {name='antibodies',     cost=1},
+        syringe =       {name='syringe',        cost=1},      
       },
       equipment = {
         broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1},},
