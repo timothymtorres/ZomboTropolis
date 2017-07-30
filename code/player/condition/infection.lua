@@ -13,13 +13,17 @@ function infection:initialize()
 end
 
 function infection:add()
+print()
 print('Player has just been infected!')  
+print()
   self.incubation_timer = dice.roll(INCUBATION_DEFAULT)
   self.is_infected = true  
 end
 
 function infection:remove(player)
+print()
 print('Player has been cured of infection!')
+print()
   self.incubation_timer = 0
   self.is_infected = false
 end
@@ -28,7 +32,7 @@ function infection:addImmunity(time) self.incubation_timer = math.min(MAX_TIME, 
 
 function infection:isActive() return self.is_infected end
 
-function infection:isImmune() return (self.is_infected and self.incubation_timer > 0) end
+function infection:isImmune() return self.incubation_timer > 0 end
 
 function infection:elapse(player, time)
   if not self.is_infected then return end  

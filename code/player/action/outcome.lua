@@ -110,11 +110,17 @@ function Outcome.attack(player, target, weapon, inv_ID)
       elseif effect == 'infection' then
         -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
-          if not target.condition.infection:isImmune() or target.condition.infection:isActive() then  --target cannot be immune or infection already active
-            target.condition.infection:add()          
---print('A zombie has infected the target')            
+          if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
+            target.condition.infection:add() 
+print('--------------------------------')
+print('A zombie has infected the target')
+print('--------------------------------')
             -- should probably add an infection message to the ZOMBIE only!  A human shouldn't be notfied immediately until damage is taken
             -- also should probably look at refactoring the msg system for player.log to make this easier
+          else 
+print('--------------------------------')
+print('Bite was successful, but no infection')
+print('--------------------------------')            
           end
         end         
       else -- normal effect process
@@ -242,15 +248,14 @@ function Outcome.item(item, player, inv_ID, target)
   local result = itemActivate[item](player, item_condition, target) 
   
   if item_INST:isSingleUse() then -- no need for durability check
-    if item_INST:getClassName() == 'syringe' then  -- syringes are a special case
+    if item_INST:getClassName() == 'syringe' then  -- syringes are a special case, only get used if successful
       local inject_success, target_weak_enough = result[1], result[2]
       if inject_success then
-        if target_weak_enough then  -- the syringe will be discarded without creating a vaccine if the target is too strong
+        if target_weak_enough then  -- the syringe will create a vaccine if the target is weak enough
           local vaccine = item.vaccine:new('unpowered') -- should probably make unpowered/powered condition dependent on syringe skills
           player.inventory:insert(vaccine)
         end
         player.inventory:remove(inv_ID)
-    --else the syringe is not removed from inventory since it didn't hit
       end
     else -- all other single use items get discarded 
       player.inventory:remove(inv_ID) 
