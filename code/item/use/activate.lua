@@ -65,6 +65,11 @@ function activate.antibodies(player, condition, target)
   print('You give antibodies to '..target:getUsername()..' for '..immunity_gained..' ticks.')
 end
 
+function activate.antidote(player, target)
+  target.condition.infection:remove()
+  print('You use the antidote on '..target:getUsername())
+end
+
 local syringe_hp_ranges = {3, 6, 9, 12}
 
 function activate.syringe(player, condition, target)
