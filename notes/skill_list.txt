@@ -66,9 +66,13 @@ healing  (bonus to hp healed)
     major_healing  (bonus to hp healed with a FAK)
     minor_healing (bonus to hp healed with a bandage)
 diagnosis_adv  [see a more preceise hp status, and can see infected]
+
 gadgets        [small bonus when using gadgets]
+
 scanner        [increased chance to scan zombies]
+
 syringe        [increased chance to inject zombies]
 syringe_adv    [increased chance to inject zombies]
+
 terminal       [cost of using terminal is reduced]
 terminal_adv   [cost of using terminal is further reduced]

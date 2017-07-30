@@ -305,7 +305,7 @@ function scene:create( event )
  
   -- Function to handle button events
   local function handleTabBarEvent( event )
-      print( event.target._id )  --reference to button's 'id' parameter
+      print('event.target._id ', event.target._id )  --reference to button's 'id' parameter
     selectedTab = event.target._id
     actionMenu = redoMenu(event.target._id)
     sceneGroup:insert(actionMenu)
