@@ -65,7 +65,7 @@ function activate.antibodies(player, condition, target)
   print('You give antibodies to '..target:getUsername()..' for '..immunity_gained..' ticks.')
 end
 
-function activate.antidote(player, target)
+function activate.antidote(player, condition, target)
   target.condition.infection:remove()
   print('You use the antidote on '..target:getUsername())
 end
