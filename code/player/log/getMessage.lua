@@ -52,6 +52,20 @@ function description.attack(player, target, weapon, attack, damage, critical)
   msg[2] = 'You are attacked by '..target:getUsername()..' with their '..weapon:getClassName()..' and they '..end_msg
 end
 
+function description.enter(player, building)
+  msg[1] = 'You enter the '..building:getName()..' '..building:getClassName()..'.'
+end
+
+function description.exit(player, building)
+  msg[1] = 'You exit the '..building:getName()..' '..building:getClassName()..'.'
+end
+
+---------------------------------------
+---------------------------------------
+--              HUMAN                --
+---------------------------------------
+---------------------------------------
+
 function description.discard(player, item)
   msg[1] = 'You discard a '..item..'.'
 end
@@ -60,13 +74,25 @@ function description.barricade(player, result)
 
 end
 
-function description.enter(player, building)
-  msg[1] = 'You enter the '..building:getName()..' '..building:getClassName()..'.'
+function description.syringe(player, inv_ID, target, inject_success, target_weak_enough, syringe_salvage_successful)
+  if not inject_success then  -- syringe missed
+    msg[1] = 'You attempt to inject a zombie with your syringe and fail.'
+    msg[2] = target:getUsername()..' attempts to inject you with their syringe.'    
+  elseif inject_success and target_weak_enough then  -- syringe landed and antidote was created
+    msg[1] = 'You inject a zombie with your syringe and an antidote is created.'
+    msg[2] = target:getUsername()..' injects you with their syringe killing you in the process.'     
+  else  -- syringe landed but target was too healthy (bonus msg if syringe salvaged)
+    local end_msg = syringe_salvage_successful and '' or ' Your syringe is destroyed.'
+    msg[1] = 'You inject a zombie with your syringe but it is too strong and resists.'..end_msg
+    msg[2] = target:getUsername()..' injects you with their syringe but you resist.'      
+  end
 end
 
-function description.exit(player, building)
-  msg[1] = 'You exit the '..building:getName()..' '..building:getClassName()..'.'
-end
+---------------------------------------
+---------------------------------------
+--             ZOMBIE                --
+---------------------------------------
+---------------------------------------
 
 function description.respawn(player)
   if player:isMobType('zombie') then

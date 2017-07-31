@@ -40,6 +40,20 @@ function setupZone.attack(player, target, weapon, inv_ID)
   end  
 end
 
+function setupZone.enter(player)
+  zone.type = 'self'  
+end
+
+function setupZone.exit(player)
+  zone.type = 'self'  
+end
+
+---------------------------------------
+---------------------------------------
+--              HUMAN                --
+---------------------------------------
+---------------------------------------
+
 function setupZone.search(player)
   zone.type = 'self'  
 end
@@ -59,13 +73,18 @@ function setupZone.speak(player, message) -- , target)
   zone.tile = player:getTile()  
 end
 
-function setupZone.enter(player)
-  zone.type = 'self'  
+function setupZone.syringe(player, inv_ID, target)
+  zone.player = player
+  zone.type = 'pair'
+  zone.target = target
 end
 
-function setupZone.exit(player)
-  zone.type = 'self'  
-end
+---------------------------------------
+---------------------------------------
+--             ZOMBIE                --
+---------------------------------------
+---------------------------------------
+
 
 function setupZone.respawn(player) 
   zone.type = 'stage'
