@@ -63,13 +63,11 @@ function criteria.syringe(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(targetInRange(player, target), 'Target is out of range')
   assert(target:isMobType('zombie'), 'Target must be a zombie')
-  assert(target:getHP()<=5, 'Target is not weak enough')
 end
 
 error_list[#error_list+1] = 'Target has been killed'
 error_list[#error_list+1] = 'Target is out of range'
 error_list[#error_list+1] = 'Target must be a zombie'
-error_list[#error_list+1] = 'Target is not weak enough'
 
 --[[
 --- WEAPONS

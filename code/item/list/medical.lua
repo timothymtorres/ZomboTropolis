@@ -22,7 +22,7 @@ medical.bandage.durability = 0
 medical.syringe = {}
 medical.syringe.full_name = 'syringe'
 medical.syringe.weight = 5
-medical.bandage.durability = 0
+medical.syringe.durability = 0
 
 medical.antibodies = {}
 medical.antibodies.full_name = 'antibodies'
