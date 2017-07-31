@@ -64,7 +64,7 @@ medical.antidote.durability = 1
 medical.syringe = {}
 medical.syringe.full_name = 'syringe'
 medical.syringe.group = {'instrument', 'syringe'}
-medical.syringe.accuracy = 0.05
+medical.syringe.accuracy = 0.99999 --0.05
 medical.syringe.durability = 0
 
 return medical

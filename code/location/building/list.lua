@@ -200,9 +200,11 @@ building.hospital.item_chance.inside = {
  -- MEDICAL =  75%
   --      FAK = .25,
   --  bandage = .50, 
+ antibodies = .01,
+    syringe = .89,
 
  -- WEAPONS =  10%
-      knife = .90,
+  --    knife = .90,
 
     -- MISC =  10%
   newspaper = .10, 
