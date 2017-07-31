@@ -1,5 +1,6 @@
 local dice = require('code.libs.dice')
 local medical = require('code.item.medical.class')
+local item = require('code.item.class')
 
 local activate = {}
 
@@ -71,8 +72,10 @@ function activate.antidote(player, condition, target)
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
+local antidote_skill_modifier = {none = 'ruined', syringe = 'unpowered', syringe_adv = 'powered'}
+local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
-function activate.syringe(player, condition, target)
+function activate.syringe(player, condition, target, inv_ID)
   local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
   if player.skills:check('syringe') then
@@ -84,11 +87,23 @@ function activate.syringe(player, condition, target)
   
   local inject_success = inject_chance >= math.random()
   local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
+  local syringe_salvage_successful
+
+  if inject_success then
+    if target_weak_enough then  -- the syringe will create a antidote
+      target:killed()
+      -- target:event trigger
+      
+      local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+      local antidote = item.antidote:new(skill_modifier)
+      player.inventory:insert(antidote)
+    end
+     
+    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
+    if target_weak_enough or not syringe_salvage_successful then player.inventory:remove(inv_ID) end  
+  end
   
-  if inject_success and target_weak_enough then target:killed() end
-  -- target:event trigger
-  
-  return {inject_success, target_weak_enough} 
+  return {inject_success, target_weak_enough, syringe_salvage_successful} 
 end
 
 --[[
