@@ -118,7 +118,8 @@ local function onRowRender( event )
               print('The params going into options are:')
               for k,v in pairs(options.params) do print(k,v) end
               
-              composer.showOverlay( "scenes.action_perform", options)        
+              composer.showOverlay("scenes.action."..item_name, options)
+              --composer.showOverlay( "scenes.action_perform", options)        
               print( "Button was pressed and released" )              
           end
       end

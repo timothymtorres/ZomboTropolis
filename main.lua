@@ -18,6 +18,7 @@ print()
 print()
 
 local map = require('code.location.map.class')
+local item = require('code.item.class')  -- for testing item generation in main.lua
 player = require('code.player.class')
 table.copy = require('code.libs.copy')
 table.inspect = require('code.libs.inspect')
@@ -35,6 +36,20 @@ print()
 city = map:new(10)
 main_player = player:new('Fran', 'zombie', city, 4, 4)
 alt_player = player:new('Tim', 'human', city, 4, 4)
+
+main_player:updateStat('hp', -49)
+
+local syringe_INST = item.syringe:new('powered')
+alt_player.inventory:insert(syringe_INST)
+
+--[[
+print('---------')
+print('SYRINGE_ISNT IS:', syringe_INST, syringe_INST:getCondition())
+print('---------')
+
+alt_player:takeAction('syringe', 1, main_player)
+--Outcome.item('syringe', alt_player, 1, main_player)
+--]]
 
 for i=1, 100 do
   local y, x = math.random(1,10), math.random(1,10)
