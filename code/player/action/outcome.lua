@@ -245,10 +245,12 @@ end
 function Outcome.item(item_name, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
-  local result = itemActivate[item_name](player, item_condition, target, inv_ID) 
+  local result = itemActivate[item_name](player, item_condition, target) 
   
-  -- syringes are a special case that get handled in their item activation function
   if item_INST:isSingleUse() and not item_INST:getClassName() == 'syringe' then player.inventory:remove(inv_ID) 
+  elseif item_INST:getClassName() == 'syringe' then -- syringes are a special case
+    local antidote_was_created, syringe_was_salvaged = result[2], result[3]
+    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end  
   elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
   end
   return result
