@@ -20,4 +20,14 @@ armor.leather.resistance = {
   [3] = {blunt=1},
 }
 
+armor.firesuit = {}
+armor.firesuit.full_name = 'firesuit'
+armor.firesuit.durability = 4
+armor.firesuit.resistance = {
+  [0] = {acid=1},
+  [1] = {acid=2},
+  [2] = {acid=3},
+  [3] = {acid=4},
+}
+
 return armor
