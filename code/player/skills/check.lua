@@ -45,4 +45,10 @@ function check.track(player)
   
 end
 
+function check.acid(player)
+  local p_tile = player:getTile()
+  local human_n = p_tile:countPlayers('human', player:getStage())
+  assert(human_n > 0, 'Must have humans nearby to use acid')  
+end
+
 return check
