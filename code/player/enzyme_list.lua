@@ -26,7 +26,7 @@ local enzyme_list = {
   speech =         {cost=1},
   resurrection =   {cost=5},
   -- hive skills
-  stinger =        {cost=3, modifier={venom = -1, venom_adv = -1},},
+  --venom =          {cost=3, modifier={venom_adv = -1},},
   acid =           {cost=3, modifier={corrode = -1, acid_adv = -1},},
   ruin =           {cost=3, modifier={ransack = -1},},
 }
