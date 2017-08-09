@@ -7,7 +7,7 @@ local inventory = class('code.player.inventory')
     [1] = crowbar,
     [2] = bandage,
     [3] = pistol,
-    ...,  -- (inv_ID = inv_CL)
+    ...,  -- (inv_ID = itemClass_INST)
   }
 --]]
 
