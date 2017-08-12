@@ -11,6 +11,8 @@ local order = {
   'book', 'bottle', 'newspaper',
   -- AMMO
   'pistol_mag', 'shotgun_shell', 'rifle_clip', 'quiver',
+  -- ARMOR
+  'firesuit', 'leather',
 }
 
 return order

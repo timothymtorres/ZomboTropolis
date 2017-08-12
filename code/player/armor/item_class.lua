@@ -27,4 +27,4 @@ function item_armor:degrade(player)
   self.protection = item_armor_list[self.name].resistance[self.condition]
 end
 
-return armor
+return item_armor

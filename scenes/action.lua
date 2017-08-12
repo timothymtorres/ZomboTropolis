@@ -251,7 +251,8 @@ print(event.target.id, 'action cost is - ', main_player:getCost('ap', event.targ
           params.icon = action_data.icon
           params.cost = main_player:getCost('ap', event.target.id)
           
-          composer.showOverlay( "scenes.action_perform", options )        
+          composer.showOverlay("scenes.action."..event.target.id, options)    -- this SERIOUSLY needs to be refactored and renamed!!!        
+          --composer.showOverlay( "scenes.action_perform", options )        
           print( "Button was pressed and released" )
         end
       end     

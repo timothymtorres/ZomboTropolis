@@ -112,15 +112,8 @@ function Outcome.attack(player, target, weapon, inv_ID)
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
           if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
             target.condition.infection:add() 
-print('--------------------------------')
-print('A zombie has infected the target')
-print('--------------------------------')
             -- should probably add an infection message to the ZOMBIE only!  A human shouldn't be notfied immediately until damage is taken
-            -- also should probably look at refactoring the msg system for player.log to make this easier
-          else 
-print('--------------------------------')
-print('Bite was successful, but no infection')
-print('--------------------------------')            
+            -- also should probably look at refactoring the msg system for player.log to make this easier           
           end
         end         
       else -- normal effect process

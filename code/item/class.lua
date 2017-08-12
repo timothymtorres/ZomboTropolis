@@ -5,6 +5,7 @@ local j_list = require('code.item.list.junk')
 local m_list = require('code.item.list.medical')
 local w_list = require('code.item.list.weaponry')
 local a_list = require('code.item.list.ammo')
+local arm_list=require('code.item.list.armor')
 local order = require('code.item.order')
 local bit = require('plugin.bit')
 local lshift, rshift, bor = bit.lshift, bit.rshift, bit.bor
@@ -127,6 +128,6 @@ function item:dataToClass(...) -- this should be a middleclass function (fix lat
 end
 
 -- turn our list of objs into item class
-item:dataToClass(e_list, g_list, j_list, m_list, w_list, a_list)
+item:dataToClass(e_list, g_list, j_list, m_list, w_list, a_list, arm_list)
 
 return item

@@ -138,6 +138,12 @@ function setupZone.track(player)
   zone.tile = player:getTile()
 end
 
+function setupZone.acid(player, target)
+  zone.player = player
+  zone.type = 'pair'
+  zone.target = target 
+end
+
 ---------------------------------------
 ---------------------------------------
 --         JUST A DIVIDER            --

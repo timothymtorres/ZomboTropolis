@@ -23,6 +23,11 @@ player = require('code.player.class')
 table.copy = require('code.libs.copy')
 table.inspect = require('code.libs.inspect')
 
+
+
+
+local arm_CL = require('code.player.armor.item_class')
+
 --[[
 local building = require('code.location.building.class')
 lookupItem = require('code.item.search')
@@ -39,8 +44,14 @@ alt_player = player:new('Tim', 'human', city, 4, 4)
 
 main_player:updateStat('hp', -49)
 
-local syringe_INST = item.syringe:new('powered')
-alt_player.inventory:insert(syringe_INST)
+for i=1, 10 do
+  local syringe_INST = item.syringe:new('powered')
+  alt_player.inventory:insert(syringe_INST)
+end
+
+local firesuit_INST = item.firesuit:new('ruined')
+alt_player.inventory:insert(firesuit_INST)
+alt_player.armor:equip('firesuit', firesuit_INST:getCondition(), #alt_player.inventory)
 
 --[[
 print('---------')

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- syringe.lua
+-- acid.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -38,25 +38,13 @@ local cancelButtonEvent = function(event)
 end
 
 local targets, wheel
-local item, inv_id 
 
 local function getActionText(action)
   local str
   
-  -- need to get syringe stats (condition, accuracy, etc.)
-  -- need to make sure correct params are being passed to action text (ie. the wheel values)
-  -- syringe is not weapon, convert into item and get condition
-  
-  
   local selections = wheel:getValues()  -- {selections[i].value, selections[i].index} [1]=targets, [2]=weapons
   local target_name = selections[1].value
-  --local weapon_name, target_name = selections[2].value, selections[1].value    
-  local condition = '{'..item:getCondition()..'}' or ''       
-  
-  str = 'Inject '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp) using syringe?'
-
-  --\n('..item:getToHit(main_player, target)..'% to-hit)   '..condition        
-
+  str = 'Spray acid at '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp)?'     
   return str
 end
 
@@ -64,13 +52,7 @@ local function getActionParams(action)
   local params = {}
   local selections = wheel:getValues()
   local target = targets[selections[1].index]
-  params = {inv_id, target}  
---[[
-  elseif action == 'barricade' then
-    local inventory_ID = action_params.inv_id
-    params = {inventory_ID}
-  end
---]]
+  params = {target}  
   return params
 end
 
@@ -102,8 +84,6 @@ function scene:create( event )
    --local parent = event.parent
    local params = event.params
    local action = event.params.id
-   inv_id = event.params.inv_id
-   item = main_player.inventory:lookup(event.params.inv_id)
    
    container_xtra_w = extra_widget_sizes and extra_widget_sizes.width or 0
    container_xtra_h = extra_widget_sizes and extra_widget_sizes.height or 0
@@ -142,19 +122,10 @@ function scene:create( event )
         if active_timer then timer.cancel(active_timer) end
         
         print('')
-        local test = {unpack(getActionParams(action))}
 --for k,v in pairs(event) do print(k,v) end
 --for k,v in pairs(event.params) do print(k,v) end
-        print('getting action params BEFORE test:')
-        for i,v in ipairs(getActionParams(test)) do print(i,v) end
         
-
-        print('inv_id for params is:', event.params.inv_id)
-        test[#test+1] = event.params.inv_id
-        print('getting action params AFTER test:')
-        for i,v in ipairs(getActionParams(test)) do print(i,v) end
-        
-        main_player:takeAction(action, unpack(getActionParams(test)))
+        main_player:takeAction(action, unpack(getActionParams(action)))
         composer.hideOverlay('fade', 400)       
         composer.gotoScene('scenes.action')
         print('Button was pressed and released')
