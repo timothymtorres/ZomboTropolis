@@ -29,11 +29,10 @@ local condition_spawn_odds = {  -- used when spawning new item
   powered =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
 }
 
-function item:initialize(location_status) 
---print(condition_spawn_odds, location_status)
---print(condition_spawn_odds[location_status])
-  self.condition = selectFrom(condition_spawn_odds[location_status])
---print('self.condition - ', self.condition)
+function item:initialize(condition_setting) 
+  if type(condition_setting) == 'string' then self.condition = selectFrom(condition_spawn_odds[condition_setting])
+  elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
+  else error('Item initialization has a malformed condition setting')
 end
 
 --[[  THESE ARE SERVER/DATABASE FUNCTIONS
