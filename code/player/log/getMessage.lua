@@ -199,6 +199,19 @@ function description.speak(player, message)
   msg[3] = player:getUsername()..' said: "'..message..'"'
 end
 
+function description.acid(player, target, acid_successful, acid_immunity)
+  if acid_successful and acid_immunity then
+    msg[1] = 'You spray '..target:getUsername()..' with acid but it has no effect.'
+    msg[2] = 'A zombie sprays you with acid but your inventory is protected by a firesuit.'
+  elseif acid_successful then
+    msg[1] = 'You spray '..target:getUsername()..' with acid.'
+    msg[2] = 'A zombie sprays you with acid.'
+  else
+    msg[1] = 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.'
+    msg[2] = 'A zombie attempts to spray acid at you but is unsuccessful.'
+  end
+end
+
 ---------------------------------------
 ---------------------------------------
 --         JUST A DIVIDER            --

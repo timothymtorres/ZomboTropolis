@@ -93,6 +93,7 @@ local action_list = {
         armor =          {name='armor',         cost=1},
         -- hive skills
         ruin =           {name='ruin',          cost=1},
+        acid =           {name='acid',          cost=1},
         -- hunter skills
         mark_prey =      {name='mark prey',     cost=1},
         track =          {name='track',         cost=1},        

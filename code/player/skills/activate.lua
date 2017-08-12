@@ -1,4 +1,5 @@
 --local outcome = require('code.player.action.outcome')
+local dice =              require('code.libs.dice')
 
 local activate = {}
 
@@ -35,6 +36,35 @@ function activate.gesture(player, target) end
 function activate.track(player)
   local targets, targets_ranges = player.condition.tracking:getPrey()
   return {targets, targets_ranges}
+end
+
+local ACID = {
+  DEFAULT =   {CHANCE = 0.15, DICE = '1d2'},
+  CORRODE =   {CHANCE = 0.20, DICE = '1d3'},
+  ACID_ADV =  {CHANCE = 0.30, DICE = '1d4'},
+}
+
+function activate.acid(player, target) 
+  local n_items = #target.inventory
+  local acid_resistance = target.armor:isPresent() and target.armor:getProtection('acid') or 0
+  local target_acid_immune = acid_resistance == 4
+  
+  local acid_type = (player.skills:check('acid_adv') and 'ACID_ADV') or (player.skills:check('corrode') and 'CORRODE') or 'DEFAULT'
+  local to_hit_chance = ACID[acid_type].CHANCE
+  local acid_successful = to_hit_chance >= math.random()
+    
+  if acid_successful and not target_acid_immune and n_items > 0 then    
+    local acid_dice = dice:new(ACID[acid_type].DICE, 0) - acid_resistance
+    for i=n_items, 1, -1 do  -- count backwards due to table.remove being used in item_INST:updateCondition
+      local item_INST = target.inventory:lookup(i)
+      local acid_damage = acid_dice:roll()      
+      
+      -- firesuits are immune from acid
+      if item_INST:getClassName() ~= 'firesuit' and acid_damage > 0 then item_INST:updateCondition(-1 * acid_damage, target, i) end 
+    end
+  end 
+  
+  return {acid_successful, target_acid_immune}
 end
 
 return activate

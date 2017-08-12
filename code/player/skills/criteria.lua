@@ -51,4 +51,12 @@ function criteria.track(player)
   
 end
 
+function criteria.acid(player)
+  local p_tile = player:getTile()
+  local human_n = p_tile:countPlayers('human', player:getStage())
+  assert(human_n > 0, 'Must have humans nearby to use acid')  
+end
+
+error_list[#error_list+1] = 'Must have humans nearby to use acid'
+
 return criteria

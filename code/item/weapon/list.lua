@@ -285,6 +285,7 @@ weapon.bite.master_skill = 'bite_adv'
 --- BURN
 --]]
 
+--[[  Moved to skill activation
 weapon.acid = {}
 weapon.acid.full_name = 'stomach acid'
 weapon.acid.attack_style = 'ranged'
@@ -294,5 +295,6 @@ weapon.acid.dice = '5d2'
 weapon.acid.accuracy = 0.15
 weapon.acid.critical = 0.30
 weapon.acid.organic = 'zombie'
+--]]
 
 return weapon

@@ -29,8 +29,8 @@ local skill_attack_bonus = {
     
     arm = {hand_stimulus=0.10, claw=0.10, claw_adv=0.15},
     teeth = {head_stimulus=0.10, bite=0.10, bite_adv=0.15},
-    acid = {acid=0.05, acid_adv=0.05},
-    stinger = {venom=0.05, venom_adv=0.10},
+    --acid = {acid=0.05, acid_adv=0.05},
+    --stinger = {venom=0.05, venom_adv=0.10},
   },
 }
 
