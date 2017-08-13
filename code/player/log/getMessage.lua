@@ -88,6 +88,16 @@ function description.syringe(player, inv_ID, target, inject_success, target_weak
   end
 end
 
+function description.leather(player, inv_ID)
+  local armor_INST = player.inventory:lookup(inv_ID)
+  msg[1] = 'You equip '..armor_INST:getClassName()..' armor.'
+end
+
+function description.firesuit()
+  local armor_INST = player.inventory:lookup(inv_ID)
+  msg[1] = 'You equip '..armor_INST:getClassName()..' armor.'  
+end
+
 ---------------------------------------
 ---------------------------------------
 --             ZOMBIE                --
