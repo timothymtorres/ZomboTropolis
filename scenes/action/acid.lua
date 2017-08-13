@@ -89,6 +89,12 @@ function scene:create( event )
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
     
+    -------------------------------
+    -------------------------------
+    -- T O P   C O N T A I N E R --
+    -------------------------------
+    -------------------------------
+    
     local bar_h = 30        
     local top_container = display.newContainer( top_container_w, top_container_h + bar_h)  
     top_container:translate( width*0.5, height*0.5 + bar_h*0.5 - bottom_container_h*0.5) -- center the container
@@ -131,7 +137,11 @@ function scene:create( event )
 
 
 
-
+    -------------------------------------
+    -------------------------------------
+    -- B O T T O M   C O N T A I N E R --
+    -------------------------------------
+    -------------------------------------
 
 
     local bottom_container = display.newContainer(bottom_container_w, bottom_container_h)
