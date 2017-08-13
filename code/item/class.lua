@@ -33,6 +33,7 @@ function item:initialize(condition_setting)
   if type(condition_setting) == 'string' then self.condition = selectFrom(condition_spawn_odds[condition_setting])
   elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
   else error('Item initialization has a malformed condition setting')
+  end
 end
 
 --[[  THESE ARE SERVER/DATABASE FUNCTIONS
