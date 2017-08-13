@@ -65,6 +65,8 @@ local action_list = {
         antidote =      {name='antidote',       cost=1},
         antibodies=     {name='antibodies',     cost=1},
         syringe =       {name='syringe',        cost=1},      
+        leather =       {name='leather',        cost=1},
+        firesuit =      {name='firesuit',       cost=1},
       },
       equipment = {
         broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1},},

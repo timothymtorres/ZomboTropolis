@@ -103,4 +103,12 @@ function check.barricade(player)
   assert(playerInsideBuilding(player), 'Must be inside building to use barricade')    
 end
 
+--[[
+--- ARMOR
+--]]
+
+function check.leather(player) end
+
+function check.firesuit(player) end
+
 return check    

@@ -79,6 +79,10 @@ function setupZone.syringe(player, inv_ID, target)
   zone.target = target
 end
 
+function setupZone.leather(player, inv_ID)
+  zone.type = 'self'
+end
+
 ---------------------------------------
 ---------------------------------------
 --             ZOMBIE                --

@@ -205,4 +205,16 @@ function activate.bottle(player, condition)
   player:updateHP(1)
 end
 
+--[[
+--- ARMOR
+--]]
+
+function activate.leather(player, condition)
+  player.armor:equip('leather', condition)
+end
+
+function activate.firesuit(player, condition)
+  player.armor:equip('firesuit', condition)
+end
+
 return activate
