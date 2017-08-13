@@ -51,7 +51,7 @@ end
 
 local firesuit_INST = item.firesuit:new('ruined')
 alt_player.inventory:insert(firesuit_INST)
-alt_player.armor:equip('firesuit', firesuit_INST:getCondition(), #alt_player.inventory)
+alt_player.armor:equip('firesuit', firesuit_INST:getCondition())
 
 --[[
 print('---------')
