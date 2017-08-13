@@ -170,4 +170,12 @@ function criteria.newspaper(player) end  -- need light?
 
 function criteria.bottle(player) end
 
+--[[
+--- ARMOR
+--]]
+
+function criteria.leather(player) end  -- make sure there is inventory room when unequiping armor?
+
+function criteria.firesuit(player) end
+
 return criteria
