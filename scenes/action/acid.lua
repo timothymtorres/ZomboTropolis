@@ -15,13 +15,15 @@ local widget = require('widget')
 ---------------------------------------------------------------------------------
 
 -- local forward references should go here
+local cancel_button = require('scenes.action.button.cancel_button')
+local perform_button = require('scenes.action.button.perform_button')
 
 -- 52 is default tabbar height
 local width, height = display.contentWidth, display.contentHeight - 52
 
 local container_w, container_h = 280, 150
 local container_xtra_w, container_xtra_h = 0, 0
-local container_xtra 
+local container_xtra
 
 local extra_widget_sizes = {width=296, height=222}
 
@@ -29,15 +31,8 @@ local button_w, button_h, divider = 110, 40, 15
 local action_text
 local listener = {}
 
-local cancelButtonEvent = function(event)
-  if ('ended' == event.phase) then
-    print('Button was pressed and released')
-    if active_timer then timer.cancel(active_timer) end    
-    composer.hideOverlay('fade', 400)
-  end
-end
-
 local targets, wheel
+local action_params = {}
 
 local function getActionText(action)
   local str
@@ -48,12 +43,19 @@ local function getActionText(action)
   return str
 end
 
-local function getActionParams(action)
-  local params = {}
-  local selections = wheel:getValues()
-  local target = targets[selections[1].index]
-  params = {target}  
-  return params
+local performButtonEvent = function(event)
+  if ('ended' == event.phase) then
+    print('Perform button was pressed and released')    
+    if active_timer then timer.cancel(active_timer) end
+    
+    -- our wheel stuff
+    local selections = wheel:getValues()
+    action_params[#action_params + 1] = targets[selections[1].index] --target    
+    -- wheel stuff finished
+    
+    main_player:takeAction(unpack(action_params))
+    composer.gotoScene('scenes.action')
+  end
 end
 
 local function getWheel()
@@ -84,6 +86,8 @@ function scene:create( event )
    --local parent = event.parent
    local params = event.params
    local action = event.params.id
+   
+   action_params[#action_params + 1] = action
    
    container_xtra_w = extra_widget_sizes and extra_widget_sizes.width or 0
    container_xtra_h = extra_widget_sizes and extra_widget_sizes.height or 0
@@ -116,53 +120,32 @@ function scene:create( event )
     }
     action_cost:setFillColor(1, 0, 0, 1)
     container:insert(action_cost)
-    
-    local performButtonEvent = function(event_button)
-      if ('ended' == event_button.phase) then
-        if active_timer then timer.cancel(active_timer) end
-        
-        print('')
---for k,v in pairs(event) do print(k,v) end
---for k,v in pairs(event.params) do print(k,v) end
-        
-        main_player:takeAction(action, unpack(getActionParams(action)))
-        composer.hideOverlay('fade', 400)       
-        composer.gotoScene('scenes.action')
-        print('Button was pressed and released')
-      end
-    end
 
-    local perform_button = widget.newButton
-      {
-          left = -1*(button_w + divider),
-          top = container_h/7,
-      --  id = ,
-          label = 'PERFORM',
-          onEvent = performButtonEvent,
-          shape = 'rect',
-          width = button_w,
-          height = button_h,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }  
+
+
+
+
+
+    perform_button.top, perform_button.left = container_h/7, -1*(button_w + divider)   
+    perform_button.onEvent = performButtonEvent
+    perform_button = widget.newButton(perform_button)
     container:insert(perform_button) -- insert and center text
-
-    local cancel_button = widget.newButton
-      {
-          left = divider,
-          top = container_h/7,
-      --  id = ,
-          label = 'CANCEL',
-          onEvent = cancelButtonEvent,
-          shape = 'rect',
-          width = button_w,
-          height = button_h,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }  
+        
+    
+    
+    
+    
+    cancel_button.top, cancel_button.left = container_h/7, divider    
+    cancel_button = widget.newButton(cancel_button) 
     container:insert(cancel_button) -- insert and center text   
+
+
+
+
+
+
+
+
 
     container_xtra = display.newContainer(container_xtra_w, container_xtra_h)
     container_xtra:translate( width*0.5, height - (container_h)) -- center the container   
