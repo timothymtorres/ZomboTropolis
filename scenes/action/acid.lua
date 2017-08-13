@@ -19,15 +19,12 @@ local cancel_button = require('scenes.action.button.cancel_button')
 local perform_button = require('scenes.action.button.perform_button')
 
 -- 52 is default tabbar height
-local width, height = display.contentWidth, display.contentHeight - 52
+local width, height = display.contentWidth, display.contentHeight - 52 --320, 428
 
-local container_w, container_h = 280, 150
-local container_xtra_w, container_xtra_h = 0, 0
-local container_xtra
+local top_container_w, top_container_h = math.floor(width*0.875 + 0.5), math.floor(height*0.35 + 0.5)
+local bottom_container_w, bottom_container_h = math.floor(width*0.925 + 0.5), math.floor(height*0.518 + 0.5)
 
-local extra_widget_sizes = {width=296, height=222}
-
-local button_w, button_h, divider = 110, 40, 15
+local divider = 15
 local action_text
 local listener = {}
 
@@ -73,7 +70,7 @@ local function getWheel()
     {align='center', startIndex=1, labels=target_names},
   }
 
-  local pick_wheel = widget.newPickerWheel{top=-1*(container_xtra_h*0.5), left=-1*(container_xtra_w*0.5)-15, columns=columnData, columnColor={0.2,0.2,0.2,1}}
+  local pick_wheel = widget.newPickerWheel{top=-1*(bottom_container_h*0.5), left=-1*(bottom_container_w*0.5)-15, columns=columnData, columnColor={0.2,0.2,0.2,1}}
   
   return pick_wheel  
 end
@@ -89,55 +86,46 @@ function scene:create( event )
    
    action_params[#action_params + 1] = action
    
-   container_xtra_w = extra_widget_sizes and extra_widget_sizes.width or 0
-   container_xtra_h = extra_widget_sizes and extra_widget_sizes.height or 0
-   
    -- Initialize the scene here.
    -- Example: add display objects to "sceneGroup", add touch listeners, etc.
     
     local bar_h = 30        
-    local container = display.newContainer( container_w, container_h + bar_h)
-    -- TAB BAR HEIGHT = 60  (so 480-60 /2)
-    container:translate( width*0.5, height*0.5 + bar_h*0.5 - container_xtra_h*0.5) -- center the container
+    local top_container = display.newContainer( top_container_w, top_container_h + bar_h)  
+    top_container:translate( width*0.5, height*0.5 + bar_h*0.5 - bottom_container_h*0.5) -- center the container
+    top_container_h = top_container_h - bar_h*0.5  -- center the container along the y-axis?!?
 
-    container_h = container_h - bar_h*0.5
-
-    container_h = container_h
-    local background = display.newRect(0, 0, container_w, container_h)
+    local background = display.newRect(0, 0, top_container_w, top_container_h)
     background:setFillColor(0.1, 0.1, 0.1, 0.70)
-    container:insert(background)
+    top_container:insert(background)
     
-    local top_background_bar = display.newRect(0, -1*(container_h/2 + bar_h*0.5), container_w, bar_h) 
+    local top_background_bar = display.newRect(0, -1*(top_container_h/2 + bar_h*0.5), top_container_w, bar_h) 
     top_background_bar:setFillColor(0.2, 0.2, 0.8, 0.70)
-    container:insert(top_background_bar)
+    top_container:insert(top_background_bar)
     
     local action_cost = display.newText{
       text = 'Perform Action For: '..params.cost..' AP', 
       x = 0,
-      y = -1*(container_h/2 + bar_h*0.375), 
+      y = -1*(top_container_h/2 + bar_h*0.375), 
       font = native.systemFont, 
       fontSize = 14,
     }
     action_cost:setFillColor(1, 0, 0, 1)
-    container:insert(action_cost)
-
-
-
-
-
-
-    perform_button.top, perform_button.left = container_h/7, -1*(button_w + divider)   
+    top_container:insert(action_cost)
+    
+    --------------------
+    -- PERFORM BUTTON --
+    --------------------
+    perform_button.top, perform_button.left = top_container_h/7, -1*(perform_button.width + divider)   
     perform_button.onEvent = performButtonEvent
     perform_button = widget.newButton(perform_button)
-    container:insert(perform_button) -- insert and center text
-        
+    top_container:insert(perform_button) 
     
-    
-    
-    
-    cancel_button.top, cancel_button.left = container_h/7, divider    
+    -------------------
+    -- CANCEL BUTTON --
+    -------------------
+    cancel_button.top, cancel_button.left = top_container_h/7, divider    
     cancel_button = widget.newButton(cancel_button) 
-    container:insert(cancel_button) -- insert and center text   
+    top_container:insert(cancel_button) 
 
 
 
@@ -146,9 +134,8 @@ function scene:create( event )
 
 
 
-
-    container_xtra = display.newContainer(container_xtra_w, container_xtra_h)
-    container_xtra:translate( width*0.5, height - (container_h)) -- center the container   
+    local bottom_container = display.newContainer(bottom_container_w, bottom_container_h)
+    bottom_container:translate( width*0.5, height - (top_container_h)) -- center the container   
     
     local function redoActionText()
         action_text:removeSelf()
@@ -156,7 +143,7 @@ function scene:create( event )
         
         action_text = display.newText{
           text = getActionText(action),
-          width = container_w - 10, 
+          width = top_container_w - 10, 
           x = 5,
           y = -40,
           font = native.systemFont,
@@ -164,7 +151,7 @@ function scene:create( event )
           align = 'center',
         }
         action_text:setFillColor(1, 1, 1, 1)
-        container:insert(action_text)      
+        top_container:insert(action_text)      
     end
 
     wheel = getWheel()
@@ -191,12 +178,12 @@ function scene:create( event )
     wheel_hitbox:addEventListener( "touch", wheelTouchListner )      
     
     
-    container_xtra:insert(wheel)
-    container_xtra:insert(wheel_hitbox) -- it's not visible
+    bottom_container:insert(wheel)
+    bottom_container:insert(wheel_hitbox) -- it's not visible
     
     action_text = display.newText{
       text = getActionText(action),
-      width = container_w - 10, 
+      width = top_container_w - 10, 
       x = 5,
       y = -40,
       font = native.systemFont,
@@ -204,10 +191,10 @@ function scene:create( event )
       align = 'center',
     }
     action_text:setFillColor(1, 1, 1, 1)
-    container:insert(action_text)    
+    top_container:insert(action_text)    
    
-    sceneGroup:insert(container)
-    if container_xtra then sceneGroup:insert(container_xtra) end
+    sceneGroup:insert(top_container)
+    sceneGroup:insert(bottom_container)
 end
 
 -- "scene:show()"
