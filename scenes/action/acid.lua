@@ -32,7 +32,7 @@ local listener = {}
 local wheel, targets
 local action_params = {}
 
-local function getActionText(action)
+local function getActionText()
   local selections = wheel:getValues()  -- {selections[i].value, selections[i].index} [1]=targets, [2]=weapons
   local target_name = selections[1].value  
   return 'Spray acid at '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp)?'
@@ -43,12 +43,11 @@ local performButtonEvent = function(event)
     print('Perform button was pressed and released')    
     if active_timer then timer.cancel(active_timer) end
     
-    -- our wheel stuff
     local selections = wheel:getValues()
     action_params[#action_params + 1] = targets[selections[1].index] --target    
-    -- wheel stuff finished
     
     main_player:takeAction(unpack(action_params))
+    composer.hideOverlay('fade', 400)     
     composer.gotoScene('scenes.action')
   end
 end
@@ -119,8 +118,7 @@ function scene:create( event )
 
     local bottom_container = display.newContainer(bottom_container_w, bottom_container_h)
     bottom_container:translate( width*0.5, height - (top_container_h)) -- center the container   
-    
-    
+        
     -----------------------------------------------------------------------------------------------------------
     -- These functions are so that the wheel values update the action text in real time while it is spinning --
     ---------- Possibly change or remove these later when the sprites are added and wheel is removed ----------
