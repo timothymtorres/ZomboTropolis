@@ -17,6 +17,7 @@ local widget = require('widget')
 -- local forward references should go here
 local cancel_button = require('scenes.action.button.cancel_button')
 local perform_button = require('scenes.action.button.perform_button')
+local target_picker_wheel = require('scenes.action.button.target_picker_wheel')
 
 -- 52 is default tabbar height
 local width, height = display.contentWidth, display.contentHeight - 52 --320, 428
@@ -28,16 +29,13 @@ local divider = 15
 local action_text
 local listener = {}
 
-local targets, wheel
+local wheel, targets
 local action_params = {}
 
 local function getActionText(action)
-  local str
-  
   local selections = wheel:getValues()  -- {selections[i].value, selections[i].index} [1]=targets, [2]=weapons
-  local target_name = selections[1].value
-  str = 'Spray acid at '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp)?'     
-  return str
+  local target_name = selections[1].value  
+  return 'Spray acid at '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp)?'
 end
 
 local performButtonEvent = function(event)
@@ -53,26 +51,6 @@ local performButtonEvent = function(event)
     main_player:takeAction(unpack(action_params))
     composer.gotoScene('scenes.action')
   end
-end
-
-local function getWheel()
-  targets = main_player:getTargets()
-  local target_names = {}
-  
-  for i in ipairs(targets) do
-    local target_class = targets[i]:getClassName()
-    if target_class == 'player' then
-      target_names[#target_names+1] = targets[i]:getUsername()
-    end
-  end
-  
-  local columnData = {
-    {align='center', startIndex=1, labels=target_names},
-  }
-
-  local pick_wheel = widget.newPickerWheel{top=-1*(bottom_container_h*0.5), left=-1*(bottom_container_w*0.5)-15, columns=columnData, columnColor={0.2,0.2,0.2,1}}
-  
-  return pick_wheel  
 end
 
 ---------------------------------------------------------------------------------
@@ -133,19 +111,20 @@ function scene:create( event )
     cancel_button = widget.newButton(cancel_button) 
     top_container:insert(cancel_button) 
 
-
-
-
-
     -------------------------------------
     -------------------------------------
     -- B O T T O M   C O N T A I N E R --
     -------------------------------------
     -------------------------------------
 
-
     local bottom_container = display.newContainer(bottom_container_w, bottom_container_h)
     bottom_container:translate( width*0.5, height - (top_container_h)) -- center the container   
+    
+    
+    -----------------------------------------------------------------------------------------------------------
+    -- These functions are so that the wheel values update the action text in real time while it is spinning --
+    ---------- Possibly change or remove these later when the sprites are added and wheel is removed ----------
+    -----------------------------------------------------------------------------------------------------------
     
     local function redoActionText()
         action_text:removeSelf()
@@ -163,8 +142,6 @@ function scene:create( event )
         action_text:setFillColor(1, 1, 1, 1)
         top_container:insert(action_text)      
     end
-
-    wheel = getWheel()
     
     function listener:timer( event )
       -- this prevents multiple timers from running by stopping the previous active timer if present
@@ -187,10 +164,19 @@ function scene:create( event )
     wheel_hitbox.isVisible, wheel_hitbox.isHitTestable = false, true
     wheel_hitbox:addEventListener( "touch", wheelTouchListner )      
     
+    -------------------
+    -- WHEEL  PICKER --
+    -------------------    
+    
+    wheel, targets = target_picker_wheel() 
+    wheel.top = -1*(bottom_container_h*0.5)
+    wheel.left = -1*(bottom_container_w*0.5)-15  -- not sure what the -15 is for?
+    wheel = widget.newPickerWheel(wheel)
     
     bottom_container:insert(wheel)
     bottom_container:insert(wheel_hitbox) -- it's not visible
     
+    -- Action text needs to have the wheel setup before it can get the text (since the wheel selection returns the target/item/etc. strings)
     action_text = display.newText{
       text = getActionText(action),
       width = top_container_w - 10, 
