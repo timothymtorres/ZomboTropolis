@@ -29,19 +29,27 @@ function criteria.gesture(player)
   assert(player_n - 1 > 0, 'Must have players nearby to gesture')
 end
 
+error_list[#error_list+1] = 'Must have players nearby to gesture'
+
 function criteria.armor(player, armor_type)
   -- Must recheck EP cost since armor_type not specified in basic criteria EP assert, causing it to be skipped
   local cost, ep = player:getCost('ep', armor_type), player:getStat('ep')
   assert(ep >= cost, 'Not enough enzyme points to use skill')  
   
   local skill = organic_armor_list[armor_type].required_skill
-  assert(player.skills:check(skill), 'Must have required skill to use ability')
+  assert(player.skills:check(skill), 'Must have required skill to use armor ability')
   assert(player.armor:hasRoomForLayer(), 'No remaining room for additional armor layers')
 end
+
+error_list[#error_list+1] = 'Not enough enzyme points to use skill'
+error_list[#error_list+1] = 'Must have required skill to use armor ability'
+error_list[#error_list+1] = 'No remaining room for additional armor layers'
 
 function criteria.ruin(player)
   assert(player:isStaged('inside'), 'Must be inside to ruin building')
 end
+
+error_list[#error_list+1] = 'Must be inside to ruin building'
 
 function criteria.mark_prey(player)
   
@@ -50,6 +58,8 @@ end
 function criteria.track(player)
   assert(player:isStaged('outside'), 'Must be outside to track prey')  
 end
+
+error_list[#error_list+1] = 'Must be outside to track prey'
 
 function criteria.acid(player)
   local p_tile = player:getTile()
