@@ -156,39 +156,23 @@ local function getGestureWheel()
   return pick_wheel  
 end
 
-local function getDragPreyWheel()
-  targets = main_player:getTargets()
-  local target_names = {}
-  
-  for i in ipairs(targets) do
-    local target_class = targets[i]:getClassName()
-    if target_class == 'player' then
-      target_names[#target_names+1] = targets[i]:getUsername()
-    end
-  end
-  
-  local columnData = {
-    {align='center', startIndex=1, labels=target_names},
-  }
-
-  local pick_wheel = widget.newPickerWheel{top=-1*(container_xtra_h*0.5), left=-1*(container_xtra_w*0.5)-15, columns=columnData, columnColor={0.2,0.2,0.2,1}}
-  
-  return pick_wheel  
-end
-
 local function getOrganicArmorWheel()
   armor_list = main_player.armor:getAvailableArmors()
+  --[[
   print()
   print('1ST LOOP')
   for k,v in pairs(armor_list) do print(k,v) end
 print(table.inspect(armor_list))  
+  --]]
   for armor_type, _ in pairs(armor_list) do
     armor_list[#armor_list+1] = armor_type
-    print(armor_type, _)
+    --print(armor_type, _)
   end
+  --[[
   print()
   print('2ND LOOP')
   for k,v in pairs(armor_list) do print(k,v) end
+  --]]
   
   local columnData = {
     {align='center', startIndex=1, labels=armor_list},

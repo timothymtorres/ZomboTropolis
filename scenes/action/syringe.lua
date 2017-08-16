@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------------------
 --
--- syringe.lua
+-- action_perform.lua
 --
 -----------------------------------------------------------------------------------------
 
@@ -27,41 +27,42 @@ local width, height = display.contentWidth, display.contentHeight - 52 --320, 42
 local top_container_w, top_container_h = math.floor(width*0.875 + 0.5), math.floor(height*0.35 + 0.5)
 local bottom_container_w, bottom_container_h = math.floor(width*0.925 + 0.5), math.floor(height*0.518 + 0.5)
 
+local bottom_container_list = {
+  syringe = target_picker_wheel,
+  acid = target_picker_wheel,
+  drag_prey = target_picker_wheel,
+  --attack = '',  
+}
+
 local divider = 15
 local action_text
 local listener = {}
 
 local wheel, targets
 local action_params = {}
+local item, inv_id
 
--- dunno about these--
-------------------
---------------------
-local item, inv_id 
-
-local function getActionText()
-  local selections = wheel:getValues()  -- {selections[i].value, selections[i].index} [1]=targets, [2]=weapons
-  local target_name = selections[1].value  
-  local condition = '{'..item:getCondition()..'}' or ''       
-  return 'Inject '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp) using syringe?'  
-end
-
-local function getActionParams(action)
-  local params = {}
-  local selections = wheel:getValues()
-  local target = targets[selections[1].index]
-  params = {inv_id, target}  
-  return params
+local function getActionText(action)
+  local str = action
+  if wheel then
+    local selections = wheel:getValues()  -- {selections[i].value, selections[i].index} [1]=targets, [2]=weapons
+    local target_name = selections[1].value  
+    str = str..' -> '..target_name..' ('..targets[selections[1].index]:getStat('hp')..'hp)'    
+  end
+  return str
 end
 
 local performButtonEvent = function(event_button)
   if ('ended' == event_button.phase) then
     print('Perform button was pressed and released')    
-    if active_timer then timer.cancel(active_timer) end
+    if active_timer then timer.cancel(active_timer) end  
     
-    local selections = wheel:getValues()   
-    action_params[#action_params + 1] = inv_id     
-    action_params[#action_params + 1] = targets[selections[1].index] --target   
+    -- params = {inv_id, target}    This has to be the order for items
+    if item then action_params[#action_params + 1] = inv_id end
+    if wheel then 
+      local selections = wheel:getValues()       
+      action_params[#action_params + 1] = targets[selections[1].index] --target
+    end
     
     main_player:takeAction(unpack(action_params))
     composer.hideOverlay('fade', 400)       
@@ -77,8 +78,11 @@ function scene:create( event )
    --local parent = event.parent
    local params = event.params
    local action = event.params.id
+   
    inv_id = event.params.inv_id
-   item = main_player.inventory:lookup(event.params.inv_id)
+   if inv_id then -- dealing with an item action
+     item = main_player.inventory:lookup(event.params.inv_id)
+   end
    
    action_params[#action_params + 1] = action   
    
@@ -135,63 +139,66 @@ function scene:create( event )
     -------------------------------------
     -------------------------------------
 
-    local bottom_container = display.newContainer(bottom_container_w, bottom_container_h)
-    bottom_container:translate( width*0.5, height - (top_container_h)) -- center the container   
-    
-    -----------------------------------------------------------------------------------------------------------
-    -- These functions are so that the wheel values update the action text in real time while it is spinning --
-    ---------- Possibly change or remove these later when the sprites are added and wheel is removed ----------
-    -----------------------------------------------------------------------------------------------------------    
-    
-    local function redoActionText()
-        action_text:removeSelf()
-        action_text = nil
-        
-        action_text = display.newText{
-          text = getActionText(action),
-          width = top_container_w - 10, 
-          x = 5,
-          y = -40,
-          font = native.systemFont,
-          fontSize = 18,
-          align = 'center',
-        }
-        action_text:setFillColor(1, 1, 1, 1)
-        top_container:insert(action_text)      
-    end
-    
-    function listener:timer( event )
-      -- this prevents multiple timers from running by stopping the previous active timer if present
-      if active_timer and (tostring(active_timer) ~= tostring(event.source)) then 
-        timer.cancel(active_timer) 
+    local bottom_container = bottom_container_list[action] and display.newContainer(bottom_container_w, bottom_container_h)
+
+    if bottom_container then
+      bottom_container:translate( width*0.5, height - (top_container_h)) -- center the container   
+      
+      -----------------------------------------------------------------------------------------------------------
+      -- These functions are so that the wheel values update the action text in real time while it is spinning --
+      ---------- Possibly change or remove these later when the sprites are added and wheel is removed ----------
+      -----------------------------------------------------------------------------------------------------------    
+      
+      local function redoActionText()
+          action_text:removeSelf()
+          action_text = nil
+          
+          action_text = display.newText{
+            text = getActionText(action),
+            width = top_container_w - 10, 
+            x = 5,
+            y = -40,
+            font = native.systemFont,
+            fontSize = 18,
+            align = 'center',
+          }
+          action_text:setFillColor(1, 1, 1, 1)
+          top_container:insert(action_text)      
       end
       
-      active_timer = event.source  -- active_timer needs to be a global!
-      redoActionText()        
-    end  
-    
-    local function wheelTouchListner( event )
-        if event.phase == "began" then
-            print( "You touched the object!")
-            timer.performWithDelay(500, listener, 20)
+      function listener:timer( event )
+        -- this prevents multiple timers from running by stopping the previous active timer if present
+        if active_timer and (tostring(active_timer) ~= tostring(event.source)) then 
+          timer.cancel(active_timer) 
         end
-    end
+        
+        active_timer = event.source  -- active_timer needs to be a global!
+        redoActionText()        
+      end  
+      
+      local function wheelTouchListner( event )
+          if event.phase == "began" then
+              print( "You touched the object!")
+              timer.performWithDelay(500, listener, 20)
+          end
+      end
 
-    local wheel_hitbox = display.newRect(0, 0, 320, 222 )  
-    wheel_hitbox.isVisible, wheel_hitbox.isHitTestable = false, true
-    wheel_hitbox:addEventListener( "touch", wheelTouchListner )   
-    
-    -------------------
-    -- WHEEL  PICKER --
-    -------------------    
-    
-    wheel, targets = target_picker_wheel() 
-    wheel.top = -1*(bottom_container_h*0.5)
-    wheel.left = -1*(bottom_container_w*0.5)-15  -- not sure what the -15 is for?
-    wheel = widget.newPickerWheel(wheel)
-    
-    bottom_container:insert(wheel)
-    bottom_container:insert(wheel_hitbox) -- it's not visible
+      local wheel_hitbox = display.newRect(0, 0, 320, 222 )  
+      wheel_hitbox.isVisible, wheel_hitbox.isHitTestable = false, true
+      wheel_hitbox:addEventListener( "touch", wheelTouchListner )   
+      
+      -------------------
+      -- WHEEL  PICKER --
+      -------------------    
+      
+      wheel, targets = bottom_container_list[action]() 
+      wheel.top = -1*(bottom_container_h*0.5)
+      wheel.left = -1*(bottom_container_w*0.5)-15  -- not sure what the -15 is for?
+      wheel = widget.newPickerWheel(wheel)
+      
+      bottom_container:insert(wheel)
+      bottom_container:insert(wheel_hitbox) -- it's not visible
+    end
     
     -- Action text needs to have the wheel setup before it can get the text (since the wheel selection returns the target/item/etc. strings)
     action_text = display.newText{
@@ -207,7 +214,7 @@ function scene:create( event )
     top_container:insert(action_text)    
    
     sceneGroup:insert(top_container)
-    sceneGroup:insert(bottom_container)
+    if bottom_container then sceneGroup:insert(bottom_container) end
 end
 
 -- "scene:show()"
