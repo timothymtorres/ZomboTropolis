@@ -48,7 +48,7 @@ function criteria.mark_prey(player)
 end
 
 function criteria.track(player)
-  
+  assert(player:isStaged('outside'), 'Must be outside to track prey')  
 end
 
 function criteria.acid(player)
