@@ -88,8 +88,8 @@ function Outcome.attack(player, target, weapon, inv_ID)
         if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
       end
       
-      local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and player)
-      local human = (player:isMobType('human') and player) or (target:isMobType('human') and player)
+      local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and target)
+      local human = (player:isMobType('human') and player) or (target:isMobType('human') and target)
       
       if zombie.skills:check('track') then
         zombie.condition.tracking:addScent(human)
