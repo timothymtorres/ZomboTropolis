@@ -1,0 +1,11 @@
+ISP = AREA STATS INCLUDED FOR TERMINAL
+
+-- A DISTRICTS FOLLOWING INFO --
+# of powered buildings
+# of buildings
+# of ruined buildings
+# of barricaded bulidings (maybe?)
+# of zombies (and locations? if scanned)
+
+If terminal is damaged, limited info
+

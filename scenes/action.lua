@@ -118,8 +118,7 @@ local function onRowRender( event )
               print('The params going into options are:')
               for k,v in pairs(options.params) do print(k,v) end
               
-              composer.showOverlay("scenes.action."..item_name, options)
-              --composer.showOverlay( "scenes.action_perform", options)        
+              composer.showOverlay( "scenes.action_perform", options)        
               print( "Button was pressed and released" )              
           end
       end
@@ -250,9 +249,8 @@ print(event.target.id, 'action cost is - ', main_player:getCost('ap', event.targ
           params.desc = action_data.desc
           params.icon = action_data.icon
           params.cost = main_player:getCost('ap', event.target.id)
-          
-          composer.showOverlay("scenes.action."..event.target.id, options)    -- this SERIOUSLY needs to be refactored and renamed!!!        
-          --composer.showOverlay( "scenes.action_perform", options )        
+                
+          composer.showOverlay( "scenes.action_perform", options )        
           print( "Button was pressed and released" )
         end
       end     
