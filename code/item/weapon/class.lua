@@ -19,8 +19,6 @@ function weapon:isSkillRequired() return (self.skill_required and true) or false
 
 function weapon:isCombustionSource() return self.combustion_source or false end
 
-function weapon:isSingleUse() return self.one_use or false end
-
 function weapon:hasConditionEffect(player)
   if self:getClassName() == 'claw' and not player.skills:check('grapple') then 
     return false -- if attacking with claws and missing grapple skill then no condition effect  
@@ -31,14 +29,6 @@ function weapon:hasConditionEffect(player)
   return (self.condition_effect and true) or false 
 end
 
-function weapon:getID() return self.weapon_ID end  -- do we need this?
-
-function weapon:getName() return self.name end
-
-function weapon:getClass() return self.class end
-
-function weapon:getClassName() return tostring(self.class) end
-
 function weapon:getSkillRequired() return self.skill_required end
 
 function weapon:getFuelAmount() return self.fuel_amount end
@@ -46,8 +36,6 @@ function weapon:getFuelAmount() return self.fuel_amount end
 function weapon:getCrit() return self.critical end
 
 function weapon:getStyle() return self.attack_style end
-
-function weapon:getMasterSkill() return self.master_skill end
   
 function weapon:getGroup() return self.group end 
  

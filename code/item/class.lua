@@ -82,15 +82,8 @@ function item:getClassName() return tostring(self.class) end
 function item:getFlag() 
   local flag 
   local ID = item[self:getClassName()].ID
-print('getFlag()', ID, 2)
   flag = lshift(ID, 2)
   flag = bor(flag, self.condition)
-  
-  if self:hasUses() then 
-    flag = lshift(flag, 4)
-    flag = bor(flag, self.uses)
-  end
-  
   return flag
 end
 

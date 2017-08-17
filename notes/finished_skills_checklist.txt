@@ -1,0 +1,15 @@
+--FINISHED SKILLS--
+
+Human  			[11/10]  (REMOVE grafitti and looting)
+  Military 		[12/10]  (REMOVE ARCHERY for now!)
+  Research 		[6/10]   (gadgets, scanner, terminal, terminal_adv)
+  Engineering 		[7/10]   (repair, repairs_adv, renovate)
+________________________________________________________________
+COMPLETED		[33/40]
+
+Zombie  		[10/10]
+  Brute			[8/10] (impale, dying grasp)
+  Hunter		[4/10] (leap, leap_adv, mark_prey, scavenge, dodge, night vision)
+  Hive			[8/10] (ruin, ransack)
+_________________________________________________________________
+COMPLETED SKILLS  	[30/40]
