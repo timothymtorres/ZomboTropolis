@@ -1,0 +1,3 @@
+Give humans item to disguise themselves as zombies to avoid detection
+Upgrade doors with item?  Give them hp?
+Equip a building with barbed wire that damages zombies?
