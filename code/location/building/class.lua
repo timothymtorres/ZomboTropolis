@@ -7,6 +7,7 @@ local transmitter = require('code.location.building.equipment.transmitter.class'
 local terminal = require('code.location.building.equipment.terminal.class')
 local door = require('code.location.building.barrier.door.class')
 local barricade = require('code.location.building.barrier.barricade.class')
+local integrity = require('code.location.building.integrity.class')
 local buildDesc = require('code.location.building.buildDesc')
 
 local building = class('building', tile)
@@ -19,10 +20,11 @@ function building:initialize(map, y, x, name)
   
   self.door        = door:new(self)
   self.barricade   = barricade:new(self)
+  self.integrity   = integrity:new(self) 
   
   self.generator   = generator:new(self)
   self.transmitter = transmitter:new(self)
-  self.terminal    = terminal:new(self)  
+  self.terminal    = terminal:new(self) 
 end
 
 function building:insert(player, setting) 
