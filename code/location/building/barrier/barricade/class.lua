@@ -117,7 +117,7 @@ function barricade:reinforce()
 end
 
 function barricade:updateDesc()
-  for i, fort in ipairs(fortification_status) do
+  for _, fort in ipairs(fortification_status) do
     if fort.range >= self.hp then
       self.hp_desc = fort.desc
       break
@@ -126,7 +126,7 @@ function barricade:updateDesc()
   
   local hp_gap = self.potential_hp - self.hp
   
-  for i, room in ipairs(room_available) do
+  for _, room in ipairs(room_available) do
     if room.range >= hp_gap then
       self.potential_hp_desc = room.desc
       break
