@@ -24,21 +24,16 @@ function integrity:updateHP(num)
   self:updateDesc() 
 end
 
-
-function integrity:isDecaying() return self.hp < 0 end
-
-function integrity:canModify(player)
-  local integrity_is_full =                self.hp == BUILDING_MAX_HP
-  local integrity_is_zero =                self.hp == 0
-  
+function integrity:canModify(player)  
   local n_humans = self.building:countPlayers('human', 'inside')
   local n_zombies = self.building:countPlayers('zombie', 'inside')
   
   if player:isMobType('human') then 
-    if self.hp >= 0  and not integrity_is_full then return true
-    elseif self:isDecaying() and player.skills:check('renovate') and n_zombies == 0 then return true
+    if self:isState('ransacked') then return true
+    elseif self:isState('ruined') and player.skills:check('renovate') and n_zombies == 0 then return true
     end 
   elseif player:isMobType('zombie') then
+    -- because zombies we don't want zombies to ransack past 0, we have RANSACK_VALUE at 10 which prevents integrity from going into ruin state
     if self.hp > RANSACK_VALUE then return true
     elseif self.hp >= 0 and player.skills:check('ruin') and n_humans == 0 then return true
     end       
@@ -46,6 +41,8 @@ function integrity:canModify(player)
   
   return false
 end
+
+function integrity:isState(setting) return self:getState() == setting end
 
 function integrity:getState() 
   local integrity_is_full = self.hp == BUILDING_MAX_HP
