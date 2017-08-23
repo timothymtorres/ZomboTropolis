@@ -147,23 +147,6 @@ function player:getUsername() return self.username end
 
 function player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
-function player:getSpot()
-  local y,x = self:getPos()
-  local map_zone = self:getMap()
-  return (self:isStaged('inside') and map_zone:getInside(y, x)) or map_zone:getOutside(y, x)
-end
-
-
-function player:getSpotCondition()  -- update later for ruins
-  local area, condition = self:getSpot()
-  if area:isBuilding() and area:isPowered() then 
-    condition = 'powered'
-  else 
-    condition = 'unpowered' 
-  end
-  return condition
-end
-
 function player:getTile()
   local map_zone = self:getMap()
   local y,x = self:getPos() 
