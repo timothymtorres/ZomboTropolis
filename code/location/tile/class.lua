@@ -141,18 +141,27 @@ function tile:isBuilding() return self.inside_players and true or false end
 function tile:isClass(tile_class) return self:getClassName() == tile_class end
 
 local modifier = {
-  building_condition = {unpowered = 0.00, powered = 0.20, ruined = -0.80},
+  building_condition = {ruined = -0.90, ransacked = -0.20, intact = 0.00},
+  search_lighting = {flashlight = 0.05, generator = 0.10, power_plant = 0.20},  
   looting_skill = 0.05,
-  flashlight_bonus = 0.10,
 }
 
 function tile:getSearchOdds(player, setting, location_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
-  local condition_bonus = modifier.building_condition[location_status]
-  local skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
-  local flashlight_bonus = was_flashlight_used and modifier.flashlight_bonus or 0
   
-  local modifier_sum = condition_bonus + skill_bonus + flashlight_bonus
+  local condition_bonus = modifier.building_condition[location_status]
+  local skill_bonus, lighting_bonus = 0, 0 
+  
+  --if location_status == 'intact' and self:isPowered('power plant') then    
+  if self:isPowered() then  -- isPowered() only checks for powered generator currently
+    lighting_bonus = modifier.search_lighting.generator
+  elseif was_flashlight_used then
+    lighting_bonus = modifier.search_lighting.flashlight
+  end
+    
+  skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
+  
+  local modifier_sum = condition_bonus + skill_bonus + lighting_bonus
   return search_chance + (search_chance * modifier_sum)
 end
 
