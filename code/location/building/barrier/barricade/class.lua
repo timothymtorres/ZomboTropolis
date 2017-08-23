@@ -25,7 +25,7 @@ local room_available = {
   {desc = 'plenty',    range = 63},            --   7-63
 }
 
-function barricade:initialize(type)
+function barricade:initialize()
   barrier.initialize(self) 
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
@@ -144,15 +144,26 @@ function barricade:canPlayerFortify(player)
   else return true end                                                    -- can barricade up to regular
 end
 
-local bypass_skill_bonus, zombie_multiplier = 5, 20
+--local bypass_skill_bonus, ransack_bonus
+local num_humans_to_nullify_zombie = 10  -- this might be too high? 
+local ransack_blockade_bonus = 1
+local skill_bypass_bonus = 1
+local default_bypass_n = 2
 
-function barricade:fortifyAttempt(player, zombie_n, human_n)  -- this code will be implemented later, probably needs chance tweaks
-  local zombie_blockade_value = (zombie_multiplier*zombie_n) - human_n
-  local skill_bonus = (player.skills:check('barricade') and bypass_skill_bonus) or 0
-  local skill_bonus_adv = (player.skills:check('barricade_adv') and bypass_skill_bonus) or 0
-  local bypass_chance = 5 + skill_bonus + skill_bonus_adv
+function barricade:constructionAttempt(player, zombie_n, human_n)
+  local nullfied_zombies = math.floor(human_n/num_humans_to_nullify_zombie)
+  local blockade_n = zombie_n - 1 - nullfied_zombies  -- the -1 is to prevent single zombies from blocking an entrance by themselves
   
-  return zombie_blockade_value <= dice.roll(zombie_blockade_value + bypass_chance)
+  -- if building is ransacked then 
+  -- blockade_n = blockade_n - ransack_blockade_n
+  
+  if blockade_n <= 0 then return true end -- not high enough chance at blocking to do a roll
+  
+  local skill_bonus = (player.skills:check('barricade') and skill_bypass_bonus) or 0
+  local skill_bonus_adv = (player.skills:check('barricade_adv') and skill_bypass_bonus) or 0
+  local skill_bypass_n = skill_bonus + skill_bonus_adv
+  
+  return blockade_n < dice.roll(default_bypass_n + skill_bypass_n + blockade_n)  -- blockade < dice.roll(1d2 / skill / blockade)
 end
 
 local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]
