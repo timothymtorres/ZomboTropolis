@@ -81,7 +81,7 @@ function tile:getMap() return self.map_zone end
 function tile:getPos() return self.y, self.x end
 
 function tile:getState()
-  if self:isBuilding() then return self.integrity:getState() end 
+  if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
 end
