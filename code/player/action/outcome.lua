@@ -146,7 +146,7 @@ function Outcome.search(player)
   local item, flashlight
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
-  local player_inside_powered_building = p_tile:getState() == 'powered' and player:isStaged('inside')
+  local player_inside_powered_building = p_tile:isPowered() and player:isStaged('inside')
   
   item = p_tile:search(player, player:getStage(), player_has_flashlight)
   
