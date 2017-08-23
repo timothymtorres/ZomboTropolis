@@ -80,7 +80,7 @@ function tile:getMap() return self.map_zone end
 
 function tile:getPos() return self.y, self.x end
 
-function tile:getState()
+function tile:getIntegrityState()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
@@ -145,13 +145,13 @@ local modifier = {
   looting_skill = 0.05,
 }
 
-function tile:getSearchOdds(player, setting, location_status, was_flashlight_used) 
+function tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
   
-  local condition_bonus = modifier.building_condition[location_status]
+  local condition_bonus = modifier.building_condition[integrity_status]
   local skill_bonus, lighting_bonus = 0, 0 
   
-  --if location_status == 'intact' and self:isPowered('power plant') then    
+  --if integrity_status == 'intact' and self:isPowered('with power plant') then    
   if self:isPowered() then  -- isPowered() only checks for powered generator currently
     lighting_bonus = modifier.search_lighting.generator
   elseif was_flashlight_used then
@@ -174,9 +174,9 @@ local function select_item(list)
 end
 
 function tile:search(player, setting, was_flashlight_used)
-  local location_state = self:getState()  
+  local integrity_state = self:getIntegrityState()  
   
-  local odds = self:getSearchOdds(player, setting, location_state, was_flashlight_used)
+  local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
   local search_success = odds >= math.random()
   
   if not search_success then return false end
@@ -184,12 +184,9 @@ function tile:search(player, setting, was_flashlight_used)
   local items = self.item_chance[setting] 
   local item_type = select_item(items)
 print('tile:search - ', item_type)
-print('location_state - ', location_state)
-
-  -- junkyards yield better barricade conditions than other locations due to the amount of junk
-  if self:getClassName() == 'junkyard' then location_state = 'powered' end
+print('integrity_state - ', integrity_state)
   
-  local item_INST = item[item_type]:new(location_state) 
+  local item_INST = item[item_type]:new(integrity_state) 
   return item_INST
 end
 
