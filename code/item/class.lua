@@ -25,8 +25,8 @@ end
 
 local condition_spawn_odds = {  -- used when spawning new item
   ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05},
-  unpowered = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
-  powered =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
+  ransacked = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
+  intact =    {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
 }
 
 function item:initialize(condition_setting) 
