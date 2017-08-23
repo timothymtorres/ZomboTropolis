@@ -97,8 +97,6 @@ function building:isPowered() return self.generator:isActive() end
 
 function building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
 
-function building:isRuined() return false end --self.ruin:isActive()  ruins haven't been implemented yet
-
 -- do we need this?!
 function building:isDescPresent(desc_type) return (self[desc_type] and #self[desc_type] > 0) or false end
 
