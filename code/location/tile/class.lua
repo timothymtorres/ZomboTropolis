@@ -80,10 +80,9 @@ function tile:getMap() return self.map_zone end
 
 function tile:getPos() return self.y, self.x end
 
-function tile:getState()  -- update later for ruins
-  if self:isBuilding() and self:isPowered() then return 'powered'
-  elseif self:isBuilding() and self:isRuined() then return 'ruined' 
-  else return 'unpowered' 
+function tile:getState()
+  if self:isBuilding() then return self.integrity:getState() end 
+  else return 'intact'
   end
 end
 
