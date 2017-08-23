@@ -192,7 +192,9 @@ local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 function activate.book(player, condition)
   local xp_dice_str = book_xp_dice[condition-1]
   local book_dice = dice:new(xp_dice_str)
-  if player:isStaged('inside') and player:getSpotCondition() == 'powered' then book_dice = book_dice^1 end 
+  local tile = player:getTile()
+ 
+  if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then book_dice = book_dice^1 end  
   local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
 end
