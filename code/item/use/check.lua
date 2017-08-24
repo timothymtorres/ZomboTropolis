@@ -58,6 +58,7 @@ function check.barricade(player)
   assert(playerInsideBuilding(player), 'Must be inside building to barricade')
   assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
   assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')  
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to make fortifications in a ruined building')
 end
 
 function check.fuel(player)

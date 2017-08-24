@@ -126,11 +126,13 @@ function criteria.barricade(player)
   assert(playerInsideBuilding(player), 'Must be inside building to barricade')
   assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
   assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to make fortifications in a ruined building')  
 end
 
 error_list[#error_list+1] = 'Must be inside building to barricade'
 error_list[#error_list+1] = 'There is no room available for fortifications'
 error_list[#error_list+1] = 'Unable to make stronger fortification without required skills'
+error_list[#error_list+1] = 'Unable to make fortifications in a ruined building'
 
 function criteria.fuel(player)
   local p_tile = player:getTile()
