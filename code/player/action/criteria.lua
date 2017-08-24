@@ -180,6 +180,19 @@ end
 
 error_list[#error_list+1] = 'You are already standing'
 
+function criteria.ransack(player)
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to ransack')
+  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
+  
+  local can_ransack_building = p_tile.integrity:canModify(player)
+  assert(can_ransack_building, 'Unable to ransack building in current state')
+end
+
+error_list[#error_list+1] = 'No building nearby to ransack'
+error_list[#error_list+1] = 'Player must be inside building to ransack'
+error_list[#error_list+1] = 'Unable to ransack building in current state'
+
 function criteria.default(action, player, ...)
   if criteria[action] then criteria[action](player, ...) end
 end

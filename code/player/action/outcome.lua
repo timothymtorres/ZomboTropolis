@@ -8,7 +8,6 @@ local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local item =              require('code.item.class')
 
-
 Outcome = {}
 
 local function getNewPos(y, x, dir)
@@ -186,6 +185,17 @@ function Outcome.exit(player)
 end
 
 function Outcome.respawn(player) player:respawn() end
+
+function Outcome.ransack(player)
+  local ransack_dice = dice:new('2d3')
+  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
+  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
+  
+  local building = player:getTile()
+  building.integrity:updateHP(-1 * ransack_dice:roll() )
+  local integrity_state = building.integrity:getState()
+  return {integrity_state}
+end
 
 local corpse_effects = { 
   -- First come, first serve! (less xp and decay loss as corpse becomes more devoured)
