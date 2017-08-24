@@ -153,21 +153,24 @@ local ransack_blockade_bonus = 1
 local skill_bypass_bonus = 1
 local default_bypass_n = 2
 
-function barricade:constructionAttempt(player, zombie_n, human_n)
+function barricade:didZombiesIntervene(player)
+  local p_tile = player:getTile()
+  local zombie_n = p_tile:countPlayers('zombie', 'inside')
+  local human_n = p_tile:countPlayers('human', 'inside')
+  
   local nullfied_zombies = math.floor(human_n/num_humans_to_nullify_zombie)
   local blockade_n = zombie_n - 1 - nullfied_zombies  -- the -1 is to prevent single zombies from blocking an entrance by themselves
   
-  local p_tile = player:getTile()
   local integrity_state = p_tile:getIntegrityState()
   if integrity_state == 'ransacked' then blockade_n = blockade_n + ransack_blockade_bonus end
   
-  if blockade_n <= 0 then return true end -- not high enough chance at blocking to do a roll
+  if blockade_n <= 0 then return false end -- not high enough chance at blocking to do a roll
   
   local skill_bonus = (player.skills:check('barricade') and skill_bypass_bonus) or 0
   local skill_bonus_adv = (player.skills:check('barricade_adv') and skill_bypass_bonus) or 0
   local skill_bypass_n = skill_bonus + skill_bonus_adv
   
-  return blockade_n < dice.roll(default_bypass_n + skill_bypass_n + blockade_n)  -- blockade < dice.roll(1d2 / skill / blockade)
+  return blockade_n >= dice.roll(default_bypass_n + skill_bypass_n + blockade_n)  -- blockade < dice.roll(1d2 / skill / blockade)
 end
 
 local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]
