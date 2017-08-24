@@ -28,7 +28,8 @@ local action_list = {
         respawn =       {name='respawn',   cost=10},
         search =        {name='search',    cost= 1},
         attack =        {name='attack',    cost= 1},
-        speak =         {name='speak',     cost= 1},      
+        speak =         {name='speak',     cost= 1},   
+        reinforce =     {name='reinforce', cost= 1},
         --close =         {name='close door', cost= 1},
       },
       skill = {
