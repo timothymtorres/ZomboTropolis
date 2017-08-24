@@ -170,8 +170,9 @@ end
 
 function Outcome.reinforce(player)
   local p_tile = player:getTile()
-  local was_building_reinforced = p_tile.barricade:reinforce()
-  return {was_building_reinforced}
+  local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
+  if building_was_reinforced then p_tile.barricade:reinforce(potential_hp) end
+  return {building_was_reinforced, potential_hp}
 end
 
 function Outcome.enter(player)
