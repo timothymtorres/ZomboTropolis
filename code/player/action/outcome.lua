@@ -168,6 +168,12 @@ function Outcome.speak(player, message) -- , target)
   tile:listen(player, message, player:getStage()) 
 end
 
+function Outcome.reinforce(player)
+  local p_tile = player:getTile()
+  local was_building_reinforced = p_tile.barricade:reinforce()
+  return {was_building_reinforced}
+end
+
 function Outcome.enter(player)
   local y, x = player:getPos()
   local map = player:getMap()

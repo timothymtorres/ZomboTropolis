@@ -137,6 +137,19 @@ error_list[#error_list+1] = 'Must have a message to speak'
 error_list[#error_list+1] = 'Message must be a string'
 error_list[#error_list+1] = 'Message length too long'
 
+function criteria.reinforce(player)
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to reinforce')
+  assert(player:isStaged('inside'), 'Player must be inside building to reinforce')
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to reinforce a ruined building')
+  assert(p_tile.barricade:canReinforce(), 'No room for reinforcements in building')
+end
+
+error_list[#error_list+1] = 'No building nearby to reinforce'
+error_list[#error_list+1] = 'Player must be inside building to reinforce'
+error_list[#error_list+1] = 'Unable to reinforce a ruined building'
+error_list[#error_list+1] = 'No room for reinforcements in building'
+
 function criteria.feed(player)
   local p_tile, p_stage = player:getTile(), player:getStage()
   local corpse_n = p_tile:countCorpses(p_stage)
