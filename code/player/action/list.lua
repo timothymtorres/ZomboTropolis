@@ -59,7 +59,7 @@ local action_list = {
         speed_loader =  {name='speed loader',   cost=3, modifier={guns = -2, handguns = -1},},
         rifle_magazine= {name='rifle magazine', cost=4, modifier={guns = -3,   rifles = -1},},
         quiver =        {name='quiver',         cost=4, modifier={archery= -3,     bows = -1},},
-        book =          {name='book',           cost=5, modifier={bookworm=-2},},
+        book =          {name='book',           cost=5, modifier={bookworm= -2},},
         FAK =           {name='first aid kit',  cost=1},
         bandage =       {name='bandage',        cost=1},
         antidote =      {name='antidote',       cost=1},
@@ -67,24 +67,26 @@ local action_list = {
         syringe =       {name='syringe',        cost=1},      
         leather =       {name='leather',        cost=1},
         firesuit =      {name='firesuit',       cost=1},
+        toolbox =       {name='toolbox',        cost=10, modifier={repair = -2, repair_adv = -3},
       },
       equipment = {
-        broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1},},
-        retune =  {cost=3, modifier={tech = -1, radio_tech = -1},},
+        broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1}},
+        retune =  {cost=3, modifier={tech = -1, radio_tech = -1}},
         --terminal =      {cost=3, modifier={tech = -1, computer_tech = -1},},
       },
     },
     zombie = {
       default = {
-        move =          {name='move',      cost=2, modifier={sprint = -1},},   
+        move =          {name='move',      cost=2, modifier={sprint = -1}},   
         enter =         {name='enter',     cost=1},
         exit =          {name='exit',      cost=1}, 
       },  
       basic = {
-        respawn =       {cost= 10, modifier={hivemind = -5},},
+        respawn =       {cost= 10, modifier={hivemind = -5}},
         attack =        {cost=  1},
         speak =         {cost=  1},
         feed =          {cost=  1},
+        ransack =       {cost=  5, modifier={ransack = -1, ruin = -2},
       },
       skill = {
         -- generic skills
