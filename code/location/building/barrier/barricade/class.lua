@@ -97,9 +97,9 @@ local reinforce_params = {
   {dice = '2d4-7', range = 63}, --        63-61 [3]
 }
 
-function barricade:reinforce()
-  local dice_str  
-  for i,reinforce in ipairs(reinforce_params) do
+function barricade:reinforceAttempt()
+  local dice_str
+  for i, reinforce in ipairs(reinforce_params) do
     if reinforce.range[i] >= self.hp then
       dice_str = reinforce.dice
       break
@@ -107,13 +107,16 @@ function barricade:reinforce()
   end  
   
   local reinforce_dice = dice:new(dice_str, 0)
-  local roll_result = reinforce_dice:roll()
-  if roll_result > 0 then
-    self.potential_hp = math.min(self.potential_hp + roll_result, MAX_HP) 
-    self:updateDesc()
-  else -- reinforce action failed (roll == 0)
-    -- we should probably return something to notify if the reinforce action failed (ie. rolled a 0)
-  end
+  local potential_hp_roll = reinforce_dice:roll()
+  local building_was_reinforced = potential_hp_roll > 0
+  local potential_hp = potential_hp_roll > 0 and potential_hp_roll or nil
+  
+  return building_was_reinforced, potential_hp
+end
+
+function barricade:reinforce(potential_hp)
+  self.potential_hp = math.min(self.potential_hp + potential_hp, MAX_HP) 
+  self:updateDesc()
 end
 
 function barricade:updateDesc()
