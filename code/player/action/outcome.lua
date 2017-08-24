@@ -171,8 +171,10 @@ end
 function Outcome.reinforce(player)
   local p_tile = player:getTile()
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
-  if building_was_reinforced then p_tile.barricade:reinforce(potential_hp) end
-  return {building_was_reinforced, potential_hp}
+  local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
+  
+  if building_was_reinforced and not did_zombies_interfere then p_tile.barricade:reinforce(potential_hp) end
+  return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
 
 function Outcome.enter(player)
@@ -254,10 +256,14 @@ function Outcome.item(item_name, player, inv_ID, target)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item_name](player, item_condition, target) 
   
-  if item_INST:isSingleUse() and not item_INST:getClassName() == 'syringe' then player.inventory:remove(inv_ID) 
-  elseif item_INST:getClassName() == 'syringe' then -- syringes are a special case
+  if item_INST:isSingleUse() and not item_name == 'syringe' and not item_name == 'barricade' then 
+    player.inventory:remove(inv_ID) 
+  elseif item_name == 'syringe' then -- syringes are a special case
     local antidote_was_created, syringe_was_salvaged = result[2], result[3]
-    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end  
+    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end
+  elseif item_name == 'barricade' then -- barricades are also a special case
+    local did_zombies_interfere = result[1]
+    if not did_zombies_interfere then player.inventory:remove(inv_ID) end
   elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
   end
   return result

@@ -160,7 +160,10 @@ end
 
 function activate.barricade(player, condition)
   local building_tile = player:getTile()
-  building_tile.barricade:fortify(player, condition)
+  local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
+  
+  if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
+  return {did_zombies_interfere}    
 end
 
 function activate.fuel(player, condition)
