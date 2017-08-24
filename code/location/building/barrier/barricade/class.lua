@@ -154,8 +154,9 @@ function barricade:constructionAttempt(player, zombie_n, human_n)
   local nullfied_zombies = math.floor(human_n/num_humans_to_nullify_zombie)
   local blockade_n = zombie_n - 1 - nullfied_zombies  -- the -1 is to prevent single zombies from blocking an entrance by themselves
   
-  -- if building is ransacked then 
-  -- blockade_n = blockade_n - ransack_blockade_n
+  local p_tile = player:getTile()
+  local integrity_state = p_tile:getIntegrityState()
+  if integrity_state == 'ransacked' then blockade_n = blockade_n + ransack_blockade_bonus end
   
   if blockade_n <= 0 then return true end -- not high enough chance at blocking to do a roll
   
