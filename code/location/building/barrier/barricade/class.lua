@@ -147,13 +147,12 @@ function barricade:canPlayerFortify(player)
   else return true end                                                    -- can barricade up to regular
 end
 
---local bypass_skill_bonus, ransack_bonus
 local num_humans_to_nullify_zombie = 10  -- this might be too high? 
 local ransack_blockade_bonus = 1
 local skill_bypass_bonus = 1
 local default_bypass_n = 2
 
-function barricade:didZombiesIntervene(player)
+function barricade:didZombiesIntervene(player)  -- make brute zombie count as x2 for blockade_n
   local p_tile = player:getTile()
   local zombie_n = p_tile:countPlayers('zombie', 'inside')
   local human_n = p_tile:countPlayers('human', 'inside')
