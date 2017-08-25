@@ -87,6 +87,13 @@ function setupZone.leather(player, inv_ID)
   zone.type = 'self'
 end
 
+function setupZone.toolbox(player, inv_ID)
+  zone.player = player
+  zone.type = 'stage'
+  zone.stage = player:getStage()
+  zone.tile = player:getTile()    
+end
+
 ---------------------------------------
 ---------------------------------------
 --             ZOMBIE                --

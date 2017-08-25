@@ -186,6 +186,19 @@ function activate.terminal(player, condition)
   building_tile:insert('terminal', condition)
 end
 
+local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
+
+function activate.toolbox(player, condition)
+  local repair_dice = dice:new(toolbox_dice[condition])
+  if player.skills:check('repair') then repair_dice = repair_dice / 1 end
+  if player.skills:check('repair_adv') then repair_dice = repair_dice ^ 3 end
+  
+  local building = player:getTile()
+  building.integrity:updateHP(repair_dice:roll() )
+  local integrity_state = building.integrity:getState()
+  return {integrity_state}
+end
+
 --[[
 --- JUNK
 --]]

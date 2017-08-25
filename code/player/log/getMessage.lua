@@ -110,6 +110,16 @@ function description.firesuit()
   msg[1] = 'You equip '..armor_INST:getClassName()..' armor.'  
 end
 
+function description.toolbox(player, integrity_state)
+  if integrity_state == 'intact' then
+    msg[1] = 'You repair the building completely.'
+    msg[3] = player:getUsername()..' repairs the building completely.'
+  else
+    msg[1] = 'You repair the building.'
+    msg[3] = player:getUsername()..' repairs the building.'    
+  end
+end
+
 ---------------------------------------
 ---------------------------------------
 --             ZOMBIE                --
