@@ -24,7 +24,7 @@ function integrity:updateHP(num)
   self:updateDesc() 
 end
 
-function integrity:canModify(player)  
+function integrity:canModify(player)  -- possibly move all or parts of this code to criteria.toolbox and critera.ransack?
   local n_humans = self.building:countPlayers('human', 'inside')
   local n_zombies = self.building:countPlayers('zombie', 'inside')
   
