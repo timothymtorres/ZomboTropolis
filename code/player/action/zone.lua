@@ -66,6 +66,10 @@ function setupZone.barricade(player)
   zone.type = 'self'  
 end
 
+function setupZone.reinforce(player)
+  zone.type = 'self'
+end
+
 function setupZone.speak(player, message) -- , target)
   zone.player = player
   zone.type = 'stage'
@@ -146,6 +150,13 @@ function setupZone.acid(player, target)
   zone.player = player
   zone.type = 'pair'
   zone.target = target 
+end
+
+function setupZone.ransack(player)
+  zone.player = player
+  zone.type = 'stage'
+  zone.stage = player:getStage()
+  zone.tile = player:getTile()  
 end
 
 ---------------------------------------
