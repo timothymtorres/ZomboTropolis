@@ -28,7 +28,7 @@ weaponry.bat.durability = 15
 weaponry.toolbox = {}
 weaponry.toolbox.full_name = 'toolbox'
 weaponry.toolbox.weight = 15
-weaponry.toolbox.master_skill = 'smashing'
+weaponry.toolbox.master_skill = 'repair_adv'
 weaponry.toolbox.durability = 10
 
 weaponry.sledge = {}
