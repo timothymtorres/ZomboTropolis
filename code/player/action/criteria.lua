@@ -143,12 +143,14 @@ function criteria.reinforce(player)
   assert(player:isStaged('inside'), 'Player must be inside building to reinforce')
   assert(not p_tile.integrity:isState('ruined'), 'Unable to reinforce a ruined building')
   assert(p_tile.barricade:canReinforce(), 'No room for reinforcements in building')
+  assert(player.skills:check('reinforce'), 'Must have skill to reinforce building')  
 end
 
 error_list[#error_list+1] = 'No building nearby to reinforce'
 error_list[#error_list+1] = 'Player must be inside building to reinforce'
 error_list[#error_list+1] = 'Unable to reinforce a ruined building'
 error_list[#error_list+1] = 'No room for reinforcements in building'
+error_list[#error_list+1] = 'Must have skill to reinforce building'
 
 function criteria.feed(player)
   local p_tile, p_stage = player:getTile(), player:getStage()

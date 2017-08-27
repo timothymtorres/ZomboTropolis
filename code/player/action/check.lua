@@ -37,6 +37,7 @@ function check.reinforce(player)
   assert(player:isStaged('inside'), 'Player must be inside building to reinforce')
   assert(not p_tile.integrity:isState('ruined'), 'Unable to reinforce a ruined building')
   assert(p_tile.barricade:canReinforce(), 'No room for reinforcements in building')
+  assert(player.skills:check('reinforce'), 'Must have skill to reinforce building')
 end
 
 function check.speak(player) 
