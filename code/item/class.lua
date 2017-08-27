@@ -19,7 +19,7 @@ local function selectFrom(spawn_list)
 
   for condition_level, odds in ipairs(spawn_list) do
     total = total + odds
-    if chance <= total then return condition_level - 1 end
+    if chance <= total then return condition_level end
   end
 end
 
@@ -30,7 +30,9 @@ local condition_spawn_odds = {  -- used when spawning new item
 }
 
 function item:initialize(condition_setting) 
-  if type(condition_setting) == 'string' then self.condition = selectFrom(condition_spawn_odds[condition_setting])
+  if type(condition_setting) == 'string' then 
+    self.condition = selectFrom(condition_spawn_odds[condition_setting])
+print('self.condition is ', self.condition)    
   elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
   else error('Item initialization has a malformed condition setting')
   end
@@ -89,7 +91,7 @@ end
 
 function item:getCondition() return self.condition end
 
-local condition_states = {[0]='ruined', [1]='worn', [2]='average', [3]='pristine'}
+local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine'}
 
 function item:getConditionState() return condition_states[self.condition] or '???' end
 
