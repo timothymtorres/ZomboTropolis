@@ -139,8 +139,8 @@ end
 
 function barricade:canPlayerFortify(player)
   local regular_cade_value, v_strong_cade_value = fortification_status[4].range, fortification_status[6].range
-  local cade_past_regular = self.hp <= regular_cade_value
-  local cade_past_v_strong = self.hp <= v_strong_cade_value
+  local cade_past_regular = self.hp >= regular_cade_value
+  local cade_past_v_strong = self.hp >= v_strong_cade_value
   
   if cade_past_v_strong then return player.skills:check('barricade_adv')  -- can barricade all
   elseif cade_past_regular then return player.skills:check('barricade')   -- can barricade up to very strong
