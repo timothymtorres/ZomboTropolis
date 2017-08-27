@@ -100,7 +100,7 @@ local reinforce_params = {
 function barricade:reinforceAttempt()
   local dice_str
   for i, reinforce in ipairs(reinforce_params) do
-    if reinforce.range[i] >= self.hp then
+    if reinforce.range >= self.hp then
       dice_str = reinforce.dice
       break
     end
