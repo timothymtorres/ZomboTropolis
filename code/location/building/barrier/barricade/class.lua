@@ -68,8 +68,8 @@ function barricade:canReinforce()
 --]]----------------------------------------------------
   
   local margin 
-  for i,potential in ipairs(reinforce_potential_params) do
-    if potential.range[i] >= self.hp then
+  for _, potential in ipairs(reinforce_potential_params) do
+    if potential.range >= self.hp then
       margin = potential.margin
       break
     end
@@ -80,7 +80,7 @@ function barricade:canReinforce()
   local has_room_to_reinforce = margin >= hp_gap  -- is the gap between the potential/current_hp within reinforce margin
   local is_reinforce_maxxed = self.potential_hp == MAX_HP -- have we hit the max ceiling for MAX_HP yet
   local has_min_cades_to_reinforce = self.hp >= MIN_HP_TO_REINFORCE -- cannot reinforce without enough cades present
-  
+
   if has_room_to_reinforce and not is_reinforce_maxxed and has_min_cades_to_reinforce then return true
   else return false
   end
