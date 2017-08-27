@@ -70,15 +70,17 @@ function description.discard(player, item)
   msg[1] = 'You discard a '..item..'.'
 end
 
-function description.reinforce(player, did_zombies_interfere)
-   if not did_zombies_interfere then
-    msg[1] = 'You reinforce the building making room for fortifications.'
-  else
-    msg[1] = 'You start to reinforce the building, but a zombie lurches towards you.'
+function description.reinforce(player, did_zombies_interfere, building_was_reinforced, potential_hp)
+  if did_zombies_interfere then
+    msg[1] = 'You start to reinforce the building but a zombie lurches towards you.'
+  elseif not building_was_reinforced then
+    msg[1] = 'You attempt to reinforce the building but fail.'
+  else  -- should we do something with potential_hp?
+    msg[1] = 'You reinforce the building making room for fortifications.'    
   end 
 end
 
-function description.barricade(player, did_zombies_interfere)
+function description.barricade(player, inv_ID, did_zombies_interfere)
   if not did_zombies_interfere then
     msg[1] = 'You fortify the building with a barricade.'
   else
