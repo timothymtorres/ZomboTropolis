@@ -13,11 +13,11 @@ function integrity:initialize(building)
 end
 
 function integrity:updateHP(num)
-  self.hp = math.min(math.max(self.hp+num, MAX_DECAY), BUILDING_MAX_HP)) 
+  self.hp = math.min(math.max(self.hp+num, MAX_DECAY), BUILDING_MAX_HP)
   
   if self.hp >= 0 or self.hp == MAX_DECAY then
     --remove building from decay list
-  if self.hp < 0 then
+  elseif self.hp < 0 then
     --add building to decay list    
   end
   

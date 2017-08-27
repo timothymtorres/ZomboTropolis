@@ -68,7 +68,7 @@ local action_list = {
         syringe =       {name='syringe',        cost=1},      
         leather =       {name='leather',        cost=1},
         firesuit =      {name='firesuit',       cost=1},
-        toolbox =       {name='toolbox',        cost=10, modifier={repair = -2, repair_adv = -3},
+        toolbox =       {name='toolbox',        cost=10, modifier={repair = -2, repair_adv = -3}},
       },
       equipment = {
         broadcast =   {cost=3, modifier={tech = -1, radio_tech = -1}},
@@ -87,7 +87,7 @@ local action_list = {
         attack =        {cost=  1},
         speak =         {cost=  1},
         feed =          {cost=  1},
-        ransack =       {cost=  5, modifier={ransack = -1, ruin = -2},
+        ransack =       {cost=  5, modifier={ransack = -1, ruin = -2}},
       },
       skill = {
         -- generic skills

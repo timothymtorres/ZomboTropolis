@@ -45,7 +45,7 @@ alt_player = player:new('Tim', 'human', city, 4, 4)
 main_player:updateStat('hp', -49)
 
 for i=1, 10 do
-  local syringe_INST = item.syringe:new('powered')
+  local syringe_INST = item.syringe:new('intact')
   alt_player.inventory:insert(syringe_INST)
 end
 
