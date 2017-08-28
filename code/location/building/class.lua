@@ -59,7 +59,8 @@ function building:getBarrierDesc()
   door_str = (is_door_damaged and 'is '..door_str..' and ') or ''
   
   local door_desc = 'The building door '..door_str
-  local cade_desc = 'has been '..cade_str..'. '
+  
+  local cade_desc = (cade_str == 'left wide open' or cade_str == 'secured' and 'has been '..cade_str..'. ') or 'has a '..cade_str..' barricade. '
   local space_desc = 'There is '..space_str..' room available for fortifications.'
   
   return door_desc..cade_desc..space_desc

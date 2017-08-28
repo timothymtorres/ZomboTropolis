@@ -14,8 +14,8 @@ local fortification_status = {
   {desc = 'regular',            range = 21},  --  14-21 [8]
   {desc = 'strong',             range = 30},  --  22-30 [9]
   {desc = 'very strong',        range = 40},  --  31-40 [10]
-  {desc = 'heavily',            range = 51},  --  41-51 [11]
-  {desc = 'extremely heavily',  range = 63},  --  52-63 [12]
+  {desc = 'heavy',              range = 51},  --  41-51 [11]
+  {desc = 'extremely heavy',    range = 63},  --  52-63 [12]
 }
 
 local room_available = {
