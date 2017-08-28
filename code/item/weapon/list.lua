@@ -76,16 +76,6 @@ weapon.crowbar.critical = 0.05
 weapon.crowbar.object_damage = {barricade=2, door=1, equipment=1}
 weapon.crowbar.master_skill = 'smacking'
 
-weapon.toolbox = {}
-weapon.toolbox.full_name = 'toolbox'
-weapon.toolbox.attack_style = 'melee'
-weapon.toolbox.damage_type = 'blunt'
-weapon.toolbox.group = {'brute', 'heavy_brute'}
-weapon.toolbox.dice = '1d4'
-weapon.toolbox.accuracy = 0.20
-weapon.toolbox.critical = 0.05
-weapon.toolbox.master_skill = 'smashing'
-
 weapon.bat = {}
 weapon.bat.full_name = 'baseball bat'
 weapon.bat.attack_style = 'melee'

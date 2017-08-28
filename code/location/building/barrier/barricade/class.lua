@@ -14,8 +14,8 @@ local fortification_status = {
   {desc = 'regular',            range = 21},  --  14-21 [8]
   {desc = 'strong',             range = 30},  --  22-30 [9]
   {desc = 'very strong',        range = 40},  --  31-40 [10]
-  {desc = 'heavily',            range = 51},  --  41-51 [11]
-  {desc = 'extremely heavily',  range = 63},  --  52-63 [12]
+  {desc = 'heavy',              range = 51},  --  41-51 [11]
+  {desc = 'extremely heavy',    range = 63},  --  52-63 [12]
 }
 
 local room_available = {
@@ -25,7 +25,7 @@ local room_available = {
   {desc = 'plenty',    range = 63},            --   7-63
 }
 
-function barricade:initialize(type)
+function barricade:initialize()
   barrier.initialize(self) 
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
@@ -68,8 +68,8 @@ function barricade:canReinforce()
 --]]----------------------------------------------------
   
   local margin 
-  for i,potential in ipairs(reinforce_potential_params) do
-    if potential.range[i] >= self.hp then
+  for _, potential in ipairs(reinforce_potential_params) do
+    if potential.range >= self.hp then
       margin = potential.margin
       break
     end
@@ -80,7 +80,7 @@ function barricade:canReinforce()
   local has_room_to_reinforce = margin >= hp_gap  -- is the gap between the potential/current_hp within reinforce margin
   local is_reinforce_maxxed = self.potential_hp == MAX_HP -- have we hit the max ceiling for MAX_HP yet
   local has_min_cades_to_reinforce = self.hp >= MIN_HP_TO_REINFORCE -- cannot reinforce without enough cades present
-  
+
   if has_room_to_reinforce and not is_reinforce_maxxed and has_min_cades_to_reinforce then return true
   else return false
   end
@@ -97,27 +97,30 @@ local reinforce_params = {
   {dice = '2d4-7', range = 63}, --        63-61 [3]
 }
 
-function barricade:reinforce()
-  local dice_str  
-  for i,reinforce in ipairs(reinforce_params) do
-    if reinforce.range[i] >= self.hp then
+function barricade:reinforceAttempt()
+  local dice_str
+  for i, reinforce in ipairs(reinforce_params) do
+    if reinforce.range >= self.hp then
       dice_str = reinforce.dice
       break
     end
   end  
   
   local reinforce_dice = dice:new(dice_str, 0)
-  local roll_result = reinforce_dice:roll()
-  if roll_result > 0 then
-    self.potential_hp = math.min(self.potential_hp + roll_result, MAX_HP) 
-    self:updateDesc()
-  else -- reinforce action failed (roll == 0)
-    -- we should probably return something to notify if the reinforce action failed (ie. rolled a 0)
-  end
+  local potential_hp_roll = reinforce_dice:roll()
+  local building_was_reinforced = potential_hp_roll > 0
+  local potential_hp = potential_hp_roll > 0 and potential_hp_roll or nil
+  
+  return building_was_reinforced, potential_hp
+end
+
+function barricade:reinforce(potential_hp)
+  self.potential_hp = math.min(self.potential_hp + potential_hp, MAX_HP) 
+  self:updateDesc()
 end
 
 function barricade:updateDesc()
-  for i, fort in ipairs(fortification_status) do
+  for _, fort in ipairs(fortification_status) do
     if fort.range >= self.hp then
       self.hp_desc = fort.desc
       break
@@ -126,7 +129,7 @@ function barricade:updateDesc()
   
   local hp_gap = self.potential_hp - self.hp
   
-  for i, room in ipairs(room_available) do
+  for _, room in ipairs(room_available) do
     if room.range >= hp_gap then
       self.potential_hp_desc = room.desc
       break
@@ -136,23 +139,37 @@ end
 
 function barricade:canPlayerFortify(player)
   local regular_cade_value, v_strong_cade_value = fortification_status[4].range, fortification_status[6].range
-  local cade_past_regular = self.hp <= regular_cade_value
-  local cade_past_v_strong = self.hp <= v_strong_cade_value
+  local cade_past_regular = self.hp >= regular_cade_value
+  local cade_past_v_strong = self.hp >= v_strong_cade_value
   
   if cade_past_v_strong then return player.skills:check('barricade_adv')  -- can barricade all
   elseif cade_past_regular then return player.skills:check('barricade')   -- can barricade up to very strong
   else return true end                                                    -- can barricade up to regular
 end
 
-local bypass_skill_bonus, zombie_multiplier = 5, 20
+local num_humans_to_nullify_zombie = 10  -- this might be too high? 
+local ransack_blockade_bonus = 1
+local skill_bypass_bonus = 1
+local default_bypass_n = 2
 
-function barricade:fortifyAttempt(player, zombie_n, human_n)  -- this code will be implemented later, probably needs chance tweaks
-  local zombie_blockade_value = (zombie_multiplier*zombie_n) - human_n
-  local skill_bonus = (player.skills:check('barricade') and bypass_skill_bonus) or 0
-  local skill_bonus_adv = (player.skills:check('barricade_adv') and bypass_skill_bonus) or 0
-  local bypass_chance = 5 + skill_bonus + skill_bonus_adv
+function barricade:didZombiesIntervene(player)  -- make brute zombie count as x2 for blockade_n
+  local p_tile = player:getTile()
+  local zombie_n = p_tile:countPlayers('zombie', 'inside')
+  local human_n = p_tile:countPlayers('human', 'inside')
   
-  return zombie_blockade_value <= dice.roll(zombie_blockade_value + bypass_chance)
+  local nullfied_zombies = math.floor(human_n/num_humans_to_nullify_zombie)
+  local blockade_n = zombie_n - 1 - nullfied_zombies  -- the -1 is to prevent single zombies from blocking an entrance by themselves
+  
+  local integrity_state = p_tile:getIntegrityState()
+  if integrity_state == 'ransacked' then blockade_n = blockade_n + ransack_blockade_bonus end
+  
+  if blockade_n <= 0 then return false end -- not high enough chance at blocking to do a roll
+  
+  local skill_bonus = (player.skills:check('barricade') and skill_bypass_bonus) or 0
+  local skill_bonus_adv = (player.skills:check('barricade_adv') and skill_bypass_bonus) or 0
+  local skill_bypass_n = skill_bonus + skill_bonus_adv
+  
+  return blockade_n >= dice.roll(default_bypass_n + skill_bypass_n + blockade_n)  -- blockade < dice.roll(1d2 / skill / blockade)
 end
 
 local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]

@@ -58,6 +58,7 @@ function check.barricade(player)
   assert(playerInsideBuilding(player), 'Must be inside building to barricade')
   assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
   assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')  
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to make fortifications in a ruined building')
 end
 
 function check.fuel(player)
@@ -84,6 +85,12 @@ function check.terminal(player)
   assert(not p_tile.terminal:isPresent(), 'There is no room for a second terminal')
 end
 
+function check.toolbox(player)
+  assert(playerInsideBuilding(player), 'Must be inside building to repair')
+  local p_tile = player:getTile()
+  local can_repair_building = p_tile.integrity:canModify(player)
+  assert(can_repair_building, 'Unable to repair building in current state')
+end
 
 --[[
 --- JUNK

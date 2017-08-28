@@ -70,8 +70,22 @@ function description.discard(player, item)
   msg[1] = 'You discard a '..item..'.'
 end
 
-function description.barricade(player, result)
+function description.reinforce(player, did_zombies_interfere, building_was_reinforced, potential_hp)
+  if did_zombies_interfere then
+    msg[1] = 'You start to reinforce the building but a zombie lurches towards you.'
+  elseif not building_was_reinforced then
+    msg[1] = 'You attempt to reinforce the building but fail.'
+  else  -- should we do something with potential_hp?
+    msg[1] = 'You reinforce the building making room for fortifications.'    
+  end 
+end
 
+function description.barricade(player, inv_ID, did_zombies_interfere)
+  if not did_zombies_interfere then
+    msg[1] = 'You fortify the building with a barricade.'
+  else
+    msg[1] = 'You start to fortify the building, but a zombie lurches towards you.'
+  end
 end
 
 function description.syringe(player, inv_ID, target, inject_success, target_weak_enough, syringe_salvage_successful)
@@ -96,6 +110,16 @@ end
 function description.firesuit()
   local armor_INST = player.inventory:lookup(inv_ID)
   msg[1] = 'You equip '..armor_INST:getClassName()..' armor.'  
+end
+
+function description.toolbox(player, inv_ID, integrity_state)
+  if integrity_state == 'intact' then
+    msg[1] = 'You repair the building completely.'
+    msg[3] = player:getUsername()..' repairs the building completely.'
+  else
+    msg[1] = 'You repair the building.'
+    msg[3] = player:getUsername()..' repairs the building.'    
+  end
 end
 
 ---------------------------------------
@@ -219,6 +243,16 @@ function description.acid(player, target, acid_successful, acid_immunity)
   else
     msg[1] = 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.'
     msg[2] = 'A zombie attempts to spray acid at you but is unsuccessful.'
+  end
+end
+
+function description.ransack(player, integrity_state)
+  if integrity_state == 'ransacked' then
+    msg[1] = 'You ransack the building.'
+    msg[3] = 'A zombie ransacks the building.'
+  elseif integrity_state == 'ruined' then
+    msg[1] = 'You ruin the building.'
+    msg[3] = 'A zombie ruins the building.'
   end
 end
 

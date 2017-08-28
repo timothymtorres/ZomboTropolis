@@ -32,6 +32,12 @@ equipment.barricade.full_name = 'barricade'
 equipment.barricade.weight = 7
 equipment.barricade.durability = 0
 
+equipment.toolbox = {}
+equipment.toolbox.full_name = 'toolbox'
+equipment.toolbox.weight = 15
+equipment.toolbox.master_skill = 'repair_adv'
+equipment.toolbox.durability = 10
+
 for item in pairs(equipment) do 
   equipment[item].class_category = 'engineering' 
 end

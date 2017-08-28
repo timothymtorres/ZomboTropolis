@@ -7,6 +7,7 @@ local transmitter = require('code.location.building.equipment.transmitter.class'
 local terminal = require('code.location.building.equipment.terminal.class')
 local door = require('code.location.building.barrier.door.class')
 local barricade = require('code.location.building.barrier.barricade.class')
+local integrity = require('code.location.building.integrity.class')
 local buildDesc = require('code.location.building.buildDesc')
 
 local building = class('building', tile)
@@ -19,10 +20,11 @@ function building:initialize(map, y, x, name)
   
   self.door        = door:new(self)
   self.barricade   = barricade:new(self)
+  self.integrity   = integrity:new(self) 
   
   self.generator   = generator:new(self)
   self.transmitter = transmitter:new(self)
-  self.terminal    = terminal:new(self)  
+  self.terminal    = terminal:new(self) 
 end
 
 function building:insert(player, setting) 
@@ -57,7 +59,8 @@ function building:getBarrierDesc()
   door_str = (is_door_damaged and 'is '..door_str..' and ') or ''
   
   local door_desc = 'The building door '..door_str
-  local cade_desc = 'has been '..cade_str..'. '
+  
+  local cade_desc = (cade_str == 'left wide open' or cade_str == 'secured' and 'has been '..cade_str..'. ') or 'has a '..cade_str..' barricade. '
   local space_desc = 'There is '..space_str..' room available for fortifications.'
   
   return door_desc..cade_desc..space_desc
@@ -94,8 +97,6 @@ function building:isFortified() return self.barricade:getHP() > 0 and self.door:
 function building:isPowered() return self.generator:isActive() end
 
 function building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
-
-function building:isRuined() return false end --self.ruin:isActive()  ruins haven't been implemented yet
 
 -- do we need this?!
 function building:isDescPresent(desc_type) return (self[desc_type] and #self[desc_type] > 0) or false end

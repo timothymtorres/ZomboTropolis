@@ -19,14 +19,14 @@ local function selectFrom(spawn_list)
 
   for condition_level, odds in ipairs(spawn_list) do
     total = total + odds
-    if chance <= total then return condition_level - 1 end
+    if chance <= total then return condition_level end
   end
 end
 
 local condition_spawn_odds = {  -- used when spawning new item
   ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05},
-  unpowered = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
-  powered =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
+  ransacked = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
+  intact =    {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
 }
 
 function item:initialize(condition_setting) 
@@ -89,7 +89,7 @@ end
 
 function item:getCondition() return self.condition end
 
-local condition_states = {[0]='ruined', [1]='worn', [2]='average', [3]='pristine'}
+local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine'}
 
 function item:getConditionState() return condition_states[self.condition] or '???' end
 
