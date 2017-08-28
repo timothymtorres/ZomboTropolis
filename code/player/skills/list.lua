@@ -27,7 +27,7 @@ local skill_list = {
       general = {'melee', 'cutting', 'swinging', 'martial_arts', 'martial_arts_adv', 'ranged', 'roof_travel', 'hp_bonus', 'ip_bonus', 'looting', 'diagnosis', 'graffiti'},
       military = {'ranged_adv', 'guns', 'light_guns', 'heavy_guns', 'archery', 'archery_adv', 'melee_adv', 'chopping', 'slicing', 'smashing', 'smacking', 'explosives'},
       research = {'healing', 'major_healing', 'minor_healing', 'diagnosis_adv', 'gadgets', 'syringe', 'syringe_adv', 'scanner', 'terminal', 'terminal_adv'},
-      engineering = {'repairs', 'repairs_adv', 'barricade', 'barricade_adv', 'reinforce', 'renovate', 'tech', 'power_tech', 'radio_tech', 'computer_tech'}, --'construction', 'reserve'},
+      engineering = {'repair', 'repair_adv', 'barricade', 'barricade_adv', 'reinforce', 'renovate', 'tech', 'power_tech', 'radio_tech', 'computer_tech'}, --'construction', 'reserve'},
     },
   },
   info = {
@@ -476,13 +476,13 @@ local skill_list = {
         },         
       },
       engineering = {
-        repairs =        {
-          name='basic repairs',   
+        repair =        {
+          name='basic repair',   
           desc='Gain ability to repair equipment',
           icon='spanner',
         },  
-        repairs_adv=     {
-          name='advanced repairs',
+        repair_adv=     {
+          name='advanced repair',
           desc='Repair equipment at cheaper cost',
           icon='auto-repair',
         },
