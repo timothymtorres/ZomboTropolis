@@ -25,12 +25,6 @@ weaponry.bat.weight = 9
 weaponry.bat.master_skill = 'smacking'
 weaponry.bat.durability = 15
 
-weaponry.toolbox = {}
-weaponry.toolbox.full_name = 'toolbox'
-weaponry.toolbox.weight = 15
-weaponry.toolbox.master_skill = 'smashing'
-weaponry.toolbox.durability = 10
-
 weaponry.sledge = {}
 weaponry.sledge.full_name = 'sledgehammer'
 weaponry.sledge.weight = 25

@@ -53,8 +53,8 @@ local skill_flags = {
   terminal_adv =       512,
   
   -- Engineering
-  repairs =              1,
-  repairs_adv =          2,
+  repair =              1,
+  repair_adv =          2,
   barricade =            4,
   barricade_adv =        8,
   reinforce =           16,

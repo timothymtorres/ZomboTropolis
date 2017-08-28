@@ -26,6 +26,18 @@ end
 function check.barricade(player) -- later check if player has barricade materials or building has room for cade? 
   local p_tile = player:getTile() 
   assert(p_tile:isBuilding() and player:isStaged('inside'), 'Must be inside building to barricade')
+  assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
+  assert(p_tile.barricade:canPlayerFortify(player), 'Unable to make stronger fortification without required skills')
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to make fortifications in a ruined building')    
+end
+
+function check.reinforce(player)
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to reinforce')
+  assert(player:isStaged('inside'), 'Player must be inside building to reinforce')
+  assert(not p_tile.integrity:isState('ruined'), 'Unable to reinforce a ruined building')
+  assert(p_tile.barricade:canReinforce(), 'No room for reinforcements in building')
+  assert(player.skills:check('reinforce'), 'Must have skill to reinforce building')
 end
 
 function check.speak(player) 
@@ -49,6 +61,15 @@ function check.feed(player)
     end
   end
   assert(edible_corpse_present, 'All corpses have been eaten')   
+end
+
+function check.ransack(player)
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to ransack')
+  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
+  
+  local can_ransack_building = p_tile.integrity:canModify(player)
+  assert(can_ransack_building, 'Unable to ransack building in current state')
 end
 
 function check.default(player, action)

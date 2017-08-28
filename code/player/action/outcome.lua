@@ -8,7 +8,6 @@ local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local item =              require('code.item.class')
 
-
 Outcome = {}
 
 local function getNewPos(y, x, dir)
@@ -146,19 +145,16 @@ function Outcome.search(player)
   local item, flashlight
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
-  local player_inside_powered_building = p_tile:getState() == 'powered' and player:isStaged('inside')
+  local player_inside_powered_building = p_tile:isPowered() and player:isStaged('inside')
   
-  if player_has_flashlight and not player_inside_powered_building then -- flashlight gives no search bonus if player inside powered building  
-    item = p_tile:search(player, player:getStage(), player_has_flashlight)
-    flashlight = true
+  item = p_tile:search(player, player:getStage(), player_has_flashlight)
+  
+  if player_has_flashlight and not player_inside_powered_building then -- flashlight is only used when building has no power
     Outcome.item('flashlight', player, inv_ID) -- this runs a durability check on flashlight
-  else  
-    item = p_tile:search(player, player:getStage())
-    flashlight = false
   end
   
   if item then player.inventory:insert(item) end
-  return {item, flashlight}
+  return {item, player_has_flashlight}
 end
 
 function Outcome.discard(player, inv_ID)
@@ -170,6 +166,15 @@ end
 function Outcome.speak(player, message) -- , target)
   local tile = player:getTile()
   tile:listen(player, message, player:getStage()) 
+end
+
+function Outcome.reinforce(player)
+  local p_tile = player:getTile()
+  local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
+  local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
+  
+  if building_was_reinforced and not did_zombies_interfere then p_tile.barricade:reinforce(potential_hp) end
+  return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
 
 function Outcome.enter(player)
@@ -189,6 +194,17 @@ function Outcome.exit(player)
 end
 
 function Outcome.respawn(player) player:respawn() end
+
+function Outcome.ransack(player)
+  local ransack_dice = dice:new('2d3')
+  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
+  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
+  
+  local building = player:getTile()
+  building.integrity:updateHP(-1 * ransack_dice:roll() )
+  local integrity_state = building.integrity:getState()
+  return {integrity_state}
+end
 
 local corpse_effects = { 
   -- First come, first serve! (less xp and decay loss as corpse becomes more devoured)
@@ -240,10 +256,14 @@ function Outcome.item(item_name, player, inv_ID, target)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item_name](player, item_condition, target) 
   
-  if item_INST:isSingleUse() and not item_INST:getClassName() == 'syringe' then player.inventory:remove(inv_ID) 
-  elseif item_INST:getClassName() == 'syringe' then -- syringes are a special case
+  if item_INST:isSingleUse() and not item_name == 'syringe' and not item_name == 'barricade' then 
+    player.inventory:remove(inv_ID) 
+  elseif item_name == 'syringe' then -- syringes are a special case
     local antidote_was_created, syringe_was_salvaged = result[2], result[3]
-    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end  
+    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end
+  elseif item_name == 'barricade' then -- barricades are also a special case
+    local did_zombies_interfere = result[1]
+    if not did_zombies_interfere then player.inventory:remove(inv_ID) end
   elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
   end
   return result

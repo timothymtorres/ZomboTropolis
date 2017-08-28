@@ -160,7 +160,10 @@ end
 
 function activate.barricade(player, condition)
   local building_tile = player:getTile()
-  building_tile.barricade:fortify(player, condition)
+  local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
+  
+  if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
+  return {did_zombies_interfere}    
 end
 
 function activate.fuel(player, condition)
@@ -183,6 +186,19 @@ function activate.terminal(player, condition)
   building_tile:insert('terminal', condition)
 end
 
+local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
+
+function activate.toolbox(player, condition)
+  local repair_dice = dice:new(toolbox_dice[condition])
+  if player.skills:check('repair') then repair_dice = repair_dice / 1 end
+  if player.skills:check('repair_adv') then repair_dice = repair_dice ^ 3 end
+  
+  local building = player:getTile()
+  building.integrity:updateHP(repair_dice:roll() )
+  local integrity_state = building.integrity:getState()
+  return {integrity_state}
+end
+
 --[[
 --- JUNK
 --]]
@@ -192,7 +208,9 @@ local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 function activate.book(player, condition)
   local xp_dice_str = book_xp_dice[condition-1]
   local book_dice = dice:new(xp_dice_str)
-  if player:isStaged('inside') and player:getSpotCondition() == 'powered' then book_dice = book_dice^1 end 
+  local tile = player:getTile()
+ 
+  if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then book_dice = book_dice^1 end  
   local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
 end

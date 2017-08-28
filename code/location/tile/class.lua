@@ -80,10 +80,9 @@ function tile:getMap() return self.map_zone end
 
 function tile:getPos() return self.y, self.x end
 
-function tile:getState()  -- update later for ruins
-  if self:isBuilding() and self:isPowered() then return 'powered'
-  elseif self:isBuilding() and self:isRuined() then return 'ruined' 
-  else return 'unpowered' 
+function tile:getIntegrityState()
+  if self:isBuilding() then return self.integrity:getState()
+  else return 'intact'
   end
 end
 
@@ -141,18 +140,27 @@ function tile:isBuilding() return self.inside_players and true or false end
 function tile:isClass(tile_class) return self:getClassName() == tile_class end
 
 local modifier = {
-  building_condition = {unpowered = 0.00, powered = 0.20, ruined = -0.80},
+  building_condition = {ruined = -0.90, ransacked = -0.20, intact = 0.00},
+  search_lighting = {flashlight = 0.05, generator = 0.10, power_plant = 0.20},  
   looting_skill = 0.05,
-  flashlight_bonus = 0.10,
 }
 
-function tile:getSearchOdds(player, setting, location_status, was_flashlight_used) 
+function tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
-  local condition_bonus = modifier.building_condition[location_status]
-  local skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
-  local flashlight_bonus = was_flashlight_used and modifier.flashlight_bonus or 0
   
-  local modifier_sum = condition_bonus + skill_bonus + flashlight_bonus
+  local condition_bonus = modifier.building_condition[integrity_status]
+  local skill_bonus, lighting_bonus = 0, 0 
+  
+  --if integrity_status == 'intact' and self:isPowered('with power plant') then    
+  if self:isPowered() then  -- isPowered() only checks for powered generator currently
+    lighting_bonus = modifier.search_lighting.generator
+  elseif was_flashlight_used then
+    lighting_bonus = modifier.search_lighting.flashlight
+  end
+    
+  skill_bonus = player.skills:check('looting') and modifier.looting_skill or 0
+  
+  local modifier_sum = condition_bonus + skill_bonus + lighting_bonus
   return search_chance + (search_chance * modifier_sum)
 end
 
@@ -166,9 +174,9 @@ local function select_item(list)
 end
 
 function tile:search(player, setting, was_flashlight_used)
-  local location_state = self:getState()  
+  local integrity_state = self:getIntegrityState()  
   
-  local odds = self:getSearchOdds(player, setting, location_state, was_flashlight_used)
+  local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
   local search_success = odds >= math.random()
   
   if not search_success then return false end
@@ -176,12 +184,9 @@ function tile:search(player, setting, was_flashlight_used)
   local items = self.item_chance[setting] 
   local item_type = select_item(items)
 print('tile:search - ', item_type)
-print('location_state - ', location_state)
-
-  -- junkyards yield better barricade conditions than other locations due to the amount of junk
-  if self:getClassName() == 'junkyard' then location_state = 'powered' end
+print('integrity_state - ', integrity_state)
   
-  local item_INST = item[item_type]:new(location_state) 
+  local item_INST = item[item_type]:new(integrity_state) 
   return item_INST
 end
 
