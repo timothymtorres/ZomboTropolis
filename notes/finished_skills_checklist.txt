@@ -1,15 +1,15 @@
 --FINISHED SKILLS--
 
 Human  			[11/10]  (REMOVE grafitti and looting)
-  Military 		[12/10]  (REMOVE ARCHERY for now!)
+  Military 		[12/10]  (REMOVE ARCHERY for now!) [prolly gonna rework combat skills]
   Research 		[6/10]   (gadgets, scanner, terminal, terminal_adv)
-  Engineering 		[7/10]   (repair, repairs_adv, renovate)
+  Engineering 		[8/10]  [repair, repairs_adv] (make repair work on items? doors? equipment?)
 ________________________________________________________________
-COMPLETED		[33/40]
+COMPLETED		[34/40]
 
-Zombie  		[10/10]
-  Brute			[8/10] (impale, dying grasp)
-  Hunter		[4/10] (leap, leap_adv, mark_prey, scavenge, dodge, night vision)
-  Hive			[8/10] (ruin, ransack)
+Zombie  		[9/10] (change EP skill to hunger boost)
+  Brute			[5/10] (dying grasp, drag_prey_adv) [impale, armor skills]
+  Hunter		[4/10] (leap, leap_adv, mark_prey) [scavenge, dodge, night vision]
+  Hive			[9/10] [hivemind]
 _________________________________________________________________
-COMPLETED SKILLS  	[30/40]
+COMPLETED SKILLS  	[29/40]
