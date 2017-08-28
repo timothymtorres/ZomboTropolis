@@ -42,18 +42,35 @@ city = map:new(10)
 main_player = player:new('Fran', 'zombie', city, 4, 4)
 alt_player = player:new('Tim', 'human', city, 4, 4)
 
+p_tile = alt_player:getTile()
+p_tile.barricade.potential_hp = 28 
+p_tile.barricade.hp = 20
+p_tile.barricade:updateDesc()
+
+--[[
+for i=1, 10 do
+  local y, x = 4, 4
+  local mob = 'human'
+  dummy[i] = player:new('dummy-'..i, mob, city, y, x)
+  dummy[i]:takeAction('enter')
+end
+--]]
+
 main_player:updateStat('hp', -49)
 
+local toolbox_INST = item.toolbox:new(4)
+alt_player.inventory:insert(toolbox_INST)
+
 for i=1, 10 do
-  local syringe_INST = item.syringe:new('intact')
-  alt_player.inventory:insert(syringe_INST)
+  local barricade_INST = item.barricade:new('intact')
+  alt_player.inventory:insert(barricade_INST)
 end
 
+--[[
 local firesuit_INST = item.firesuit:new('ruined')
 alt_player.inventory:insert(firesuit_INST)
 alt_player.armor:equip('firesuit', firesuit_INST:getCondition())
 
---[[
 print('---------')
 print('SYRINGE_ISNT IS:', syringe_INST, syringe_INST:getCondition())
 print('---------')
@@ -62,12 +79,14 @@ alt_player:takeAction('syringe', 1, main_player)
 --Outcome.item('syringe', alt_player, 1, main_player)
 --]]
 
+--[[
 for i=1, 100 do
   local y, x = math.random(1,10), math.random(1,10)
   local mob = math.random() > 0.5 and 'human' or 'zombie'
   dummy[i] = player:new('dummy-'..i, mob, city, y, x)
   if math.random() > 0.5 then dummy[i]:takeAction('enter') end
 end
+--]]
 
 --[[
 
