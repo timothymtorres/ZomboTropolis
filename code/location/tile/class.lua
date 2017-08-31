@@ -125,11 +125,13 @@ function tile:getPlayers(setting)
   local players
   if setting == 'inside' then 
     players = self.inside_players
-  elseif not setting or setting == 'outside' then
+  elseif setting == 'outside' then
     players = self.outside_players
-  elseif setting == 'all' then
+  elseif not setting then -- get all players
     players = {}
-    for k,v in pairs(self.inside_players) do players[k] = v end
+    if self.inside_players then 
+      for k,v in pairs(self.inside_players) do players[k] = v end
+    end
     for k,v in pairs(self.outside_players) do players[k] = v end
   end
   return players 
