@@ -236,7 +236,7 @@ function Outcome.respawn(player)
     else broadcastEvent(player, 'You reanimate to life and struggle to stand.') 
     end
   end
-  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', {stage=player:getStage()})      
+  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', {stage=player:getStage(), exclude={player:getUsername()=true}})      
 end
 
 function Outcome.ransack(player)

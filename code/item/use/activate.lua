@@ -212,7 +212,7 @@ function activate.toolbox(player, condition)
   local integrity_state = building.integrity:getState()
   
   broadcastEvent(player, 'You repair the building' .. (integrity_state == 'intact' and 'completely.' or '.'))
-  broadcastEvent(building, player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.'), {stage='inside'})
+  broadcastEvent(building, player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.'), {stage='inside', exclude={player:getUsername()=true})
   
   --return {integrity_state}
 end
