@@ -15,14 +15,6 @@ local getTimeStamp = require('code.player.log.getTimeStamp')
 local description = {}
 local msg = {}
 
-function description.attack(player, target, weapon, attack, damage, critical)
-  local attack_msg = attack and 'succeed.' or 'miss.'
-  local critical_msg = critical and 'score a critical hit!' or ''
-  local end_msg = (attack and critical and critical_msg) or attack_msg
-  msg[1] = 'You attack '..target:getUsername()..' with your '..weapon:getClassName()..' and '..end_msg
-  msg[2] = 'You are attacked by '..target:getUsername()..' with their '..weapon:getClassName()..' and they '..end_msg
-end
-
 function description.enter(player, building)
   msg[1] = 'You enter the '..building:getName()..' '..building:getClassName()..'.'
 end

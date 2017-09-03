@@ -63,6 +63,8 @@ function Outcome.move(player, dir)
   
   player:updatePos(dir_y, dir_x)    
   broadcastEvent(player, 'You travel ' .. compass[dir] .. (GPS_usage and ' using a GPS' or '') .. '.')
+  
+  -- return {GPS_usage}
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -140,8 +142,17 @@ function Outcome.attack(player, target, weapon, inv_ID)
       end
     end
   end
+
+    broadcastEvent(player, 
+      'You attack ' .. target:getUsername() .. ' with your ' .. weapon:getClassName() .. 
+      (attack and critical and ' and score a critical hit!') or (not attack and ' and miss.') or '.'
+    )
+    broadcastEvent(target, 
+      'You are attacked by ' .. target:getUsername() .. ' with their ' .. weapon:getClassName() .. 
+      (attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
+    )  
   
-  return {attack, damage, critical}
+  --return {attack, damage, critical}  
 end
 
 function Outcome.search(player)
@@ -155,15 +166,17 @@ function Outcome.search(player)
   
   if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
     local flashlight_INST = player.inventory:lookup(inv_ID)
-    if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID)
+    if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID) end
   end
   
-  if item then 
-    player.inventory:insert(item) 
-    broadcastEvent(player, 'You search'.. (flashlight and ' with a flashlight ' or ' ') .. 'and find a '..item:getClassName()..'.')
-  else
-    broadcastEvent(player, 'You search' .. (flashlight and ' with a flashlight ' or ' ') .. 'and find nothing.')
-  end
+  if item then player.inventory:insert(item) end
+  
+  broadcastEvent(player, 
+    'You search ' .. (flashlight and 'with a flashlight ' or ' ') .. 'and find ' .. 
+    (item and ('a ' .. item:getClassName() ) or 'nothing') .. '.'
+  )
+  
+  -- return {item, player_has_flashlight}
 end
 
 function Outcome.discard(player, inv_ID)
