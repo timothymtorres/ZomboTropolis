@@ -204,7 +204,9 @@ function Outcome.enter(player)
   local map = player:getMap()
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
-  return {map[y][x]}
+  broadcastEvent(player, 'You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.')  
+  
+  --return {map[y][x]}
 end
 
 function Outcome.exit(player)
@@ -212,7 +214,9 @@ function Outcome.exit(player)
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
   map[y][x]:insert(player, 'outside')
-  return {map[y][x]}
+  broadcastEvent(player, 'You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.')  
+
+  --return {map[y][x]}
 end
 
 function Outcome.respawn(player) player:respawn() end

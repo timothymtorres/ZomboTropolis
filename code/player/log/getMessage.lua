@@ -15,14 +15,6 @@ local getTimeStamp = require('code.player.log.getTimeStamp')
 local description = {}
 local msg = {}
 
-function description.enter(player, building)
-  msg[1] = 'You enter the '..building:getName()..' '..building:getClassName()..'.'
-end
-
-function description.exit(player, building)
-  msg[1] = 'You exit the '..building:getName()..' '..building:getClassName()..'.'
-end
-
 ---------------------------------------
 ---------------------------------------
 --              HUMAN                --
