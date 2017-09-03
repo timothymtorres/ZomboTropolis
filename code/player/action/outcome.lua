@@ -228,7 +228,16 @@ function Outcome.exit(player)
   --return {map[y][x]}
 end
 
-function Outcome.respawn(player) player:respawn() end
+function Outcome.respawn(player) 
+  player:respawn() 
+  
+  if player:isMobType('zombie') then
+    if player.skills:check('hivemind') then broadcastEvent(player, 'You animate to life quickly and stand.')
+    else broadcastEvent(player, 'You reanimate to life and struggle to stand.') 
+    end
+  end
+  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', {stage=player:getStage()})      
+end
 
 function Outcome.ransack(player)
   local ransack_dice = dice:new('2d3')

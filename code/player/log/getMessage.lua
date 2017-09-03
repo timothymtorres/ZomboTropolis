@@ -21,18 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-function description.respawn(player)
-  if player:isMobType('zombie') then
-print('player is zombie')
-    if player.skills:check('resurrection') then
-      msg[1] = 'You animate to life quickly and stand.'
-    else
-      msg[1] = 'You reanimate to life and struggle to stand.' 
-    end
-  end
-  msg[3] = 'A nearby corpse rises to life.'    
-end
-
 local groan_description = {'disappointed', 'bored', 'pleased', 'satisfied', 'excited', 'very excited'}
 
 function description.groan(player, y, x, range)
