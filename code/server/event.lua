@@ -1,10 +1,10 @@
 local function broadcastEvent(zone, msg, setting) --settings={stage, range, mob_type}
   local date = os.time()  
 
-  if zone:isType('player') then
+  if zone:isClass('player') then
     local player = zone
     player.log:insert(msg, date)
-  elseif zone:isType('tile') then
+  elseif zone:isClass('tile') then
     local tile = zone
     local range, stage, mob_type = setting.range, setting.stage, setting.mob_type
     
@@ -27,7 +27,7 @@ local function broadcastEvent(zone, msg, setting) --settings={stage, range, mob_
         end
       end
     end      
-  elseif zone:isType('map') then
+  elseif zone:isClass('map') then
     --broadcast msg to all players on that map
   --elseif zone:isType('server') then   broadcast msg to all players on server?
   end
