@@ -15,35 +15,6 @@ local getTimeStamp = require('code.player.log.getTimeStamp')
 local description = {}
 local msg = {}
 
-function description.error(error_ID)
-  msg = error_list[error_ID]
-end
-
---[[--DIR/COMPASS LAYOUT
-  +-------------+
-  || 8 | 1 | 2 ||
-  || 7 |   | 3 ||
-  || 6 | 5 | 4 ||
-  +-------------+
---]]--DIR/COMPASS LAYOUT
-local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
-
-function description.move(player, dir, GPS_usage)
-  if GPS_usage then
-    msg[1] = 'You travel '..compass[dir]..' using a GPS.'    
-  else  
-    msg[1] = 'You travel '..compass[dir]..'.'
-  end
-end
-
-function description.search(player, item, flashlight)
-  if item then 
-    msg[1] = 'You search'.. (flashlight and ' with a flashlight ' or ' ') .. 'and find a '..item:getClassName()..'.'
-  else 
-    msg[1] = 'You search' .. (flashlight and ' with a flashlight ' or ' ') .. 'and find nothing.'
-  end
-end
-
 function description.attack(player, target, weapon, attack, damage, critical)
   local attack_msg = attack and 'succeed.' or 'miss.'
   local critical_msg = critical and 'score a critical hit!' or ''

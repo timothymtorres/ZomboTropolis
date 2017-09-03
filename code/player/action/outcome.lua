@@ -7,6 +7,7 @@ local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local item =              require('code.item.class')
+local broadcastEvent =    require('code.server.event')
 
 Outcome = {}
 
@@ -31,6 +32,9 @@ local function getNewPos(y, x, dir)
   end
   return dir_y, dir_x
 end
+
+
+local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
 
 function Outcome.move(player, dir)
   local y, x = player:getPos() 
@@ -57,8 +61,8 @@ function Outcome.move(player, dir)
     map[dir_y][dir_x]:insert(player)
   end
   
-  player:updatePos(dir_y, dir_x)  
-  return {GPS_usage}
+  player:updatePos(dir_y, dir_x)    
+  broadcastEvent(player, 'You travel ' .. compass[dir] .. (GPS_usage and ' using a GPS' or '') .. '.')
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -145,16 +149,21 @@ function Outcome.search(player)
   local item, flashlight
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
-  local player_inside_powered_building = p_tile:isPowered() and player:isStaged('inside')
+  local player_inside_unpowered_building = not p_tile:isPowered() and player:isStaged('inside')
   
   item = p_tile:search(player, player:getStage(), player_has_flashlight)
   
-  if player_has_flashlight and not player_inside_powered_building then -- flashlight is only used when building has no power
-    Outcome.item('flashlight', player, inv_ID) -- this runs a durability check on flashlight
+  if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
+    local flashlight_INST = player.inventory:lookup(inv_ID)
+    if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID)
   end
   
-  if item then player.inventory:insert(item) end
-  return {item, player_has_flashlight}
+  if item then 
+    player.inventory:insert(item) 
+    broadcastEvent(player, 'You search'.. (flashlight and ' with a flashlight ' or ' ') .. 'and find a '..item:getClassName()..'.')
+  else
+    broadcastEvent(player, 'You search' .. (flashlight and ' with a flashlight ' or ' ') .. 'and find nothing.')
+  end
 end
 
 function Outcome.discard(player, inv_ID)
