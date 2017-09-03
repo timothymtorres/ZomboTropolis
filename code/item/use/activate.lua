@@ -210,7 +210,11 @@ function activate.toolbox(player, condition)
   local building = player:getTile()
   building.integrity:updateHP(repair_dice:roll() )
   local integrity_state = building.integrity:getState()
-  return {integrity_state}
+  
+  broadcastEvent(player, 'You repair the building' .. (integrity_state == 'intact' and 'completely.' or '.'))
+  broadcastEvent(building, player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.'), {stage='inside'})
+  
+  --return {integrity_state}
 end
 
 --[[
