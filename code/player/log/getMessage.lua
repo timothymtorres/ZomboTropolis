@@ -21,24 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-function description.reinforce(player, did_zombies_interfere, building_was_reinforced, potential_hp)
-  if did_zombies_interfere then
-    msg[1] = 'You start to reinforce the building but a zombie lurches towards you.'
-  elseif not building_was_reinforced then
-    msg[1] = 'You attempt to reinforce the building but fail.'
-  else  -- should we do something with potential_hp?
-    msg[1] = 'You reinforce the building making room for fortifications.'    
-  end 
-end
-
-function description.barricade(player, inv_ID, did_zombies_interfere)
-  if not did_zombies_interfere then
-    msg[1] = 'You fortify the building with a barricade.'
-  else
-    msg[1] = 'You start to fortify the building, but a zombie lurches towards you.'
-  end
-end
-
 function description.syringe(player, inv_ID, target, inject_success, target_weak_enough, syringe_salvage_successful)
   if not inject_success then  -- syringe missed
     msg[1] = 'You attempt to inject a zombie with your syringe and fail.'

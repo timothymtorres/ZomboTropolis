@@ -1,6 +1,7 @@
 local dice = require('code.libs.dice')
 local medical = require('code.item.medical.class')
 local item = require('code.item.class')
+local broadcastEvent = require('code.server.event')
 
 local activate = {}
 
@@ -162,8 +163,14 @@ function activate.barricade(player, condition)
   local building_tile = player:getTile()
   local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
   
-  if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
-  return {did_zombies_interfere}    
+  if not did_zombies_interfere then 
+    building_tile.barricade:fortify(player, condition) 
+    broadcastEvent(player, 'You fortify the building with a barricade.')
+  else
+    broadcastEvent(player, 'You start to fortify the building, but a zombie lurches towards you.')
+  end
+  
+  --return {did_zombies_interfere}    
 end
 
 function activate.fuel(player, condition)

@@ -196,8 +196,16 @@ function Outcome.reinforce(player)
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
   
-  if building_was_reinforced and not did_zombies_interfere then p_tile.barricade:reinforce(potential_hp) end
-  return {did_zombies_interfere, building_was_reinforced, potential_hp}
+  if building_was_reinforced and not did_zombies_interfere then 
+    p_tile.barricade:reinforce(potential_hp) 
+    broadcastEvent(player, 'You reinforce the building making room for fortifications.')
+  elseif did_zombies_interfere then
+    broadcastEvent(player, 'You start to reinforce the building but a zombie lurches towards you.')    
+  elseif not building_was_reinforced then
+    broadcastEvent(player, 'You attempt to reinforce the building but fail.') -- should we do something with potential hp?
+  end
+  
+  --return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
 
 function Outcome.enter(player)
