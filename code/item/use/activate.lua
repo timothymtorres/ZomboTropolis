@@ -247,10 +247,12 @@ end
 
 function activate.leather(player, condition)
   player.armor:equip('leather', condition)
+  broadcastEvent(player, 'You equip a leather jacket.')    
 end
 
 function activate.firesuit(player, condition)
   player.armor:equip('firesuit', condition)
+  broadcastEvent(player, 'You equip a firesuit.')    
 end
 
 return activate
