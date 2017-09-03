@@ -25,7 +25,7 @@ local action_list = {
         discard =       {name='discard',   cost= 0},      
       },
       basic = {
-        respawn =       {name='respawn',   cost=10},
+        --respawn =       {name='respawn',   cost=10},
         search =        {name='search',    cost= 1},
         attack =        {name='attack',    cost= 1},
         speak =         {name='speak',     cost= 1},   
