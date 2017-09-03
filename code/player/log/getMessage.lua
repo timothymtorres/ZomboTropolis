@@ -21,20 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-function description.syringe(player, inv_ID, target, inject_success, target_weak_enough, syringe_salvage_successful)
-  if not inject_success then  -- syringe missed
-    msg[1] = 'You attempt to inject a zombie with your syringe and fail.'
-    msg[2] = target:getUsername()..' attempts to inject you with their syringe.'    
-  elseif inject_success and target_weak_enough then  -- syringe landed and antidote was created
-    msg[1] = 'You inject a zombie with your syringe and an antidote is created.'
-    msg[2] = target:getUsername()..' injects you with their syringe killing you in the process.'     
-  else  -- syringe landed but target was too healthy (bonus msg if syringe salvaged)
-    local end_msg = syringe_salvage_successful and '' or ' Your syringe is destroyed.'
-    msg[1] = 'You inject a zombie with your syringe but it is too strong and resists.'..end_msg
-    msg[2] = target:getUsername()..' injects you with their syringe but you resist.'      
-  end
-end
-
 function description.leather(player, inv_ID)
   local armor_INST = player.inventory:lookup(inv_ID)
   msg[1] = 'You equip '..armor_INST:getClassName()..' armor.'

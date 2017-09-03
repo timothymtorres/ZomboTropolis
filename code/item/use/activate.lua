@@ -98,12 +98,19 @@ function activate.syringe(player, condition, target)
       local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
       local antidote = item.antidote:new(skill_modifier)
       player.inventory:insert(antidote)
+      broadcastEvent(player, 'You inject a zombie with your syringe and an antidote is created.')
+      broadcastEvent(target, player:getUsername()..' injects you with their syringe killing you in the process.')
+    else
+      syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
+      broadcastEvent(player, 'You inject a zombie with your syringe but it is too strong and resists.' .. (syringe_salvage_successful and '' or ' Your syringe is destroyed.')
+      broadcastEvent(target, player:getUsername()..' injects you with their syringe but you resist.'        
     end
-     
-    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
+  else -- syringe missed
+    broadcastEvent(player, 'You attempt to inject a zombie with your syringe and fail.')
+    broadcastEvent(target, player:getUsername()..' attempted to inject you with their syringe.'     
   end
   
-  return {inject_success, target_weak_enough, syringe_salvage_successful} 
+  --return {inject_success, target_weak_enough, syringe_salvage_successful} 
 end
 
 --[[
