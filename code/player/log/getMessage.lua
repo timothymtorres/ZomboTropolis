@@ -21,10 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-function description.discard(player, item)
-  msg[1] = 'You discard a '..item..'.'
-end
-
 function description.reinforce(player, did_zombies_interfere, building_was_reinforced, potential_hp)
   if did_zombies_interfere then
     msg[1] = 'You start to reinforce the building but a zombie lurches towards you.'

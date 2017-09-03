@@ -182,7 +182,8 @@ end
 function Outcome.discard(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
-  return {item}
+  broadcastEvent(player, 'You discard a '..item:getClassName()..'.')
+  --return {item}
 end
 
 function Outcome.speak(player, message) -- , target)
