@@ -35,28 +35,6 @@ function description.armor(player, armor_type)
   end
 end
 
-function description.acid(player, target, acid_successful, acid_immunity)
-  if acid_successful and acid_immunity then
-    msg[1] = 'You spray '..target:getUsername()..' with acid but it has no effect.'
-    msg[2] = 'A zombie sprays you with acid but your inventory is protected by a firesuit.'
-  elseif acid_successful then
-    msg[1] = 'You spray '..target:getUsername()..' with acid.'
-    msg[2] = 'A zombie sprays you with acid.'
-  else
-    msg[1] = 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.'
-    msg[2] = 'A zombie attempts to spray acid at you but is unsuccessful.'
-  end
-end
-
-function description.ransack(player, integrity_state)
-  if integrity_state == 'ransacked' then
-    msg[1] = 'You ransack the building.'
-    msg[3] = 'A zombie ransacks the building.'
-  elseif integrity_state == 'ruined' then
-    msg[1] = 'You ruin the building.'
-    msg[3] = 'A zombie ruins the building.'
-  end
-end
 
 ---------------------------------------
 ---------------------------------------

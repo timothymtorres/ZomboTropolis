@@ -132,7 +132,21 @@ function activate.acid(player, target)
     end
   end 
   
-  return {acid_successful, target_acid_immune}
+  if acid_successful and target_acid_immune then
+    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid but it has no effect.')
+    broadcastEvent(target, 'A zombie sprays you with acid but your inventory is protected by a firesuit.')
+  elseif acid_successful and n_items == 0 then
+    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid but they have no equipment.')
+    broadcastEvent(target, 'A zombie sprays you with acid but you have no items in your inventory.')    
+  elseif acid_successful then
+    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid.')
+    broadcastEvent(target, 'A zombie sprays you with acid.')
+  else
+    broadcastEvent(player, 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.')
+    broadcastEvent(target, 'A zombie attempts to spray acid at you but is unsuccessful.')
+  end  
+  
+  --return {acid_successful, target_acid_immune}
 end
 
 return activate

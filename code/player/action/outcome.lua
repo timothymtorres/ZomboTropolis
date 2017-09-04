@@ -255,7 +255,16 @@ function Outcome.ransack(player)
   local building = player:getTile()
   building.integrity:updateHP(-1 * ransack_dice:roll() )
   local integrity_state = building.integrity:getState()
-  return {integrity_state}
+  
+  if integrity_state == 'ransacked' then
+    broadcastEvent(player, 'You ransack the building.')
+    broadcastEvent(building, 'A zombie ransacks the building.', {stage='inside', exclude={player:getUsername()=true}})
+  elseif integrity_state == 'ruined' then
+    broadcastEvent(player, 'You ruin the building.')
+    broadcastEvent(building, 'A zombie ruins the building.', {stage='inside', exclude={player:getUsername()=true}})    
+  end  
+  
+  --return {integrity_state}
 end
 
 local corpse_effects = { 
