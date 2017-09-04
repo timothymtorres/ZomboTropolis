@@ -1,10 +1,12 @@
 --local outcome = require('code.player.action.outcome')
 local dice =              require('code.libs.dice')
+local broadcastEvent =    require('code.server.event')
 
 local activate = {}
 
 local GROAN_MAX_RANGE = 6
 local GROAN_DENOMINATOR = 3
+local groan_description = {'disappointed', 'bored', 'pleased', 'satisfied', 'excited', 'very excited'}
 
 function activate.groan(player)
   local y, x = player:getPos()
@@ -12,7 +14,33 @@ function activate.groan(player)
   local human_n = p_tile:countPlayers('human', player:getStage())
   local groan_range = math.floor(human_n/GROAN_DENOMINATOR + 0.5)
   local range = math.min(groan_range, GROAN_MAX_RANGE)
-  return {y, x, range} 
+
+  broadcastEvent(player, 'You emit a ' .. groan_description[range] .. ' groan.')
+  
+  -- What humans will hear
+  if player:isStaged('inside') then
+    broadcastEvent(p_tile, 'A zombie groans at your current location.', {stage='inside', mob_type='human', exclude={player:getUsername=true}})
+  end
+  broadcastEvent(p_tile, 'You hear a groan in the distance.', {range=range, stage='outside', mob_type='human'})  -- desc distance based?  [nearby, far away, etc. just like tracking descs]
+  
+  --What zombies will hear
+  broadcastEvent(p_tile, 'You hear a ' .. groan_description[range] .. ' groan at map[' .. y .. ']['.. x .. '].', {range=range, mob_type='zombie', exclude={player:getUsername=true}})
+  
+  --[[  OLD CODE from description.groan()
+  local player_y, player_x = player:getPos()
+  local y_dist, x_dist = player_y - y, player_x - x
+  if y_dist == 0 and x_dist == 0 then msg[3] = msg[3]..' at your current location.' end
+  
+  if y_dist > 0 then msg[3] = msg[3]..math.abs(y_dist)..' South'
+  elseif y_dist < 0 then msg[3] = msg[3]..math.abs(y_dist)..' North'
+  end
+
+  if x_dist > 0 then msg[3] = msg[3]..math.abs(x_dist)..' East'
+  elseif x_dist < 0 then msg[3] = msg[3]..math.abs(x_dist)..' West'
+  end 
+  --]]
+  
+  --return {y, x, range} 
 end
 
 local DRAG_PREY_HEALTH_THRESHOLD = 13
@@ -31,7 +59,21 @@ function activate.armor(player, armor_type)
   return {armor_type}
 end
 
-function activate.gesture(player, target) end
+local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
+
+function activate.gesture(player, target) 
+  local object
+  
+  if type(target) == 'number' then object = compass[target]
+  elseif target:getClassName() == 'player' then object = target:getUsername()
+  else object = 'the '..target:getName()..' '..target:getClassName() -- must be building
+  end
+  
+  broadcastEvent(player, 'You gesture towards ' .. object .. '.')
+  broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', {stage=player:getStage(), exclude={player:getUsername()=true}})
+end
+  
+end
 
 function activate.track(player)
   local targets, targets_ranges = player.condition.tracking:getPrey()

@@ -21,44 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-local groan_description = {'disappointed', 'bored', 'pleased', 'satisfied', 'excited', 'very excited'}
-
-function description.groan(player, y, x, range)
-  
-  if player:isMobType('human') then
-    msg[3] = 'You hear a groan in the distance.'
-  elseif player:isMobType('zombie') then
-    msg[1] = 'You emit a '..groan_description[range]..' groan.'
-    msg[3] = 'You hear a '..groan_description[range]..' groan'
-    
-    local player_y, player_x = player:getPos()
-    local y_dist, x_dist = player_y - y, player_x - x
-    if y_dist == 0 and x_dist == 0 then msg[3] = msg[3]..' at your current location.' end
-    
-    if y_dist > 0 then msg[3] = msg[3]..math.abs(y_dist)..' South'
-    elseif y_dist < 0 then msg[3] = msg[3]..math.abs(y_dist)..' North'
-    end
-  
-    if x_dist > 0 then msg[3] = msg[3]..math.abs(x_dist)..' East'
-    elseif x_dist < 0 then msg[3] = msg[3]..math.abs(x_dist)..' West'
-    end
-    
-    msg[3] = msg[3]..'.'
-  end
-end
-
-function description.gesture(player, target)
-  for k,v in pairs(target) do print(k,v) end
-  local object
-  if type(target) == 'number' then object = compass[target]
-  elseif target:getClassName() == 'player' then object = target:getUsername()
-  else object = 'the '..target:getName()..' '..target:getClassName() -- must be building
-  end
-  
-  msg[1] = 'You gesture towards '..object..'.'
-  msg[3] = 'A zombie gestures towards '..object..'.'
-end
-
 function description.drag_prey(player, target, drag_successful)
   if drag_successful then
     msg[1] = 'You drag '..target:getUsername()..' outside.'
