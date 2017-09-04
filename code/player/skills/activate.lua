@@ -95,6 +95,7 @@ function activate.track(player)
       local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
       local index = targets_ranges[i]  
       track_msg = track_msg .. '\n' .. target:getUsername() .. ' is ' .. description[index] .. '.'
+    end
   else
     track_msg = track_msg .. 'There are no humans you are currently tracking.'
   end
