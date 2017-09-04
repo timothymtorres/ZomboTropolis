@@ -23,7 +23,7 @@ local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, 
 
 --Accounts[new_ID] = player:new(n, t)
 
-function player:initialize(username, mob_type, map_zone, y, x) 
+function player:initialize(username, mob_type, map_zone, y, x) --add account name
   self.username = username
   self.map_zone = map_zone
   self.y, self.x = y, x
@@ -144,6 +144,8 @@ function player:getClass() return self.class end
 function player:getClassName() return tostring(self.class) end
 
 function player:getUsername() return self.username end
+
+--function player:getAccountName() return self.account_name end
 
 function player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
