@@ -186,9 +186,17 @@ function Outcome.discard(player, inv_ID)
   --return {item}
 end
 
-function Outcome.speak(player, message) -- , target)
+function Outcome.speak(player, message, target)
   local tile = player:getTile()
-  tile:listen(player, message, player:getStage()) 
+  
+  if target then -- whisper to target only
+    broadcastEvent(target, player:getUsername()..' said: "'..message..'"'  
+    broadcastEvent(player, 'You whispered to '..target:getUsername()..':  "'..message..'"')
+    broadcastEvent(tile, player:getUsername()..' whispers to '..target:getUsername(), {stage=player:getStage(), exclude={player:getUsername()=true, target:getUsername()=true})
+  else -- say outloud to everyone
+    broadcastEvent(player, 'You said:  "'..message..'"')  
+    broadcastEvent(tile, player:getUsername()..' said:  "'..message..'"', {stage=player:getStage(), exclude={player:getUsername()=true, target:getUsername()=true})
+  end
 end
 
 function Outcome.reinforce(player)

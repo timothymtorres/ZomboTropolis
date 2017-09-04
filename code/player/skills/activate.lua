@@ -80,9 +80,29 @@ function activate.gesture(player, target)
   broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', {stage=player:getStage(), exclude={player:getUsername()=true}})
 end
 
+local tracking_description = {
+  advanced = {'very far away', 'far away', 'in the distance', 'in the area', 'in a nearby area', 'close', 'very close', 'here'},
+  basic = {'far away', 'in the distance', 'in the area', 'close'},
+}
+
 function activate.track(player)
   local targets, targets_ranges = player.condition.tracking:getPrey()
-  return {targets, targets_ranges}
+  local track_msg = 'You sniff the air for prey.'
+  
+  if targets then 
+    local has_advanced_tracking = player.skills:check('track_adv')  
+    for i, target in ipairs(targets) do
+      local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
+      local index = targets_ranges[i]  
+      track_msg = track_msg .. '\n' .. target:getUsername() .. ' is ' .. description[index] .. '.'
+  else
+    track_msg = track_msg .. 'There are no humans you are currently tracking.'
+  end
+  
+  broadcastEvent(player, track_msg)
+  broadcastEvent(player:getTile(), 'A zombie smells the air for prey.', {stage=player:getStage(), exclude={player:getUsername()=true}})
+  
+  -- return {targets, targets_ranges}
 end
 
 local ACID = {

@@ -35,32 +35,6 @@ function description.armor(player, armor_type)
   end
 end
 
-local tracking_description = {
-  advanced = {'very far away', 'far away', 'in the distance', 'in the area', 'in a nearby area', 'close', 'very close', 'here'},
-  basic = {'far away', 'in the distance', 'in the area', 'close'},
-}
-
-function description.track(player, prey, prey_range_indexs)
-  msg[1] = 'You sniff the air for prey.'
-  msg[3] = 'A zombie smells the air for prey.'
-    
-  if prey then
-    local has_advanced_tracking = player.skills:check('track_adv')  
-    for i, target in ipairs(prey) do
-      local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
-      local index = prey_range_indexs[i]
-      msg[1] = msg[1]..'\n'..target:getUsername()..' is '..description[index]..'.'
-    end
-  else
-    msg[1] = msg[1] .. 'There are no humans you are currently tracking.'
-  end  
-end
-
-function description.speak(player, message)
-  msg[1] = 'You said:  "'..message..'"'
-  msg[3] = player:getUsername()..' said: "'..message..'"'
-end
-
 function description.acid(player, target, acid_successful, acid_immunity)
   if acid_successful and acid_immunity then
     msg[1] = 'You spray '..target:getUsername()..' with acid but it has no effect.'
