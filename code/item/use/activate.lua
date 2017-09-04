@@ -73,7 +73,7 @@ function activate.antidote(player, condition, target)
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
-local antidote_skill_modifier = {none = 'ruined', syringe = 'unpowered', syringe_adv = 'powered'}
+local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe_adv = 'intact'}
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
 function activate.syringe(player, condition, target)
@@ -211,8 +211,13 @@ function activate.toolbox(player, condition)
   building.integrity:updateHP(repair_dice:roll() )
   local integrity_state = building.integrity:getState()
   
-  broadcastEvent(player, 'You repair the building' .. (integrity_state == 'intact' and 'completely.' or '.'))
-  broadcastEvent(building, player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.'), {stage='inside', exclude={player:getUsername()=true})
+  local broadcast_settings = {
+    stage='inside', 
+    exclude={player:getUsername()=true},
+  }
+  
+  broadcastEvent(player, 'You repair the building' .. (integrity_state == 'intact' and 'completely.' or '.'))  
+  broadcastEvent(building, player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.'), broadcast_settings)
   
   --return {integrity_state}
 end
