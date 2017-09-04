@@ -50,8 +50,15 @@ function activate.drag_prey(player, target)
   if has_been_dragged then
     Outcome.exit(player)
     Outcome.exit(target)
-  end  
-  return {has_been_dragged}
+    
+    broadcastEvent(player, 'You drag '..target:getUsername()..' outside.')
+    broadcastEvent(target, 'A zombie drags you outside.')
+    broadcastEvent(player:getTile(), 'A zombie drags '..target:getUsername()..' outside.', {exclude={player:getUsername()=true, target:getUsername()=true}})
+  else
+    broadcastEvent(player, 'You attempt to drag '..target:getUsername()..' outside but are unsuccessful.')
+  end
+
+  -- return {has_been_dragged}
 end
 
 function activate.armor(player, armor_type)
@@ -71,8 +78,6 @@ function activate.gesture(player, target)
   
   broadcastEvent(player, 'You gesture towards ' .. object .. '.')
   broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', {stage=player:getStage(), exclude={player:getUsername()=true}})
-end
-  
 end
 
 function activate.track(player)

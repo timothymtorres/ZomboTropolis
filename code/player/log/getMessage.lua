@@ -21,21 +21,6 @@ local msg = {}
 ---------------------------------------
 ---------------------------------------
 
-function description.drag_prey(player, target, drag_successful)
-  if drag_successful then
-    msg[1] = 'You drag '..target:getUsername()..' outside.'
-    msg[2] = 'A zombie drags you outside.'
-    msg[3] = 'A zombie drags '..target:getUsername()..' outside.'
-  else
-    msg[1] = 'You attempt to drag '..target:getUsername()..' outside but are unsuccessful.'
-  end
-end
-
-function description.feed(player)
-  msg[1] = 'You feed on a corpse.'
-  msg[3] = 'A zombie feeds on a corpse.'
-end
-
 function description.armor(player, armor_type)
   if armor_type == 'scale' then
     msg[1] = 'Your skin shapeshifts into hard scales that are resistant to bladed weapons.'  

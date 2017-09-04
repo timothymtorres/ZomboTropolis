@@ -289,6 +289,9 @@ function Outcome.feed(player)
     
   player:updateStat('xp', xp_gained)
   player.condition.decay:add(-1*decay_loss)
+  
+  broadcastEvent(player, 'You feed on a corpse.')
+  broadcastEvent(player:getTile(), 'A zombie feeds on a corpse.', {stage=player:getStage(), exclude={player:getUsername()=true}})  
 end
 
 function Outcome.default(action, player, ...)
