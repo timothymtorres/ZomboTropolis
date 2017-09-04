@@ -189,13 +189,24 @@ end
 function Outcome.speak(player, message, target)
   local tile = player:getTile()
   
+  local broadcast_settings = {
+    whisper = {
+      stage=player:getStage(), 
+      exclude={player:getUsername()=true, target:getUsername()=true}      
+    },
+    outloud = {
+      stage=player:getStage(), 
+      exclude={player:getUsername()=true, target:getUsername()=true}      
+    },
+  }
+  
   if target then -- whisper to target only
     broadcastEvent(target, player:getUsername()..' said: "'..message..'"'  
     broadcastEvent(player, 'You whispered to '..target:getUsername()..':  "'..message..'"')
-    broadcastEvent(tile, player:getUsername()..' whispers to '..target:getUsername(), {stage=player:getStage(), exclude={player:getUsername()=true, target:getUsername()=true})
+    broadcastEvent(tile, player:getUsername()..' whispers to '..target:getUsername()..'.', broadcast_settings.whisper)
   else -- say outloud to everyone
     broadcastEvent(player, 'You said:  "'..message..'"')  
-    broadcastEvent(tile, player:getUsername()..' said:  "'..message..'"', {stage=player:getStage(), exclude={player:getUsername()=true, target:getUsername()=true})
+    broadcastEvent(tile, player:getUsername()..' said:  "'..message..'"', broadcast_settings.outloud)
   end
 end
 
@@ -244,7 +255,12 @@ function Outcome.respawn(player)
     else broadcastEvent(player, 'You reanimate to life and struggle to stand.') 
     end
   end
-  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', {stage=player:getStage(), exclude={player:getUsername()=true}})      
+  
+  local broadcast_settings = {
+    stage=player:getStage(), 
+    exclude={player:getUsername()=true}
+  }
+  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', broadcast_settings)      
 end
 
 function Outcome.ransack(player)
@@ -256,12 +272,17 @@ function Outcome.ransack(player)
   building.integrity:updateHP(-1 * ransack_dice:roll() )
   local integrity_state = building.integrity:getState()
   
+  local broadcast_settings = {
+    stage=player:getStage(), 
+    exclude={player:getUsername()=true}
+  }  
+  
   if integrity_state == 'ransacked' then
     broadcastEvent(player, 'You ransack the building.')
-    broadcastEvent(building, 'A zombie ransacks the building.', {stage='inside', exclude={player:getUsername()=true}})
+    broadcastEvent(building, 'A zombie ransacks the building.', broadcast_settings)
   elseif integrity_state == 'ruined' then
     broadcastEvent(player, 'You ruin the building.')
-    broadcastEvent(building, 'A zombie ruins the building.', {stage='inside', exclude={player:getUsername()=true}})    
+    broadcastEvent(building, 'A zombie ruins the building.', broadcast_settings)    
   end  
   
   --return {integrity_state}
@@ -307,8 +328,13 @@ function Outcome.feed(player)
   player:updateStat('xp', xp_gained)
   player.condition.decay:add(-1*decay_loss)
   
+  local broadcast_settings = {
+    stage=player:getStage(), 
+    exclude={player:getUsername()=true}
+  }  
+  
   broadcastEvent(player, 'You feed on a corpse.')
-  broadcastEvent(player:getTile(), 'A zombie feeds on a corpse.', {stage=player:getStage(), exclude={player:getUsername()=true}})  
+  broadcastEvent(player:getTile(), 'A zombie feeds on a corpse.', broadcast_settings)  
 end
 
 function Outcome.default(action, player, ...)

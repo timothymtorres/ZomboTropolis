@@ -17,14 +17,32 @@ function activate.groan(player)
 
   broadcastEvent(player, 'You emit a ' .. groan_description[range] .. ' groan.')
   
+  local broadcast_settings = {
+    for_humans_inside = {
+      stage='inside', 
+      mob_type='human', 
+      exclude={player:getUsername=true}
+    },
+    for_humans_outside = {
+      range=range, 
+      stage='outside', 
+      mob_type='human'      
+    },
+    for_zombies_nearby = {
+      range=range, 
+      mob_type='zombie', 
+      exclude={player:getUsername=true}      
+    }
+  }  
+  
   -- What humans will hear
   if player:isStaged('inside') then
-    broadcastEvent(p_tile, 'A zombie groans at your current location.', {stage='inside', mob_type='human', exclude={player:getUsername=true}})
+    broadcastEvent(p_tile, 'A zombie groans at your current location.', broadcast_settings.for_humans_inside)
   end
-  broadcastEvent(p_tile, 'You hear a groan in the distance.', {range=range, stage='outside', mob_type='human'})  -- desc distance based?  [nearby, far away, etc. just like tracking descs]
+  broadcastEvent(p_tile, 'You hear a groan in the distance.', broadcast_settings.for_humans_outside)  -- desc distance based?  [nearby, far away, etc. just like tracking descs]
   
   --What zombies will hear
-  broadcastEvent(p_tile, 'You hear a ' .. groan_description[range] .. ' groan at map[' .. y .. ']['.. x .. '].', {range=range, mob_type='zombie', exclude={player:getUsername=true}})
+  broadcastEvent(p_tile, 'You hear a ' .. groan_description[range] .. ' groan at map[' .. y .. ']['.. x .. '].', broadcast_settings.for_zombies_nearby)
   
   --[[  OLD CODE from description.groan()
   local player_y, player_x = player:getPos()
@@ -53,7 +71,12 @@ function activate.drag_prey(player, target)
     
     broadcastEvent(player, 'You drag '..target:getUsername()..' outside.')
     broadcastEvent(target, 'A zombie drags you outside.')
-    broadcastEvent(player:getTile(), 'A zombie drags '..target:getUsername()..' outside.', {exclude={player:getUsername()=true, target:getUsername()=true}})
+    
+    local broadcast_settings = {
+      exclude={player:getUsername()=true, target:getUsername()=true}
+    }  
+  
+    broadcastEvent(player:getTile(), 'A zombie drags '..target:getUsername()..' outside.', broadcast_settings)
   else
     broadcastEvent(player, 'You attempt to drag '..target:getUsername()..' outside but are unsuccessful.')
   end
@@ -91,7 +114,13 @@ function activate.gesture(player, target)
   end
   
   broadcastEvent(player, 'You gesture towards ' .. object .. '.')
-  broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', {stage=player:getStage(), exclude={player:getUsername()=true}})
+  
+  local broadcast_settings = {
+    stage=player:getStage(), 
+    exclude={player:getUsername()=true}
+  }  
+  
+  broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', broadcast_settings)
 end
 
 local tracking_description = {
@@ -115,7 +144,13 @@ function activate.track(player)
   end
   
   broadcastEvent(player, track_msg)
-  broadcastEvent(player:getTile(), 'A zombie smells the air for prey.', {stage=player:getStage(), exclude={player:getUsername()=true}})
+  
+  local broadcast_settings = {
+    stage=player:getStage(), 
+    exclude={player:getUsername()=true}
+  }    
+  
+  broadcastEvent(player:getTile(), 'A zombie smells the air for prey.', broadcast_settings)
   
   -- return {targets, targets_ranges}
 end
