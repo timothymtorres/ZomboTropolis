@@ -188,20 +188,22 @@ end
 
 function Outcome.speak(player, message, target)
   local tile = player:getTile()
+  local player_name = player:getUsername()
+  local target_name = player:getUsername()
   
   local broadcast_settings = {
     whisper = {
       stage=player:getStage(), 
-      exclude={player:getUsername()=true, target:getUsername()=true}      
+      exclude={player_name=true, target_name=true},
     },
     outloud = {
       stage=player:getStage(), 
-      exclude={player:getUsername()=true, target:getUsername()=true}      
+      exclude={player_name=true},
     },
   }
   
   if target then -- whisper to target only
-    broadcastEvent(target, player:getUsername()..' said: "'..message..'"'  
+    broadcastEvent(target, player:getUsername()..' whispered: "'..message..'"')
     broadcastEvent(player, 'You whispered to '..target:getUsername()..':  "'..message..'"')
     broadcastEvent(tile, player:getUsername()..' whispers to '..target:getUsername()..'.', broadcast_settings.whisper)
   else -- say outloud to everyone
