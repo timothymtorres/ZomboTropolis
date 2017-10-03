@@ -1,4 +1,4 @@
-local function broadcastEvent(zone, msg, setting) --settings={stage=inside/outside, range=num, mob_type=zombie/human, exclude={player:getUsername()=true}}
+local function broadcastEvent(zone, msg, setting) --settings={stage=inside/outside, range=num, mob_type=zombie/human, exclude={player=true, ...}}
   local date = os.time()  
 
   if zone:isClass('player') then
@@ -11,7 +11,7 @@ local function broadcastEvent(zone, msg, setting) --settings={stage=inside/outsi
     -- delivers msg to tile
     local players = tile:getPlayers(stage)
     for _, player in pairs(players) do
-      if (not mob_type or player:isMobType(mob_type) ) and player:isStanding() and (not exclude or not exclude[player:getUsername()]) then 
+      if (not mob_type or player:isMobType(mob_type) ) and player:isStanding() and (not exclude or not exclude[player]) then 
         -- plug in map[y][x] coords into msg with string.gsub()
         player.log:insert(msg, date)
       end
