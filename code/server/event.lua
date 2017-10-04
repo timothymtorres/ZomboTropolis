@@ -1,8 +1,6 @@
 local broadcastEvent = {}
 
 function broadcastEvent.player(player, msg, self_msg, event)  --this broadcasts specifically to exclude player and give player their own self_msg 
-  local date = os.time()  
- 
   local tile = player:getTile()
   local stage = player:getStage()
   
@@ -10,17 +8,15 @@ function broadcastEvent.player(player, msg, self_msg, event)  --this broadcasts 
   for _, player_INST in pairs(players) do
     if player_INST:isStanding() and player_INST ~= player then 
       -- plug in map[y][x] coords into msg with string.gsub()
-      player_INST.log:insert(msg, event, date)
+      player_INST.log:insert(msg, event)
     end
   end
   
-  player.log:insert(self_msg, event, date)
+  player.log:insert(self_msg, event)
 end
     
 --settings={stage=inside/outside, range=num, mob_type=zombie/human, exclude={player=true, ...}}
 function broadcastEvent.zone(zone, msg, event, setting)
-  local date = os.time()  
-  
   if zone:isClass('tile') then
     local tile = zone
     local range, stage, mob_type, exclude = setting.range, setting.stage, setting.mob_type, setting.exclude
@@ -30,7 +26,7 @@ function broadcastEvent.zone(zone, msg, event, setting)
     for _, player_INST in pairs(players) do
       if (not mob_type or player_INST:isMobType(mob_type) ) and player_INST:isStanding() and (not exclude or not exclude[player_INST]) then 
         -- plug in map[y][x] coords into msg with string.gsub()
-        player_INST.log:insert(msg, event, date)
+        player_INST.log:insert(msg, event)
       end
     end        
 
