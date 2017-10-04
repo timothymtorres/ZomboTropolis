@@ -7,9 +7,10 @@ function log:initiallize()
   -- need to save data to client?
 end
 
-function log:insert(msg, date)
+function log:insert(msg, event, date)
   self[#self+1] = {
     msg = msg,
+    event = event,
     date = date,
   }
 end
