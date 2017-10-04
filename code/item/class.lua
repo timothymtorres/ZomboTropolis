@@ -64,8 +64,8 @@ function item:failDurabilityCheck(player)
 end
 
 function item:updateCondition(num, player, inv_ID)
-  self.condition = self.condition + num -- is condition 1-4 or 0-3?!  Might need to fix this...  Also add math.max(whatever the limit is...)
-  if self.condition < 0 then -- item is destroyed
+  self.condition = math.max(self.condition + num, 4)
+  if self.condition <= 0 then -- item is destroyed
     player.inventory:remove(inv_ID)
     -- include announcement msg?
   end
