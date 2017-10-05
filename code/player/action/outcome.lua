@@ -61,9 +61,8 @@ function Outcome.move(player, dir)
     map[dir_y][dir_x]:insert(player)
   end
   
-  player:updatePos(dir_y, dir_x)    
-  broadcastEvent(player, 'You travel ' .. compass[dir] .. (GPS_usage and ' using a GPS' or '') .. '.')
-  
+  player:updatePos(dir_y, dir_x)
+  player.log:insert('You travel '..compass[dir]..(GPS_usage and ' using a GPS.' or '.'), {'move', player, dir, GPS_usage})  
   -- return {GPS_usage}
 end
 
@@ -143,14 +142,17 @@ function Outcome.attack(player, target, weapon, inv_ID)
     end
   end
 
-    broadcastEvent(player, 
-      'You attack ' .. target:getUsername() .. ' with your ' .. weapon:getClassName() .. 
-      (attack and critical and ' and score a critical hit!') or (not attack and ' and miss.') or '.'
-    )
-    broadcastEvent(target, 
-      'You are attacked by ' .. target:getUsername() .. ' with their ' .. weapon:getClassName() .. 
-      (attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
-    )  
+  local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  
+  local settings = {stage=player:getStage(), exclude={}}
+  settings.exclude[player], settings.exclude[target] = true, true
+
+  local self_msg = 'You attack '..target:getUsername()..' with your '..weapon:getClassName()..(attack and critical and ' and score a critical hit!') or (not attack and ' and miss.') or '.'
+  local target_msg = 'You are attacked by '..target:getUsername()..' with their '..weapon:getClassName()..(attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
+  local msg = player:getUsername()..' attacks '..target:getUsername()..' with their '..weapon:getClassName()..(attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
+
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)
+  broadcastEvent.zone(player:getTile(), msg, event, settings)
   
   --return {attack, damage, critical}  
 end
@@ -165,16 +167,16 @@ function Outcome.search(player)
   item = p_tile:search(player, player:getStage(), player_has_flashlight)
   
   if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
+    flashlight = true
     local flashlight_INST = player.inventory:lookup(inv_ID)
     if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID) end
   end
   
   if item then player.inventory:insert(item) end
   
-  broadcastEvent(player, 
-    'You search ' .. (flashlight and 'with a flashlight ' or ' ') .. 'and find ' .. 
-    (item and ('a ' .. item:getClassName() ) or 'nothing') .. '.'
-  )
+  local msg = 'You search '..(flashlight and 'with a flashlight ' or ' ')..'and find '..(item and ('a '..item:getClassName()) or 'nothing')..'.'
+  local event = {'search', player, item, flashlight)
+  player.log:insert(msg, event)
   
   -- return {item, player_has_flashlight}
 end
@@ -182,33 +184,30 @@ end
 function Outcome.discard(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
-  broadcastEvent(player, 'You discard a '..item:getClassName()..'.')
+  
+  player.log:insert('You discard a '..item:getClassName()..'.', {'discard', player, inv_ID})
   --return {item}
 end
 
-function Outcome.speak(player, message, target)
-  local tile = player:getTile()
-  local player_name = player:getUsername()
-  local target_name = player:getUsername()
+function Outcome.speak(player, message, target)  
+  local event = {'speak', player, message, target}  
+  local settings = {stage=player:getStage(), exclude={}}
+  settings.exclude[player], settings.exclude[target] = true, true
   
-  local broadcast_settings = {
-    whisper = {
-      stage=player:getStage(), 
-      exclude={player_name=true, target_name=true},
-    },
-    outloud = {
-      stage=player:getStage(), 
-      exclude={player_name=true},
-    },
-  }
+  local p_name = player:getUsername()
+  local t_name = target:getUsername()
   
   if target then -- whisper to target only
-    broadcastEvent(target, player:getUsername()..' whispered: "'..message..'"')
-    broadcastEvent(player, 'You whispered to '..target:getUsername()..':  "'..message..'"')
-    broadcastEvent(tile, player:getUsername()..' whispers to '..target:getUsername()..'.', broadcast_settings.whisper)
+    local whispered_msg, self_msg = p_name..' whispered: "'..message..'"', 'You whispered to '..t_name..':  "'..message..'"'
+    player.log:insert(self_msg, event)
+    target.log:insert(whispered_msg, event)
+    
+    local msg = p_name..' whispers to '..t_name..'.'
+    event[3] = nil --other players should not hear message    (Is this the correct way to do this event?  Perhaps instead of omitting event data we should create a new Outcome.whisper?)
+    broadcastEvent.zone(player:getTile(), msg, event, settings)
   else -- say outloud to everyone
-    broadcastEvent(player, 'You said:  "'..message..'"')  
-    broadcastEvent(tile, player:getUsername()..' said:  "'..message..'"', broadcast_settings.outloud)
+    local msg, self_msg = p_name..' said:  "'..message..'"', 'You said:  "'..message..'"'
+    broadcastEvent.player(player, msg, self_msg, event) 
   end
 end
 
@@ -217,14 +216,20 @@ function Outcome.reinforce(player)
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
   
+  local self_msg, msg
+  local p_name = player:getUsername()
+  
   if building_was_reinforced and not did_zombies_interfere then 
     p_tile.barricade:reinforce(potential_hp) 
-    broadcastEvent(player, 'You reinforce the building making room for fortifications.')
+    self_msg, msg = 'You reinforce the building making room for fortifications.', p_name..' reinforces the building making room for fortifications.'
   elseif did_zombies_interfere then
-    broadcastEvent(player, 'You start to reinforce the building but a zombie lurches towards you.')    
+    self_msg, msg = 'You start to reinforce the building but a zombie lurches towards you.', p_name..' starts to reinforce the building but is interrupted by a zombie.'    
   elseif not building_was_reinforced then
-    broadcastEvent(player, 'You attempt to reinforce the building but fail.') -- should we do something with potential hp?
+    self_msg, msg = 'You attempt to reinforce the building but fail.', p_name..' attempts to reinforce the building but fails.'
   end
+  
+  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?
+  broadcastEvent.player(player, msg, self_msg, event)
   
   --return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
@@ -234,7 +239,8 @@ function Outcome.enter(player)
   local map = player:getMap()
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
-  broadcastEvent(player, 'You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.')  
+  
+  player.log:insert('You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'enter', map[y][x]})
   
   --return {map[y][x]}
 end
@@ -244,25 +250,16 @@ function Outcome.exit(player)
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
   map[y][x]:insert(player, 'outside')
-  broadcastEvent(player, 'You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.')  
+  
+  player.log:insert('You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'exit', map[y][x]})
 
   --return {map[y][x]}
 end
 
 function Outcome.respawn(player) 
   player:respawn() 
-  
-  if player:isMobType('zombie') then
-    if player.skills:check('hivemind') then broadcastEvent(player, 'You animate to life quickly and stand.')
-    else broadcastEvent(player, 'You reanimate to life and struggle to stand.') 
-    end
-  end
-  
-  local broadcast_settings = {
-    stage=player:getStage(), 
-    exclude={player:getUsername()=true}
-  }
-  broadcastEvent(player:getTile(), 'A nearby corpse rises to life.', broadcast_settings)      
+  local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'
+  broadcastEvent.player(player, 'A nearby corpse rises to life.', self_msg, {'respawn', player})      
 end
 
 function Outcome.ransack(player)
@@ -273,19 +270,12 @@ function Outcome.ransack(player)
   local building = player:getTile()
   building.integrity:updateHP(-1 * ransack_dice:roll() )
   local integrity_state = building.integrity:getState()
+  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
   
-  local broadcast_settings = {
-    stage=player:getStage(), 
-    exclude={player:getUsername()=true}
-  }  
+  local msg =  'A zombie '..(building_was_ransacked and 'ransacks' or 'ruins')..' the building.'
+  local self_msg 'You '..(building_was_ransacked and 'ransack' or 'ruin')..' the building.'
   
-  if integrity_state == 'ransacked' then
-    broadcastEvent(player, 'You ransack the building.')
-    broadcastEvent(building, 'A zombie ransacks the building.', broadcast_settings)
-  elseif integrity_state == 'ruined' then
-    broadcastEvent(player, 'You ruin the building.')
-    broadcastEvent(building, 'A zombie ruins the building.', broadcast_settings)    
-  end  
+  broadcastEvent.player(player, msg, self_msg, {'ransack', player, integrity_state})
   
   --return {integrity_state}
 end
@@ -330,13 +320,7 @@ function Outcome.feed(player)
   player:updateStat('xp', xp_gained)
   player.condition.decay:add(-1*decay_loss)
   
-  local broadcast_settings = {
-    stage=player:getStage(), 
-    exclude={player:getUsername()=true}
-  }  
-  
-  broadcastEvent(player, 'You feed on a corpse.')
-  broadcastEvent(player:getTile(), 'A zombie feeds on a corpse.', broadcast_settings)  
+  broadcastEvent.player(player, 'A zombie feeds on a corpse.', 'You feed on a corpse.', {'feed', player})  
 end
 
 function Outcome.default(action, player, ...)
