@@ -240,7 +240,7 @@ function Outcome.enter(player)
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
   
-  player.log:insert('You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'enter', map[y][x]})
+  player.log:insert('You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'enter', player, map[y][x]})
   
   --return {map[y][x]}
 end
@@ -251,7 +251,7 @@ function Outcome.exit(player)
   map[y][x]:remove(player, 'inside')
   map[y][x]:insert(player, 'outside')
   
-  player.log:insert('You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'exit', map[y][x]})
+  player.log:insert('You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'exit', player, map[y][x]})
 
   --return {map[y][x]}
 end
