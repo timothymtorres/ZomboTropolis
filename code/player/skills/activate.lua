@@ -15,34 +15,25 @@ function activate.groan(player)
   local groan_range = math.floor(human_n/GROAN_DENOMINATOR + 0.5)
   local range = math.min(groan_range, GROAN_MAX_RANGE)
 
-  broadcastEvent(player, 'You emit a ' .. groan_description[range] .. ' groan.')
-  
   local broadcast_settings = {
-    for_humans_inside = {
-      stage='inside', 
-      mob_type='human', 
-      exclude={player:getUsername=true}
-    },
-    for_humans_outside = {
-      range=range, 
-      stage='outside', 
-      mob_type='human'      
-    },
-    for_zombies_nearby = {
-      range=range, 
-      mob_type='zombie', 
-      exclude={player:getUsername=true}      
-    }
+    for_humans_inside =  {stage='inside',  mob_type='human'},
+    for_humans_outside = {stage='outside', mob_type='human',  range=range},
+    for_zombies =        {                 mob_type='zombie', range=range, exclude = {}}
   }  
+  broadcast_settings.for_zombies_nearby.exclude[player] = true
   
-  -- What humans will hear
-  if player:isStaged('inside') then
-    broadcastEvent(p_tile, 'A zombie groans at your current location.', broadcast_settings.for_humans_inside)
-  end
-  broadcastEvent(p_tile, 'You hear a groan in the distance.', broadcast_settings.for_humans_outside)  -- desc distance based?  [nearby, far away, etc. just like tracking descs]
+  local event = {'groan', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+  --local event_human_inside, event_human_outside = {'groan', player}, {'groan', player, y, x}
+  --humans with military class can pinpoint the groan exactly?
+
+  -- Groan point of orgin
+  local self_msg = 'You emit a ' .. groan_description[range] .. ' groan.'
+  local human_msg = 'A zombie groans at [pos].'
+  local zombie_msg = 'You hear a ' .. groan_description[range] .. ' groan at [pos]'
   
-  --What zombies will hear
-  broadcastEvent(p_tile, 'You hear a ' .. groan_description[range] .. ' groan at map[' .. y .. ']['.. x .. '].', broadcast_settings.for_zombies_nearby)
+  player.log:insert(self_msg, event)
+  broadcastEvent.zone(p_tile, zombie_msg, event, broadcast_settings.for_zombies) 
+  broadcastEvent.zone(p_tile, human_msg, event, broadcast_settings.for_humans)
   
   --[[  OLD CODE from description.groan()
   local player_y, player_x = player:getPos()
@@ -65,20 +56,22 @@ local DRAG_PREY_HEALTH_THRESHOLD = 13
 
 function activate.drag_prey(player, target)
   local has_been_dragged = DRAG_PREY_HEALTH_THRESHOLD >= target:getStat('hp')
+  local event = {'drag_prey', player, target, has_been_dragged}
+  
   if has_been_dragged then
     Outcome.exit(player)
     Outcome.exit(target)
     
-    broadcastEvent(player, 'You drag '..target:getUsername()..' outside.')
-    broadcastEvent(target, 'A zombie drags you outside.')
+    local self_msg = 'You drag '..target:getUsername()..' outside.'
+    local target_msg = 'A zombie drags you outside.'
+    local msg = 'A zombie drags '..target:getUsername()..' outside.'
     
-    local broadcast_settings = {
-      exclude={player:getUsername()=true, target:getUsername()=true}
-    }  
-  
-    broadcastEvent(player:getTile(), 'A zombie drags '..target:getUsername()..' outside.', broadcast_settings)
+    local broadcast_settings = {exclude={}}  
+    broadcast_settings.exclude[player], broadcast_settings.exclude[target] = true, true
+    
+    broadcastEvent.zone(player:getTile(), msg, event, broadcast_settings)
   else
-    broadcastEvent(player, 'You attempt to drag '..target:getUsername()..' outside but are unsuccessful.')
+    player.log:insert('You attempt to drag '..target:getUsername()..' outside but are unsuccessful.', event)
   end
 
   -- return {has_been_dragged}
@@ -113,14 +106,10 @@ function activate.gesture(player, target)
   else object = 'the '..target:getName()..' '..target:getClassName() -- must be building
   end
   
-  broadcastEvent(player, 'You gesture towards ' .. object .. '.')
+  local self_msg = 'You gesture towards ' .. object .. '.'
+  local msg = 'A zombie gestures towards ' .. object .. '.'
   
-  local broadcast_settings = {
-    stage=player:getStage(), 
-    exclude={player:getUsername()=true}
-  }  
-  
-  broadcastEvent(player:getTile(), 'A zombie gestures towards ' .. object .. '.', broadcast_settings)
+  broadcastEvent.player(player, msg, self_msg, {'gesture', player, target})
 end
 
 local tracking_description = {
@@ -130,27 +119,22 @@ local tracking_description = {
 
 function activate.track(player)
   local targets, targets_ranges = player.condition.tracking:getPrey()
-  local track_msg = 'You sniff the air for prey.'
+  
+  local self_msg = 'You sniff the air for prey.'
+  local msg = 'A zombie smells the air for prey.'
   
   if targets then 
     local has_advanced_tracking = player.skills:check('track_adv')  
     for i, target in ipairs(targets) do
       local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
       local index = targets_ranges[i]  
-      track_msg = track_msg .. '\n' .. target:getUsername() .. ' is ' .. description[index] .. '.'
+      self_msg = self_msg .. '\n' .. target:getUsername() .. ' is ' .. description[index] .. '.'
     end
   else
-    track_msg = track_msg .. 'There are no humans you are currently tracking.'
+    self_msg = self_msg .. 'There are no humans you are currently tracking.'
   end
   
-  broadcastEvent(player, track_msg)
-  
-  local broadcast_settings = {
-    stage=player:getStage(), 
-    exclude={player:getUsername()=true}
-  }    
-  
-  broadcastEvent(player:getTile(), 'A zombie smells the air for prey.', broadcast_settings)
+  broadcastEvent.player(player, msg, self_msg, {'track', player})
   
   -- return {targets, targets_ranges}
 end
@@ -181,19 +165,26 @@ function activate.acid(player, target)
     end
   end 
   
+  local self_msg, target_msg 
+  local event = {'acid', player, target, acid_successful, target_acid_immune}
+  
   if acid_successful and target_acid_immune then
-    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid but it has no effect.')
-    broadcastEvent(target, 'A zombie sprays you with acid but your inventory is protected by a firesuit.')
+    self_msg = 'You spray '..target:getUsername()..' with acid but it has no effect.'
+    target_msg = 'A zombie sprays you with acid but your inventory is protected by a firesuit.'
   elseif acid_successful and n_items == 0 then
-    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid but they have no equipment.')
-    broadcastEvent(target, 'A zombie sprays you with acid but you have no items in your inventory.')    
+    self_msg = 'You spray '..target:getUsername()..' with acid but they have no equipment.'
+    target_msg = 'A zombie sprays you with acid but you have no items in your inventory.'  
   elseif acid_successful then
-    broadcastEvent(player, 'You spray '..target:getUsername()..' with acid.')
-    broadcastEvent(target, 'A zombie sprays you with acid.')
+    self_msg = 'You spray '..target:getUsername()..' with acid.'
+    target_msg = 'A zombie sprays you with acid.'
   else
-    broadcastEvent(player, 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.')
-    broadcastEvent(target, 'A zombie attempts to spray acid at you but is unsuccessful.')
+    self_msg = 'You attempt to spray '..target:getUsername()..' with acid but are unsuccessful.'
+    target_msg = 'A zombie attempts to spray acid at you but is unsuccessful.'
   end  
+  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)
   
   --return {acid_successful, target_acid_immune}
 end
