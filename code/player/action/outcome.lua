@@ -175,7 +175,7 @@ function Outcome.search(player)
   if item then player.inventory:insert(item) end
   
   local msg = 'You search '..(flashlight and 'with a flashlight ' or ' ')..'and find '..(item and ('a '..item:getClassName()) or 'nothing')..'.'
-  local event = {'search', player, item, flashlight)
+  local event = {'search', player, item, flashlight}
   player.log:insert(msg, event)
   
   -- return {item, player_has_flashlight}
@@ -272,8 +272,8 @@ function Outcome.ransack(player)
   local integrity_state = building.integrity:getState()
   local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
   
-  local msg =  'A zombie '..(building_was_ransacked and 'ransacks' or 'ruins')..' the building.'
-  local self_msg 'You '..(building_was_ransacked and 'ransack' or 'ruin')..' the building.'
+  local msg = 'A zombie '..(building_was_ransacked and 'ransacks' or 'ruins')..' the building.'
+  local self_msg = 'You '..(building_was_ransacked and 'ransack' or 'ruin')..' the building.'
   
   broadcastEvent.player(player, msg, self_msg, {'ransack', player, integrity_state})
   
