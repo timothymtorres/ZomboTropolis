@@ -69,7 +69,7 @@ function Outcome.move(player, dir)
   -----------   M E S S A G E   --------------
   --------------------------------------------
 
-  local GPS_str = GPS_usage and 'using a GPS' or ''
+  local GPS_str = GPS_usage and 'using a GPS'
   local self_msg = 'You travel {dir} {with_GPS}.'
   local names = {dir=compass[dir], with_GPS=GPS_str}
   self_msg = self_msg:replace(names)
