@@ -8,6 +8,7 @@ local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local item =              require('code.item.class')
 local broadcastEvent =    require('code.server.event')
+string.replace =          require('code.libs.replace')
 
 Outcome = {}
 
@@ -53,7 +54,7 @@ function Outcome.move(player, dir)
     if player:isMobType('human') then
       local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
       if inventory_has_GPS then 
-        GPS_usage = Outcome.item('GPS', player, inv_ID) 
+        GPS_usage = Outcome.item('GPS', player, inv_ID) -- Item.GPS:activate(GPS, player, inv_ID)
       end
     end
     
@@ -61,8 +62,30 @@ function Outcome.move(player, dir)
     map[dir_y][dir_x]:insert(player)
   end
   
-  player:updatePos(dir_y, dir_x)
-  player.log:insert('You travel '..compass[dir]..(GPS_usage and ' using a GPS.' or '.'), {'move', player, dir, GPS_usage})  
+  player:updatePos(dir_y, dir_x)  
+ 
+ 
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+
+  local GPS_str = GPS_usage and 'using a GPS' or ''
+  local self_msg = 'You travel {dir} {with_GPS}.'
+  local names = {dir=compass[dir], with_GPS=GPS_str}
+  self_msg = self_msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+
+  local event = {'move', player, dir, GPS_usage}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)  
+  
   -- return {GPS_usage}
 end
 
@@ -141,14 +164,38 @@ function Outcome.attack(player, target, weapon, inv_ID)
       end
     end
   end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+      
+  local self_msg = 'You attack {target} with your {weapon}' ..
+                                          (critical and   ' and score a critical hit!') or 
+                                          (not attack and ' and miss.') or '.'
+  local target_msg = 'You are attacked by {player} with their {weapon}'..
+                                                      (critical and   ' and they score a critical hit!') or 
+                                                      (not attack and ' and they miss.') or '.'
+  local msg = '{player} attacks {target} with their {weapon}'..
+                                              (critical and ' and they score a critical hit!') or 
+                                            (not attack and ' and they miss.') or '.'  
+                                                            
+  local names = {player=player:getUsername(), target=target:getUsername(), weapon=weapon:getClassName()}
+  self_msg =     self_msg:replace(names)
+  target_msg = target_msg:replace(names)
+  msg =               msg:replace(names)
 
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
   local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  -------------------------------------------- 
+
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
-
-  local self_msg = 'You attack '..target:getUsername()..' with your '..weapon:getClassName()..(attack and critical and ' and score a critical hit!') or (not attack and ' and miss.') or '.'
-  local target_msg = 'You are attacked by '..target:getUsername()..' with their '..weapon:getClassName()..(attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
-  local msg = player:getUsername()..' attacks '..target:getUsername()..' with their '..weapon:getClassName()..(attack and critical and ' and they score a critical hit!') or (not attack and ' and they miss.') or '.'
 
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)
@@ -174,8 +221,27 @@ function Outcome.search(player)
   
   if item then player.inventory:insert(item) end
   
-  local msg = 'You search '..(flashlight and 'with a flashlight ' or ' ')..'and find '..(item and ('a '..item:getClassName()) or 'nothing')..'.'
-  local event = {'search', player, item, flashlight}
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+   
+  local msg = 'You search {with_flashlight} and find {item}.'
+  local names = {
+    with_flashlight = flashlight and 'with a flashlight' or '',
+    item = item and 'a '..item:getClassName() or 'nothing', 
+  }
+  msg = msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------  
+  
+  local event = {'search', player, item, flashlight}   
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------     
+  
   player.log:insert(msg, event)
   
   -- return {item, player_has_flashlight}
@@ -185,29 +251,69 @@ function Outcome.discard(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
   
-  player.log:insert('You discard a '..item:getClassName()..'.', {'discard', player, inv_ID})
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+    
+  local msg = 'You discard a {item}.'
+  msg = msg:replace(item:getClassName())    
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'discard', player, inv_ID}    
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------   
+  
+  player.log:insert(msg, event)
+  
   --return {item}
 end
 
 function Outcome.speak(player, message, target)  
-  local event = {'speak', player, message, target}  
-  local settings = {stage=player:getStage(), exclude={}}
-  settings.exclude[player], settings.exclude[target] = true, true
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
   
-  local p_name = player:getUsername()
-  local t_name = target:getUsername()
+  local whispered_msg, self_msg, public_msg
   
   if target then -- whisper to target only
-    local whispered_msg, self_msg = p_name..' whispered: "'..message..'"', 'You whispered to '..t_name..':  "'..message..'"'
+    whispered_msg = '{player} whispered: "{msg}"'
+    self_msg =      'You whispered to {target}: "{msg}"'
+    public_msg =    '{player} whispers to {target}.'
+  else           -- say outloud to everyone
+    self_msg =      'You said: "{msg}"'
+    public_msg =    '{player} said: "{msg}"'
+  end
+  
+  local names = {player=player:getUsername(), target=target:getUsername(), msg=message}
+  whispered_msg = whispered_msg and whispered_msg:replace(names)
+  self_msg =                             self_msg:replace(names)
+  public_msg =                         public_msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'speak', player, message, target}      
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  -------------------------------------------- 
+  
+  local settings = {stage=player:getStage(), exclude={}}
+  settings.exclude[player], settings.exclude[target] = true, true  
+  
+  if target then
     player.log:insert(self_msg, event)
     target.log:insert(whispered_msg, event)
-    
-    local msg = p_name..' whispers to '..t_name..'.'
-    event[3] = nil --other players should not hear message    (Is this the correct way to do this event?  Perhaps instead of omitting event data we should create a new Outcome.whisper?)
-    broadcastEvent.zone(player:getTile(), msg, event, settings)
-  else -- say outloud to everyone
-    local msg, self_msg = p_name..' said:  "'..message..'"', 'You said:  "'..message..'"'
-    broadcastEvent.player(player, msg, self_msg, event) 
+    event[3] = nil -- other players should not hear message     
+    broadcastEvent.zone(player:getTile(), public_msg, event, settings)    
+  else
+    broadcastEvent.player(player, public_msg, self_msg, event)     
   end
 end
 
@@ -216,20 +322,35 @@ function Outcome.reinforce(player)
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
   
+  if building_was_reinforced and not did_zombies_interfere then p_tile.barricade:reinforce(potential_hp) end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+    
   local self_msg, msg
-  local p_name = player:getUsername()
   
   if building_was_reinforced and not did_zombies_interfere then 
-    p_tile.barricade:reinforce(potential_hp) 
-    self_msg, msg = 'You reinforce the building making room for fortifications.', p_name..' reinforces the building making room for fortifications.'
+    self_msg, msg = 'You reinforce the building making room for fortifications.', '{player} reinforces the building making room for fortifications.'
   elseif did_zombies_interfere then
-    self_msg, msg = 'You start to reinforce the building but a zombie lurches towards you.', p_name..' starts to reinforce the building but is interrupted by a zombie.'    
+    self_msg, msg = 'You start to reinforce the building but a zombie lurches towards you.', '{player} starts to reinforce the building but is interrupted by a zombie.'    
   elseif not building_was_reinforced then
-    self_msg, msg = 'You attempt to reinforce the building but fail.', p_name..' attempts to reinforce the building but fails.'
-  end
+    self_msg, msg = 'You attempt to reinforce the building but fail.', '{player} attempts to reinforce the building but fails.'
+  end    
   
-  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?
-  broadcastEvent.player(player, msg, self_msg, event)
+  msg = msg:replace(player:getUsername())
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?    
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------   
+  
+  broadcastEvent.player(player, msg, self_msg, event)  
   
   --return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
@@ -240,7 +361,25 @@ function Outcome.enter(player)
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
   
-  player.log:insert('You enter the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'enter', player, map[y][x]})
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You enter the {building} {building_type}.'
+  local names = {building=map[y][x]:getName(), building_type=map[y][x]:getClassName()}
+  msg = msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'enter', player, map[y][x]}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)
   
   --return {map[y][x]}
 end
@@ -250,16 +389,51 @@ function Outcome.exit(player)
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
   map[y][x]:insert(player, 'outside')
+
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
   
-  player.log:insert('You exit the '..map[y][x]:getName()..' '..map[y][x]:getClassName()..'.', {'exit', player, map[y][x]})
+  local msg = 'You exit the {building} {building_type}.'
+  local names = {building=map[y][x]:getName(), building_type=map[y][x]:getClassName()}
+  msg = msg:replace(names)  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'exit', player, map[y][x]}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 
   --return {map[y][x]}
 end
 
 function Outcome.respawn(player) 
-  player:respawn() 
-  local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'
-  broadcastEvent.player(player, 'A nearby corpse rises to life.', self_msg, {'respawn', player})      
+  player:respawn()  
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'A nearby corpse rises to life'
+  local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'respawn', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  broadcastEvent.player(player, msg, self_msg, event)    
 end
 
 function Outcome.ransack(player)
@@ -272,10 +446,28 @@ function Outcome.ransack(player)
   local integrity_state = building.integrity:getState()
   local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
   
-  local msg = 'A zombie '..(building_was_ransacked and 'ransacks' or 'ruins')..' the building.'
-  local self_msg = 'You '..(building_was_ransacked and 'ransack' or 'ruin')..' the building.'
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
   
-  broadcastEvent.player(player, msg, self_msg, {'ransack', player, integrity_state})
+  local msg =      'A zombie {destruction} the building.'
+  local self_msg = 'You {destruction} the building.'  
+  local destruction_type = building_was_ransacked and 'ransack' or 'ruin'
+  
+  self_msg = self_msg:replace(destruction_type)
+  msg =           msg:replace(destruction_type..'s')
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'ransack', player, integrity_state}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  broadcastEvent.player(player, msg, self_msg, event)  
   
   --return {integrity_state}
 end
@@ -318,9 +510,25 @@ function Outcome.feed(player)
   xp_gained, decay_loss = dice.roll(xp_gained), dice.roll(decay_loss)
     
   player:updateStat('xp', xp_gained)
-  player.condition.decay:add(-1*decay_loss)
+  player.condition.decay:add(-1*decay_loss) 
   
-  broadcastEvent.player(player, 'A zombie feeds on a corpse.', 'You feed on a corpse.', {'feed', player})  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg, self_msg = 'A zombie feeds on a corpse.', 'You feed on a corpse.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'feed', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  broadcastEvent.player(player, msg, self_msg, event)   
 end
 
 function Outcome.default(action, player, ...)

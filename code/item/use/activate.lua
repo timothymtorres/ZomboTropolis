@@ -2,6 +2,7 @@ local dice = require('code.libs.dice')
 local medical = require('code.item.medical.class')
 local item = require('code.item.class')
 local broadcastEvent = require('code.server.event')
+local pattern = '{(.-)}'
 
 local activate = {}
 
@@ -31,8 +32,27 @@ function activate.FAK(player, condition, target)
   local hp_gained = FAK_dice:roll()
   target:updateHP(hp_gained)
   
-  player.log:insert('You heal '..target:getUsername()..' with a first aid kit.', {'FAK', player, target})
-  target.log:insert(player:getUsername()..' heals you with a first aid kit.', {'FAK', player, target})
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You heal {target} with a first aid kit.'
+  local target_msg = '{player} heals you with a first aid kit.'
+  self_msg =     self_msg:replace(target:getUsername())
+  target_msg = target_msg:replace(player:getUsername())  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'FAK', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
 end
 
 function activate.bandage(player, condition, target)
@@ -52,8 +72,27 @@ function activate.bandage(player, condition, target)
   local hp_gained = bandage_dice:roll()
   target:updateHP(hp_gained)
   
-  player.log:insert('You heal '..target:getUsername()..' with a bandage.', {'bandage', player, target})
-  target.log:insert(player:getUsername()..' heals you with a bandage.', {'bandage', player, target})  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You heal {target} with a bandage.'
+  local target_msg = '{player} heals you with a bandage.'
+  self_msg =     self_msg:replace(target:getUsername())
+  target_msg = target_msg:replace(player:getUsername())   
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'bandage', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)   
 end
 
 function activate.antibodies(player, condition, target)
@@ -66,14 +105,53 @@ function activate.antibodies(player, condition, target)
   local immunity_gained = antibodies_dice:roll()
   target.condition.infection:addImmunity(immunity_gained)
   
-  player.log:insert('You inject '..target:getUsername()..' with antibodies.', {'antibodies', player, target})
-  target.log:insert(player:getUsername()..' injects you with antibodies.', {'antibodies', player, target})
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You inject {target} with antibodies.'
+  local target_msg = '{player} injects you with antibodies.'
+  self_msg =     self_msg:replace(target:getUsername())
+  target_msg = target_msg:replace(player:getUsername())  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'antibodies', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
 end
 
 function activate.antidote(player, condition, target)
   target.condition.infection:remove()
-  player.log:insert('You inject '..target:getUsername()..' with an antidote.', {'antidote', player, target})
-  target.log:insert(player:getUsername()..' injects you with an antidote.', {'antidote', player, target})  
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You inject {target} with an antidote.'
+  local target_msg = '{player} injects you with an antidote.'
+  self_msg =     self_msg:replace(target:getUsername())
+  target_msg = target_msg:replace(player:getUsername()) 
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'antidote', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)   
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
@@ -94,31 +172,48 @@ function activate.syringe(player, condition, target)
   local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
   local syringe_salvage_successful
 
-  local self_msg, target_msg 
-
-  if inject_success then
-    if target_weak_enough then  -- the syringe will create a antidote
-      target:killed()
-      
-      local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
-      local antidote = item.antidote:new(skill_modifier)
-      player.inventory:insert(antidote)
-      self_msg = 'You inject a zombie with your syringe and an antidote is created.'
-      target_msg = player:getUsername()..' injects you with their syringe killing you in the process.'
-    else
-      syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
-      self_msg = 'You inject a zombie with your syringe but it is too strong and resists.' .. (syringe_salvage_successful and '' or ' Your syringe is destroyed.')
-      target_msg = player:getUsername()..' injects you with their syringe but you resist.'        
-    end
-  else -- syringe missed
-    self_msg = 'You attempt to inject a zombie with your syringe and fail.'
-    target_msg = player:getUsername()..' attempted to inject you with their syringe.'     
+  if inject_success and target_weak_enough then  -- the syringe will create a antidote
+    target:killed()
+    
+    local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+    local antidote = item.antidote:new(skill_modifier)
+    player.inventory:insert(antidote)
+  elseif inject_success then
+    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1  
   end
   
-  local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg, target_msg   
+  
+  if inject_success and target_weak_enough then
+    self_msg =   'You inject {target} with your syringe and an antidote is created.'
+    target_msg = '{player} injects you with their syringe killing you in the process.'    
+  elseif inject_success then
+    self_msg =   'You inject {target} with your syringe but it is too strong and resists.' .. (syringe_salvage_successful and '' or ' Your syringe is destroyed.')
+    target_msg = '{player} injects you with their syringe but you resist.'       
+  else 
+    self_msg =   'You attempt to inject {target} with your syringe and fail.'
+    target_msg = '{player} attempted to inject you with their syringe.'  
+  end
+  
+  self_msg =     self_msg:replace(target:getUsername())
+  target_msg = target_msg:replace(player:getUsername())    
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
   
   player.log:insert(self_msg, event)
-  target.log:insert(target_msg, event)
+  target.log:insert(target_msg, event)  
   
   --return {inject_success, target_weak_enough, syringe_salvage_successful} 
 end
@@ -180,12 +275,25 @@ function activate.barricade(player, condition)
   local building_tile = player:getTile()
   local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
   
-  if not did_zombies_interfere then
-    building_tile.barricade:fortify(player, condition)
-    player.log:insert('You fortify the building with a barricade.', {'barricade', player, did_zombies_interfere})
-  else
-    player.log:insert('You start to fortify the building, but a zombie lurches towards you.', {'barricade', player, did_zombies_interfere})
-  end
+  if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = not did_zombies_interfere and 'You fortify the building with a barricade.' or 'You start to fortify the building, but a zombie lurches towards you.'
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'barricade', player, did_zombies_interfere}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)  
   
   --return {did_zombies_interfere}    
 end
@@ -221,10 +329,27 @@ function activate.toolbox(player, condition)
   building.integrity:updateHP(repair_dice:roll() )
   local integrity_state = building.integrity:getState()
   
-  local self_msg = 'You repair the building' .. (integrity_state == 'intact' and 'completely.' or '.')
-  local msg = player:getUsername()..' repairs the building' .. (integrity_state == 'intact' and 'completely.' or '.')
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
   
-  broadcastEvent.player(player, msg, self_msg, {'toolbox', integrity_state})
+  local self_msg = 'You repair the building {is_finished}.'
+  local msg =      '{player} repairs the building {is_finished}.'
+  local names = {player=player:getUsername(), is_finished=integrity_state == 'intact' and 'completely' or ''}
+  self_msg = self_msg:replace(names)
+  msg =           msg:replace(names)   
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'toolbox', integrity_state}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  broadcastEvent.player(player, msg, self_msg, event)  
   
   --return {integrity_state}
 end
@@ -259,12 +384,46 @@ end
 
 function activate.leather(player, condition)
   player.armor:equip('leather', condition)
-  player.log:insert('You equip a leather jacket.', {'leather', player})
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You equip a leather jacket.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'leather', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 end
 
 function activate.firesuit(player, condition)
   player.armor:equip('firesuit', condition)
-  player.log:insert('You equip a firesuit.', {'firesuit', player})
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You equip a firesuit.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'firesuit', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 end
 
 return activate
