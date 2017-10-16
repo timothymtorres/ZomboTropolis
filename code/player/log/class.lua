@@ -31,7 +31,7 @@ function log:read()
     end
     list[index] = list[index] or {date=event.date, collapsed=true, events={}} 
     local event_tbl = list[index].events
-    event_tbl[#event_tbl+1] = event.msg..getTimeStamp(event.date) 
+    event_tbl[#event_tbl+1] = event.msg..' '..getTimeStamp(event.date) 
   end
   return list
 end
