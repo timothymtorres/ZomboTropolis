@@ -1,18 +1,19 @@
-local class = require('code.libs.middleclass')
-local combat = require('code.player.combat')
-local action_list = require('code.player.action.list')
-local enzyme_list = require('code.player.enzyme_list')
-local perform = require('code.player.action.perform')
+local class =                   require('code.libs.middleclass')
+local combat =                  require('code.player.combat')
+local action_list =             require('code.player.action.list')
+local enzyme_list =             require('code.player.enzyme_list')
+local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
-local map = require('code.location.map.class')
-local skills = require('code.player.skills.class')
-local inventory = require('code.player.inventory')
-local log = require('code.player.log.class')
-local condition = require('code.player.condition.class')
-local carcass = require('code.player.carcass')
-local organic_armor = require('code.player.armor.organic_class')
-local item_armor = require('code.player.armor.item_class')
-local weapon = require('code.item.weapon.class')
+local skills =                  require('code.player.skills.class')
+local inventory =               require('code.player.inventory')
+local log =                     require('code.player.log.class')
+local condition =               require('code.player.condition.class')
+local carcass =                 require('code.player.carcass')
+local organic_armor =           require('code.player.armor.organic_class')
+local item_armor =              require('code.player.armor.item_class')
+local weapon =                  require('code.item.weapon.class')
+local map =                     require('code.location.map.class')
+local broadcastEvent =          require('code.server.event')
 
 local player = class('player')
 
@@ -43,6 +44,9 @@ function player:initialize(username, mob_type, map_zone, y, x) --add account nam
   elseif mob_type == 'zombie' then self.armor = organic_armor:new(self)
   end
 end
+
+-- broadcastEvent whenever player performs an action for others to see
+player.broadcastEvent = broadcastEvent.player
 
 function player:killed(cause_of_death) 
 --[[ scenarios
