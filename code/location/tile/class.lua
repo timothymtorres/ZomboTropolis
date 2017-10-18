@@ -1,8 +1,8 @@
-local class = require('code.libs.middleclass')
-local t_list = require('code.location.tile.list')
-local b_list = require('code.location.building.list')
-local item = require('code.item.class')
-local broadcastEvent = require('code.server.event')
+local class =           require('code.libs.middleclass')
+local t_list =          require('code.location.tile.list')
+local b_list =          require('code.location.building.list')
+local item =            require('code.item.class')
+local broadcastEvent =  require('code.server.event')
 
 local tile = class('tile')
 
