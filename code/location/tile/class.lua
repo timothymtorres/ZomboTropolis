@@ -2,6 +2,7 @@ local class = require('code.libs.middleclass')
 local t_list = require('code.location.tile.list')
 local b_list = require('code.location.building.list')
 local item = require('code.item.class')
+local broadcastEvent = require('code.server.event')
 
 local tile = class('tile')
 
@@ -11,6 +12,8 @@ function tile:initialize(map, y, x, name)
   self.name = name
   self.map_zone = map
 end
+
+tile.broadcastEvent = broadcastEvent.tile
 
 function tile:insert(player) self.outside_players[player] = player end
 
