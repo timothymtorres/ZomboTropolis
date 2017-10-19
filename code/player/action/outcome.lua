@@ -197,7 +197,9 @@ function Outcome.attack(player, target, weapon, inv_ID)
 
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)
-  broadcastEvent.zone(player:getTile(), msg, event, settings)  
+  
+  local tile = player:getTile()
+  tile:broadcastEvent(msg, event, settings)  
 end
 
 function Outcome.search(player)
@@ -302,10 +304,12 @@ function Outcome.speak(player, message, target)
   if target then
     player.log:insert(self_msg, event)
     target.log:insert(whispered_msg, event)
-    event[3] = nil -- other players should not hear message     
-    broadcastEvent.zone(player:getTile(), public_msg, event, settings)    
+    event[3] = nil -- other players should not hear message
+    
+    local tile = player:getTile()
+    tile:broadcastEvent(public_msg, event, settings)    
   else
-    broadcastEvent.player(player, public_msg, self_msg, event)     
+    player:broadcastEvent(public_msg, self_msg, event)     
   end
 end
 
@@ -342,7 +346,7 @@ function Outcome.reinforce(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------   
   
-  broadcastEvent.player(player, msg, self_msg, event)  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 function Outcome.enter(player)
@@ -417,7 +421,7 @@ function Outcome.respawn(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  broadcastEvent.player(player, msg, self_msg, event)    
+  player:broadcastEvent(msg, self_msg, event)    
 end
 
 function Outcome.ransack(player)
@@ -451,7 +455,7 @@ function Outcome.ransack(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  broadcastEvent.player(player, msg, self_msg, event)  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 local corpse_effects = { 
@@ -510,7 +514,7 @@ function Outcome.feed(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
-  broadcastEvent.player(player, msg, self_msg, event)   
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
 function Outcome.default(action, player, ...)

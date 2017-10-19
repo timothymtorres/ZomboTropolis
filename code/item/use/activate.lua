@@ -345,7 +345,7 @@ function activate.toolbox(player, condition)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  broadcastEvent.player(player, msg, self_msg, event)  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 --[[

@@ -10,8 +10,8 @@ local groan_description = {'disappointed', 'bored', 'pleased', 'satisfied', 'exc
 
 function activate.groan(player)
   local y, x = player:getPos()
-  local p_tile = player:getTile()
-  local human_n = p_tile:countPlayers('human', player:getStage())
+  local tile = player:getTile()
+  local human_n = tile:countPlayers('human', player:getStage())
   local groan_range = math.floor(human_n/GROAN_DENOMINATOR + 0.5)
   local range = math.min(groan_range, GROAN_MAX_RANGE)
   
@@ -38,16 +38,20 @@ function activate.groan(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local broadcast_settings = {
-    for_humans_inside =  {stage='inside',  mob_type='human'},
-    for_humans_outside = {stage='outside', mob_type='human',  range=range},
-    for_zombies =        {                 mob_type='zombie', range=range, exclude = {}}
+  local exclude = {}
+  exclude[player] = true
+  exclude[tile] = true
+  
+  local settings = {
+    --for_humans_inside =  {stage='inside',  mob_type='human'},
+    --for_humans_outside = {stage='outside', mob_type='human',  range=range},
+    humans =  {mob_type='human',  range=range, exclude = exclude},
+    zombies = {mob_type='zombie', range=range, exclude = exclude},
   }  
-  broadcast_settings.for_zombies_nearby.exclude[player] = true  
   
   player.log:insert(self_msg, event)
-  broadcastEvent.zone(p_tile, zombie_msg, event, broadcast_settings.for_zombies) 
-  broadcastEvent.zone(p_tile, human_msg, event, broadcast_settings.for_humans)  
+  tile:broadcastEvent(zombie_msg, event, settings.zombies) 
+  tile:broadcastEvent(human_msg, event, settings.humans)  
   
   --[[  OLD CODE from description.groan()
   local player_y, player_x = player:getPos()
@@ -102,9 +106,10 @@ function activate.drag_prey(player, target)
   --------------------------------------------  
 
   if has_been_dragged then
-    local broadcast_settings = {exclude={}}  
-    broadcast_settings.exclude[player], broadcast_settings.exclude[target] = true, true
-    broadcastEvent.zone(player:getTile(), msg, event, broadcast_settings)
+    local tile = player:getTile()    
+    local settings = {exclude={}}  
+    settings.exclude[player], settings.exclude[target] = true, true
+    tile:broadcastEvent(msg, event, settings)
   else
     player.log:insert(self_msg, event)    
   end
@@ -157,7 +162,7 @@ function activate.gesture(player, target)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  broadcastEvent.player(player, msg, self_msg, event)  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 local tracking_description = {
@@ -196,7 +201,7 @@ function activate.track(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  broadcastEvent.player(player, msg, self_msg, event)  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 local ACID = {
