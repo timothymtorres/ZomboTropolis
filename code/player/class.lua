@@ -203,10 +203,12 @@ function player:getTargets(mode)
   end 
   
   if p_tile:isBuilding() then
+    --[[  Add this at a later time
     if p_tile:isFortified() then targets[#targets+1] = p_tile:getBarrier() end  -- is this right?  (do I need a class instead?)
     if p_tile:isPresent('equipment') then
       for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
-    end  
+    end 
+    --]]
   end
   
   if mode == 'gesture' then

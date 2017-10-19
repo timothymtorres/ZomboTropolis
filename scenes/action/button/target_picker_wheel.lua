@@ -18,6 +18,7 @@ local function target_picker_wheel(targets, weapons)  -- change the arg names?  
   for i in ipairs(targets) do
     if type(targets[i]) == 'number' then  -- this is used by the gesture action
       target_names[#target_names+1] = compass[targets[i]]
+    --elseif type(targets[i]) == 'string' then target_names[#target_names+1] = targets[i]   (used for barricades? doors?)
     else
       local target_class = targets[i]:getClassName()
       
