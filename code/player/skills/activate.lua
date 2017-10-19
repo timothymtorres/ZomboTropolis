@@ -1,4 +1,3 @@
---local outcome = require('code.player.action.outcome')
 local dice =              require('code.libs.dice')
 local broadcastEvent =    require('code.server.event')
 
@@ -74,8 +73,13 @@ function activate.drag_prey(player, target)
   local has_been_dragged = DRAG_PREY_HEALTH_THRESHOLD >= target:getStat('hp')
   
   if has_been_dragged then
-    Outcome.exit(player)
-    Outcome.exit(target)
+    local y, x = player:getPos()
+    local map = player:getMap()
+    map[y][x]:remove(player, 'inside')
+    map[y][x]:insert(player, 'outside') 
+    
+    map[y][x]:remove(target, 'inside')
+    map[y][x]:insert(target, 'outside')    
   end
   
   --------------------------------------------

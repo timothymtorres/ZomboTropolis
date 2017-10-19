@@ -10,7 +10,7 @@ local item =              require('code.item.class')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 
-Outcome = {}
+local outcome = {}
 
 local function getNewPos(y, x, dir)
 --[[--DIR LAYOUT
@@ -36,8 +36,9 @@ end
 
 
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
+local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
 
-function Outcome.move(player, dir)
+function outcome.move(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
@@ -53,8 +54,16 @@ function Outcome.move(player, dir)
   else  -- player is outside
     if player:isMobType('human') then
       local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-      if inventory_has_GPS then 
-        GPS_usage = Outcome.item('GPS', player, inv_ID) -- Item.GPS:activate(GPS, player, inv_ID)
+      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement
+        
+        -- need to include code here to durability check GPS and degrade condition
+        
+        local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+        local GPS_usage = GPS_chance >= math.random()
+        
+        -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+        if GPS_usage then player:updateStat('ap', 1) end
+        --GPS_usage = outcome.item('GPS', player, inv_ID) -- Item.GPS:activate(GPS, player, inv_ID)
       end
     end
     
@@ -89,7 +98,7 @@ end
 
 local ARMOR_DAMAGE_MOD = 2.5
 
-function Outcome.attack(player, target, weapon, inv_ID)
+function outcome.attack(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
   
@@ -202,7 +211,7 @@ function Outcome.attack(player, target, weapon, inv_ID)
   tile:broadcastEvent(msg, event, settings)  
 end
 
-function Outcome.search(player)
+function outcome.search(player)
   local p_tile = player:getTile()
   local item, flashlight
   
@@ -243,7 +252,7 @@ function Outcome.search(player)
   player.log:insert(msg, event)
 end
 
-function Outcome.discard(player, inv_ID)
+function outcome.discard(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
   
@@ -267,7 +276,7 @@ function Outcome.discard(player, inv_ID)
   player.log:insert(msg, event)
 end
 
-function Outcome.speak(player, message, target)  
+function outcome.speak(player, message, target)  
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
@@ -313,7 +322,7 @@ function Outcome.speak(player, message, target)
   end
 end
 
-function Outcome.reinforce(player)
+function outcome.reinforce(player)
   local p_tile = player:getTile()
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
@@ -349,7 +358,7 @@ function Outcome.reinforce(player)
   player:broadcastEvent(msg, self_msg, event)  
 end
 
-function Outcome.enter(player)
+function outcome.enter(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'outside')
@@ -375,7 +384,7 @@ function Outcome.enter(player)
   player.log:insert(msg, event)
 end
 
-function Outcome.exit(player)
+function outcome.exit(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
@@ -401,7 +410,7 @@ function Outcome.exit(player)
   player.log:insert(msg, event)  
 end
 
-function Outcome.respawn(player) 
+function outcome.respawn(player) 
   player:respawn()  
   
   --------------------------------------------
@@ -424,7 +433,7 @@ function Outcome.respawn(player)
   player:broadcastEvent(msg, self_msg, event)    
 end
 
-function Outcome.ransack(player)
+function outcome.ransack(player)
   local ransack_dice = dice:new('2d3')
   if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
   if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
@@ -468,7 +477,7 @@ local corpse_effects = {
   },
 }
 
-function Outcome.feed(player) 
+function outcome.feed(player) 
   local p_tile, p_stage = player:getTile(), player:getStage()
   local tile_player_group = p_tile:getPlayers(p_stage)
   local target
@@ -517,11 +526,11 @@ function Outcome.feed(player)
   player:broadcastEvent(msg, self_msg, event)   
 end
 
-function Outcome.default(action, player, ...)
-  return Outcome[action](player, ...)
+function outcome.default(action, player, ...)
+  return outcome[action](player, ...)
 end
 
-function Outcome.item(item_name, player, inv_ID, target)
+function outcome.item(item_name, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item_name](player, item_condition, target) 
@@ -539,11 +548,11 @@ function Outcome.item(item_name, player, inv_ID, target)
   return result
 end
 
-function Outcome.equipment(equipment, player, operation, ...)  -- condition degrade on use?
+function outcome.equipment(equipment, player, operation, ...)  -- condition degrade on use?
   return equipmentActivate[equipment](player, operation, ...) --unpack({...}))
 end
 
-function Outcome.skill(skill, player, target)
+function outcome.skill(skill, player, target)
   if enzyme_list[skill] then
     local cost = player:getCost('ep', skill)
     player:updateStat('ep', cost)
@@ -551,4 +560,4 @@ function Outcome.skill(skill, player, target)
   return skillActivate[skill](player, target)  
 end
 
-return Outcome
+return outcome
