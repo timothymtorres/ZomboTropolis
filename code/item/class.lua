@@ -99,6 +99,8 @@ function item:getWeight() return self.weight end
 
 function item:getMasterSkill() return self.master_skill end
 
+function item:__tostring() return self:getClassName() end
+
 function item:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
   for _, list in ipairs(combined_lists) do

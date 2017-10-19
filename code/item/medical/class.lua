@@ -22,6 +22,8 @@ function medical:getDice() return self.dice end
   
 function medical:getGroup() return self.group end 
 
+function medical:__tostring() return self:getClassName() end
+
 function medical:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
   for _, list in ipairs(combined_lists) do

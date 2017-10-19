@@ -246,4 +246,13 @@ function player:updateStat(stat, num)
   end
 end
 
+--[[
+-- METAMETHODS
+--]]
+
+function player:__tostring() 
+  -- if self:isMobType('zombie') then return 'a zombie' 
+  return self:getUsername() 
+end
+
 return player
