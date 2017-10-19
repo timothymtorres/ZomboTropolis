@@ -20,10 +20,13 @@ function activate.groan(player)
   
   -- Groan point of orgin
   local self_msg = 'You emit a {interest} groan.'
-  local human_msg = 'A zombie groans at [pos].'
-  local zombie_msg = 'You hear a {interest} groan at [pos].'  
-  self_msg =     self_msg.replace(groan_description[range])
-  zombie_msg = zombie_msg.replace(groan_description[range])
+  local human_msg = 'A zombie groans at {pos}.'
+  local zombie_msg = 'You hear a {interest} groan at {pos}.'
+  
+  local words = {interest=groan_description[range], pos='{'..y..', '..x..'}'}
+  self_msg =     self_msg:replace(words)
+  zombie_msg = zombie_msg:replace(words)
+  human_msg =   human_msg:replace(words)
   
   --------------------------------------------
   -------------   E V E N T   ----------------
