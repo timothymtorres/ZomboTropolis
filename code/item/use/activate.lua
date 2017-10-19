@@ -472,7 +472,7 @@ function activate.book(player, condition)
   --------------------------------------------
   
   local msg = 'You read a book {lighting} and gain knowledge.'  
-  msg = msg:replace(tile:isPowered and 'in the light' or '')
+  msg = msg:replace(tile:isPowered() and 'in the light' or '')
   
   --------------------------------------------
   -------------   E V E N T   ----------------
