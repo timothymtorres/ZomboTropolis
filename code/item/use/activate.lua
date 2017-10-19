@@ -214,8 +214,6 @@ function activate.syringe(player, condition, target)
   
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
-  
-  --return {inject_success, target_weak_enough, syringe_salvage_successful} 
 end
 
 --[[
@@ -293,9 +291,7 @@ function activate.barricade(player, condition)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  player.log:insert(msg, event)  
-  
-  --return {did_zombies_interfere}    
+  player.log:insert(msg, event)   
 end
 
 function activate.fuel(player, condition)
@@ -350,8 +346,6 @@ function activate.toolbox(player, condition)
   --------------------------------------------  
   
   broadcastEvent.player(player, msg, self_msg, event)  
-  
-  --return {integrity_state}
 end
 
 --[[

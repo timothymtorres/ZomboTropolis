@@ -62,8 +62,6 @@ function activate.groan(player)
   elseif x_dist < 0 then msg[3] = msg[3]..math.abs(x_dist)..' West'
   end 
   --]]
-  
-  --return {y, x, range} 
 end
 
 local DRAG_PREY_HEALTH_THRESHOLD = 13
@@ -110,8 +108,6 @@ function activate.drag_prey(player, target)
   else
     player.log:insert(self_msg, event)    
   end
-
-  -- return {has_been_dragged}
 end
 
 function activate.armor(player, armor_type)
@@ -130,7 +126,6 @@ function activate.armor(player, armor_type)
     msg[1] = 'Your skin becomes loose and rubbery causing projectiles to slow as they make contact.'
   end
 --]]  
-  --return {armor_type}
 end
 
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
@@ -202,8 +197,6 @@ function activate.track(player)
   --------------------------------------------  
   
   broadcastEvent.player(player, msg, self_msg, event)  
-  
-  -- return {targets, targets_ranges}
 end
 
 local ACID = {
@@ -266,8 +259,6 @@ function activate.acid(player, target)
   
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
-  
-  --return {acid_successful, target_acid_immune}
 end
 
 return activate

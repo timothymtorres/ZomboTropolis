@@ -85,8 +85,6 @@ function Outcome.move(player, dir)
   --------------------------------------------  
   
   player.log:insert(self_msg, event)  
-  
-  -- return {GPS_usage}
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -199,9 +197,7 @@ function Outcome.attack(player, target, weapon, inv_ID)
 
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)
-  broadcastEvent.zone(player:getTile(), msg, event, settings)
-  
-  --return {attack, damage, critical}  
+  broadcastEvent.zone(player:getTile(), msg, event, settings)  
 end
 
 function Outcome.search(player)
@@ -243,8 +239,6 @@ function Outcome.search(player)
   --------------------------------------------     
   
   player.log:insert(msg, event)
-  
-  -- return {item, player_has_flashlight}
 end
 
 function Outcome.discard(player, inv_ID)
@@ -269,8 +263,6 @@ function Outcome.discard(player, inv_ID)
   --------------------------------------------   
   
   player.log:insert(msg, event)
-  
-  --return {item}
 end
 
 function Outcome.speak(player, message, target)  
@@ -351,8 +343,6 @@ function Outcome.reinforce(player)
   --------------------------------------------   
   
   broadcastEvent.player(player, msg, self_msg, event)  
-  
-  --return {did_zombies_interfere, building_was_reinforced, potential_hp}
 end
 
 function Outcome.enter(player)
@@ -380,8 +370,6 @@ function Outcome.enter(player)
   --------------------------------------------
   
   player.log:insert(msg, event)
-  
-  --return {map[y][x]}
 end
 
 function Outcome.exit(player)
@@ -409,8 +397,6 @@ function Outcome.exit(player)
   --------------------------------------------
   
   player.log:insert(msg, event)  
-
-  --return {map[y][x]}
 end
 
 function Outcome.respawn(player) 
@@ -468,8 +454,6 @@ function Outcome.ransack(player)
   --------------------------------------------  
   
   broadcastEvent.player(player, msg, self_msg, event)  
-  
-  --return {integrity_state}
 end
 
 local corpse_effects = { 
