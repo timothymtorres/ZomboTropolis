@@ -220,39 +220,62 @@ end
 --- WEAPONS
 --]]
 
+local flare_ranges = {6, 9, 12, 15}
+
 function activate.flare(player, condition)
-  -- target:event trigger
-  -- condition range = [0] = 6x6, [1] = 9x9, [2] = 12x12, [3] = 15x15
+  local y, x = player:getPos()
+  local tile = player:getTile()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  -- Groan point of orgin
+  local self_msg =   'You fire a flare into the sky.'
+  local nearby_msg = '{player} fires a flare into the sky.'
+  local msg =        'A flare was fired {pos}.'
+  
+  local words = {player=player, pos='{'..y..', '..x..'}'}
+  nearby_msg = nearby_msg:replace(words)
+  msg =               msg:replace(words)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(nearby_msg, self_msg, event)
+  
+  local settings = {stage='inside', exclude={}} -- broadcast to players on the same tile that are inside  
+  tile:broadcastEvent(msg, event, settings) 
+  
+  settings.stage = nil
+  settings.range = flare_ranges[condition]
+  settings.exclude[tile] = true
+  tile:broadcastEvent(msg, event, settings)     -- broadcast using a range and exclude the tile
 end
 
 --[[
 --- GADGETS
 --]]
 
+--[[  This needs to be redone!
 function activate.radio(player, condition, old_freq, new_freq)
   player.inventory:updateRadio(player, 'remove', old_freq, condition)
   player.inventory:updateRadio(player, 'insert', new_freq, condition)
 end
+--]]
 
-function activate.cellphone(player, condition)
+--function activate.cellphone(player, condition) end
+--function activate.sampler(player, condition, target) end
+--function activate.GPS(player, condition) end
 
-end
-
-function activate.sampler(player, condition, target)
-
-end
-
-local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
-
-function activate.GPS(player, condition)
-  local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
-  local free_movement_success = GPS_chance >= math.random()
-  if free_movement_success then  -- the GPS has a chance to avoid wasting ap on movement
-    player:updateStat('ap', 1) -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-  end 
-  return {free_movement_success}
-end
-
+--[[
 function activate.loudspeaker(player, condition, message)
   if condition == 3 then
     --event 3x3 inside/outside
@@ -264,6 +287,7 @@ function activate.loudspeaker(player, condition, message)
   
   -- do event - broadcast to all tiles of large building
 end
+--]]
 
 --[[
 --- EQUIPMENT
@@ -297,21 +321,101 @@ end
 function activate.fuel(player, condition)
   local building_tile = player:getTile()
   building_tile.generator:refuel()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You refuel the generator.'
+  local msg =      '{player} refuels the generator.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'fuel', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)     
 end
 
 function activate.generator(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('generator', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a generator.'
+  local msg =      '{player} installs a generator.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'generator', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)     
 end
 
 function activate.transmitter(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('transmitter', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a transmitter.'
+  local msg =      '{player} installs a transmitter.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'transmitter', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
 function activate.terminal(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('terminal', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a terminal.'
+  local msg =      '{player} installs a terminal.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'terminal', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
 local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
@@ -362,14 +466,49 @@ function activate.book(player, condition)
   if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then book_dice = book_dice^1 end  
   local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You read a book {lighting} and gain knowledge.'  
+  msg = msg:replace(tile:isPowered and 'in the light' or '')
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'book', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)    
 end
 
-function activate.newspaper(player, condition)
-  -- event trigger
-end
+--function activate.newspaper(player, condition) end
 
 function activate.bottle(player, condition)
   player:updateHP(1)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You drink some liquor from the bottle.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'bottle', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)   
 end
 
 --[[
