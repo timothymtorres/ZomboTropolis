@@ -176,15 +176,15 @@ function outcome.attack(player, target, weapon, inv_ID)
   -----------   M E S S A G E   --------------
   --------------------------------------------
       
-  local self_msg = 'You attack {target} with your {weapon}' ..
+  local self_msg = 'You attack {target} with your {weapon}' ..(
                                           (critical and   ' and score a critical hit!') or 
-                                          (not attack and ' and miss.') or '.'
-  local target_msg = 'You are attacked by {player} with their {weapon}'..
+                                          (not attack and ' and miss.') or '.')
+  local target_msg = 'You are attacked by {player} with their {weapon}'..(
                                                       (critical and   ' and they score a critical hit!') or 
-                                                      (not attack and ' and they miss.') or '.'
-  local msg = '{player} attacks {target} with their {weapon}'..
+                                                      (not attack and ' and they miss.') or '.')
+  local msg = '{player} attacks {target} with their {weapon}'..(
                                               (critical and ' and they score a critical hit!') or 
-                                            (not attack and ' and they miss.') or '.'  
+                                            (not attack and ' and they miss.') or '.')  
                                                             
   local names = {player=player, target=target, weapon=weapon}
   self_msg =     self_msg:replace(names)
