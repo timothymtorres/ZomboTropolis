@@ -177,7 +177,7 @@ function Outcome.attack(player, target, weapon, inv_ID)
                                               (critical and ' and they score a critical hit!') or 
                                             (not attack and ' and they miss.') or '.'  
                                                             
-  local names = {player=player:getUsername(), target=target:getUsername(), weapon=weapon:getClassName()}
+  local names = {player=player, target=target, weapon=weapon}
   self_msg =     self_msg:replace(names)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
@@ -224,7 +224,7 @@ function Outcome.search(player)
   local msg = 'You search {with_flashlight} and find {item}.'
   local names = {
     with_flashlight = flashlight and 'with a flashlight' or '',
-    item = item and 'a '..item:getClassName() or 'nothing', 
+    item = item and 'a '..item or 'nothing', 
   }
   msg = msg:replace(names)
   
@@ -281,7 +281,7 @@ function Outcome.speak(player, message, target)
     public_msg =    '{player} said: "{msg}"'
   end
   
-  local names = {player=player:getUsername(), target=target:getUsername(), msg=message}
+  local names = {player=player, target=target, msg=message}
   whispered_msg = whispered_msg and whispered_msg:replace(names)
   self_msg =                             self_msg:replace(names)
   public_msg =                         public_msg:replace(names)
@@ -330,7 +330,7 @@ function Outcome.reinforce(player)
     self_msg, msg = 'You attempt to reinforce the building but fail.', '{player} attempts to reinforce the building but fails.'
   end    
   
-  msg = msg:replace(player:getUsername())
+  msg = msg:replace(player)
     
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -355,9 +355,8 @@ function Outcome.enter(player)
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local msg = 'You enter the {building} {building_type}.'
-  local names = {building=map[y][x]:getName(), building_type=map[y][x]:getClassName()}
-  msg = msg:replace(names)
+  local msg = 'You enter the {building}.'
+  msg = msg:replace(map[y][x])
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -382,9 +381,8 @@ function Outcome.exit(player)
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local msg = 'You exit the {building} {building_type}.'
-  local names = {building=map[y][x]:getName(), building_type=map[y][x]:getClassName()}
-  msg = msg:replace(names)  
+  local msg = 'You exit the {building}.'
+  msg = msg:replace(map[y][x])
   
   --------------------------------------------
   -------------   E V E N T   ----------------

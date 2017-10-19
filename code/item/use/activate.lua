@@ -38,8 +38,8 @@ function activate.FAK(player, condition, target)
   
   local self_msg =   'You heal {target} with a first aid kit.'
   local target_msg = '{player} heals you with a first aid kit.'
-  self_msg =     self_msg:replace(target:getUsername())
-  target_msg = target_msg:replace(player:getUsername())  
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)  
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -78,8 +78,8 @@ function activate.bandage(player, condition, target)
   
   local self_msg =   'You heal {target} with a bandage.'
   local target_msg = '{player} heals you with a bandage.'
-  self_msg =     self_msg:replace(target:getUsername())
-  target_msg = target_msg:replace(player:getUsername())   
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)   
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -111,8 +111,8 @@ function activate.antibodies(player, condition, target)
   
   local self_msg =   'You inject {target} with antibodies.'
   local target_msg = '{player} injects you with antibodies.'
-  self_msg =     self_msg:replace(target:getUsername())
-  target_msg = target_msg:replace(player:getUsername())  
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)  
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -137,8 +137,8 @@ function activate.antidote(player, condition, target)
   
   local self_msg =   'You inject {target} with an antidote.'
   local target_msg = '{player} injects you with an antidote.'
-  self_msg =     self_msg:replace(target:getUsername())
-  target_msg = target_msg:replace(player:getUsername()) 
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player) 
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -199,8 +199,8 @@ function activate.syringe(player, condition, target)
     target_msg = '{player} attempted to inject you with their syringe.'  
   end
   
-  self_msg =     self_msg:replace(target:getUsername())
-  target_msg = target_msg:replace(player:getUsername())    
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)    
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -331,7 +331,7 @@ function activate.toolbox(player, condition)
   
   local self_msg = 'You repair the building {is_finished}.'
   local msg =      '{player} repairs the building {is_finished}.'
-  local names = {player=player:getUsername(), is_finished=integrity_state == 'intact' and 'completely' or ''}
+  local names = {player=player, is_finished=integrity_state == 'intact' and 'completely' or ''}
   self_msg = self_msg:replace(names)
   msg =           msg:replace(names)   
   

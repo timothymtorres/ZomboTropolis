@@ -88,8 +88,8 @@ function activate.drag_prey(player, target)
     self_msg =   'You attempt to drag {target} outside but are unsuccessful.'    
   end
   
-  self_msg = self_msg:replace(target:getUsername())
-  msg =   msg and msg:replace(target:getUsername())
+  self_msg = self_msg:replace(target)
+  msg =   msg and msg:replace(target)
   
   --------------------------------------------
   -------------   E V E N T   ----------------
@@ -138,8 +138,8 @@ function activate.gesture(player, target)
   local object
   
   if type(target) == 'number' then object = compass[target]
-  elseif target:getClassName() == 'player' then object = target:getUsername()
-  else object = 'the '..target:getName()..' '..target:getClassName() -- must be building
+  elseif target:getClassName() == 'player' then object = target
+  else object = 'the '..target -- must be building
   end  
   
   local self_msg = 'You gesture towards {object}.'
@@ -180,7 +180,7 @@ function activate.track(player)
     for i, target in ipairs(targets) do
       local description = has_advanced_tracking and tracking_description.advanced or tracking_description.basic
       local index = targets_ranges[i]  
-      self_msg = self_msg .. '\n' .. target:getUsername() .. ' is ' .. description[index] .. '.'
+      self_msg = self_msg .. '\n' .. target .. ' is ' .. description[index] .. '.'
     end
   else
     self_msg = self_msg .. 'There are no humans you are currently tracking.'
@@ -245,7 +245,7 @@ function activate.acid(player, target)
     target_msg = 'A zombie attempts to spray acid at you but is unsuccessful.'
   end  
   
-  self_msg = self_msg:replace(target:getUsername())
+  self_msg = self_msg:replace(target)
   
   --------------------------------------------
   -------------   E V E N T   ----------------
