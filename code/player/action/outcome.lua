@@ -261,7 +261,7 @@ function outcome.discard(player, inv_ID)
   --------------------------------------------
     
   local msg = 'You discard a {item}.'
-  msg = msg:replace(item:getClassName())    
+  msg = msg:replace(item)    
     
   --------------------------------------------
   -------------   E V E N T   ----------------
