@@ -17,6 +17,10 @@ function log:insert(msg, event, date)
   }
 end
 
+function log:append(msg)
+  self[#self].msg = self[#self].msg..'  '..msg
+end
+
 function log:reset()
   for i=1, #self do self[i] = nil end
 end
