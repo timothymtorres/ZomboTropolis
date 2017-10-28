@@ -101,6 +101,7 @@ local ARMOR_DAMAGE_MOD = 2.5
 function outcome.attack(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
+  local caused_infection  
   
   if attack then 
     if target_class == 'player' then
@@ -146,8 +147,7 @@ function outcome.attack(player, target, weapon, inv_ID)
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
           if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
             target.condition.infection:add() 
-            -- should probably add an infection message to the ZOMBIE only!  A human shouldn't be notfied immediately until damage is taken
-            -- also should probably look at refactoring the msg system for player.log to make this easier           
+            caused_infection = true          
           end
         end         
       else -- normal effect process
@@ -184,18 +184,21 @@ function outcome.attack(player, target, weapon, inv_ID)
                                                       (not attack and ' and they miss.') or '.')
   local msg = '{player} attacks {target} with their {weapon}'..(
                                               (critical and ' and they score a critical hit!') or 
-                                            (not attack and ' and they miss.') or '.')  
+                                            (not attack and ' and they miss.') or '.')                                                             
                                                             
   local names = {player=player, target=target, weapon=weapon}
   self_msg =     self_msg:replace(names)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
 
+  -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
+  if caused_infection then self_msg = self_msg .. '  They become infected.' end
+
   --------------------------------------------
   -------------   E V E N T   ----------------
   --------------------------------------------
   
-  local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  
+  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
@@ -235,7 +238,7 @@ function outcome.search(player)
   local msg = 'You search {with_flashlight} and find {item}.'
   local names = {
     with_flashlight = flashlight and 'with a flashlight' or '',
-    item = item and 'a '..item or 'nothing', 
+    item = item and 'a '..tostring(item) or 'nothing', 
   }
   msg = msg:replace(names)
   
