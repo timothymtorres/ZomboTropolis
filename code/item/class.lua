@@ -66,12 +66,16 @@ end
 function item:updateCondition(num, player, inv_ID)
   self.condition = math.max(self.condition + num, 4)
   if self.condition <= 0 then -- item is destroyed
+    player.log:append('Your '..tostring(item)..' is destroyed!')
     player.inventory:remove(inv_ID)
-    -- include announcement msg?
+  elseif num > 0 and self:isConditionVisible(player) then
+    player.log:append('Your '..tostring(item)..' upgrades to '..condition_states[self.condition]..' state.')
+  elseif num < 0 and self:isConditionVisible(player) then
+    player.log:append('Your '..tostring(item)..' degrades to '..condition_states[self.condition]..' state.')  
   end
 end
 
-function item:isConditionVisible(player) end
+function item:isConditionVisible(player) return player.skills:check(self:getClassCategory()) end
 
 function item:getName() return self.name end
 
