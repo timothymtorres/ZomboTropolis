@@ -7,8 +7,10 @@ local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local item =              require('code.item.class')
+local broadcastEvent =    require('code.server.event')
+string.replace =          require('code.libs.replace')
 
-Outcome = {}
+local outcome = {}
 
 local function getNewPos(y, x, dir)
 --[[--DIR LAYOUT
@@ -32,7 +34,11 @@ local function getNewPos(y, x, dir)
   return dir_y, dir_x
 end
 
-function Outcome.move(player, dir)
+
+local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
+local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
+
+function outcome.move(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
@@ -48,8 +54,16 @@ function Outcome.move(player, dir)
   else  -- player is outside
     if player:isMobType('human') then
       local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-      if inventory_has_GPS then 
-        GPS_usage = Outcome.item('GPS', player, inv_ID) 
+      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement
+        
+        -- need to include code here to durability check GPS and degrade condition
+        
+        local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+        local GPS_usage = GPS_chance >= math.random()
+        
+        -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+        if GPS_usage then player:updateStat('ap', 1) end
+        --GPS_usage = outcome.item('GPS', player, inv_ID) -- Item.GPS:activate(GPS, player, inv_ID)
       end
     end
     
@@ -58,14 +72,36 @@ function Outcome.move(player, dir)
   end
   
   player:updatePos(dir_y, dir_x)  
-  return {GPS_usage}
+ 
+ 
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+
+  local GPS_str = GPS_usage and 'using a GPS'
+  local self_msg = 'You travel {dir} {with_GPS}.'
+  local names = {dir=compass[dir], with_GPS=GPS_str}
+  self_msg = self_msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+
+  local event = {'move', player, dir, GPS_usage}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)  
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
 
-function Outcome.attack(player, target, weapon, inv_ID)
+function outcome.attack(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
+  local caused_infection  
   
   if attack then 
     if target_class == 'player' then
@@ -111,8 +147,7 @@ function Outcome.attack(player, target, weapon, inv_ID)
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
           if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
             target.condition.infection:add() 
-            -- should probably add an infection message to the ZOMBIE only!  A human shouldn't be notfied immediately until damage is taken
-            -- also should probably look at refactoring the msg system for player.log to make this easier           
+            caused_infection = true          
           end
         end         
       else -- normal effect process
@@ -137,65 +172,271 @@ function Outcome.attack(player, target, weapon, inv_ID)
     end
   end
   
-  return {attack, damage, critical}
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+      
+  local self_msg = 'You attack {target} with your {weapon}' ..(
+                                          (critical and   ' and score a critical hit!') or 
+                                          (not attack and ' and miss.') or '.')
+  local target_msg = 'You are attacked by {player} with their {weapon}'..(
+                                                      (critical and   ' and they score a critical hit!') or 
+                                                      (not attack and ' and they miss.') or '.')
+  local msg = '{player} attacks {target} with their {weapon}'..(
+                                              (critical and ' and they score a critical hit!') or 
+                                            (not attack and ' and they miss.') or '.')                                                             
+                                                            
+  local names = {player=player, target=target, weapon=weapon}
+  self_msg =     self_msg:replace(names)
+  target_msg = target_msg:replace(names)
+  msg =               msg:replace(names)
+
+  -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
+  if caused_infection then self_msg = self_msg .. '  They become infected.' end
+
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  -------------------------------------------- 
+
+  local settings = {stage=player:getStage(), exclude={}}
+  settings.exclude[player], settings.exclude[target] = true, true
+
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)
+  
+  local tile = player:getTile()
+  tile:broadcastEvent(msg, event, settings)  
 end
 
-function Outcome.search(player)
+function outcome.search(player)
   local p_tile = player:getTile()
   local item, flashlight
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
-  local player_inside_powered_building = p_tile:isPowered() and player:isStaged('inside')
+  local player_inside_unpowered_building = not p_tile:isPowered() and player:isStaged('inside')
   
   item = p_tile:search(player, player:getStage(), player_has_flashlight)
   
-  if player_has_flashlight and not player_inside_powered_building then -- flashlight is only used when building has no power
-    Outcome.item('flashlight', player, inv_ID) -- this runs a durability check on flashlight
+  if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
+    flashlight = true
+    local flashlight_INST = player.inventory:lookup(inv_ID)
+    if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID) end
   end
   
   if item then player.inventory:insert(item) end
-  return {item, player_has_flashlight}
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+   
+  local msg = 'You search {with_flashlight} and find {item}.'
+  local names = {
+    with_flashlight = flashlight and 'with a flashlight' or '',
+    item = item and 'a '..tostring(item) or 'nothing', 
+  }
+  msg = msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------  
+  
+  local event = {'search', player, item, flashlight}   
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------     
+  
+  player.log:insert(msg, event)
 end
 
-function Outcome.discard(player, inv_ID)
+function outcome.discard(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
-  return {item}
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+    
+  local msg = 'You discard a {item}.'
+  msg = msg:replace(item)    
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'discard', player, inv_ID}    
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------   
+  
+  player.log:insert(msg, event)
 end
 
-function Outcome.speak(player, message) -- , target)
-  local tile = player:getTile()
-  tile:listen(player, message, player:getStage()) 
+function outcome.speak(player, message, target)  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local whispered_msg, self_msg, public_msg
+  
+  if target then -- whisper to target only
+    whispered_msg = '{player} whispered: "{msg}"'
+    self_msg =      'You whispered to {target}: "{msg}"'
+    public_msg =    '{player} whispers to {target}.'
+  else           -- say outloud to everyone
+    self_msg =      'You said: "{msg}"'
+    public_msg =    '{player} said: "{msg}"'
+  end
+  
+  local names = {player=player, target=target, msg=message}
+  whispered_msg = whispered_msg and whispered_msg:replace(names)
+  self_msg =                             self_msg:replace(names)
+  public_msg =                         public_msg:replace(names)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'speak', player, message, target}      
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  -------------------------------------------- 
+  
+  local settings = {stage=player:getStage(), exclude={}}
+  settings.exclude[player], settings.exclude[target] = true, true  
+  
+  if target then
+    player.log:insert(self_msg, event)
+    target.log:insert(whispered_msg, event)
+    event[3] = nil -- other players should not hear message
+    
+    local tile = player:getTile()
+    tile:broadcastEvent(public_msg, event, settings)    
+  else
+    player:broadcastEvent(public_msg, self_msg, event)     
+  end
 end
 
-function Outcome.reinforce(player)
+function outcome.reinforce(player)
   local p_tile = player:getTile()
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
   
   if building_was_reinforced and not did_zombies_interfere then p_tile.barricade:reinforce(potential_hp) end
-  return {did_zombies_interfere, building_was_reinforced, potential_hp}
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+    
+  local self_msg, msg
+  
+  if building_was_reinforced and not did_zombies_interfere then 
+    self_msg, msg = 'You reinforce the building making room for fortifications.', '{player} reinforces the building making room for fortifications.'
+  elseif did_zombies_interfere then
+    self_msg, msg = 'You start to reinforce the building but a zombie lurches towards you.', '{player} starts to reinforce the building but is interrupted by a zombie.'    
+  elseif not building_was_reinforced then
+    self_msg, msg = 'You attempt to reinforce the building but fail.', '{player} attempts to reinforce the building but fails.'
+  end    
+  
+  msg = msg:replace(player)
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+    
+  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?    
+    
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------   
+  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
-function Outcome.enter(player)
+function outcome.enter(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
-  return {map[y][x]}
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You enter the {building}.'
+  msg = msg:replace(map[y][x])
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'enter', player, map[y][x]}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)
 end
 
-function Outcome.exit(player)
+function outcome.exit(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
   map[y][x]:insert(player, 'outside')
-  return {map[y][x]}
+
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You exit the {building}.'
+  msg = msg:replace(map[y][x])
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'exit', player, map[y][x]}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 end
 
-function Outcome.respawn(player) player:respawn() end
+function outcome.respawn(player) 
+  player:respawn()  
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'A nearby corpse rises to life'
+  local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'respawn', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)    
+end
 
-function Outcome.ransack(player)
+function outcome.ransack(player)
   local ransack_dice = dice:new('2d3')
   if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
   if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
@@ -203,7 +444,30 @@ function Outcome.ransack(player)
   local building = player:getTile()
   building.integrity:updateHP(-1 * ransack_dice:roll() )
   local integrity_state = building.integrity:getState()
-  return {integrity_state}
+  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg =      'A zombie {destruction} the building.'
+  local self_msg = 'You {destruction} the building.'  
+  local destruction_type = building_was_ransacked and 'ransack' or 'ruin'
+  
+  self_msg = self_msg:replace(destruction_type)
+  msg =           msg:replace(destruction_type..'s')
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'ransack', player, integrity_state}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 local corpse_effects = { 
@@ -216,7 +480,7 @@ local corpse_effects = {
   },
 }
 
-function Outcome.feed(player) 
+function outcome.feed(player) 
   local p_tile, p_stage = player:getTile(), player:getStage()
   local tile_player_group = p_tile:getPlayers(p_stage)
   local target
@@ -244,14 +508,32 @@ function Outcome.feed(player)
   xp_gained, decay_loss = dice.roll(xp_gained), dice.roll(decay_loss)
     
   player:updateStat('xp', xp_gained)
-  player.condition.decay:add(-1*decay_loss)
+  player.condition.decay:add(-1*decay_loss) 
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg, self_msg = 'A zombie feeds on a corpse.', 'You feed on a corpse.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'feed', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
-function Outcome.default(action, player, ...)
-  return Outcome[action](player, ...)
+function outcome.default(action, player, ...)
+  return outcome[action](player, ...)
 end
 
-function Outcome.item(item_name, player, inv_ID, target)
+function outcome.item(item_name, player, inv_ID, target)
   local item_INST = player.inventory:lookup(inv_ID)
   local item_condition = item_INST:getCondition()
   local result = itemActivate[item_name](player, item_condition, target) 
@@ -264,16 +546,22 @@ function Outcome.item(item_name, player, inv_ID, target)
   elseif item_name == 'barricade' then -- barricades are also a special case
     local did_zombies_interfere = result[1]
     if not did_zombies_interfere then player.inventory:remove(inv_ID) end
-  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
+  elseif item_INST:failDurabilityCheck(player) then 
+    local condition = item_INST:updateCondition(-1, player, inv_ID)
+    if condition <= 0 then -- item is destroyed
+      player.log:append('Your '..tostring(item_INST)..' is destroyed!')
+    elseif item_INST:isConditionVisible(player) then
+      player.log:append('Your '..tostring(item_INST)..' degrades to a '..item_INST:getConditionState()..' state.')  
+    end    
   end
   return result
 end
 
-function Outcome.equipment(equipment, player, operation, ...)  -- condition degrade on use?
+function outcome.equipment(equipment, player, operation, ...)  -- condition degrade on use?
   return equipmentActivate[equipment](player, operation, ...) --unpack({...}))
 end
 
-function Outcome.skill(skill, player, target)
+function outcome.skill(skill, player, target)
   if enzyme_list[skill] then
     local cost = player:getCost('ep', skill)
     player:updateStat('ep', cost)
@@ -281,4 +569,4 @@ function Outcome.skill(skill, player, target)
   return skillActivate[skill](player, target)  
 end
 
-return Outcome
+return outcome

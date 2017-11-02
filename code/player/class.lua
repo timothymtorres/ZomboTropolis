@@ -1,18 +1,19 @@
-local class = require('code.libs.middleclass')
-local combat = require('code.player.combat')
-local action_list = require('code.player.action.list')
-local enzyme_list = require('code.player.enzyme_list')
-local perform = require('code.player.action.perform')
+local class =                   require('code.libs.middleclass')
+local combat =                  require('code.player.combat')
+local action_list =             require('code.player.action.list')
+local enzyme_list =             require('code.player.enzyme_list')
+local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
-local map = require('code.location.map.class')
-local skills = require('code.player.skills.class')
-local inventory = require('code.player.inventory')
-local log = require('code.player.log.class')
-local condition = require('code.player.condition.class')
-local carcass = require('code.player.carcass')
-local organic_armor = require('code.player.armor.organic_class')
-local item_armor = require('code.player.armor.item_class')
-local weapon = require('code.item.weapon.class')
+local skills =                  require('code.player.skills.class')
+local inventory =               require('code.player.inventory')
+local log =                     require('code.player.log.class')
+local condition =               require('code.player.condition.class')
+local carcass =                 require('code.player.carcass')
+local organic_armor =           require('code.player.armor.organic_class')
+local item_armor =              require('code.player.armor.item_class')
+local weapon =                  require('code.item.weapon.class')
+local map =                     require('code.location.map.class')
+local broadcastEvent =          require('code.server.event')
 
 local player = class('player')
 
@@ -23,7 +24,7 @@ local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, 
 
 --Accounts[new_ID] = player:new(n, t)
 
-function player:initialize(username, mob_type, map_zone, y, x) 
+function player:initialize(username, mob_type, map_zone, y, x) --add account name
   self.username = username
   self.map_zone = map_zone
   self.y, self.x = y, x
@@ -43,6 +44,9 @@ function player:initialize(username, mob_type, map_zone, y, x)
   elseif mob_type == 'zombie' then self.armor = organic_armor:new(self)
   end
 end
+
+-- broadcastEvent whenever player performs an action for others to see
+player.broadcastEvent = broadcastEvent.player
 
 function player:killed(cause_of_death) 
 --[[ scenarios
@@ -145,6 +149,8 @@ function player:getClassName() return tostring(self.class) end
 
 function player:getUsername() return self.username end
 
+--function player:getAccountName() return self.account_name end
+
 function player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
 function player:getTile()
@@ -197,10 +203,12 @@ function player:getTargets(mode)
   end 
   
   if p_tile:isBuilding() then
+    --[[  Add this at a later time
     if p_tile:isFortified() then targets[#targets+1] = p_tile:getBarrier() end  -- is this right?  (do I need a class instead?)
     if p_tile:isPresent('equipment') then
       for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
-    end  
+    end 
+    --]]
   end
   
   if mode == 'gesture' then
@@ -238,6 +246,15 @@ function player:updateStat(stat, num)
       self.health_advanced = math.ceil(health_percent/(1/7)) 
     end  
   end
+end
+
+--[[
+-- METAMETHODS
+--]]
+
+function player:__tostring() 
+  -- if self:isMobType('zombie') then return 'a zombie' 
+  return self:getUsername() 
 end
 
 return player

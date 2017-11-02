@@ -8,7 +8,7 @@ ________________________________________________________________
 COMPLETED		[34/40]
 
 Zombie  		[9/10] (change EP skill to hunger boost)
-  Brute			[5/10] (dying grasp, drag_prey_adv) [impale, armor skills]
+  Brute			[5/10] (dying grasp, drag_prey) [impale, armor skills]
   Hunter		[4/10] (leap, leap_adv, mark_prey) [scavenge, dodge, night vision]
   Hive			[9/10] [hivemind]
 _________________________________________________________________

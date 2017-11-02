@@ -73,6 +73,7 @@ function burn:elapse(player, time)
   while time > 0 do     
     local total_damage = self:damage()
     local hp_loss = -1*total_damage
+    player.log:append('You burn in agony!')
     player:updateStat('hp', hp_loss)
 print('You burn in agony!', 'You lose '..hp_loss..'hp') 
     
