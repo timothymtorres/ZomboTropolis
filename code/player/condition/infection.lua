@@ -39,7 +39,11 @@ function infection:elapse(player, time)
     
   if self.incubation_timer > 0 then
     self.incubation_timer = math.max(self.incubation_timer - time, 0)
+    if self.incubation_timer == 0 then 
+      player.log:append('A dormant infection has now become active!  (You will now take 1 HP damage for every action taken)')
+    end
   else -- infection is no longer dormant
+    player.log:append('You feel the infection spreading.')    
     player:updateStat('hp', INFECTION_DAMAGE_PER_TICK)    
 print('Player takes damage for infection!')
   end

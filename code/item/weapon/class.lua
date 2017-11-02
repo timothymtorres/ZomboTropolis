@@ -148,6 +148,8 @@ function weapon:getConditionEffect(player) --, condition)  maybe for later...?
   return effect, duration, bonus_effect
 end
 
+function weapon:__tostring() return self:getClassName() end
+
 function weapon:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
   for _, list in ipairs(combined_lists) do

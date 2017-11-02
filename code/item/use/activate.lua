@@ -1,6 +1,8 @@
 local dice = require('code.libs.dice')
 local medical = require('code.item.medical.class')
 local item = require('code.item.class')
+local broadcastEvent = require('code.server.event')
+local pattern = '{(.-)}'
 
 local activate = {}
 
@@ -29,8 +31,28 @@ function activate.FAK(player, condition, target)
   
   local hp_gained = FAK_dice:roll()
   target:updateHP(hp_gained)
-  -- target:event trigger
-  print('You heal with the first aid kit for '..hp_gained..' hp.')
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You heal {target} with a first aid kit.'
+  local target_msg = '{player} heals you with a first aid kit.'
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'FAK', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
 end
 
 function activate.bandage(player, condition, target)
@@ -49,8 +71,28 @@ function activate.bandage(player, condition, target)
   
   local hp_gained = bandage_dice:roll()
   target:updateHP(hp_gained)
-  -- target:event trigger
-  print('You heal with '..bandage:getName()..' for '..hp_gained..' hp.')
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You heal {target} with a bandage.'
+  local target_msg = '{player} heals you with a bandage.'
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)   
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'bandage', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)   
 end
 
 function activate.antibodies(player, condition, target)
@@ -62,17 +104,58 @@ function activate.antibodies(player, condition, target)
   
   local immunity_gained = antibodies_dice:roll()
   target.condition.infection:addImmunity(immunity_gained)
-  --target:event trigger
-  print('You give antibodies to '..target:getUsername()..' for '..immunity_gained..' ticks.')
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You inject {target} with antibodies.'
+  local target_msg = '{player} injects you with antibodies.'
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)  
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'antibodies', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
 end
 
 function activate.antidote(player, condition, target)
   target.condition.infection:remove()
-  print('You use the antidote on '..target:getUsername())
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You inject {target} with an antidote.'
+  local target_msg = '{player} injects you with an antidote.'
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player) 
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'antidote', player, target}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)   
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
-local antidote_skill_modifier = {none = 'ruined', syringe = 'unpowered', syringe_adv = 'powered'}
+local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe_adv = 'intact'}
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
 function activate.syringe(player, condition, target)
@@ -89,59 +172,110 @@ function activate.syringe(player, condition, target)
   local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
   local syringe_salvage_successful
 
-  if inject_success then
-    if target_weak_enough then  -- the syringe will create a antidote
-      target:killed()
-      -- target:event trigger
-      
-      local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
-      local antidote = item.antidote:new(skill_modifier)
-      player.inventory:insert(antidote)
-    end
-     
-    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1
+  if inject_success and target_weak_enough then  -- the syringe will create a antidote
+    target:killed()
+    
+    local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+    local antidote = item.antidote:new(skill_modifier)
+    player.inventory:insert(antidote)
+  elseif inject_success then
+    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1  
   end
   
-  return {inject_success, target_weak_enough, syringe_salvage_successful} 
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg, target_msg   
+  
+  if inject_success and target_weak_enough then
+    self_msg =   'You inject {target} with your syringe and an antidote is created.'
+    target_msg = '{player} injects you with their syringe killing you in the process.'    
+  elseif inject_success then
+    self_msg =   'You inject {target} with your syringe but it is too strong and resists.' .. (syringe_salvage_successful and '' or ' Your syringe is destroyed.')
+    target_msg = '{player} injects you with their syringe but you resist.'       
+  else 
+    self_msg =   'You attempt to inject {target} with your syringe and fail.'
+    target_msg = '{player} attempted to inject you with their syringe.'  
+  end
+  
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)    
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
 end
 
 --[[
 --- WEAPONS
 --]]
 
+local flare_ranges = {6, 9, 12, 15}
+
 function activate.flare(player, condition)
-  -- target:event trigger
-  -- condition range = [0] = 6x6, [1] = 9x9, [2] = 12x12, [3] = 15x15
+  local y, x = player:getPos()
+  local tile = player:getTile()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  -- Groan point of orgin
+  local self_msg =   'You fire a flare into the sky.'
+  local nearby_msg = '{player} fires a flare into the sky.'
+  local msg =        'A flare was fired {pos}.'
+  
+  local words = {player=player, pos='{'..y..', '..x..'}'}
+  nearby_msg = nearby_msg:replace(words)
+  msg =               msg:replace(words)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(nearby_msg, self_msg, event)
+  
+  local settings = {stage='inside', exclude={}} -- broadcast to players on the same tile that are inside  
+  tile:broadcastEvent(msg, event, settings) 
+  
+  settings.stage = nil
+  settings.range = flare_ranges[condition]
+  settings.exclude[tile] = true
+  tile:broadcastEvent(msg, event, settings)     -- broadcast using a range and exclude the tile
 end
 
 --[[
 --- GADGETS
 --]]
 
+--[[  This needs to be redone!
 function activate.radio(player, condition, old_freq, new_freq)
   player.inventory:updateRadio(player, 'remove', old_freq, condition)
   player.inventory:updateRadio(player, 'insert', new_freq, condition)
 end
+--]]
 
-function activate.cellphone(player, condition)
+--function activate.cellphone(player, condition) end
+--function activate.sampler(player, condition, target) end
+--function activate.GPS(player, condition) end
 
-end
-
-function activate.sampler(player, condition, target)
-
-end
-
-local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
-
-function activate.GPS(player, condition)
-  local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
-  local free_movement_success = GPS_chance >= math.random()
-  if free_movement_success then  -- the GPS has a chance to avoid wasting ap on movement
-    player:updateStat('ap', 1) -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-  end 
-  return {free_movement_success}
-end
-
+--[[
 function activate.loudspeaker(player, condition, message)
   if condition == 3 then
     --event 3x3 inside/outside
@@ -153,6 +287,7 @@ function activate.loudspeaker(player, condition, message)
   
   -- do event - broadcast to all tiles of large building
 end
+--]]
 
 --[[
 --- EQUIPMENT
@@ -163,27 +298,124 @@ function activate.barricade(player, condition)
   local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
   
   if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
-  return {did_zombies_interfere}    
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = not did_zombies_interfere and 'You fortify the building with a barricade.' or 'You start to fortify the building, but a zombie lurches towards you.'
+    
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'barricade', player, did_zombies_interfere}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)   
 end
 
 function activate.fuel(player, condition)
   local building_tile = player:getTile()
   building_tile.generator:refuel()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You refuel the generator.'
+  local msg =      '{player} refuels the generator.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'fuel', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)     
 end
 
 function activate.generator(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('generator', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a generator.'
+  local msg =      '{player} installs a generator.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'generator', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)     
 end
 
 function activate.transmitter(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('transmitter', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a transmitter.'
+  local msg =      '{player} installs a transmitter.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'transmitter', player}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
 function activate.terminal(player, condition)
   local building_tile = player:getTile()
   building_tile:insert('terminal', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You install a terminal.'
+  local msg =      '{player} installs a terminal.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'terminal', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)   
 end
 
 local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
@@ -196,7 +428,28 @@ function activate.toolbox(player, condition)
   local building = player:getTile()
   building.integrity:updateHP(repair_dice:roll() )
   local integrity_state = building.integrity:getState()
-  return {integrity_state}
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You repair the building {is_finished}.'
+  local msg =      '{player} repairs the building {is_finished}.'
+  local names = {player=player, is_finished=integrity_state == 'intact' and 'completely' or ''}
+  self_msg = self_msg:replace(names)
+  msg =           msg:replace(names)   
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'toolbox', integrity_state}  
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 --[[
@@ -213,14 +466,49 @@ function activate.book(player, condition)
   if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then book_dice = book_dice^1 end  
   local gained_xp = book_dice:roll()
   player:updateXP(gained_xp)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You read a book {lighting} and gain knowledge.'  
+  msg = msg:replace(tile:isPowered() and 'in the light' or '')
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'book', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)    
 end
 
-function activate.newspaper(player, condition)
-  -- event trigger
-end
+--function activate.newspaper(player, condition) end
 
 function activate.bottle(player, condition)
   player:updateHP(1)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You drink some liquor from the bottle.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'bottle', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player.log:insert(msg, event)   
 end
 
 --[[
@@ -229,10 +517,46 @@ end
 
 function activate.leather(player, condition)
   player.armor:equip('leather', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You equip a leather jacket.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'leather', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 end
 
 function activate.firesuit(player, condition)
   player.armor:equip('firesuit', condition)
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg = 'You equip a firesuit.'
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'firesuit', player}
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+  
+  player.log:insert(msg, event)  
 end
 
 return activate

@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local getMessage = require('code.player.log.getMessage')
+local getTimeStamp = require('code.player.log.getTimeStamp')
 
 local log = class('log')
 
@@ -7,19 +7,18 @@ function log:initiallize()
   -- need to save data to client?
 end
 
-function log:event(date, action, params, POV)
-  local event = {
-    date = date,
-    action = action,
-    params = params,
-    POV = POV,
-  }
+function log:insert(msg, event, date)
+  date = date or os.time()    
   
-  self:insert(event)
+  self[#self+1] = {
+    msg = msg,
+    event = event,
+    date = date,
+  }
 end
 
-function log:insert(event)
-  self[#self+1] = event
+function log:append(msg)
+  self[#self].msg = self[#self].msg..'  '..msg
 end
 
 function log:reset()
@@ -36,7 +35,7 @@ function log:read()
     end
     list[index] = list[index] or {date=event.date, collapsed=true, events={}} 
     local event_tbl = list[index].events
-    event_tbl[#event_tbl+1] = getMessage(event) 
+    event_tbl[#event_tbl+1] = event.msg..' '..getTimeStamp(event.date) 
   end
   return list
 end

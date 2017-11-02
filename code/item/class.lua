@@ -64,14 +64,12 @@ function item:failDurabilityCheck(player)
 end
 
 function item:updateCondition(num, player, inv_ID)
-  self.condition = self.condition + num -- is condition 1-4 or 0-3?!  Might need to fix this...  Also add math.max(whatever the limit is...)
-  if self.condition < 0 then -- item is destroyed
-    player.inventory:remove(inv_ID)
-    -- include announcement msg?
-  end
+  self.condition = math.min(self.condition + num, 4)
+  if self.condition <= 0 then player.inventory:remove(inv_ID) end -- item is destroyed
+  return self.condition, num
 end
 
-function item:isConditionVisible(player) end
+function item:isConditionVisible(player) return player.skills:check(self:getClassCategory()) end
 
 function item:getName() return self.name end
 
@@ -98,6 +96,8 @@ function item:getClassCategory() return self.class_category end
 function item:getWeight() return self.weight end
 
 function item:getMasterSkill() return self.master_skill end
+
+function item:__tostring() return self:getClassName() end
 
 function item:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}

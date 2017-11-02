@@ -59,7 +59,7 @@ local function populateItemList()
   
   for i in ipairs(itemListMenu) do
     local item = itemListMenu[i].item
-    menu:insertRow{params = {name = item:getClassName(), condition = item:getConditionState(), weight = item:getWeight(), canBeTapped=true}}
+    menu:insertRow{params = {name = item:getClassName(), condition = item:isConditionVisible(main_player) and item:getConditionState() or '???', weight = item:getWeight(), canBeTapped=true}}
     if itemListMenu[i].collapsed then
       menu:insertRow{params = {name=item:getClassName(), inventory_index=i, discard=true, activate=item:canBeActivated(), canBeTapped=false, item_options=true}}
     end

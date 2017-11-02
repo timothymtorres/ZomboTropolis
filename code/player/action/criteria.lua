@@ -67,15 +67,15 @@ function criteria.attack(player, target, weapon, inv_ID)
   end
 -- Weapon/Inventory checks [finish]
   
-  local p_tile, p_spot = player:getTile(), player:getSpot()
+  local p_tile = player:getTile()
   local target_class = target:getClassName()
 --print('target_class', target_class, target)
 
   if target_class == 'player' then
     -- need to check if target actually exists in player database... aka - target:isPresent()?!
     assert(target:isStanding(), 'Target has been killed')
-    local t_spot = target:getSpot()
-    assert(p_spot == t_spot, 'Target has moved out of range')
+    local t_tile = target:getTile()
+    assert(p_tile == t_tile and player:getStage() == target:getStage(), 'Target has moved out of range')
   elseif target_class == 'equipment' then
     assert(p_tile:isBuilding(), 'No building present to target equipment for attack')
     assert(player:isStaged('inside'), 'Player must be inside building to attack equipment')

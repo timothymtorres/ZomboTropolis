@@ -1,7 +1,8 @@
-local class = require('code.libs.middleclass')
-local t_list = require('code.location.tile.list')
-local b_list = require('code.location.building.list')
-local item = require('code.item.class')
+local class =           require('code.libs.middleclass')
+local t_list =          require('code.location.tile.list')
+local b_list =          require('code.location.building.list')
+local item =            require('code.item.class')
+local broadcastEvent =  require('code.server.event')
 
 local tile = class('tile')
 
@@ -11,6 +12,8 @@ function tile:initialize(map, y, x, name)
   self.name = name
   self.map_zone = map
 end
+
+tile.broadcastEvent = broadcastEvent.tile
 
 function tile:insert(player) self.outside_players[player] = player end
 
@@ -74,7 +77,7 @@ function tile:getClass() return self.class end
 
 function tile:getClassName() return tostring(self.class) end
 
-function tile:getName() return self.name end
+function tile:getName() return self.name or '' end
 
 function tile:getMap() return self.map_zone end
 
@@ -125,11 +128,13 @@ function tile:getPlayers(setting)
   local players
   if setting == 'inside' then 
     players = self.inside_players
-  elseif not setting or setting == 'outside' then
+  elseif setting == 'outside' then
     players = self.outside_players
-  elseif setting == 'all' then
+  elseif not setting then -- get all players
     players = {}
-    for k,v in pairs(self.inside_players) do players[k] = v end
+    if self.inside_players then 
+      for k,v in pairs(self.inside_players) do players[k] = v end
+    end
     for k,v in pairs(self.outside_players) do players[k] = v end
   end
   return players 
@@ -190,6 +195,7 @@ print('integrity_state - ', integrity_state)
   return item_INST
 end
 
+function tile:__tostring() return self:getName()..' '..self:getClassName() end
 
 function tile:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
