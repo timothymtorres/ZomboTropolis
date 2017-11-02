@@ -64,7 +64,7 @@ function item:failDurabilityCheck(player)
 end
 
 function item:updateCondition(num, player, inv_ID)
-  self.condition = math.max(self.condition + num, 4)
+  self.condition = math.min(self.condition + num, 4)
   if self.condition <= 0 then player.inventory:remove(inv_ID) end -- item is destroyed
   return self.condition, num
 end
