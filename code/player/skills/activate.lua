@@ -225,6 +225,8 @@ function activate.acid(player, target)
   local acid_type = (player.skills:check('acid_adv') and 'ACID_ADV') or (player.skills:check('corrode') and 'CORRODE') or 'DEFAULT'
   local to_hit_chance = ACID[acid_type].CHANCE
   local acid_successful = to_hit_chance >= math.random()
+  
+  local destroyed_items, damaged_items = {}, {}
     
   if acid_successful and not target_acid_immune and n_items > 0 then    
     local acid_dice = dice:new(ACID[acid_type].DICE, 0) - acid_resistance
@@ -233,7 +235,12 @@ function activate.acid(player, target)
       local acid_damage = acid_dice:roll()      
       
       -- firesuits are immune from acid
-      if item_INST:getClassName() ~= 'firesuit' and acid_damage > 0 then item_INST:updateCondition(-1 * acid_damage, target, i) end 
+      if item_INST:getClassName() ~= 'firesuit' and acid_damage > 0 then 
+        local condition = item_INST:updateCondition(-1 * acid_damage, target, i)
+        if condition <= 0 then destroyed_items[#destroyed_items + 1] = item_INST -- item was destroyed
+        else                   damaged_items[#damaged_items + 1]     = item_INST -- item was damaged  
+        end        
+      end 
     end
   end 
   
@@ -259,6 +266,19 @@ function activate.acid(player, target)
   
   self_msg = self_msg:replace(target)
   
+  for _, damaged_item_INST in ipairs(damaged_items) do
+    self_msg = self_msg..'  The '..tostring(damaged_item_INST)..' was damaged.'
+    if damaged_item_INST:isConditionVisible(target) then
+      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' degrades to a '..damaged_item_INST:getConditionState()..' state.')
+    else
+      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' was damaged.'
+    end
+  end
+  
+  for _, destroyed_item_INST in ipairs(destroyed_items) do
+    self_msg = self_msg..'  The '..tostring(destroyed_item_INST)..' was destroyed!'
+    target_msg = target_msg..'  Your '..tostring(destroyed_item_INST)..' was destroyed!'
+  end  
   --------------------------------------------
   -------------   E V E N T   ----------------
   --------------------------------------------
