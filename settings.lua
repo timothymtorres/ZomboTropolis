@@ -1,5 +1,5 @@
 local settings = {
-  _VERSION     = 'ZomboTropolis v0.5.0', 
+  _VERSION     = 'ZomboTropolis v0.6.0', 
   _AUTHOR = 'Timothy Torres',
   _URL     = 'https://github.com/timothymtorres/ZomboTropolis-Roguelike',
   _DESCRIPTION = 'A zombie survival roguelike MMORPG.',  
