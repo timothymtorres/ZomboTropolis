@@ -269,7 +269,7 @@ function activate.acid(player, target)
   for _, damaged_item_INST in ipairs(damaged_items) do
     self_msg = self_msg..'  The '..tostring(damaged_item_INST)..' was damaged.'
     if damaged_item_INST:isConditionVisible(target) then
-      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' degrades to a '..damaged_item_INST:getConditionState()..' state.')
+      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' degrades to a '..damaged_item_INST:getConditionState()..' state.'
     else
       target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' was damaged.'
     end
