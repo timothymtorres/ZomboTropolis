@@ -546,7 +546,13 @@ function outcome.item(item_name, player, inv_ID, target)
   elseif item_name == 'barricade' then -- barricades are also a special case
     local did_zombies_interfere = result[1]
     if not did_zombies_interfere then player.inventory:remove(inv_ID) end
-  elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID) 
+  elseif item_INST:failDurabilityCheck(player) then 
+    local condition = item_INST:updateCondition(-1, player, inv_ID)
+    if condition <= 0 then -- item is destroyed
+      player.log:append('Your '..tostring(item_INST)..' is destroyed!')
+    elseif item_INST:isConditionVisible(player) then
+      player.log:append('Your '..tostring(item_INST)..' degrades to a '..item_INST:getConditionState()..' state.')  
+    end    
   end
   return result
 end
