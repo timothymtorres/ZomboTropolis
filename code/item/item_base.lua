@@ -1,4 +1,5 @@
 local class = require('code.libs.middleclass')
+--[[
 local e_list = require('code.item.list.equipment')
 local g_list = require('code.item.list.gadget')
 local j_list = require('code.item.list.junk')
@@ -7,6 +8,7 @@ local w_list = require('code.item.list.weaponry')
 local a_list = require('code.item.list.ammo')
 local arm_list=require('code.item.list.armor')
 local order = require('code.item.order')
+--]]
 local bit = require('plugin.bit')
 local lshift, rshift, bor = bit.lshift, bit.rshift, bit.bor
 local check = require('code.item.use.check')
