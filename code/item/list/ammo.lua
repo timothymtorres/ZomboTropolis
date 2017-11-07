@@ -1,31 +1,52 @@
-local ammo = {}
+local class =          require('code.libs.middleclass')
+local ItemBase =       require('code.item.item_base')
+local broadcastEvent = require('code.server.event')
+string.replace =       require('code.libs.replace')
+local dice =           require('code.libs.dice')
 
---[[
-  full_name = 'insert name'
-  weight = num
-  class_category = 'military'
-  durability = 0/1/+num    [0 = one use, 1 = one usage each time, +num = 1/num chance of usage]
---]]
+ 
+--ammo[item].durability = 0  -- all ammo is single use??? Or nah?
 
-ammo.pistol_mag = {}
-ammo.pistol_mag.full_name = 'pistol magazine'
-ammo.pistol_mag.weight = 3
+local Magazine = class('Magazine', ItemBase)
 
-ammo.shotgun_shell = {}
-ammo.shotgun_shell.full_name = 'shotgun shell'
-ammo.shotgun_shell.weight = 2
+Magazine.static = {
+  FULL_NAME = 'pistol magazine',
+  WEIGHT = 3,
+  DURABILITY = 0,
+  CATEGORY = 'military',
+}
 
-ammo.rifle_clip = {}
-ammo.rifle_clip.full_name = 'rifle clip'
-ammo.rifle_clip.weight = 5
+-------------------------------------------------------------------
 
-ammo.quiver = {}
-ammo.quiver.full_name = 'quiver'
-ammo.quiver.weight = 4
+local Shell = class('Shell', ItemBase)
 
-for item in pairs(ammo) do 
-  ammo[item].class_category = 'military' 
-  ammo[item].durability = 0  -- all ammo is single use
-end
+Shell.static = {
+  FULL_NAME = 'shotgun shell',
+  WEIGHT = 2,
+  DURABILITY = 0,
+  CATEGORY = 'military',
+}
 
-return ammo
+-------------------------------------------------------------------
+
+local Clip = class('Clip', ItemBase)
+
+Clip.static = {
+  FULL_NAME = 'rifle clip',
+  WEIGHT = 5,
+  DURABILITY = 0,
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+local Quiver = class('Quiver', ItemBase)
+
+Quiver.static = {
+  FULL_NAME = 'quiver',
+  WEIGHT = 4,
+  DURABILITY = 0,
+  CATEGORY = 'military',
+}
+
+return {Magazine, Shell, Clip, Quiver}

@@ -1,105 +1,217 @@
-local weaponry = {}
+local class =          require('code.libs.middleclass')
+local ItemBase =       require('code.item.item_base')
+local broadcastEvent = require('code.server.event')
+string.replace =       require('code.libs.replace')
 
---[[
-  full_name = 'insert name'
-  weight = num
-  designated_weapon = true/nil 
-  class_category = military/research/engineering/medical
-  one_use = true/nil
-  durability = num (average # of attacks to wear out weapon)
---]]
+-- need to add designated_weapon var to items?  Or do this via mixins?
+-- weaponry[item].designated_weapon = true 
+
+-------------------------------------------------------------------
 
 --[[
 ---  BRUTE
 --]]
 
-weaponry.crowbar = {}
-weaponry.crowbar.full_name = 'crowbar'
-weaponry.crowbar.weight = 8
-weaponry.crowbar.master_skill = 'smacking'
-weaponry.crowbar.durability = 25
+local Crowbar = class('Crowbar', ItemBase)
 
-weaponry.bat = {}
-weaponry.bat.full_name = 'baseball bat'
-weaponry.bat.weight = 9
-weaponry.bat.master_skill = 'smacking'
-weaponry.bat.durability = 15
+Crowbar.static = {
+  FULL_NAME = 'crowbar',
+  WEIGHT = 8,
+  DURABILITY = 25,  
+  MASTER_SKILL = 'smacking',
+  CATEGORY = 'military',
+}
 
-weaponry.sledge = {}
-weaponry.sledge.full_name = 'sledgehammer'
-weaponry.sledge.weight = 25
-weaponry.sledge.master_skill = 'smashing'
-weaponry.sledge.durability = 20
+-------------------------------------------------------------------
+
+local Bat = class('Bat', ItemBase)
+
+Bat.static = {
+  FULL_NAME = 'baseball bat',
+  WEIGHT = 9,
+  DURABILITY = 15,  
+  MASTER_SKILL = 'smacking',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+local Sledge = class('Sledge', ItemBase)
+
+Sledge.static = {
+  FULL_NAME = 'sledgehammer',
+  WEIGHT = 25,
+  DURABILITY = 20,  
+  MASTER_SKILL = 'smashing',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
 
 --[[
 ---  BLADE
 --]]
 
-weaponry.knife = {}
-weaponry.knife.full_name = 'knife'
-weaponry.knife.weight = 3
-weaponry.knife.master_skill = 'slicing'
-weaponry.knife.durability = 10
+-------------------------------------------------------------------
 
-weaponry.katanna = {}
-weaponry.katanna.full_name = 'katanna'
-weaponry.katanna.weight = 7
-weaponry.katanna.master_skill = 'chopping'
-weaponry.katanna.durability = 15
+local Knife = class('Knife', ItemBase)
+
+Knife.static = {
+  FULL_NAME = 'knife',
+  WEIGHT = 3,
+  DURABILITY = 10,  
+  MASTER_SKILL = 'slicing',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+local Katanna = class('Katanna', ItemBase)
+
+Katanna.static = {
+  FULL_NAME = 'katanna',
+  WEIGHT = 7,
+  DURABILITY = 15,  
+  MASTER_SKILL = 'chopping',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
 
 --[[
 --- PROJECTILE
 --]]
 
-weaponry.pistol = {}
-weaponry.pistol.full_name = 'pistol'
-weaponry.pistol.weight = 6
-weaponry.pistol.master_skill = 'light_guns'
-weaponry.pistol.durability = 40
+-------------------------------------------------------------------
 
-weaponry.magnum = {}
-weaponry.magnum.full_name = 'magnum'
-weaponry.magnum.weight = 6
-weaponry.magnum.master_skill = 'light_guns'
-weaponry.magnum.durability = 50
+local Pistol = class('Pistol', ItemBase)
 
-weaponry.shotgun = {}
-weaponry.shotgun.full_name = 'shotgun'
-weaponry.shotgun.weight = 10
-weaponry.shotgun.master_skill = 'heavy_guns'
-weaponry.shotgun.durability = 40
+Pistol.static = {
+  FULL_NAME = 'pistol',
+  WEIGHT = 6,
+  DURABILITY = 40,  
+  MASTER_SKILL = 'light_guns',
+  CATEGORY = 'military',
+}
 
-weaponry.rifle = {}
-weaponry.rifle.full_name = 'assualt rifle'
-weaponry.rifle.weight = 15
-weaponry.rifle.master_skill = 'heavy_guns'
-weaponry.rifle.durability = 40
+-------------------------------------------------------------------
 
---[[
-weaponry.bow = {}
-weaponry.bow.full_name = 'bow'
-weaponry.bow.weight = 9
+local Magnum = class('Magnum', ItemBase)
 
-weaponry.missle = {}
-weaponry.missle.full_name = 'missle launcher'
-weaponry.missle.weight = 25
---]]
+Magnum.static = {
+  FULL_NAME = 'magnum',
+  WEIGHT = 6,
+  DURABILITY = 50,  
+  MASTER_SKILL = 'light_guns',
+  CATEGORY = 'military',
+}
 
-weaponry.flare = {}
-weaponry.flare.full_name = 'flare'
-weaponry.flare.weight = 5
-weaponry.flare.durability = 0
-weaponry.flare.master_skill = 'explosives'
+-------------------------------------------------------------------
 
-weaponry.molotov = {}
-weaponry.molotov.full_name = 'molotov cocktail'
-weaponry.molotov.weight = 5
-weaponry.molotov.durability = 0
-weaponry.molotov.master_skill = 'explosives'
+local Shotgun = class('Shotgun', ItemBase)
 
-for item in pairs(weaponry) do 
-  weaponry[item].designated_weapon = true 
-  weaponry[item].class_category = 'military'
+Shotgun.static = {
+  FULL_NAME = 'shotgun',
+  WEIGHT = 10,
+  DURABILITY = 40,  
+  MASTER_SKILL = 'heavy_guns',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+local Rifle = class('Rifle', ItemBase)
+
+Rifle.static = {
+  FULL_NAME = 'assualt rifle',
+  WEIGHT = 15,
+  DURABILITY = 40,  
+  MASTER_SKILL = 'heavy_guns',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+local Flare = class('Flare', ItemBase)
+
+Flare.static = {
+  FULL_NAME = 'flare',
+  WEIGHT = 5,
+  DURABILITY = 0,
+  MASTER_SKILL = 'explosives',
+  CATEGORY = 'military',
+}
+
+function Flare.client_criteria(player)
+  assert(player:isStaged('outside'), 'Player must be outside to use flare')  
 end
 
-return weaponry
+function Flare.server_criteria(player)
+  assert(player:isStaged('outside'), 'Player must be outside to use flare')  
+end
+
+local flare_ranges = {6, 9, 12, 15}
+
+function Flare.activate(player, condition)
+  local y, x = player:getPos()
+  local tile = player:getTile()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  -- Groan point of orgin
+  local self_msg =   'You fire a flare into the sky.'
+  local nearby_msg = '{player} fires a flare into the sky.'
+  local msg =        'A flare was fired {pos}.'
+  
+  local words = {player=player, pos='{'..y..', '..x..'}'}
+  nearby_msg = nearby_msg:replace(words)
+  msg =               msg:replace(words)
+  
+  --------------------------------------------
+  -------------   E V E N T   ----------------
+  --------------------------------------------
+  
+  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  player:broadcastEvent(nearby_msg, self_msg, event)
+  
+  local settings = {stage='inside', exclude={}} -- broadcast to players on the same tile that are inside  
+  tile:broadcastEvent(msg, event, settings) 
+  
+  settings.stage = nil
+  settings.range = flare_ranges[condition]
+  settings.exclude[tile] = true
+  tile:broadcastEvent(msg, event, settings)     -- broadcast using a range and exclude the tile
+end
+
+-------------------------------------------------------------------
+
+local Molotov = class('Molotov', ItemBase)
+
+Molotov.static = {
+  FULL_NAME = 'molotov cocktail',
+  WEIGHT = 5,
+  DURABILITY = 0,
+  MASTER_SKILL = 'explosives',
+  CATEGORY = 'military',
+}
+
+-------------------------------------------------------------------
+
+--[[
+bow = {}
+bow.FULL_NAME = 'bow'
+bow.WEIGHT = 9
+
+missle = {}
+missle.FULL_NAME = 'missle launcher'
+missle.WEIGHT = 25
+--]]
+
+return {Crowbar, Bat, Sledge, Knife, Katanna, Pistol, Magnum, Shotgun, Rifle, Flare, Molotov}
