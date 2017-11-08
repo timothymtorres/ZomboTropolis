@@ -4,6 +4,45 @@ local dice =        require('code.libs.dice')
 
 local isWeapon = {}
 
+--[[
+  {
+    full_name = 'insert name'
+    attack_style = melee/ranged
+    damage_type = bullet/pierce/blunt/scorch
+    group = {
+      organic (arm/teeth/stomach)  
+      melee (brute/blade)  
+      firearms (gun/handgun/shotgun/rifle)  
+      archery (bow/crossbow)
+      misc. (special)
+    }
+    dice = '?d?'
+    accuracy = 0.00 (base chance to hit)
+    critical = 0.00 (base chance for crit)
+    
+    *if gun/bow*
+    
+    max_ammo = num
+    reload_amount = num
+    
+    *optional*
+    
+    organic = human/zombie/nil (results in default weapon choice, since weapon is attached to body)
+    object_damage = {barricade=1/2/nil, door=1/2/nil, equipment=1/2/nil} /nil
+    master_skill = skill_name/nil (designated skill that signals mastery)
+    one_use = true/nil (is disposed of after one use)
+    ^^^^ if weapon is ranged immediately after firing it's used
+    ^^^^ if weapon is melee then when a hit is landed it's used 
+    no_damage = true/nil (does not cause damage)
+    condition_effect = poison/infect/burn/confuse/blind/nil
+    skill_required = skill_name/nil  (need a skill to use this weapon, mostly for special zombie attacks)
+    fuel_amount = {num}/nil
+    combustion_source = true/false/nil (can this weapon ignite a fire)
+  } 
+--]]
+
+-- WEAPON CONDITION MODIFIERS (blunt = damage range, blade = damage bonus, bullet = to-hit-accuracy, scorch = damage rolls)
+
 function isWeapon:isOrganic() return self.organic or false end
 
 function isWeapon:isHarmless() return self.no_damage or false end
