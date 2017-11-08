@@ -1,8 +1,9 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
-local broadcastEvent = require('code.server.event')
-string.replace =       require('code.libs.replace')
 local dice =           require('code.libs.dice')
+local broadcastEvent = require('code.server.event')
+local isWeapon =       require('code.mixin.is_weapon')
+string.replace =       require('code.libs.replace')
 
 local Book = class('Book', ItemBase)
 
@@ -74,7 +75,7 @@ end
 
 -------------------------------------------------------------------
 
-local Newspaper = class('Newspaper', ItemBase)
+local Newspaper = class('Newspaper', ItemBase):include(isWeapon)
 
 Newspaper.FULL_NAME = 'newspaper'
 Newspaper.WEIGHT = 1
