@@ -80,6 +80,9 @@ Newspaper.FULL_NAME = 'newspaper'
 Newspaper.WEIGHT = 1
 Newspaper.DURABILITY = 0
 
+Newspaper.ACCURACY = 1.00
+Newspaper.NO_DAMAGE = true
+
 --function Newspaper.activate(player, condition) end
 
 return {Book, Bottle, Newspaper}
