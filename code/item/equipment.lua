@@ -222,7 +222,7 @@ Toolbox.FULL_NAME = 'toolbox'
 Toolbox.WEIGHT = 15
 Toolbox.DURABILITY = 10
 Toolbox.CATEGORY = 'engineering'
-Toolbox.MASTER_SKILL = 'repair_adv'
+--Toolbox.MASTER_SKILL = 'repair_adv'
 
 function Toolbox.client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to repair')
