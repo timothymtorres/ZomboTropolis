@@ -6,12 +6,10 @@ local dice =           require('code.libs.dice')
 
 local Generator = class('Generator', ItemBase)
 
-Generator.static = {
-  FULL_NAME = 'generator',
-  WEIGHT = 25,
-  DURABILITY = 0,
-  CATEGORY = 'engineering'
-}
+Generator.FULL_NAME = 'generator'
+Generator.WEIGHT = 25
+Generator.DURABILITY = 0
+Generator.CATEGORY = 'engineering'
 
 function Generator.client_criteria(player)
   local p_tile = player:getTile()
@@ -50,12 +48,10 @@ end
 
 local Transmitter = class('Transmitter', ItemBase)
 
-Transmitter.static = {
-  FULL_NAME = 'transmitter',
-  WEIGHT = 25,
-  DURABILITY = 0,
-  CATEGORY = 'engineering'  
-}
+Transmitter.FULL_NAME = 'transmitter'
+Transmitter.WEIGHT = 25
+Transmitter.DURABILITY = 0
+Transmitter.CATEGORY = 'engineering'
 
 function Transmitter.client_criteria(player)
   local p_tile = player:getTile()  
@@ -94,12 +90,10 @@ end
 
 local Terminal = class('Terminal', ItemBase)
 
-Terminal.static = {
-  FULL_NAME = 'terminal',
-  WEIGHT = 25,
-  DURABILITY = 0,
-  CATEGORY = 'engineering'  
-}
+Terminal.FULL_NAME = 'terminal'
+Terminal.WEIGHT = 25
+Terminal.DURABILITY = 0
+Terminal.CATEGORY = 'engineering'
 
 function Terminal.client_criteria(player)
   local p_tile = player:getTile()
@@ -138,12 +132,10 @@ end
 
 local Fuel = class('Fuel', ItemBase)
 
-Fuel.static = {
-  FULL_NAME = 'fuel tank',
-  WEIGHT = 10,
-  DURABILITY = 0,
-  CATEGORY = 'engineering'  
-}
+Fuel.FULL_NAME = 'fuel tank'
+Fuel.WEIGHT = 10
+Fuel.DURABILITY = 0
+Fuel.CATEGORY = 'engineering'
 
 function Fuel.client_criteria(player)
   local p_tile = player:getTile()
@@ -182,12 +174,10 @@ end
 
 local Barricade = class('Barricade', ItemBase)
 
-Barricade.static = {
-  FULL_NAME = 'barricade',
-  WEIGHT = 7,
-  DURABILITY = 0,
-  CATEGORY = 'engineering'  
-}
+Barricade.FULL_NAME = 'barricade'
+Barricade.WEIGHT = 7
+Barricade.DURABILITY = 0
+Barricade.CATEGORY = 'engineering'
 
 function Barricade.client_criteria(player)
   local p_tile = player:getTile()
@@ -228,13 +218,11 @@ end
 
 local Toolbox = class('Toolbox', ItemBase)
 
-Toolbox.static = {
-  FULL_NAME = 'toolbox',
-  WEIGHT = 15,
-  DURABILITY = 10,
-  CATEGORY = 'engineering'  
-  MASTER_SKILL = 'repair_adv',  
-}
+Toolbox.FULL_NAME = 'toolbox'
+Toolbox.WEIGHT = 15
+Toolbox.DURABILITY = 10
+Toolbox.CATEGORY = 'engineering'
+Toolbox.MASTER_SKILL = 'repair_adv'
 
 function Toolbox.client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to repair')

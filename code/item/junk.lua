@@ -6,12 +6,10 @@ local dice =           require('code.libs.dice')
 
 local Book = class('Book', ItemBase)
 
-Book.static = {
-  FULL_NAME = 'book',
-  WEIGHT = 2,
-  CATEGORY = 'research',
-  DURABILITY = 0,
-}
+Book.FULL_NAME = 'book'
+Book.WEIGHT = 2
+Book.CATEGORY = 'research'
+Book.DURABILITY = 0
 
 local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 
@@ -48,11 +46,9 @@ end
 
 local Bottle = class('Bottle', ItemBase)
 
-Bottle.static = {
-  FULL_NAME = 'bottle',
-  WEIGHT = 1,
-  DURABILITY = 0,
-}
+Bottle.FULL_NAME = 'bottle'
+Bottle.WEIGHT = 1
+Bottle.DURABILITY = 0
 
 function Bottle.activate(player, condition)
   player:updateHP(1)
@@ -80,11 +76,9 @@ end
 
 local Newspaper = class('Newspaper', ItemBase)
 
-Newspaper.static = {
-  FULL_NAME = 'newspaper',
-  WEIGHT = 1,
-  DURABILITY = 0,
-}
+Newspaper.FULL_NAME = 'newspaper'
+Newspaper.WEIGHT = 1
+Newspaper.DURABILITY = 0
 
 --function Newspaper.activate(player, condition) end
 

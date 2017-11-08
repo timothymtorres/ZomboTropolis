@@ -8,12 +8,10 @@ local dice =           require('code.libs.dice')
 
 local FAK = class('FAK', ItemBase)
 
-FAK.static = {
-  FULL_NAME = 'first aid kit',
-  WEIGHT = 8,
-  DURABILITY = 0,
-  CATEGORY = 'research',
-}
+FAK.FULL_NAME = 'first aid kit'
+FAK.WEIGHT = 8
+FAK.DURABILITY = 0
+FAK.CATEGORY = 'research'
 
 function FAK.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -71,12 +69,10 @@ end
 
 local Bandage = class('Bandage', ItemBase)
 
-Bandage.static = {
-  FULL_NAME = 'bandage',
-  WEIGHT = 3,
-  DURABILITY = 0,
-  CATEGORY = 'research',
-}
+Bandage.FULL_NAME = 'bandage'
+Bandage.WEIGHT = 3
+Bandage.DURABILITY = 0
+Bandage.CATEGORY = 'research'
 
 function Bandage.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -129,12 +125,10 @@ end
 
 local Syringe = class('Syringe', ItemBase)
 
-Syringe.static = {
-  FULL_NAME = 'syringe',
-  WEIGHT = 5,
-  DURABILITY = 0,
-  CATEGORY = 'research',  
-}
+Syringe.FULL_NAME = 'syringe'
+Syringe.WEIGHT = 5
+Syringe.DURABILITY = 0
+Syringe.CATEGORY = 'research'
 
 function Syringe.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -214,12 +208,10 @@ end
 
 local Vaccine = class('Vaccine', ItemBase)
 
-Vaccine.static = {
-  FULL_NAME = 'antibodies',
-  WEIGHT = 5,
-  DURABILITY = 0,
-  CATEGORY = 'research',
-}
+Vaccine.FULL_NAME = 'antibodies'
+Vaccine.WEIGHT = 5
+Vaccine.DURABILITY = 0
+Vaccine.CATEGORY = 'research'
 
 function Vaccine.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -264,12 +256,10 @@ end
 
 local Antidote = class('Antidote', ItemBase)
 
-Antidote.static = {
-  FULL_NAME = 'antidote',
-  WEIGHT = 5,
-  DURABILITY = 1,
-  CATEGORY = 'research',
-}
+Antidote.FULL_NAME = 'antidote'
+Antidote.WEIGHT = 5
+Antidote.DURABILITY = 1
+Antidote.CATEGORY = 'research'
 
 function Antidote.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')

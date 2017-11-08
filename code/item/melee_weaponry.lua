@@ -14,37 +14,31 @@ string.replace =       require('code.libs.replace')
 
 local Crowbar = class('Crowbar', ItemBase)
 
-Crowbar.static = {
-  FULL_NAME = 'crowbar',
-  WEIGHT = 8,
-  DURABILITY = 25,  
-  MASTER_SKILL = 'smacking',
-  CATEGORY = 'military',
-}
+Crowbar.FULL_NAME = 'crowbar'
+Crowbar.WEIGHT = 8
+Crowbar.DURABILITY = 25
+Crowbar.MASTER_SKILL = 'smacking'
+Crowbar.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Bat = class('Bat', ItemBase)
 
-Bat.static = {
-  FULL_NAME = 'baseball bat',
-  WEIGHT = 9,
-  DURABILITY = 15,  
-  MASTER_SKILL = 'smacking',
-  CATEGORY = 'military',
-}
+Bat.FULL_NAME = 'baseball bat'
+Bat.WEIGHT = 9
+Bat.DURABILITY = 15
+Bat.MASTER_SKILL = 'smacking'
+Bat.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Sledge = class('Sledge', ItemBase)
 
-Sledge.static = {
-  FULL_NAME = 'sledgehammer',
-  WEIGHT = 25,
-  DURABILITY = 20,  
-  MASTER_SKILL = 'smashing',
-  CATEGORY = 'military',
-}
+Sledge.FULL_NAME = 'sledgehammer'
+Sledge.WEIGHT = 25
+Sledge.DURABILITY = 20
+Sledge.MASTER_SKILL = 'smashing'
+Sledge.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
@@ -56,24 +50,20 @@ Sledge.static = {
 
 local Knife = class('Knife', ItemBase)
 
-Knife.static = {
-  FULL_NAME = 'knife',
-  WEIGHT = 3,
-  DURABILITY = 10,  
-  MASTER_SKILL = 'slicing',
-  CATEGORY = 'military',
-}
+Knife.FULL_NAME = 'knife'
+Knife.WEIGHT = 3
+Knife.DURABILITY = 10
+Knife.MASTER_SKILL = 'slicing'
+Knife.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Katanna = class('Katanna', ItemBase)
 
-Katanna.static = {
-  FULL_NAME = 'katanna',
-  WEIGHT = 7,
-  DURABILITY = 15,  
-  MASTER_SKILL = 'chopping',
-  CATEGORY = 'military',
-}
+Katanna.FULL_NAME = 'katanna'
+Katanna.WEIGHT = 7
+Katanna.DURABILITY = 15
+Katanna.MASTER_SKILL = 'chopping'
+Katanna.CATEGORY = 'military'
 
 return {Crowbar, Bat, Sledge, Knife, Katanna}

@@ -6,12 +6,10 @@ local dice =           require('code.libs.dice')
 
 local Radio = class('Radio', ItemBase)
 
-Radio.static = {
-  FULL_NAME = 'portable radio',
-  WEIGHT = 3,
-  DURABILITY = 100,
-  CATEGORY = 'research'
-}
+Radio.FULL_NAME = 'portable radio'
+Radio.WEIGHT = 3
+Radio.DURABILITY = 100
+Radio.CATEGORY = 'research'
 
 --function Radio.client_criteria(player) end --needs batteries/need light
 
@@ -30,34 +28,28 @@ end
 
 local GPS = class('GPS', ItemBase)
 
-GPS.static = {
-  FULL_NAME = 'global position system',
-  WEIGHT = 2,
-  DURABILITY = 50,
-  CATEGORY = 'research'
-}
+GPS.FULL_NAME = 'global position system'
+GPS.WEIGHT = 2
+GPS.DURABILITY = 50
+GPS.CATEGORY = 'research'
 
 ---------------------------------------------------------------------
 
 local Flashlight = class('Flashlight', ItemBase)
 
-Flashlight.static = {
-  FULL_NAME = 'flashlight',
-  WEIGHT = 4,
-  DURABILITY = 100,
-  CATEGORY = 'research'
-}
+Flashlight.FULL_NAME = 'flashlight'
+Flashlight.WEIGHT = 4
+Flashlight.DURABILITY = 100
+Flashlight.CATEGORY = 'research'
 
 ---------------------------------------------------------------------
 
 local Sampler = class('Sampler', ItemBase)
 
-Sampler.static = {
-  FULL_NAME = 'lab sampler',
-  WEIGHT = 4,
-  DURABILITY = 20,
-  CATEGORY = 'research'
-}
+Sampler.FULL_NAME = 'lab sampler'
+Sampler.WEIGHT = 4
+Sampler.DURABILITY = 20
+Sampler.CATEGORY = 'research'
 
 function Sampler.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()

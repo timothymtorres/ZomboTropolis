@@ -14,61 +14,51 @@ string.replace =       require('code.libs.replace')
 
 local Pistol = class('Pistol', ItemBase)
 
-Pistol.static = {
-  FULL_NAME = 'pistol',
-  WEIGHT = 6,
-  DURABILITY = 40,  
-  MASTER_SKILL = 'light_guns',
-  CATEGORY = 'military',
-}
+Pistol.FULL_NAME = 'pistol'
+Pistol.WEIGHT = 6
+Pistol.DURABILITY = 40
+Pistol.MASTER_SKILL = 'light_guns'
+Pistol.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Magnum = class('Magnum', ItemBase)
 
-Magnum.static = {
-  FULL_NAME = 'magnum',
-  WEIGHT = 6,
-  DURABILITY = 50,  
-  MASTER_SKILL = 'light_guns',
-  CATEGORY = 'military',
-}
+Magnum.FULL_NAME = 'magnum'
+Magnum.WEIGHT = 6
+Magnum.DURABILITY = 50
+Magnum.MASTER_SKILL = 'light_guns'
+Magnum.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Shotgun = class('Shotgun', ItemBase)
 
-Shotgun.static = {
-  FULL_NAME = 'shotgun',
-  WEIGHT = 10,
-  DURABILITY = 40,  
-  MASTER_SKILL = 'heavy_guns',
-  CATEGORY = 'military',
-}
+Shotgun.FULL_NAME = 'shotgun'
+Shotgun.WEIGHT = 10
+Shotgun.DURABILITY = 40
+Shotgun.MASTER_SKILL = 'heavy_guns'
+Shotgun.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Rifle = class('Rifle', ItemBase)
 
-Rifle.static = {
-  FULL_NAME = 'assualt rifle',
-  WEIGHT = 15,
-  DURABILITY = 40,  
-  MASTER_SKILL = 'heavy_guns',
-  CATEGORY = 'military',
-}
+Rifle.FULL_NAME = 'assualt rifle'
+Rifle.WEIGHT = 15
+Rifle.DURABILITY = 40
+Rifle.MASTER_SKILL = 'heavy_guns'
+Rifle.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 
 local Flare = class('Flare', ItemBase)
 
-Flare.static = {
-  FULL_NAME = 'flare',
-  WEIGHT = 5,
-  DURABILITY = 0,
-  MASTER_SKILL = 'explosives',
-  CATEGORY = 'military',
-}
+Flare.FULL_NAME = 'flare'
+Flare.WEIGHT = 5
+Flare.DURABILITY = 0
+Flare.MASTER_SKILL = 'explosives'
+Flare.CATEGORY = 'military'
 
 function Flare.client_criteria(player)
   assert(player:isStaged('outside'), 'Player must be outside to use flare')  
@@ -122,13 +112,11 @@ end
 
 local Molotov = class('Molotov', ItemBase)
 
-Molotov.static = {
-  FULL_NAME = 'molotov cocktail',
-  WEIGHT = 5,
-  DURABILITY = 0,
-  MASTER_SKILL = 'explosives',
-  CATEGORY = 'military',
-}
+Molotov.FULL_NAME = 'molotov cocktail'
+Molotov.WEIGHT = 5
+Molotov.DURABILITY = 0
+Molotov.MASTER_SKILL = 'explosives'
+Molotov.CATEGORY = 'military'
 
 -------------------------------------------------------------------
 

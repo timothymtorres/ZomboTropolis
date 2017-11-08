@@ -5,11 +5,9 @@ string.replace =       require('code.libs.replace')
 
 local Leather = class('Leather', ItemBase)
 
-Leather.static = {
-  FULL_NAME = 'leather jacket',
-  DURABILITY = 0,
-  CATEGORY = 'military',
-}
+Leather.FULL_NAME = 'leather jacket'
+Leather.DURABILITY = 0
+Leather.CATEGORY = 'military'
 
 function Leather.activate(player, condition)
   player.armor:equip('leather', condition)
@@ -37,11 +35,9 @@ end
 
 local Firesuit = class('Firesuit', ItemBase)
 
-Firesuit.static = {
-  FULL_NAME = 'firesuit',
-  DURABILITY = 0,
-  CATEGORY = 'military',
-}
+Firesuit.FULL_NAME = 'firesuit'
+Firesuit.DURABILITY = 0
+Firesuit.CATEGORY = 'military'
 
 function Firesuit.activate(player, condition)
   player.armor:equip('firesuit', condition)
