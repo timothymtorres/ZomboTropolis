@@ -1,7 +1,7 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
 local broadcastEvent = require('code.server.event')
-local isWeapon =       require('code.mixin.is_weapon')
+local IsWeapon =       require('code.mixin.is_weapon')
 string.replace =       require('code.libs.replace')
 
 -- need to add designated_weapon var to items?  Or do this via mixins?
@@ -13,7 +13,7 @@ string.replace =       require('code.libs.replace')
 ---  BRUTE
 --]]
 
-local Crowbar = class('Crowbar', ItemBase):include(isWeapon)
+local Crowbar = class('Crowbar', ItemBase):include(IsWeapon)
 
 Crowbar.FULL_NAME = 'crowbar'
 Crowbar.WEIGHT = 8
@@ -29,7 +29,7 @@ Crowbar.CRITICAL = 0.05
 
 -------------------------------------------------------------------
 
-local Bat = class('Bat', ItemBase):include(isWeapon)
+local Bat = class('Bat', ItemBase):include(IsWeapon)
 
 Bat.FULL_NAME = 'baseball bat'
 Bat.WEIGHT = 9
@@ -46,7 +46,7 @@ Bat.MASTER_SKILL = 'smacking'
 
 -------------------------------------------------------------------
 
-local Sledge = class('Sledge', ItemBase):include(isWeapon)
+local Sledge = class('Sledge', ItemBase):include(IsWeapon)
 
 Sledge.FULL_NAME = 'sledgehammer'
 Sledge.WEIGHT = 25
@@ -69,7 +69,7 @@ Sledge.MASTER_SKILL = 'smashing'
 
 -------------------------------------------------------------------
 
-local Knife = class('Knife', ItemBase):include(isWeapon)
+local Knife = class('Knife', ItemBase):include(IsWeapon)
 
 Knife.FULL_NAME = 'knife'
 Knife.WEIGHT = 3
@@ -86,7 +86,7 @@ Knife.MASTER_SKILL = 'slicing'
 
 -------------------------------------------------------------------
 
-local Katanna = class('Katanna', ItemBase):include(isWeapon)
+local Katanna = class('Katanna', ItemBase):include(IsWeapon)
 
 Katanna.FULL_NAME = 'katanna'
 Katanna.WEIGHT = 7

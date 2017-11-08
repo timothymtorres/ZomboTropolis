@@ -1,7 +1,7 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
 local broadcastEvent = require('code.server.event')
-local isWeapon =       require('code.mixin.is_weapon')
+local IsWeapon =       require('code.mixin.is_weapon')
 string.replace =       require('code.libs.replace')
 
 -- need to add designated_weapon var to items?  Or do this via mixins?
@@ -13,7 +13,7 @@ string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local Pistol = class('Pistol', ItemBase):include(isWeapon)
+local Pistol = class('Pistol', ItemBase):include(IsWeapon)
 
 Pistol.FULL_NAME = 'pistol'
 Pistol.WEIGHT = 6
@@ -33,7 +33,7 @@ Pistol.RELOAD_AMOUNT = 14
 
 -------------------------------------------------------------------
 
-local Magnum = class('Magnum', ItemBase):include(isWeapon)
+local Magnum = class('Magnum', ItemBase):include(IsWeapon)
 
 Magnum.FULL_NAME = 'magnum'
 Magnum.WEIGHT = 6
@@ -53,7 +53,7 @@ Magnum.RELOAD_AMOUNT = 6
 
 -------------------------------------------------------------------
 
-local Shotgun = class('Shotgun', ItemBase):include(isWeapon)
+local Shotgun = class('Shotgun', ItemBase):include(IsWeapon)
 
 Shotgun.FULL_NAME = 'shotgun'
 Shotgun.WEIGHT = 10
@@ -73,7 +73,7 @@ Shotgun.RELOAD_AMOUNT = 1
 
 -------------------------------------------------------------------
 
-local Rifle = class('Rifle', ItemBase):include(isWeapon)
+local Rifle = class('Rifle', ItemBase):include(IsWeapon)
 
 Rifle.FULL_NAME = 'assualt rifle'
 Rifle.WEIGHT = 15
@@ -93,7 +93,7 @@ Rifle.RELOAD_AMOUNT = 5
 
 -------------------------------------------------------------------
 
-local Flare = class('Flare', ItemBase):include(isWeapon)
+local Flare = class('Flare', ItemBase):include(IsWeapon)
 
 Flare.FULL_NAME = 'flare'
 Flare.WEIGHT = 5
@@ -160,7 +160,7 @@ end
 
 -------------------------------------------------------------------
 
-local Molotov = class('Molotov', ItemBase):include(isWeapon)
+local Molotov = class('Molotov', ItemBase):include(IsWeapon)
 
 Molotov.FULL_NAME = 'molotov cocktail'
 Molotov.WEIGHT = 5

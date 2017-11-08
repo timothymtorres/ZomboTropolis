@@ -2,7 +2,7 @@ local chanceToHit = require('code.mixin.chanceToHit')
 local entangle =    require('code.player.condition.entangle')
 local dice =        require('code.libs.dice')
 
-local isWeapon = {}
+local IsWeapon = {}
 
 --[[
   {
@@ -43,15 +43,15 @@ local isWeapon = {}
 
 -- WEAPON CONDITION MODIFIERS (blunt = damage range, blade = damage bonus, bullet = to-hit-accuracy, scorch = damage rolls)
 
-function isWeapon:isOrganic() return self.organic or false end
+function IsWeapon:isOrganic() return self.organic or false end
 
-function isWeapon:isHarmless() return self.no_damage or false end
+function IsWeapon:isHarmless() return self.no_damage or false end
 
-function isWeapon:isSkillRequired() return (self.skill_required and true) or false end
+function IsWeapon:isSkillRequired() return (self.skill_required and true) or false end
 
---function isWeapon:isCombustionSource() return self.combustion_source or false end
+--function IsWeapon:isCombustionSource() return self.combustion_source or false end
 
-function isWeapon:hasConditionEffect(player)
+function IsWeapon:hasConditionEffect(player)
   if self:getClassName() == 'claw' and not player.skills:check('grapple') then 
     return false -- if attacking with claws and missing grapple skill then no condition effect  
   elseif self:getClassName() == 'bite' and not player.skills:check('infection') then
@@ -61,21 +61,21 @@ function isWeapon:hasConditionEffect(player)
   return (self.condition_effect and true) or false 
 end
 
-function isWeapon:getSkillRequired() return self.skill_required end
+function IsWeapon:getSkillRequired() return self.skill_required end
 
---function isWeapon:getFuelAmount() return self.fuel_amount end
+--function IsWeapon:getFuelAmount() return self.fuel_amount end
 
-function isWeapon:getCrit() return self.critical end
+function IsWeapon:getCrit() return self.critical end
 
-function isWeapon:getStyle() return self.attack_style end
+function IsWeapon:getStyle() return self.attack_style end
   
-function isWeapon:getGroup() return self.group end 
+function IsWeapon:getGroup() return self.group end 
  
-function isWeapon:getDamageType() return self.damage_type end 
+function IsWeapon:getDamageType() return self.damage_type end 
 
-function isWeapon:getObjectDamage(type) return (self.object_damage and self.object_damage[type]) or false end
+function IsWeapon:getObjectDamage(type) return (self.object_damage and self.object_damage[type]) or false end
 
---function isWeapon:getWeaponID() return self.weapon_ID end
+--function IsWeapon:getWeaponID() return self.weapon_ID end
 
 local modifier = {
   power_claw =   0.15,                      -- to-hit% bonus (for equipment and buildings)    
@@ -87,7 +87,7 @@ local modifier = {
       scorch = {-2, -1, 0, 1},              -- dice               
 }
 
-function isWeapon:getAccuracy(player, target)
+function IsWeapon:getAccuracy(player, target)
   local accuracy_bonus
   
   if player:isMobType('zombie') then
@@ -110,7 +110,7 @@ function isWeapon:getAccuracy(player, target)
   return self.accuracy, accuracy_bonus
 end
 
-function isWeapon:getToHit(player, target) return chanceToHit(player, target, self) end
+function IsWeapon:getToHit(player, target) return chanceToHit(player, target, self) end
 
 local organic_modifier = {
   claw = {
@@ -127,7 +127,7 @@ local organic_modifier = {
   },
 }
 
-function isWeapon:getDice(player, condition)
+function IsWeapon:getDice(player, condition)
   local weapon_dice = dice:new(self.dice)
   local damage_type = self:getDamageType()
   
@@ -162,7 +162,7 @@ function isWeapon:getDice(player, condition)
   return tostring(weapon_dice) 
 end
 
-function isWeapon:getConditionEffect(player) --, condition)  maybe for later...?
+function IsWeapon:getConditionEffect(player) --, condition)  maybe for later...?
   local effect = self.condition_effect
   local duration, bonus_effect
   
@@ -180,4 +180,4 @@ function isWeapon:getConditionEffect(player) --, condition)  maybe for later...?
   return effect, duration, bonus_effect
 end
 
-return isWeapon
+return IsWeapon
