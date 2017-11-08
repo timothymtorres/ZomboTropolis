@@ -1,17 +1,20 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
 local broadcastEvent = require('code.server.event')
-string.replace =       require('code.libs.replace')
 local dice =           require('code.libs.dice')
+local IsMedical =      require('code.mixin.is_medical')
+string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local FAK = class('FAK', ItemBase)
+local FAK = class('FAK', ItemBase):include(IsMedical)
 
 FAK.FULL_NAME = 'first aid kit'
 FAK.WEIGHT = 8
 FAK.DURABILITY = 0
 FAK.CATEGORY = 'research'
+
+FAK.DICE = '1d5'
 
 function FAK.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -67,12 +70,14 @@ end
 
 -------------------------------------------------------------------
 
-local Bandage = class('Bandage', ItemBase)
+local Bandage = class('Bandage', ItemBase):include(IsMedical)
 
 Bandage.FULL_NAME = 'bandage'
 Bandage.WEIGHT = 3
 Bandage.DURABILITY = 0
 Bandage.CATEGORY = 'research'
+
+Bandage.DICE = '1d3'
 
 function Bandage.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -123,12 +128,14 @@ end
 
 -------------------------------------------------------------------
 
-local Syringe = class('Syringe', ItemBase)
+local Syringe = class('Syringe', ItemBase):include(IsMedical)
 
 Syringe.FULL_NAME = 'syringe'
 Syringe.WEIGHT = 5
 Syringe.DURABILITY = 0
 Syringe.CATEGORY = 'research'
+
+Syringe.ACCURACY = 0.99999 --0.05
 
 function Syringe.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -213,6 +220,8 @@ Vaccine.WEIGHT = 5
 Vaccine.DURABILITY = 0
 Vaccine.CATEGORY = 'research'
 
+Vaccine.DICE = '10d10'
+
 function Vaccine.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
@@ -254,7 +263,7 @@ end
 
 -------------------------------------------------------------------
 
-local Antidote = class('Antidote', ItemBase)
+local Antidote = class('Antidote', ItemBase) -- no need to make this IsMedical since this item does not utilize dice
 
 Antidote.FULL_NAME = 'antidote'
 Antidote.WEIGHT = 5
@@ -292,5 +301,13 @@ function Antidote.activate(player, condition, target)
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)   
 end
+
+--[[
+medical.herb = {}
+medical.herb.full_name = 'herb'
+medical.herb.group = {'healing', 'herb'}
+medical.herb.dice = '1d2'
+medical.herb.durability = 0
+--]]
 
 return {FAK, Bandage, Syringe, Vaccine, Antidote}
