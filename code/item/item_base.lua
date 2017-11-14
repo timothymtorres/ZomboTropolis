@@ -38,13 +38,13 @@ function ItemBase:isReloadable() return self.reload or false end
 function ItemBase:isSingleUse() return self.DURABILITY == 0 end
 
 function ItemBase:failDurabilityCheck(player)
-  local durability = self.DURABILITY
+  local durability
   if self.MASTER_SKILL then          -- skill mastery provides +20% durability bonus to items
     if self.DURABILITY > 1 then      -- but not to items that are limited usage (ie. only 4 use or single use)
       durability = player.skills:check(self.MASTER_SKILL) and math.floor(self.DURABILITY*1.2 + 0.5) or durability
     end
   end
-  return dice.roll(durability) <= 1
+  return dice.roll(durability or self.DURABILITY) <= 1
 end
 
 function ItemBase:updateCondition(num, player, inv_ID)
