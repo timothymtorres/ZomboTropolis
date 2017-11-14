@@ -33,7 +33,7 @@ function ItemBase:toBit() end
 function ItemBase.toClass(bits) end
 --]]
 
-function ItemBase:hasConditions() return not self.condition_omitted end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
+function ItemBase:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
 function ItemBase:isWeapon() return self.weapon or false end
 
@@ -43,13 +43,13 @@ function ItemBase:isArmor() return self.armor or false end
 
 function ItemBase:isReloadable() return self.reload or false end
 
-function ItemBase:isSingleUse() return self.durability == 0 end
+function ItemBase:isSingleUse() return self.DURABILITY == 0 end
 
 function ItemBase:failDurabilityCheck(player)
-  local durability = self.durability
-  if self.master_skill then          -- skill mastery provides +20% durability bonus to items
-    if self.durability > 1 then      -- but not to items that are limited usage (ie. only 4 use or single use)
-      durability = player.skills:check(self.master_skill) and math.floor(self.durability*1.2 + 0.5) or durability
+  local durability = self.DURABILITY
+  if self.MASTER_SKILL then          -- skill mastery provides +20% durability bonus to items
+    if self.DURABILITY > 1 then      -- but not to items that are limited usage (ie. only 4 use or single use)
+      durability = player.skills:check(self.MASTER_SKILL) and math.floor(self.DURABILITY*1.2 + 0.5) or durability
     end
   end
   return dice.roll(durability) <= 1
@@ -61,7 +61,7 @@ function ItemBase:updateCondition(num, player, inv_ID)
   return self.condition, num
 end
 
-function ItemBase:isConditionVisible(player) return player.skills:check(self:getClassCategory()) end
+function ItemBase:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
 
 function ItemBase:getClass() return self.class end
 
@@ -71,9 +71,9 @@ local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine
 
 function ItemBase:getConditionState() return condition_states[self.condition] or '???' end
 
-function ItemBase:getClassCategory() return self.class_category end
+function ItemBase:getClassCategory() return self.CLASS_CATEGORY end
 
-function ItemBase:getWeight() return self.weight end
+function ItemBase:getWeight() return self.WEIGHT end
 
 function ItemBase:__tostring() return tostring(self.class) end
 
