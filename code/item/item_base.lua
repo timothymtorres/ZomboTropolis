@@ -25,7 +25,7 @@ function ItemBase:initialize(condition_setting)
   end
 end
 
-function ItemBase:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
+--function ItemBase:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
 function ItemBase:isWeapon() return self.weapon or false end
 
