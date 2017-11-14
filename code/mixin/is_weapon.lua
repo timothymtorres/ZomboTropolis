@@ -43,11 +43,11 @@ local IsWeapon = {}
 
 -- WEAPON CONDITION MODIFIERS (blunt = damage range, blade = damage bonus, bullet = to-hit-accuracy, scorch = damage rolls)
 
-function IsWeapon:isOrganic() return self.organic or false end
+function IsWeapon:isOrganic() return self.weapon.ORGANIC or false end
 
-function IsWeapon:isHarmless() return self.no_damage or false end
+function IsWeapon:isHarmless() return self.weapon.NO_DAMAGE or false end
 
-function IsWeapon:isSkillRequired() return (self.skill_required and true) or false end
+--function IsWeapon:isSkillRequired() return (self.weapon.SKILL_REQUIRED and true) or false end
 
 --function IsWeapon:isCombustionSource() return self.combustion_source or false end
 
@@ -61,19 +61,19 @@ function IsWeapon:hasConditionEffect(player)
   return (self.condition_effect and true) or false 
 end
 
-function IsWeapon:getSkillRequired() return self.skill_required end
+--function IsWeapon:getSkillRequired() return self.weapon.SKILL_REQUIRED end
 
 --function IsWeapon:getFuelAmount() return self.fuel_amount end
 
-function IsWeapon:getCrit() return self.critical end
+function IsWeapon:getCrit() return self.weapon.CRITICAL end
 
-function IsWeapon:getStyle() return self.attack_style end
+function IsWeapon:getStyle() return self.weapon.ATTACK_STYLE end
   
-function IsWeapon:getGroup() return self.group end 
+function IsWeapon:getGroup() return self.weapon.GROUP end 
  
-function IsWeapon:getDamageType() return self.damage_type end 
+function IsWeapon:getDamageType() return self.weapon.DAMAGE_TYPE end 
 
-function IsWeapon:getObjectDamage(type) return (self.object_damage and self.object_damage[type]) or false end
+--function IsWeapon:getObjectDamage(type) return (self.object_damage and self.object_damage[type]) or false end
 
 --function IsWeapon:getWeaponID() return self.weapon_ID end
 
@@ -128,7 +128,7 @@ local organic_modifier = {
 }
 
 function IsWeapon:getDice(player, condition)
-  local weapon_dice = dice:new(self.dice)
+  local weapon_dice = dice:new(self.weapon.DICE)
   local damage_type = self:getDamageType()
   
   if not self:isOrganic() and not damage_type == 'bullet' and condition then
@@ -163,7 +163,7 @@ function IsWeapon:getDice(player, condition)
 end
 
 function IsWeapon:getConditionEffect(player) --, condition)  maybe for later...?
-  local effect = self.condition_effect
+  local effect = self.weapon.CONDITION_EFFECT
   local duration, bonus_effect
   
   if player:isMobType('human') then

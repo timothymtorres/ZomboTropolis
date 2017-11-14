@@ -18,15 +18,17 @@ local Pistol = class('Pistol', ItemBase):include(IsWeapon)
 Pistol.FULL_NAME = 'pistol'
 Pistol.WEIGHT = 6
 Pistol.DURABILITY = 40
-Pistol.MASTER_SKILL = 'light_guns'
 Pistol.CATEGORY = 'military'
 
-Pistol.ATTACK_STYLE = 'ranged'
-Pistol.DAMAGE_TYPE = 'bullet'
-Pistol.GROUP = {'guns', 'light_guns'}
-Pistol.DICE = '1d6+2'
-Pistol.ACCURACY = 0.30
-Pistol.CRITICAL = 0.05
+Pistol.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'bullet',
+  GROUP = {'guns', 'light_guns'},
+  DICE = '1d6+2',
+  ACCURACY = 0.30,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'light_guns',
+}
 
 Pistol.MAX_AMMO = 14
 Pistol.RELOAD_AMOUNT = 14
@@ -38,15 +40,17 @@ local Magnum = class('Magnum', ItemBase):include(IsWeapon)
 Magnum.FULL_NAME = 'magnum'
 Magnum.WEIGHT = 6
 Magnum.DURABILITY = 50
-Magnum.MASTER_SKILL = 'light_guns'
 Magnum.CATEGORY = 'military'
 
-Magnum.ATTACK_STYLE = 'ranged'
-Magnum.DAMAGE_TYPE = 'bullet'
-Magnum.GROUP = {'guns', 'light_guns'}
-Magnum.DICE = '1d9+4'
-Magnum.ACCURACY = 0.30
-Magnum.CRITICAL = 0.05
+Magnum.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'bullet',
+  GROUP = {'guns', 'light_guns'},
+  DICE = '1d9+4',
+  ACCURACY = 0.30,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'light_guns',
+}
 
 Magnum.MAX_AMMO = 6
 Magnum.RELOAD_AMOUNT = 6
@@ -58,15 +62,17 @@ local Shotgun = class('Shotgun', ItemBase):include(IsWeapon)
 Shotgun.FULL_NAME = 'shotgun'
 Shotgun.WEIGHT = 10
 Shotgun.DURABILITY = 40
-Shotgun.MASTER_SKILL = 'heavy_guns'
 Shotgun.CATEGORY = 'military'
 
-Shotgun.ATTACK_STYLE = 'ranged'
-Shotgun.DAMAGE_TYPE = 'bullet'
-Shotgun.GROUP = {'guns', 'heavy_guns'}
-Shotgun.DICE = '3d3++1'
-Shotgun.ACCURACY = 0.30
-Shotgun.CRITICAL = 0.05
+Shotgun.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'bullet',
+  GROUP = {'guns', 'heavy_guns'},
+  DICE = '3d3++1',
+  ACCURACY = 0.30,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'heavy_guns',
+}
 
 Shotgun.MAX_AMMO = 2
 Shotgun.RELOAD_AMOUNT = 1
@@ -78,15 +84,17 @@ local Rifle = class('Rifle', ItemBase):include(IsWeapon)
 Rifle.FULL_NAME = 'assualt rifle'
 Rifle.WEIGHT = 15
 Rifle.DURABILITY = 40
-Rifle.MASTER_SKILL = 'heavy_guns'
 Rifle.CATEGORY = 'military'
 
-Rifle.ATTACK_STYLE = 'ranged'
-Rifle.DAMAGE_TYPE = 'bullet'
-Rifle.GROUP = {'guns', 'heavy_guns'}
-Rifle.DICE = '(1d5)x3'
-Rifle.ACCURACY = 0.30
-Rifle.CRITICAL = 0.05
+Rifle.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'bullet',
+  GROUP = {'guns', 'heavy_guns'},
+  DICE = '(1d5)x3',
+  ACCURACY = 0.30,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'heavy_guns',
+}
 
 Rifle.MAX_AMMO = 5
 Rifle.RELOAD_AMOUNT = 5
@@ -98,17 +106,19 @@ local Flare = class('Flare', ItemBase):include(IsWeapon)
 Flare.FULL_NAME = 'flare'
 Flare.WEIGHT = 5
 Flare.DURABILITY = 0
-Flare.MASTER_SKILL = 'explosives'
 Flare.CATEGORY = 'military'
 
-Flare.ATTACK_STYLE = 'ranged'
-Flare.DAMAGE_TYPE = 'scorch'
-Flare.GROUP = {'guns'}  -- really?!
-Flare.DICE = '5d3'
-Flare.ACCURACY = 0.15
-Flare.CRITICAL = 0.30
---Flare.combustion_source = true
---Flare.fuel_amount = {'1d2+3', '1d3+5', '1d4+8', '1d5+10'}
+Flare.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'scorch',
+  GROUP = {'guns'},  -- really?!
+  DICE = '5d3',
+  ACCURACY = 0.15,
+  CRITICAL = 0.30,
+  MASTER_SKILL = 'explosives',
+  --combustion_source = true,
+  --fuel_amount = {'1d2+3', '1d3+5', '1d4+8', '1d5+10'},
+}
 
 function Flare.client_criteria(player)
   assert(player:isStaged('outside'), 'Player must be outside to use flare')  

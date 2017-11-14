@@ -20,12 +20,14 @@ Crowbar.WEIGHT = 8
 Crowbar.DURABILITY = 25
 Crowbar.CATEGORY = 'military'
 
-Crowbar.ATTACK_STYLE = 'melee'
-Crowbar.DAMAGE_TYPE = 'blunt'
-Crowbar.GROUP = {'brute', 'light_brute'}
-Crowbar.DICE = '1d4'
-Crowbar.ACCURACY = 0.25
-Crowbar.CRITICAL = 0.05
+Crowbar.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'blunt',
+  GROUP = {'brute', 'light_brute'},
+  DICE = '1d4',
+  ACCURACY = 0.25,
+  CRITICAL = 0.05,
+}
 
 -------------------------------------------------------------------
 
@@ -36,13 +38,15 @@ Bat.WEIGHT = 9
 Bat.DURABILITY = 15
 Bat.CATEGORY = 'military'
 
-Bat.ATTACK_STYLE = 'melee'
-Bat.DAMAGE_TYPE = 'blunt'
-Bat.GROUP = {'brute', 'light_brute'}
-Bat.DICE = '1d5'
-Bat.ACCURACY = 0.25
-Bat.CRITICAL = 0.05
-Bat.MASTER_SKILL = 'smacking'
+Bat.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'blunt',
+  GROUP = {'brute', 'light_brute'},
+  DICE = '1d5',
+  ACCURACY = 0.25,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'smacking',
+}
 
 -------------------------------------------------------------------
 
@@ -53,13 +57,15 @@ Sledge.WEIGHT = 25
 Sledge.DURABILITY = 20
 Sledge.CATEGORY = 'military'
 
-Sledge.ATTACK_STYLE = 'melee'
-Sledge.DAMAGE_TYPE = 'blunt'
-Sledge.GROUP = {'brute', 'heavy_brute'}
-Sledge.DICE = '1d8'
-Sledge.ACCURACY = 0.25
-Sledge.CRITICAL = 0.025
-Sledge.MASTER_SKILL = 'smashing'
+Sledge.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'blunt',
+  GROUP = {'brute', 'heavy_brute'},
+  DICE = '1d8',
+  ACCURACY = 0.25,
+  CRITICAL = 0.025,
+  MASTER_SKILL = 'smashing',
+}
 
 -------------------------------------------------------------------
 
@@ -76,13 +82,15 @@ Knife.WEIGHT = 3
 Knife.DURABILITY = 10
 Knife.CATEGORY = 'military'
 
-Knife.ATTACK_STYLE = 'melee'
-Knife.DAMAGE_TYPE = 'pierce'
-Knife.GROUP = {'blade', 'light_blade'}
-Knife.DICE = '1d2+1'
-Knife.ACCURACY = 0.25
-Knife.CRITICAL = 0.075
-Knife.MASTER_SKILL = 'slicing'
+Knife.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'pierce',
+  GROUP = {'blade', 'light_blade'},
+  DICE = '1d2+1',
+  ACCURACY = 0.25,
+  CRITICAL = 0.075,
+  MASTER_SKILL = 'slicing',
+}
 
 -------------------------------------------------------------------
 
@@ -93,13 +101,15 @@ Katanna.WEIGHT = 7
 Katanna.DURABILITY = 15
 Katanna.CATEGORY = 'military'
 
-Katanna.ATTACK_STYLE = 'melee'
-Katanna.DAMAGE_TYPE = 'pierce'
-Katanna.GROUP = {'blade', 'heavy_blade'}
-Katanna.DICE = '1d4+2'
-Katanna.ACCURACY = 0.25
-Katanna.CRITICAL = 0.10
-Katanna.MASTER_SKILL = 'chopping'
+Katanna.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'pierce',
+  GROUP = {'blade', 'heavy_blade'},
+  DICE = '1d4+2',
+  ACCURACY = 0.25,
+  CRITICAL = 0.10,
+  MASTER_SKILL = 'chopping',
+}
 
 --------------------------------------------------------------------
 
