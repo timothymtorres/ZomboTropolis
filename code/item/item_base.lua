@@ -35,7 +35,13 @@ function ItemBase.toClass(bits) end
 
 function ItemBase:hasConditions() return not self.condition_omitted end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
-function ItemBase:isWeapon() return self.designated_weapon or false end
+function ItemBase:isWeapon() return self.weapon or false end
+
+function ItemBase:isMedical() return self.medical or false end
+
+function ItemBase:isArmor() return self.armor or false end
+
+function ItemBase:isReloadable() return self.reload or false end
 
 function ItemBase:isSingleUse() return self.durability == 0 end
 
