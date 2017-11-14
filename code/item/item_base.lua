@@ -1,6 +1,4 @@
 local class = require('code.libs.middleclass')
-local bit = require('plugin.bit')
-local lshift, rshift, bor = bit.lshift, bit.rshift, bit.bor
 local dice = require('code.libs.dice')
 
 local ItemBase = class('ItemBase')
@@ -26,12 +24,6 @@ function ItemBase:initialize(condition_setting)
   else error('Item initialization has a malformed condition setting')
   end
 end
-
---[[  THESE ARE SERVER/DATABASE FUNCTIONS
-function ItemBase:toBit() end
-
-function ItemBase.toClass(bits) end
---]]
 
 function ItemBase:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
