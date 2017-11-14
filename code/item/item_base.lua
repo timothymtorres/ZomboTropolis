@@ -33,11 +33,6 @@ function ItemBase:toBit() end
 function ItemBase.toClass(bits) end
 --]]
 
-function ItemBase:canBeActivated(player)
-  local item_name = self:getClassName()
-  return (check[item_name] and pcall(check[item_name], player) ) or false
-end
-
 function ItemBase:hasConditions() return not self.condition_omitted end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
 function ItemBase:isWeapon() return self.designated_weapon or false end
@@ -62,19 +57,7 @@ end
 
 function ItemBase:isConditionVisible(player) return player.skills:check(self:getClassCategory()) end
 
-function ItemBase:getName() return self.name end
-
 function ItemBase:getClass() return self.class end
-
-function ItemBase:getClassName() return tostring(self.class) end
-
-function ItemBase:getFlag() 
-  local flag 
-  local ID = item[self:getClassName()].ID
-  flag = lshift(ID, 2)
-  flag = bor(flag, self.condition)
-  return flag
-end
 
 function ItemBase:getCondition() return self.condition end
 
@@ -86,32 +69,6 @@ function ItemBase:getClassCategory() return self.class_category end
 
 function ItemBase:getWeight() return self.weight end
 
-function ItemBase:getMasterSkill() return self.master_skill end
-
-function ItemBase:__tostring() return self:getClassName() end
-
-function ItemBase:dataToClass(...) -- this should be a middleclass function (fix later)
-  local combined_lists = {...}
-  for _, list in ipairs(combined_lists) do
-    for obj in pairs(list) do
-      self[obj] = class(obj, self)
-    --[[  
-      self[obj].initialize = function(self_subclass)
-        self.initialize(self_subclass)
-      end
-    --]]  
-      for field, data in pairs(list[obj]) do self[obj][field] = data end
-    end  
-  end
-  
-  local count = 0
-  for ID, obj in ipairs(order) do
-    self[ID] = self[obj]
-    self[obj].ID = ID
-  end
-end
-
--- turn our list of objs into item class
-ItemBase:dataToClass(e_list, g_list, j_list, m_list, w_list, a_list, arm_list)
+function ItemBase:__tostring() return tostring(self.class) end
 
 return ItemBase
