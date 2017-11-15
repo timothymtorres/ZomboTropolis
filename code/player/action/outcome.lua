@@ -1,12 +1,11 @@
 local map =               require('code.location.map.class')
 local combat =            require('code.player.combat')
 local entangle =          require('code.player.condition.entangle')
-local itemActivate =      require('code.item.use.activate')
 local equipmentActivate = require('code.location.building.equipment.operation.activate')
 local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
-local item =              require('code.item.class')
+local Item =              require('code.item.class')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 
@@ -156,18 +155,18 @@ function outcome.attack(player, target, weapon, inv_ID)
     end     
     
     if player:isMobType('human') and not weapon:isOrganic() then
-      local item_INST = player.inventory:lookup(inv_ID)
-      if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID)
+      local item = player.inventory:lookup(inv_ID)
+      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
+      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
       end
     end
   else
     if player:isMobType('zombie') and player.skills:check('grapple') then 
       player.condition.entangle:remove() 
     elseif player:isMobType('human') and weapon:getStyle() == 'ranged' then
-      local item_INST = player.inventory:lookup(inv_ID)
-      if item_INST:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item_INST:failDurabilityCheck(player) then item_INST:updateCondition(-1, player, inv_ID)
+      local item = player.inventory:lookup(inv_ID)
+      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
+      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
       end
     end
   end
@@ -216,17 +215,17 @@ end
 
 function outcome.search(player)
   local p_tile = player:getTile()
-  local item, flashlight
+  local flashlight_was_used
   
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
   local player_inside_unpowered_building = not p_tile:isPowered() and player:isStaged('inside')
   
-  item = p_tile:search(player, player:getStage(), player_has_flashlight)
+  local item = p_tile:search(player, player:getStage(), player_has_flashlight)
   
   if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
-    flashlight = true
-    local flashlight_INST = player.inventory:lookup(inv_ID)
-    if flashlight_INST:failDurabilityCheck(player) then flashlight_INST:updateCondition(-1, player, inv_ID) end
+    flashlight_was_used = true
+    local flashlight = player.inventory:lookup(inv_ID)
+    if flashlight:failDurabilityCheck(player) then flashlight:updateCondition(-1, player, inv_ID) end
   end
   
   if item then player.inventory:insert(item) end
@@ -237,7 +236,7 @@ function outcome.search(player)
    
   local msg = 'You search {with_flashlight} and find {item}.'
   local names = {
-    with_flashlight = flashlight and 'with a flashlight' or '',
+    with_flashlight = flashlight_was_used and 'with a flashlight' or '',
     item = item and 'a '..tostring(item) or 'nothing', 
   }
   msg = msg:replace(names)
@@ -246,7 +245,7 @@ function outcome.search(player)
   -------------   E V E N T   ----------------
   --------------------------------------------  
   
-  local event = {'search', player, item, flashlight}   
+  local event = {'search', player, item, flashlight_was_used}   
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
