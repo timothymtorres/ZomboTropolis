@@ -120,17 +120,17 @@ Flare.weapon = {
   --fuel_amount = {'1d2+3', '1d3+5', '1d4+8', '1d5+10'},
 }
 
-function Flare.client_criteria(player)
+function Flare:client_criteria(player)
   assert(player:isStaged('outside'), 'Player must be outside to use flare')  
 end
 
-function Flare.server_criteria(player)
+function Flare:server_criteria(player)
   assert(player:isStaged('outside'), 'Player must be outside to use flare')  
 end
 
 local flare_ranges = {6, 9, 12, 15}
 
-function Flare.activate(player, condition)
+function Flare:activate(player)
   local y, x = player:getPos()
   local tile = player:getTile()
   
@@ -163,7 +163,7 @@ function Flare.activate(player, condition)
   tile:broadcastEvent(msg, event, settings) 
   
   settings.stage = nil
-  settings.range = flare_ranges[condition]
+  settings.range = flare_ranges[self.condition]
   settings.exclude[tile] = true
   tile:broadcastEvent(msg, event, settings)     -- broadcast using a range and exclude the tile
 end

@@ -212,14 +212,14 @@ function criteria.default(action, player, ...)
   if criteria[action] then criteria[action](player, ...) end
 end
 
-function criteria.item(item, player, inv_ID, ...)
+function criteria.item(item_name, player, inv_ID, ...)
   assert(inv_ID, 'Missing inventory ID for item')
   assert(player.inventory:check(inv_ID), 'Item not in inventory')  
   
-  local item_INST = player.inventory:lookup(inv_ID)
-  assert(item == item_INST:getClassName(), "Item in inventory doesn't match one being used")
+  local item = player.inventory:lookup(inv_ID)
+  assert(item_name == item:getClassName(), "Item in inventory doesn't match one being used")
   
-  if itemCriteria[item] then itemCriteria[item](player, ...) end  
+  if item.server_criteria then item:server_criteria(player, ...) end
 end
 
 error_list[#error_list+1] = 'Missing inventory ID for item'

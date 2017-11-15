@@ -14,8 +14,8 @@ Book.DURABILITY = 0
 
 local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 
-function Book.activate(player, condition)
-  local xp_dice_str = book_xp_dice[condition-1]
+function Book:activate(player)
+  local xp_dice_str = book_xp_dice[self.condition]
   local book_dice = dice:new(xp_dice_str)
   local tile = player:getTile()
  
@@ -51,8 +51,8 @@ Bottle.FULL_NAME = 'bottle'
 Bottle.WEIGHT = 1
 Bottle.DURABILITY = 0
 
-function Bottle.activate(player, condition)
-  player:updateHP(1)
+function Bottle:activate(player)
+  player:updateHP(self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------

@@ -534,11 +534,10 @@ function outcome.default(action, player, ...)
 end
 
 function outcome.item(item_name, player, inv_ID, target)
-  local item_INST = player.inventory:lookup(inv_ID)
-  local item_condition = item_INST:getCondition()
-  local result = itemActivate[item_name](player, item_condition, target) 
+  local item = player.inventory:lookup(inv_ID)
+  local result = item:activate(player, target) 
   
-  if item_INST:isSingleUse() and not item_name == 'syringe' and not item_name == 'barricade' then 
+  if item:isSingleUse() and not item_name == 'syringe' and not item_name == 'barricade' then 
     player.inventory:remove(inv_ID) 
   elseif item_name == 'syringe' then -- syringes are a special case
     local antidote_was_created, syringe_was_salvaged = result[2], result[3]
@@ -546,12 +545,12 @@ function outcome.item(item_name, player, inv_ID, target)
   elseif item_name == 'barricade' then -- barricades are also a special case
     local did_zombies_interfere = result[1]
     if not did_zombies_interfere then player.inventory:remove(inv_ID) end
-  elseif item_INST:failDurabilityCheck(player) then 
-    local condition = item_INST:updateCondition(-1, player, inv_ID)
+  elseif item:failDurabilityCheck(player) then 
+    local condition = item:updateCondition(-1, player, inv_ID)
     if condition <= 0 then -- item is destroyed
-      player.log:append('Your '..tostring(item_INST)..' is destroyed!')
-    elseif item_INST:isConditionVisible(player) then
-      player.log:append('Your '..tostring(item_INST)..' degrades to a '..item_INST:getConditionState()..' state.')  
+      player.log:append('Your '..tostring(item)..' is destroyed!')
+    elseif item:isConditionVisible(player) then
+      player.log:append('Your '..tostring(item)..' degrades to a '..item:getConditionState()..' state.')  
     end    
   end
   return result

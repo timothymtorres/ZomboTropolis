@@ -16,14 +16,14 @@ FAK.CATEGORY = 'research'
 
 FAK.medical = {DICE = '1d5'}
 
-function FAK.server_criteria(player, target)
+function FAK:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   assert(target:isMobType('human'), 'Target must be a human')     
 end
 
-function FAK.activate(player, condition, target)
+function FAK:activate(player, target)
   local FAK_dice = dice:new(medical.FAK:getDice())
   local tile = player:getTile()  
  
@@ -79,14 +79,14 @@ Bandage.CATEGORY = 'research'
 
 Bandage.medical = {DICE = '1d3'}
 
-function Bandage.server_criteria(player, target)
+function Bandage:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   assert(target:isMobType('human'), 'Target must be a human')    
 end
 
-function Bandage.activate(player, condition, target)
+function Bandage:activate(player, target)
   local bandage_dice = dice:new(medical.bandage:getDice())  
   local tile = player:getTile()
  
@@ -137,13 +137,13 @@ Syringe.CATEGORY = 'research'
 
 Syringe.medical = {Syringe.ACCURACY = 0.99999} --0.05
 
-function Syringe.client_criteria(player)
+function Syringe:client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
   local zombie_n = p_tile:countPlayers('zombie', setting) 
   assert(zombie_n > 0, 'No zombies are nearby')  
 end
 
-function Syringe.server_criteria(player, target)
+function Syringe:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('zombie'), 'Target must be a zombie')
@@ -153,7 +153,7 @@ local syringe_hp_ranges = {3, 6, 9, 12}
 local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe_adv = 'intact'}
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
-function Syringe.activate(player, condition, target)
+function Syringe:activate(player, target)
   local syringe = medical.syringe
   local inject_chance = syringe:getAccuracy()
   if player.skills:check('syringe') then
@@ -164,7 +164,7 @@ function Syringe.activate(player, condition, target)
   end
   
   local inject_success = inject_chance >= math.random()
-  local target_weak_enough = syringe_hp_ranges[condition] >= target:getStat('hp') 
+  local target_weak_enough = syringe_hp_ranges[self.condition] >= target:getStat('hp') 
   local syringe_salvage_successful
 
   if inject_success and target_weak_enough then  -- the syringe will create a antidote
@@ -222,17 +222,17 @@ Vaccine.CATEGORY = 'research'
 
 Vaccine.medical = {DICE = '10d10'}
 
-function Vaccine.server_criteria(player, target)
+function Vaccine:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('human'), 'Target must be a human')    
 end
 
-function Vaccine.activate(player, condition, target)
+function Vaccine:activate(player, target)
   local antibodies = medical.antibodies
   local antibodies_dice = dice:new(medical.antibodies:getDice())
   
-  antibodies_dice = antibodies_dice + (condition*100)
+  antibodies_dice = antibodies_dice + (self.condition*100)
   --if player.skills:check('') then        Should we utilize a skill that affects antibodies?
   
   local immunity_gained = antibodies_dice:roll()
@@ -270,13 +270,13 @@ Antidote.WEIGHT = 5
 Antidote.DURABILITY = 1
 Antidote.CATEGORY = 'research'
 
-function Antidote.server_criteria(player, target)
+function Antidote:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('human'), 'Target must be a human')  
 end
 
-function Antidote.activate(player, condition, target)
+function Antidote:activate(player, target)
   target.condition.infection:remove()
   
   --------------------------------------------

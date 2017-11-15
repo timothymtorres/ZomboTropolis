@@ -9,8 +9,8 @@ Leather.FULL_NAME = 'leather jacket'
 Leather.DURABILITY = 0
 Leather.CATEGORY = 'military'
 
-function Leather.activate(player, condition)
-  player.armor:equip('leather', condition)
+function Leather:activate(player)
+  player.armor:equip('leather', self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -39,8 +39,8 @@ Firesuit.FULL_NAME = 'firesuit'
 Firesuit.DURABILITY = 0
 Firesuit.CATEGORY = 'military'
 
-function Firesuit.activate(player, condition)
-  player.armor:equip('firesuit', condition)
+function Firesuit:activate(player)
+  player.armor:equip('firesuit', self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------

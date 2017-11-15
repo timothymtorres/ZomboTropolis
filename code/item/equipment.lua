@@ -11,7 +11,7 @@ Generator.WEIGHT = 25
 Generator.DURABILITY = 0
 Generator.CATEGORY = 'engineering'
 
-function Generator.client_criteria(player)
+function Generator:client_criteria(player)
   local p_tile = player:getTile()
   assert(player:isStaged('inside'), 'Must be inside building to install generator')
   assert(not p_tile.generator:isPresent(), 'There is no room for a second generator') 
@@ -19,9 +19,9 @@ end
 
 Generator.server_criteria = Generator.client_criteria
 
-function Generator.activate(player, condition)
+function Generator:activate(player)
   local building_tile = player:getTile()
-  building_tile:insert('generator', condition)
+  building_tile:insert('generator', self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -53,7 +53,7 @@ Transmitter.WEIGHT = 25
 Transmitter.DURABILITY = 0
 Transmitter.CATEGORY = 'engineering'
 
-function Transmitter.client_criteria(player)
+function Transmitter:client_criteria(player)
   local p_tile = player:getTile()  
   assert(player:isStaged('inside'), 'Must be inside building to install transmitter')
   assert(not p_tile.transmitter:isPresent(), 'There is no room for a second transmitter')
@@ -61,9 +61,9 @@ end
 
 Transmitter.server_criteria = Transmitter.client_criteria
 
-function Transmitter.activate(player, condition)
+function Transmitter:activate(player)
   local building_tile = player:getTile()
-  building_tile:insert('transmitter', condition)
+  building_tile:insert('transmitter', self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -95,7 +95,7 @@ Terminal.WEIGHT = 25
 Terminal.DURABILITY = 0
 Terminal.CATEGORY = 'engineering'
 
-function Terminal.client_criteria(player)
+function Terminal:client_criteria(player)
   local p_tile = player:getTile()
   assert(player:isStaged('inside'), 'Must be inside building to install terminal')
   assert(not p_tile.terminal:isPresent(), 'There is no room for a second terminal')
@@ -103,9 +103,9 @@ end
 
 Terminal.server_criteria = Terminal.client_criteria
 
-function Terminal.activate(player, condition)
+function Terminal:activate(player)
   local building_tile = player:getTile()
-  building_tile:insert('terminal', condition)
+  building_tile:insert('terminal', self.condition)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -137,7 +137,7 @@ Fuel.WEIGHT = 10
 Fuel.DURABILITY = 0
 Fuel.CATEGORY = 'engineering'
 
-function Fuel.client_criteria(player)
+function Fuel:client_criteria(player)
   local p_tile = player:getTile()
   assert(player:isStaged('inside'), 'Must be inside building to refuel')
   assert(p_tile.generator:isPresent(), 'Missing nearby generator to refuel')
@@ -145,7 +145,7 @@ end
 
 Fuel.server_criteria = Fuel.client_criteria
 
-function Fuel.activate(player, condition)
+function Fuel:activate(player)
   local building_tile = player:getTile()
   building_tile.generator:refuel()
   
@@ -179,7 +179,7 @@ Barricade.WEIGHT = 7
 Barricade.DURABILITY = 0
 Barricade.CATEGORY = 'engineering'
 
-function Barricade.client_criteria(player)
+function Barricade:client_criteria(player)
   local p_tile = player:getTile()
   assert(player:isStaged('inside'), 'Must be inside building to barricade')
   assert(p_tile.barricade:roomForFortification(), 'There is no room available for fortifications')
@@ -189,11 +189,11 @@ end
 
 Barricade.server_criteria = Barricade.client_criteria
 
-function Barricade.activate(player, condition)
+function Barricade:activate(player)
   local building_tile = player:getTile()
   local did_zombies_interfere = building_tile.barricade:didZombiesIntervene(player)
   
-  if not did_zombies_interfere then building_tile.barricade:fortify(player, condition) end
+  if not did_zombies_interfere then building_tile.barricade:fortify(player, self.condition) end
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -224,7 +224,7 @@ Toolbox.DURABILITY = 10
 Toolbox.CATEGORY = 'engineering'
 --Toolbox.MASTER_SKILL = 'repair_adv'
 
-function Toolbox.client_criteria(player)
+function Toolbox:client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to repair')
   local p_tile = player:getTile()
   local can_repair_building = p_tile.integrity:canModify(player)
@@ -235,8 +235,8 @@ Toolbox.server_criteria = Toolbox.client_criteria
 
 local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
 
-function Toolbox.activate(player, condition)
-  local repair_dice = dice:new(toolbox_dice[condition])
+function Toolbox:activate(player)
+  local repair_dice = dice:new(toolbox_dice[self.condition])
   if player.skills:check('repair') then repair_dice = repair_dice / 1 end
   if player.skills:check('repair_adv') then repair_dice = repair_dice ^ 3 end
   
