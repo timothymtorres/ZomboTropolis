@@ -24,6 +24,8 @@ local Item = {
   Leather, Firesuit,
 }
 
-for Class in ipairs(Item) do Item[Class.name] = Class end
+for _, Class in ipairs(Item) do 
+  Item[Class.name] = Class 
+end
 
 return Item
