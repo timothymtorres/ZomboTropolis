@@ -18,7 +18,7 @@ print()
 print()
 
 local map = require('code.location.map.class')
-local item = require('code.item.class')  -- for testing item generation in main.lua
+local Item = require('code.item.item')  -- for testing item generation in main.lua
 player = require('code.player.class')
 table.copy = require('code.libs.copy')
 table.inspect = require('code.libs.inspect')
@@ -58,16 +58,16 @@ end
 
 main_player:updateStat('hp', -49)
 
-local toolbox_INST = item.toolbox:new(4)
+local toolbox_INST = Item.toolbox:new(4)
 alt_player.inventory:insert(toolbox_INST)
 
 for i=1, 10 do
-  local barricade_INST = item.barricade:new('intact')
+  local barricade_INST = Item.barricade:new('intact')
   alt_player.inventory:insert(barricade_INST)
 end
 
 --[[
-local firesuit_INST = item.firesuit:new('ruined')
+local firesuit_INST = Item.firesuit:new('ruined')
 alt_player.inventory:insert(firesuit_INST)
 alt_player.armor:equip('firesuit', firesuit_INST:getCondition())
 
@@ -76,7 +76,7 @@ print('SYRINGE_ISNT IS:', syringe_INST, syringe_INST:getCondition())
 print('---------')
 
 alt_player:takeAction('syringe', 1, main_player)
---Outcome.item('syringe', alt_player, 1, main_player)
+--Outcome.Item('syringe', alt_player, 1, main_player)
 --]]
 
 --[[
@@ -94,7 +94,7 @@ dummy:updateStat('xp', 1000)
 dummy.skills:buy(dummy, 'hive')
 dummy.skills:buy(dummy, 'stinger')
 
-local weapon = require('code.item.weapon.class')
+local weapon = require('code.Item.weapon.class')
 local sting = weapon.sting:new()
 
 for i=1, 3 do
