@@ -1,10 +1,4 @@
 local map =         require('code.location.map.class')
---[[  Not needed?!
-local lookupError = require('code.error.search')
-local lookupWeapon= require('code.item.weapon.search')
-local lookupItem = require('code.item.search')
---]]
-local itemCriteria = require('code.item.use.criteria')
 local equipmentCriteria = require('code.location.building.equipment.operation.criteria')
 local skillCriteria = require('code.player.skills.criteria')
 local error_list = require('code.error.list')
