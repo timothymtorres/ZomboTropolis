@@ -53,16 +53,15 @@ function outcome.move(player, dir)
   else  -- player is outside
     if player:isMobType('human') then
       local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement
-        
-        -- need to include code here to durability check GPS and degrade condition
-        
+      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
         local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
         local GPS_usage = GPS_chance >= math.random()
         
         -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
         if GPS_usage then player:updateStat('ap', 1) end
-        --GPS_usage = outcome.item('GPS', player, inv_ID) -- Item.GPS:activate(GPS, player, inv_ID)
+        
+        local GPS = player.inventory:lookup(inv_ID)
+        if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
       end
     end
     
