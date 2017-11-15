@@ -135,7 +135,7 @@ Syringe.WEIGHT = 5
 Syringe.DURABILITY = 0
 Syringe.CATEGORY = 'research'
 
-Syringe.medical = {Syringe.ACCURACY = 0.99999} --0.05
+Syringe.medical = {ACCURACY = 0.99999} --0.05
 
 function Syringe:client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
