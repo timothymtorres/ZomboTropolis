@@ -16,6 +16,8 @@ Fist.weapon = {
   MASTER_SKILL = 'martial_arts_adv',
 }
 
+function Fist:__tostring() return tostring(self.class) end
+
 -------------------------------------------------------------------
 
 local Claw = class('Claw'):include(IsWeapon)
@@ -33,6 +35,8 @@ Claw.weapon = {
   CONDITION_EFFECT = 'entangle',
   MASTER_SKILL = 'claw_adv',
 }
+
+function Claw:__tostring() return tostring(self.class) end
 
 -------------------------------------------------------------------
 
@@ -52,6 +56,8 @@ Bite.weapon = {
   MASTER_SKILL = 'bite_adv',
 }
 
+function Bite:__tostring() return tostring(self.class) end
+
 -------------------------------------------------------------------
 
 --[[  Moved to skill activation
@@ -66,4 +72,4 @@ weapon.acid.CRITICAL = 0.30
 weapon.acid.ORGANIC = 'zombie'
 --]]
 
-return {}
+return {Fist, Claw, Bite}
