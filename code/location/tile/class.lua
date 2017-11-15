@@ -1,7 +1,7 @@
 local class =           require('code.libs.middleclass')
 local t_list =          require('code.location.tile.list')
 local b_list =          require('code.location.building.list')
-local item =            require('code.item.class')
+local Item =            require('code.item.item')
 local broadcastEvent =  require('code.server.event')
 
 local tile = class('tile')
@@ -172,9 +172,9 @@ end
 local function select_item(list)
   local chance, total = math.random(), 0
 
-  for item, odds in pairs(list) do
+  for item_str, odds in pairs(list) do
     total = total + odds
-    if chance <= total then return item end
+    if chance <= total then return item_str end
   end
 end
 
@@ -186,13 +186,11 @@ function tile:search(player, setting, was_flashlight_used)
   
   if not search_success then return false end
 
-  local items = self.item_chance[setting] 
-  local item_type = select_item(items)
-print('tile:search - ', item_type)
-print('integrity_state - ', integrity_state)
+  local tile_item_list = self.item_chance[setting] 
+  local selected_item_type = select_item(tile_item_list)
   
-  local item_INST = item[item_type]:new(integrity_state) 
-  return item_INST
+  local item = Item[selected_item_type]:new(integrity_state) 
+  return item
 end
 
 function tile:__tostring() return self:getName()..' '..self:getClassName() end
