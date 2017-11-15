@@ -19,9 +19,9 @@ local IsMedical = {}
   } 
 --]]
 
-function IsMedical:getAccuracy() return self.accuracy end
+function IsMedical:getAccuracy() return self.medical.ACCURACY end
 
-function IsMedical:getDice() return self.dice end
+function IsMedical:getDice() return self.medical.DICE end
   
 --function IsMedical:getGroup() return self.group end 
   

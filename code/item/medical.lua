@@ -14,7 +14,7 @@ FAK.WEIGHT = 8
 FAK.DURABILITY = 0
 FAK.CATEGORY = 'research'
 
-FAK.DICE = '1d5'
+FAK.medical = {DICE = '1d5'}
 
 function FAK.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -77,7 +77,7 @@ Bandage.WEIGHT = 3
 Bandage.DURABILITY = 0
 Bandage.CATEGORY = 'research'
 
-Bandage.DICE = '1d3'
+Bandage.medical = {DICE = '1d3'}
 
 function Bandage.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -135,7 +135,7 @@ Syringe.WEIGHT = 5
 Syringe.DURABILITY = 0
 Syringe.CATEGORY = 'research'
 
-Syringe.ACCURACY = 0.99999 --0.05
+Syringe.medical = {Syringe.ACCURACY = 0.99999} --0.05
 
 function Syringe.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -220,7 +220,7 @@ Vaccine.WEIGHT = 5
 Vaccine.DURABILITY = 0
 Vaccine.CATEGORY = 'research'
 
-Vaccine.DICE = '10d10'
+Vaccine.medical = {DICE = '10d10'}
 
 function Vaccine.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
