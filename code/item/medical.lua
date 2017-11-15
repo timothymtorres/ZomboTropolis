@@ -18,7 +18,7 @@ FAK.medical = {DICE = '1d5'}
 
 function FAK.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
-  assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
+  assert(player:isSameLocation(target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   assert(target:isMobType('human'), 'Target must be a human')     
 end
@@ -81,7 +81,7 @@ Bandage.medical = {DICE = '1d3'}
 
 function Bandage.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
-  assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
+  assert(player:isSameLocation(target), 'Target is out of range')
   assert(not target:isMaxHP(), 'Target has full health')
   assert(target:isMobType('human'), 'Target must be a human')    
 end
@@ -145,7 +145,7 @@ end
 
 function Syringe.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
-  assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
+  assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('zombie'), 'Target must be a zombie')
 end
 
@@ -224,7 +224,7 @@ Vaccine.medical = {DICE = '10d10'}
 
 function Vaccine.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
-  assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
+  assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('human'), 'Target must be a human')    
 end
 
@@ -272,7 +272,7 @@ Antidote.CATEGORY = 'research'
 
 function Antidote.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
-  assert((player:getStage() == target:getStage()) and (player:getTile() == target:getTile()), 'Target is out of range')
+  assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('human'), 'Target must be a human')  
 end
 

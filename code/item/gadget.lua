@@ -60,7 +60,7 @@ end
 function Sampler.server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')  
   assert(target:isZombie(), 'Target must be a zombie')
-  assert(targetInRange(player, target), 'Target is out of range')  
+  assert(player:isSameLocation(target), 'Target is out of range')  
 end
 
 function Sampler.activate(player, condition, target) end
