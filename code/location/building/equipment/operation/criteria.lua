@@ -1,5 +1,3 @@
-local error_list = require('code.error.list')
-
 local criteria = {}
 
 --[[

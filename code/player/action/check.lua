@@ -1,5 +1,4 @@
 local map =         require('code.location.map.class')
-local itemCheck = require('code.item.use.check')
 local equipmentCheck = require('code.location.building.equipment.operation.check')
 local skillCheck = require('code.player.skills.check')
 local enzyme_list = require('code.player.enzyme_list')
@@ -76,7 +75,8 @@ function check.default(player, action)
   if check[action] then check[action](player) end
 end
 
-function check.item(player, item_ID) --, target, inv_ID)
+--[[ Pretty sure this entire function is not needed and REAAAAALLY OLD CODE!
+function check.item(player, inv_ID) --item_ID) --, target, inv_ID)
 --print(player, item_name, target, inv_ID)
   assert(inv_ID, 'Missing inventory ID for item')
   assert(player.inventory:check(inv_ID), 'Item not in inventory')  
@@ -88,6 +88,7 @@ function check.item(player, item_ID) --, target, inv_ID)
   local item_name = item:getClassName()
   if itemCheck[item_name] then itemCheck[item_name](player) end  
 end
+--]]
 
 function check.equipment(player, equipment_name) -- operation)
   local p_tile = player:getTile()  

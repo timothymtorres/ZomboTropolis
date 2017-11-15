@@ -1,7 +1,6 @@
 local map =         require('code.location.map.class')
 local equipmentCriteria = require('code.location.building.equipment.operation.criteria')
 local skillCriteria = require('code.player.skills.criteria')
-local error_list = require('code.error.list')
 local enzyme_list = require('code.player.enzyme_list')
 
 local criteria = {}
@@ -36,9 +35,6 @@ function criteria.move(player, dir)
   local outside_map = dir_y > #map or dir_y < 1 or dir_x > #map or dir_x < 1
   assert(not outside_map, 'Cannot move outside the quarantine')
 end
-
-error_list[#error_list+1] = 'Cannot move without direction'
-error_list[#error_list+1] = 'Cannot move outside the quarantine'
 
 function criteria.attack(player, target, weapon, inv_ID)
 -- Weapon/Inventory checks [start]
@@ -82,29 +78,6 @@ function criteria.attack(player, target, weapon, inv_ID)
   end
 end
 
---Organic Weapon
-error_list[#error_list+1] = 'Cannot use this attack'
-error_list[#error_list+1] = "Organic weapon shouldn't be in inventory"
-error_list[#error_list+1] = 'Cannot use this attack without required skill'
---Inventory Weapon
-error_list[#error_list+1] = 'Must be human to attack with items'
-error_list[#error_list+1] = 'Weapon not selected properly'
-error_list[#error_list+1] = 'Weapon missing from inventory'
-error_list[#error_list+1] = "Inventory item doesn't match weapon"
---Player Target
-error_list[#error_list+1] = 'Target has been killed'
-error_list[#error_list+1] = 'Target has moved out of range'
---Equipment Target
-error_list[#error_list+1] = 'No building present to target equipment for attack'
-error_list[#error_list+1] = 'Player must be inside building to attack equipment'
-error_list[#error_list+1] = 'Selected weapon unable to attack equipment'
-error_list[#error_list+1] = 'Equipment target does not exist in building'
---Building Target
-error_list[#error_list+1] = 'No building near player to attack'
-error_list[#error_list+1] = 'Selected weapon cannot attack barricade'
-error_list[#error_list+1] = 'No barricade or door on building to attack'
-
-
 function criteria.search(player) end
 
 function criteria.speak(player, message) --, target) 
@@ -126,11 +99,6 @@ function criteria.speak(player, message) --, target)
 --]]  
 end
 
-error_list[#error_list+1] = 'No players nearby to communicate'
-error_list[#error_list+1] = 'Must have a message to speak'
-error_list[#error_list+1] = 'Message must be a string'
-error_list[#error_list+1] = 'Message length too long'
-
 function criteria.reinforce(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to reinforce')
@@ -139,12 +107,6 @@ function criteria.reinforce(player)
   assert(p_tile.barricade:canReinforce(), 'No room for reinforcements in building')
   assert(player.skills:check('reinforce'), 'Must have skill to reinforce building')  
 end
-
-error_list[#error_list+1] = 'No building nearby to reinforce'
-error_list[#error_list+1] = 'Player must be inside building to reinforce'
-error_list[#error_list+1] = 'Unable to reinforce a ruined building'
-error_list[#error_list+1] = 'No room for reinforcements in building'
-error_list[#error_list+1] = 'Must have skill to reinforce building'
 
 function criteria.feed(player)
   local p_tile, p_stage = player:getTile(), player:getStage()
@@ -162,17 +124,11 @@ function criteria.feed(player)
   assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
-error_list[#error_list+1] = 'No available corpses to eat'
-error_list[#error_list+1] = 'All corpses have been eaten'
-
 function criteria.enter(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to enter')
   assert(player:isStaged('outside'), 'Player must be outside building to enter')
 end
-
-error_list[#error_list+1] = 'No building nearby to enter'
-error_list[#error_list+1] = 'Player must be outside building to enter'
 
 function criteria.exit(player)
   local p_tile = player:getTile()
@@ -180,14 +136,9 @@ function criteria.exit(player)
   assert(player:isStaged('inside'), 'Player must be inside building to exit')
 end
 
-error_list[#error_list+1] = 'No building nearby to exit'
-error_list[#error_list+1] = 'Player must be inside building to exit'
-
 function criteria.respawn(player)
   assert(not player:isStanding(), 'You are already standing')
 end
-
-error_list[#error_list+1] = 'You are already standing'
 
 function criteria.ransack(player)
   local p_tile = player:getTile()
@@ -197,10 +148,6 @@ function criteria.ransack(player)
   local can_ransack_building = p_tile.integrity:canModify(player)
   assert(can_ransack_building, 'Unable to ransack building in current state')
 end
-
-error_list[#error_list+1] = 'No building nearby to ransack'
-error_list[#error_list+1] = 'Player must be inside building to ransack'
-error_list[#error_list+1] = 'Unable to ransack building in current state'
 
 function criteria.default(action, player, ...)
   if criteria[action] then criteria[action](player, ...) end
@@ -216,10 +163,6 @@ function criteria.item(item_name, player, inv_ID, ...)
   if item.server_criteria then item:server_criteria(player, ...) end
 end
 
-error_list[#error_list+1] = 'Missing inventory ID for item'
-error_list[#error_list+1] = 'Item not in inventory'
-error_list[#error_list+1] = "Item in inventory doesn't match one being used"
-
 function criteria.equipment(equipment, player, operation)
   assert(operation, 'Missing equipment operation for action')
   
@@ -232,11 +175,6 @@ function criteria.equipment(equipment, player, operation)
   if equipmentCriteria[equipment] then equipmentCriteria[equipment](player, operation) end  
 end
 
-error_list[#error_list+1] = 'Missing equipment operation for action'
-error_list[#error_list+1] = 'No building near player to use equipment'
-error_list[#error_list+1] = 'Player is not inside building to use equipment'
-error_list[#error_list+1] = 'Building must be powered to use equipment'
-
 function criteria.skill(skill, player, ...)
 --for k,v in pairs(player) do print(k,v) end
   assert(player.skills:check(skill), 'Must have required skill to use ability')
@@ -246,8 +184,5 @@ function criteria.skill(skill, player, ...)
   end  
   if skillCriteria[skill] then skillCriteria[skill](player, ...) end 
 end
-
-error_list[#error_list+1] = 'Must have required skill to use ability'
-error_list[#error_list+1] = 'Not enough enzyme points to use skill'
 
 return criteria
