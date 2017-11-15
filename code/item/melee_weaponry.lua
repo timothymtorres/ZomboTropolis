@@ -27,6 +27,7 @@ Crowbar.weapon = {
   DICE = '1d4',
   ACCURACY = 0.25,
   CRITICAL = 0.05,
+  MASTER_SKILL = 'smacking',
 }
 
 -------------------------------------------------------------------
