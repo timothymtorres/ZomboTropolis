@@ -39,9 +39,12 @@ function ItemBase:isSingleUse() return self.DURABILITY == 0 end
 
 function ItemBase:failDurabilityCheck(player)
   local durability
-  if self.MASTER_SKILL then          -- skill mastery provides +20% durability bonus to items
+  
+  -- need to add a Item.DURABILITY_SKILL for items that are not weapons and check them here with weapons
+  
+  if self.weapon.MASTER_SKILL then   -- skill mastery provides +20% durability bonus to items
     if self.DURABILITY > 1 then      -- but not to items that are limited usage (ie. only 4 use or single use)
-      durability = player.skills:check(self.MASTER_SKILL) and math.floor(self.DURABILITY*1.2 + 0.5) or durability
+      durability = player.skills:check(self.weapon.MASTER_SKILL) and math.floor(self.DURABILITY*1.2 + 0.5) or durability
     end
   end
   return dice.roll(durability or self.DURABILITY) <= 1
