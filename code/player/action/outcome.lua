@@ -5,7 +5,7 @@ local equipmentActivate = require('code.location.building.equipment.operation.ac
 local skillActivate =     require('code.player.skills.activate')
 local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
-local Item =              require('code.item.class')
+local Item =              require('code.item.item')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 
