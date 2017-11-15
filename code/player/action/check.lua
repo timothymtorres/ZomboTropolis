@@ -75,21 +75,6 @@ function check.default(player, action)
   if check[action] then check[action](player) end
 end
 
---[[ Pretty sure this entire function is not needed and REAAAAALLY OLD CODE!
-function check.item(player, inv_ID) --item_ID) --, target, inv_ID)
---print(player, item_name, target, inv_ID)
-  assert(inv_ID, 'Missing inventory ID for item')
-  assert(player.inventory:check(inv_ID), 'Item not in inventory')  
-  
-  local item, inv_item = lookupItem(item_ID), player.inventory:lookup(inv_ID)
---print(item, inv_item) 
-  assert(inv_item:getID() == item:getID(), "Item in inventory doesn't match one being used")
-  
-  local item_name = item:getClassName()
-  if itemCheck[item_name] then itemCheck[item_name](player) end  
-end
---]]
-
 function check.equipment(player, equipment_name) -- operation)
   local p_tile = player:getTile()  
   assert(p_tile:isBuilding(), 'No building near player')
