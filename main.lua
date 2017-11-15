@@ -58,12 +58,12 @@ end
 
 main_player:updateStat('hp', -49)
 
-local toolbox_INST = Item.toolbox:new(4)
-alt_player.inventory:insert(toolbox_INST)
+local toolbox = Item.Toolbox:new(4)
+alt_player.inventory:insert(toolbox)
 
 for i=1, 10 do
-  local barricade_INST = Item.barricade:new('intact')
-  alt_player.inventory:insert(barricade_INST)
+  local barricade = Item.Barricade:new('intact')
+  alt_player.inventory:insert(barricade)
 end
 
 --[[
