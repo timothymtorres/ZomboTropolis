@@ -11,7 +11,7 @@ local condition =               require('code.player.condition.class')
 local carcass =                 require('code.player.carcass')
 local organic_armor =           require('code.player.armor.organic_class')
 local item_armor =              require('code.player.armor.item_class')
-local weapon =                  require('code.item.weapon.class')
+local Fist, Claw, Bite = unpack(require('code.player.organic_weaponry'))
 local map =                     require('code.location.map.class')
 local broadcastEvent =          require('code.server.event')
 
@@ -179,17 +179,15 @@ function player:getWeapons()
   local list = {}
   
   if self:isMobType('human') then
-    for inv_ID, item_INST in ipairs(self.inventory) do
-      if item_INST:isWeapon() then
-        local item_name, condition = item_INST:getClassName(), item_INST:getCondition()
-        local weap_INST = weapon[item_name]:new(condition)
-        list[#list+1] = {weapon=weap_INST, inventory_ID=inv_ID}        
+    for inv_ID, item in ipairs(self.inventory) do
+      if item:isWeapon() then
+        list[#list+1] = {weapon=item, inventory_ID=inv_ID}        
       end  
     end
-    list[#list+1] = {weapon=weapon.fist:new()} -- organic           
+    list[#list+1] = {weapon=Fist} -- organic           
   elseif self:isMobType('zombie') then
-    list[#list+1] = {weapon=weapon.claw:new()} -- organic
-    list[#list+1] = {weapon=weapon.bite:new()} -- organic
+    list[#list+1] = {weapon=Claw} -- organic
+    list[#list+1] = {weapon=Bite} -- organic
   end
   return list
 end  
