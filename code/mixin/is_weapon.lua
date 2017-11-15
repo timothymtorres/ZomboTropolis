@@ -43,7 +43,7 @@ local IsWeapon = {}
 
 -- WEAPON CONDITION MODIFIERS (blunt = damage range, blade = damage bonus, bullet = to-hit-accuracy, scorch = damage rolls)
 
-function IsWeapon:isOrganic() return self.weapon.ORGANIC or false end
+function IsWeapon:isOrganic(mob_type) return (mob_type and self.weapon.ORGANIC == mob_type) or self.weapon.ORGANIC or false end
 
 function IsWeapon:isHarmless() return self.weapon.NO_DAMAGE or false end
 
