@@ -1,4 +1,3 @@
-local chanceToHit = require('code.mixin.chanceToHit')
 local entangle =    require('code.player.condition.entangle')
 local dice =        require('code.libs.dice')
 
@@ -109,8 +108,6 @@ function IsWeapon:getAccuracy(player, target)
   accuracy_bonus = accuracy_bonus or 0
   return self.accuracy, accuracy_bonus
 end
-
-function IsWeapon:getToHit(player, target) return chanceToHit(player, target, self) end
 
 local organic_modifier = {
   claw = {
