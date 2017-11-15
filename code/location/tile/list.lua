@@ -12,13 +12,13 @@ tile.street.full_name = 'street'
 tile.street.item_chance =  {}
 tile.street.item_chance.outside = {
   -- WEAPONS =  00.1%
-  knife = .001,
+  Knife = .001,
 
   -- MISC   =  09.9%
-  newspaper = .099,
+  Newspaper = .099,
 
   -- EQUIPMENT =  90%
-  barricade = .90,
+  Barricade = .90,
 }
 
 --[[  barricade descriptions inserted at a later time

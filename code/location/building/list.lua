@@ -49,34 +49,33 @@ building.default.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = INSIDE_S
 building.default.item_chance = {}
 building.default.item_chance.outside = {
   -- WEAPONS =  00.1%
-  knife = .001,
+  Knife = .001,
 
   -- MISC   =  09.9%
-  newspaper = .099,
+  Newspaper = .099,
 
   -- EQUIPMENT =  90%
-  barricade = .90,  
+  Barricade = .90,  
 }
 building.default.item_chance.inside =  {
  -- MEDICAL =  15%
         FAK = .05,
-    bandage = .10,
+    Bandage = .10,
 
  -- WEAPONS =  30%
-     pistol = .03,
-    shotgun = .02,
-     hammer = .05,
-        bat = .10,
-      knife = .10,
+     Pistol = .03,
+    Shotgun = .02,
+        Bat = .15,
+      Knife = .10,
 
     -- MISC =  40%
-  newspaper = .10,
-       book = .15,
-     bottle = .15,
+  Newspaper = .10,
+       Book = .15,
+     Bottle = .15,
 
     -- GEAR =  15%
-      radio = .05,
-      phone = .10, 
+      Radio = .05,
+      Phone = .10, 
 }
 
 --[[
@@ -92,23 +91,22 @@ building.apartment.item_chance.outside = building.default.item_chance.outside
 building.apartment.item_chance.inside =  {
  -- MEDICAL =  15%
         FAK = .05,
-    bandage = .10,
+    Bandage = .10,
 
  -- WEAPONS =  30%
-     pistol = .03,
-    shotgun = .02,
-     hammer = .05,
-        bat = .10,
-      knife = .10,
+     Pistol = .03,
+    Shotgun = .02,
+        Bat = .15,
+      Knife = .10,
 
     -- MISC =  40%
-  newspaper = .10,
-       book = .15,
-     bottle = .15,
+  Newspaper = .10,
+       Book = .15,
+     Bottle = .15,
 
     -- GEAR =  15%
-      radio = .05,
-      phone = .10, 
+      Radio = .05,
+      Phone = .10, 
 }
 
 building.hotel = {}
@@ -120,23 +118,22 @@ building.hotel.item_chance.outside = building.default.item_chance.outside
 building.hotel.item_chance.inside =  {
  -- MEDICAL =  15%
         FAK = .05,
-    bandage = .10,
+    Bandage = .10,
 
  -- WEAPONS =  30%
-     pistol = .03,
-    shotgun = .02,
-     hammer = .05,
-        bat = .10,
-      knife = .10,
+     Pistol = .03,
+    Shotgun = .02,
+        Bat = .15,
+      Knife = .10,
 
     -- MISC =  40%
-  newspaper = .10,
-       book = .15,
-     bottle = .15,
+  Newspaper = .10,
+       Book = .15,
+     Bottle = .15,
 
     -- GEAR =  15%
-      radio = .05,
-      phone = .10, 
+      Radio = .05,
+      Phone = .10, 
 }
 
 --[[
@@ -151,19 +148,19 @@ building.PD.item_chance = {}
 building.PD.item_chance.outside = building.default.item_chance.outside
 building.PD.item_chance.inside = {
    -- WEAPONS =  24%
-       pistol = .16,
-      shotgun = .08,
+       Pistol = .16,
+      Shotgun = .08,
 
       -- AMMO =  48%
-   pistol_mag = .32,
-shotgun_shell = .16,
+     Magazine = .32,
+        Shell = .16,
     
    -- GADGETS =  18%
-        radio = .13,
+        Radio = .13,
           GPS = .05,
 
       -- MISC =  10%
-    newspaper = .10,
+    Newspaper = .10,
 }
 
 building.FD = {}
@@ -175,18 +172,18 @@ building.FD.item_chance.outside = building.default.item_chance.outside
 building.FD.item_chance.inside = {
  -- MEDICAL =  25%
         FAK = .05,
-    bandage = .20,
+    Bandage = .20,
 
  -- WEAPONS =  40%
-        axe = .10,
-      flare = .20, 
-    crowbar = .10,
+        Axe = .10,
+      Flare = .20, 
+    Crowbar = .10,
 
     -- MISC =  10%
-  newspaper = .10,
+  Newspaper = .10,
 
     -- GEAR =  25%
-      radio = .20,
+      Radio = .20,
         GPS = .05, 
 }
 
@@ -199,15 +196,15 @@ building.hospital.item_chance.outside = building.default.item_chance.outside
 building.hospital.item_chance.inside = {
  -- MEDICAL =  75%
   --      FAK = .25,
-  --  bandage = .50, 
- antibodies = .01,
-    syringe = .89,
+  --  Bandage = .50, 
+    Vaccine = .01,
+    Syringe = .89,
 
  -- WEAPONS =  10%
-  --    knife = .90,
+  --    Knife = .90,
 
     -- MISC =  10%
-  newspaper = .10, 
+  Newspaper = .10, 
 }
 
 building.courthouse = {}
@@ -218,9 +215,9 @@ building.courthouse.item_chance = {}
 building.courthouse.item_chance.outside = building.default.item_chance.outside
 building.courthouse.item_chance.inside = {
   -- MEDICAL
-    bandage = .10,
+    Bandage = .10,
   
-  newspaper = .90,
+  Newspaper = .90,
 }
 
 --[[
@@ -236,17 +233,16 @@ building.warehouse.item_chance = {}
 building.warehouse.item_chance.outside = building.default.item_chance.outside
 building.warehouse.item_chance.inside = {
  -- WEAPONS =  70%
-    crowbar = .20,
-     sledge = .10,
-    toolbox = .20,
-     hammer = .20,
+    Crowbar = .20,
+     Sledge = .10,
+    Toolbox = .40,
 
     -- MISC =  10%
-  newspaper = .10,
+  Newspaper = .10,
 
    -- EQUIP =  20%
-  generator = .05,
-       fuel = .15, 
+  Generator = .05,
+       Fuel = .15, 
 }
 
 building.factory = {}
@@ -257,17 +253,16 @@ building.factory.item_chance = {}
 building.factory.item_chance.outside = building.default.item_chance.outside
 building.factory.item_chance.inside = {
  -- WEAPONS =  70%
-    crowbar = .20,
-     sledge = .10,
-    toolbox = .20,
-     hammer = .20,
+    Crowbar = .20,
+     Sledge = .10,
+    Toolbox = .40,
 
     -- MISC =  10%
-  newspaper = .10,
+  Newspaper = .10,
 
    -- EQUIP =  20%
-  generator = .05,
-       fuel = .15, 
+  Generator = .05,
+       Fuel = .15, 
 }
 
 --[[
@@ -281,7 +276,7 @@ building.news.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = 0.30}
 building.news.item_chance = {}
 building.news.item_chance.outside = building.default.item_chance.outside
 building.news.item_chance.inside = {
-  newspaper = 1.00,
+  Newspaper = 1.00,
 }
 
 building.sport = {}
@@ -292,17 +287,17 @@ building.sport.item_chance = {}
 building.sport.item_chance.outside = building.default.item_chance.outside
 building.sport.item_chance.inside = {
  -- WEAPONS =  60%
-    machate = .10,
-        bat = .20,
-        bow = .10,
-   crossbow = .10,
-      knife = .10,
+    Machate = .10,
+        Bat = .30,
+        Bow = .10,
+   Crossbow = .10,
+      Knife = .10,
 
     -- AMMO =  30%
-     quiver = .30,
+     Quiver = .30,
 
     -- MISC =  10%
-  newspaper = .10, 
+  Newspaper = .10, 
 }
 
 building.bar = {}
@@ -313,17 +308,17 @@ building.bar.item_chance = {}
 building.bar.item_chance.outside = building.default.item_chance.outside
 building.bar.item_chance.inside = {
    -- WEAPONS =  30%
-      shotgun = .10,
-          bat = .05,
-        knife = .15,
+      Shotgun = .10,
+          Bat = .05,
+        Knife = .15,
 
       -- AMMO =  25%
-shotgun_shell = .25,
+        Shell = .25,
 
       -- MISC =  45%
-    newspaper = .10,
-       bottle = .30,
-        phone = .05,
+    Newspaper = .10,
+       Bottle = .30,
+        Phone = .05,
 }
 
 -- MALL WILL ACT DIFFERENTLY FROM OTHER BUILDINGS
@@ -335,17 +330,17 @@ building.mall.item_chance = {}
 building.mall.item_chance.outside = building.default.item_chance.outside
 building.mall.item_chance.inside = {
  -- WEAPONS =  60%
-    machate = .10,
-        bat = .20,
-        bow = .10,
-   crossbow = .10,
-      knife = .10,
+    Machate = .10,
+        Bat = .20,
+        Bow = .10,
+   Crossbow = .10,
+      Knife = .10,
 
     -- AMMO =  30%
-     quiver = .30,
+     Quiver = .30,
 
     -- MISC =  10%
-  newspaper = .10, 
+  Newspaper = .10, 
 }
 
 --[[
@@ -360,11 +355,11 @@ building.library.item_chance = {}
 building.library.item_chance.outside = building.default.item_chance.outside
 building.library.item_chance.inside = {
     -- MISC =  95%
-  newspaper = .20,
-       book = .75,
+  Newspaper = .20,
+       Book = .75,
   
     -- GEAR =  05%
-      phone = .05,
+      Phone = .05,
 }
 
 building.school = {}
@@ -375,14 +370,14 @@ building.school.item_chance = {}
 building.school.item_chance.outside = building.default.item_chance.outside
 building.school.item_chance.inside = {
  -- WEAPONS =  02%
-        bat = .02,  
+        Bat = .02,  
   
     -- MISC =  90%
-  newspaper = .20,
-       book = .70,
+  Newspaper = .20,
+       Book = .70,
   
     -- GEAR =  08%
-      phone = .08,  
+      Phone = .08,  
 }
 
 return building
