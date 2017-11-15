@@ -1,78 +1,69 @@
-local weapon = {}
+local class =          require('code.libs.middleclass')
+local IsWeapon =       require('code.mixin.is_weapon')
 
---[[---------
+local Fist = class('Fist'):include(IsWeapon)
 
-  HUMAN WEAPONS
+Fist.FULL_NAME = 'fist'
 
---]]---------
+Fist.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'blunt',
+  GROUP = {'hand'},
+  DICE = '1d1',
+  ACCURACY = 0.20,
+  CRITICAL = 0.05,
+  ORGANIC = 'human',
+  MASTER_SKILL = 'martial_arts_adv',
+}
 
+-------------------------------------------------------------------
 
---[[
----  MELEE
---]]
+local Claw = class('Claw'):include(IsWeapon)
 
-weapon.fist = {}
-weapon.fist.full_name = 'fist'
-weapon.fist.attack_style = 'melee'
-weapon.fist.damage_type = 'blunt'
-weapon.fist.group = {'hand'}
-weapon.fist.dice = '1d1'
-weapon.fist.accuracy = 0.20
-weapon.fist.critical = 0.05
-weapon.fist.organic = 'human'
-weapon.fist.master_skill = 'martial_arts_adv'
+Claw.FULL_NAME = 'claw'
 
---[[---------
+Claw.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'blunt',
+  GROUP = {'arm'},
+  DICE = '1d3',
+  ACCURACY = 0.99, --0.25
+  CRITICAL = 0.05,
+  ORGANIC = 'zombie',
+  CONDITION_EFFECT = 'entangle',
+  MASTER_SKILL = 'claw_adv',
+}
 
-  ZOMBIE WEAPONS
+-------------------------------------------------------------------
 
---]]---------
+local Bite = class('Bite'):include(IsWeapon)
 
+Bite.FULL_NAME = 'bite'
 
+Bite.weapon = {
+  ATTACK_STYLE = 'melee',
+  DAMAGE_TYPE = 'pierce',
+  GROUP = {'teeth'},
+  DICE = '1d4+1',
+  ACCURACY = 0.20,
+  CRITICAL = 0.05,
+  ORGANIC = 'zombie',
+  CONDITION_EFFECT = 'infection',
+  MASTER_SKILL = 'bite_adv',
+}
 
---[[
----  MELEE
---]]
-
-weapon.claw = {}
-weapon.claw.full_name = 'claw'
-weapon.claw.attack_style = 'melee'
-weapon.claw.damage_type = 'blunt'
-weapon.claw.group = {'arm'}
-weapon.claw.dice = '1d3'
-weapon.claw.accuracy = 0.99 --0.25
-weapon.claw.critical = 0.05
-weapon.claw.organic = 'zombie'
-weapon.claw.object_damage = {barricade=1, door=1, equipment=1}
-weapon.claw.condition_effect = 'entangle'
-weapon.claw.master_skill = 'claw_adv'
-
-weapon.bite = {}
-weapon.bite.full_name = 'bite'
-weapon.bite.attack_style = 'melee'
-weapon.bite.damage_type = 'pierce'
-weapon.bite.group = {'teeth'}
-weapon.bite.dice = '1d4+1'
-weapon.bite.accuracy = 0.20
-weapon.bite.critical = 0.05
-weapon.bite.organic = 'zombie'
-weapon.bite.condition_effect = 'infection'
-weapon.bite.master_skill = 'bite_adv'
-
---[[
---- BURN
---]]
+-------------------------------------------------------------------
 
 --[[  Moved to skill activation
 weapon.acid = {}
-weapon.acid.full_name = 'stomach acid'
-weapon.acid.attack_style = 'ranged'
-weapon.acid.damage_type = 'scorch'
-weapon.acid.group = {'stomach'}
-weapon.acid.dice = '5d2'
-weapon.acid.accuracy = 0.15
-weapon.acid.critical = 0.30
-weapon.acid.organic = 'zombie'
+weapon.acid.FULL_NAME = 'stomach acid'
+weapon.acid.ATTACK_STYLE = 'ranged'
+weapon.acid.DAMAGE_TYPE = 'scorch'
+weapon.acid.GROUP = {'stomach'}
+weapon.acid.DICE = '5d2'
+weapon.acid.ACCURACY = 0.15
+weapon.acid.CRITICAL = 0.30
+weapon.acid.ORGANIC = 'zombie'
 --]]
 
-return weapon
+return {}
