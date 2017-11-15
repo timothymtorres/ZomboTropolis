@@ -4,9 +4,6 @@ local broadcastEvent = require('code.server.event')
 local IsWeapon =       require('code.mixin.is_weapon')
 string.replace =       require('code.libs.replace')
 
--- need to add designated_weapon var to items?  Or do this via mixins?
--- weaponry[item].designated_weapon = true 
-
 -------------------------------------------------------------------
 
 --[[
