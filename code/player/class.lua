@@ -101,6 +101,8 @@ function player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside'
   return tile:check(self, setting)
 end
 
+function player:isSameLocation(target) return (player:getStage() == target:getStage()) and (player:getTile() == target:getTile()) end
+
 --[[
 --  GET [X]
 --]]
