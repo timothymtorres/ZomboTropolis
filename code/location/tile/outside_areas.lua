@@ -1,67 +1,49 @@
-local tile = {}
+local Street = class('Street', TileBase)
 
---[[
-  full_name = 'insert name'
-  resources = 0, 1, 2, 3
-  item_chance = {outside = {item = 0.00}, inside = {item = 0.00}}
-  barricade = {size = 'desc'}
---]]
+Street.FULL_NAME = 'street'
 
-tile.street =  {}
-tile.street.full_name = 'street'
-tile.street.item_chance =  {}
-tile.street.item_chance.outside = {
-  -- WEAPONS =  00.1%
-  Knife = .001,
+-------------------------------------------------------------------
 
-  -- MISC   =  09.9%
-  Newspaper = .099,
+local Cemetary = class('Cemetary', TileBase)
 
-  -- EQUIPMENT =  90%
-  Barricade = .90,
-}
+Cemetary.FULL_NAME = 'cemetary'
 
---[[  barricade descriptions inserted at a later time
-tile.street.barricades = {
-  small = {'cinder blocks'},
-  medium = {'pieces of scrap metal',},
-  large = {'trash can',},
-  heavy = {'tire',},
-}
---]]
+-------------------------------------------------------------------
 
-tile.cemetary = {}
-tile.cemetary.full_name = 'cemetary'
-tile.cemetary.item_chance = {}
+local Monument = class('Monument', TileBase)
 
-tile.monument = {}
-tile.monument.full_name = 'monument'
-tile.monument.item_chance = {}
-tile.monument.barricades = {}
+Monument.FULL_NAME = 'monument'
 
-tile.park = {}
-tile.park.full_name = 'park'
-tile.park.item_chance = {}
-tile.park.barricades = {}
+-------------------------------------------------------------------
 
-tile.wasteland = {}
-tile.wasteland.full_name = 'wasteland'
-tile.wasteland.item_chance = {}
-tile.wasteland.barricades = {}
+local Park = class('Park', TileBase)
 
-tile.stadium = {}
-tile.stadium.full_name = 'stadium'
-tile.stadium.item_chance = {}
-tile.stadium.barricade = {}
+Park.FULL_NAME = 'park'
 
-tile.junkyard = {}
-tile.junkyard.full_name = 'junkyard'
-tile.junkyard.item_chance = {}
-tile.junkyard.barricade = {}
+-------------------------------------------------------------------
 
-tile.carpark = {}
-tile.carpark.full_name = 'carpark'
-tile.carpark.item_chance = {}
-tile.carpark.barricade = {}
+local Wasteland = class('Wasteland', TileBase)
 
-return tile
+Wasteland.FULL_NAME = 'wasteland'
+
+-------------------------------------------------------------------
+
+local Stadium = class('Stadium', TileBase)
+
+Stadium.FULL_NAME = 'stadium'
+
+-------------------------------------------------------------------
+
+local Junkyard = class('Junkyard', TileBase)
+
+Junkyard.FULL_NAME = 'junkyard'
+
+-------------------------------------------------------------------
+
+local Carpark = class('Carpark', TileBase)
+
+Carpark.FULL_NAME = 'carpark'
+
+-------------------------------------------------------------------
+
+return {Street, Cemetary, Monument, Park, Wasteland, Stadium, Junkyard, Carpark}
