@@ -1,25 +1,23 @@
 local class =           require('code.libs.middleclass')
-local t_list =          require('code.location.tile.list')
-local b_list =          require('code.location.building.list')
 local Item =            require('code.item.item')
 local broadcastEvent =  require('code.server.event')
 
-local tile = class('tile')
+local TileBase = class('TileBase')
 
-function tile:initialize(map, y, x, name)
+function TileBase:initialize(map, y, x, name)
   self.y, self.x = y, x
   self.outside_players = {}
   self.name = name
   self.map_zone = map
 end
 
-tile.broadcastEvent = broadcastEvent.tile
+TileBase.broadcastEvent = broadcastEvent.tile
 
-function tile:insert(player) self.outside_players[player] = player end
+function TileBase:insert(player) self.outside_players[player] = player end
 
-function tile:remove(player) self.outside_players[player] = nil end
+function TileBase:remove(player) self.outside_players[player] = nil end
 
-function tile:listen(speaker, message) --, setting)
+function TileBase:listen(speaker, message) --, setting)
   for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
   if self:isBuilding() then
     for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
@@ -34,7 +32,7 @@ function tile:listen(speaker, message) --, setting)
   --]]
 end
 
-function tile:check(player, setting)
+function TileBase:check(player, setting)
   local attendance
   if setting == 'outside' or setting == nil then attendance = self.outside_players[player]
   elseif setting == 'inside' and self:isBuilding() then attendance = self.inside_players[player] 
@@ -42,7 +40,7 @@ function tile:check(player, setting)
   return (attendance and true) or false
 end
 
-function tile:countPlayers(mob_type, setting)
+function TileBase:countPlayers(mob_type, setting)
   local players
   
   if setting == 'outside' then players = self.outside_players 
@@ -59,7 +57,7 @@ function tile:countPlayers(mob_type, setting)
   return count
 end
 
-function tile:countCorpses(setting)
+function TileBase:countCorpses(setting)
   local players 
   if setting == 'outside' then players = self.outside_players
   elseif setting == 'inside' then players = self.inside_players 
@@ -73,23 +71,23 @@ function tile:countCorpses(setting)
   return count
 end
 
-function tile:getClass() return self.class end
+function TileBase:getClass() return self.class end
 
-function tile:getClassName() return tostring(self.class) end
+function TileBase:getClassName() return tostring(self.class) end
 
-function tile:getName() return self.name or '' end
+function TileBase:getName() return self.name or '' end
 
-function tile:getMap() return self.map_zone end
+function TileBase:getMap() return self.map_zone end
 
-function tile:getPos() return self.y, self.x end
+function TileBase:getPos() return self.y, self.x end
 
-function tile:getIntegrityState()
+function TileBase:getIntegrityState()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
 end
 
-function tile:getDesc(setting)
+function TileBase:getDesc(setting)
   local str, desc
   
   if not setting or setting == 'external' then
@@ -124,7 +122,7 @@ function tile:getDesc(setting)
   return str
 end
 
-function tile:getPlayers(setting) 
+function TileBase:getPlayers(setting) 
   local players
   if setting == 'inside' then 
     players = self.inside_players
@@ -140,9 +138,9 @@ function tile:getPlayers(setting)
   return players 
 end
 
-function tile:isBuilding() return self.inside_players and true or false end
+function TileBase:isBuilding() return self.inside_players and true or false end
 
-function tile:isClass(tile_class) return self:getClassName() == tile_class end
+function TileBase:isClass(tile_class) return self:getClassName() == tile_class end
 
 local modifier = {
   building_condition = {ruined = -0.90, ransacked = -0.20, intact = 0.00},
@@ -150,7 +148,7 @@ local modifier = {
   looting_skill = 0.05,
 }
 
-function tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
+function TileBase:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
   
   local condition_bonus = modifier.building_condition[integrity_status]
@@ -178,7 +176,7 @@ local function select_item(list)
   end
 end
 
-function tile:search(player, setting, was_flashlight_used)
+function TileBase:search(player, setting, was_flashlight_used)
   local integrity_state = self:getIntegrityState()  
   
   local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
@@ -193,9 +191,9 @@ function tile:search(player, setting, was_flashlight_used)
   return item
 end
 
-function tile:__tostring() return self:getName()..' '..self:getClassName() end
+function TileBase:__tostring() return self:getName()..' '..self:getClassName() end
 
-function tile:dataToClass(...) -- this should be a middleclass function (fix later)
+function TileBase:dataToClass(...) -- this should be a middleclass function (fix later)
   local combined_lists = {...}
   for _, list in ipairs(combined_lists) do
     for obj in pairs(list) do
@@ -208,7 +206,7 @@ function tile:dataToClass(...) -- this should be a middleclass function (fix lat
   end
 end
 
--- turn our list of tiles into tile class
-tile:dataToClass(t_list)
+-- turn our list of TileBases into TileBase class
+TileBase:dataToClass(t_list)
 
-return tile
+return TileBase
