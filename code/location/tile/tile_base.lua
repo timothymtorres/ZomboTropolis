@@ -4,6 +4,21 @@ local broadcastEvent =  require('code.server.event')
 
 local TileBase = class('TileBase')
 
+local OUTSIDE_SEARCH_ODDS = .50
+
+TileBase.search_chance = {OUTSIDE=OUTSIDE_SEARCH_ODDS}
+TileBase.item_chance = {}
+TileBase.item_chance.outside = {
+  -- WEAPONS =  00.1%
+  Knife = .001,
+
+  -- MISC   =  09.9%
+  Newspaper = .099,
+
+  -- EQUIPMENT =  90%
+  Barricade = .90,
+}
+
 function TileBase:initialize(map, y, x, name)
   self.y, self.x = y, x
   self.outside_players = {}
