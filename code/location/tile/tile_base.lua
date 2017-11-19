@@ -17,21 +17,6 @@ function TileBase:insert(player) self.outside_players[player] = player end
 
 function TileBase:remove(player) self.outside_players[player] = nil end
 
-function TileBase:listen(speaker, message) --, setting)
-  for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
-  if self:isBuilding() then
-    for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
-  end
-  
-  --[[  add this later for the whisper feature
-  if setting == 'outside' or setting == nil then
-    for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
-  elseif setting == 'inside' then
-    for _, player in pairs(self.outside_players) do player:listen(speaker, message) end
-  end
-  --]]
-end
-
 function TileBase:check(player, setting)
   local attendance
   if setting == 'outside' or setting == nil then attendance = self.outside_players[player]
@@ -72,10 +57,6 @@ function TileBase:countCorpses(setting)
 end
 
 function TileBase:getClass() return self.class end
-
-function TileBase:getClassName() return tostring(self.class) end
-
-function TileBase:getName() return self.name or '' end
 
 function TileBase:getMap() return self.map_zone end
 
@@ -140,8 +121,6 @@ end
 
 function TileBase:isBuilding() return self.inside_players and true or false end
 
-function TileBase:isClass(tile_class) return self:getClassName() == tile_class end
-
 local modifier = {
   building_condition = {ruined = -0.90, ransacked = -0.20, intact = 0.00},
   search_lighting = {flashlight = 0.05, generator = 0.10, power_plant = 0.20},  
@@ -192,21 +171,5 @@ function TileBase:search(player, setting, was_flashlight_used)
 end
 
 function TileBase:__tostring() return self:getName()..' '..self:getClassName() end
-
-function TileBase:dataToClass(...) -- this should be a middleclass function (fix later)
-  local combined_lists = {...}
-  for _, list in ipairs(combined_lists) do
-    for obj in pairs(list) do
-      self[obj] = class(obj, self)
-      self[obj].initialize = function(self_subclass, location_condition)
-        self.initialize(self_subclass, location_condition)
-      end
-      for field, data in pairs(list[obj]) do self[obj][field] = data end
-    end
-  end
-end
-
--- turn our list of TileBases into TileBase class
-TileBase:dataToClass(t_list)
 
 return TileBase
