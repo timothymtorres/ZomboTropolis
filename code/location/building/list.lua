@@ -1,15 +1,3 @@
-local building = {}
-building.external_desc = {
-  odds = {adjective = .25, color = .50, details = .25, surroundings = .25},
-  stories = {'three story', 'four story', 'five story'},
-  adjective = {'narrow', 'tall', 'straight', 'curved', 'twisted', 'crooked', 'fire-scorched', 'burnt', 'scorched'},
-  color = {'grey', 'yellow', 'white', 'vanilla', 'blue'}, 
-  colored_material = {concrete = true, wooden = true, stone = true, slab = true, marble = true},
-  material = {'glass', 'red-brick', 'concrete', 'wooden', 'slab', 'stone', 'steel', 'metal', 'metal and glass', 'ivory', 'marble'},
-  details = {'revovling doors', 'boarded up windows', 'dusty windows', 'rounded windows', 'broken and dusty windows', 'broken windows', 'glass windows', 'tinted windows'},
-  surroundings = {'surrounded by wrecked cars', 'surrounded by a metal fence', 'surrounded by trees', 'covered in vines', 'covered in moss', 'surrounded by a wooden fence'},
-}
-
 -- external desc works as follows
 -- You are standing outside the [building title], a [story] [adjective] [color] [material] [details] [surroundings].
 
@@ -36,58 +24,22 @@ home = 10%
 
 --]]-----------  SEARCH ODDS  ------------
 
-local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .50, .15
-
 --[[
 ---  GENERIC
 --]]
-
-building.default = {}
-building.default.full_name = 'building'
-building.default.building_type = 'generic'
-building.default.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = INSIDE_SEARCH_ODDS}
-building.default.item_chance = {}
-building.default.item_chance.outside = {
-  -- WEAPONS =  00.1%
-  Knife = .001,
-
-  -- MISC   =  09.9%
-  Newspaper = .099,
-
-  -- EQUIPMENT =  90%
-  Barricade = .90,  
-}
-building.default.item_chance.inside =  {
- -- MEDICAL =  15%
-        FAK = .05,
-    Bandage = .10,
-
- -- WEAPONS =  30%
-     Pistol = .03,
-    Shotgun = .02,
-        Bat = .15,
-      Knife = .10,
-
-    -- MISC =  40%
-  Newspaper = .10,
-       Book = .15,
-     Bottle = .15,
-
-    -- GEAR =  15%
-      Radio = .05,
-      Phone = .10, 
-}
 
 --[[
 ---  RESIDENTIAL
 --]]
 
+
+
 building.apartment = {}
 building.apartment.full_name = 'apartment'
 building.apartment.building_type = 'residential'
-building.apartment.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = 0.10}
+building.apartment.search_odds = {outside = Building.search_odds.OUTSIDE, inside = 0.10}
 building.apartment.item_chance = {}
-building.apartment.item_chance.outside = building.default.item_chance.outside
+building.apartment.item_chance.outside = Building.item_chance.outside
 building.apartment.item_chance.inside =  {
  -- MEDICAL =  15%
         FAK = .05,
