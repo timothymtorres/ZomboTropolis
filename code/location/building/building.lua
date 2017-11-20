@@ -26,6 +26,29 @@ Building.external_desc = {
 -- external desc works as follows
 -- You are standing outside the [building title], a [story] [adjective] [color] [material] [details] [surroundings].
 
+--[[
+  FULL_NAME = 'insert name'
+  BUILDING_TYPE = residential/government/industrial/commercial/generic
+  door_missing = true/nil
+**internal_desc = {desc1, desc2, desc3, ..., selection_range = num/nil}/nil   (selection_range is optional)
+**powered_desc = {desc1, desc2, desc3, ..., selection_range = num/nil}/nil    (selection_range is optional)
+  search_odds = {internal = num, external = num}/nil  
+  item_chance = {item = .00 chance}
+ 
+** - desc string must start with '... ' if it's a continuation of a sentence (comma inserted before string), otherwise string will be a new sentence. (period inserted before string)
+** - selection_range is the range for the description that will be randomly selected  (ie. math.random(1, desc[selection_range]), this is because some descs for unique locations will be outside of the selection range  
+--]]
+
+--[[-----------  SEARCH ODDS  ------------ 
+
+mall = 60%
+PD, FD, hospital = 50%
+factory = 30-40%
+library/school = 20%
+home = 10%
+
+--]]-----------  SEARCH ODDS  ------------
+
 local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .50, .15
 
 Building.BUILDING_TYPE = 'generic'
