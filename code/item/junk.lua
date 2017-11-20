@@ -2,7 +2,7 @@ local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
 local dice =           require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
-local isWeapon =       require('code.mixin.is_weapon')
+local isWeapon =       require('code.item.mixin.is_weapon')
 string.replace =       require('code.libs.replace')
 
 local Book = class('Book', ItemBase)
