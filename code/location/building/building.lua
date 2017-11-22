@@ -7,36 +7,15 @@ local terminal = require('code.location.building.equipment.terminal.class')
 local door = require('code.location.building.barrier.door.class')
 local barricade = require('code.location.building.barrier.barricade.class')
 local integrity = require('code.location.building.integrity.class')
-local buildDesc = require('code.location.building.buildDesc')
 
 local Building = class('Building', TileBase)
-
--- This needs to be removed eventually
-Building.external_desc = {
-  odds = {adjective = .25, color = .50, details = .25, surroundings = .25},
-  stories = {'three story', 'four story', 'five story'},
-  adjective = {'narrow', 'tall', 'straight', 'curved', 'twisted', 'crooked', 'fire-scorched', 'burnt', 'scorched'},
-  color = {'grey', 'yellow', 'white', 'vanilla', 'blue'}, 
-  colored_material = {concrete = true, wooden = true, stone = true, slab = true, marble = true},
-  material = {'glass', 'red-brick', 'concrete', 'wooden', 'slab', 'stone', 'steel', 'metal', 'metal and glass', 'ivory', 'marble'},
-  details = {'revovling doors', 'boarded up windows', 'dusty windows', 'rounded windows', 'broken and dusty windows', 'broken windows', 'glass windows', 'tinted windows'},
-  surroundings = {'surrounded by wrecked cars', 'surrounded by a metal fence', 'surrounded by trees', 'covered in vines', 'covered in moss', 'surrounded by a wooden fence'},
-}
-
--- external desc works as follows
--- You are standing outside the [building title], a [story] [adjective] [color] [material] [details] [surroundings].
 
 --[[
   FULL_NAME = 'insert name'
   BUILDING_TYPE = residential/government/industrial/commercial/generic
   door_missing = true/nil
-**internal_desc = {desc1, desc2, desc3, ..., selection_range = num/nil}/nil   (selection_range is optional)
-**powered_desc = {desc1, desc2, desc3, ..., selection_range = num/nil}/nil    (selection_range is optional)
   search_odds = {internal = num, external = num}/nil  
   item_chance = {item = .00 chance}
- 
-** - desc string must start with '... ' if it's a continuation of a sentence (comma inserted before string), otherwise string will be a new sentence. (period inserted before string)
-** - selection_range is the range for the description that will be randomly selected  (ie. math.random(1, desc[selection_range]), this is because some descs for unique locations will be outside of the selection range  
 --]]
 
 --[[-----------  SEARCH ODDS  ------------ 
