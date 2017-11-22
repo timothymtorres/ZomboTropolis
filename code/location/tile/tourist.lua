@@ -1,4 +1,5 @@
 local class =           require('code.libs.middleclass')
+local TileBase = 		require('code.location.tile.tile_base')
 
 -------------------------------------------------------------------
 
