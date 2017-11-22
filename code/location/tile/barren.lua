@@ -1,4 +1,5 @@
 local class =           require('code.libs.middleclass')
+local TileBase = 		require('code.location.tile.tile_base')
 
 -------------------------------------------------------------------
 
@@ -20,4 +21,4 @@ Wasteland.FULL_NAME = 'wasteland'
 
 -------------------------------------------------------------------
 
-return = {Street, Cemetary, Wasteland}
+return {Street, Cemetary, Wasteland}
