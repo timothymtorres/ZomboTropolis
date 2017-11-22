@@ -1,6 +1,6 @@
 local class = require('code.libs.middleclass')
 -- local suburb = require('suburb')
-local tile =         require('code.location.tile.class')
+local Tile =         require('code.location.tile.tile')
 local building =     require('code.location.building.class')
 local b_list =       require('code.location.building.list')
 
