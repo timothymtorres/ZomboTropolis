@@ -84,8 +84,8 @@ local skill_flags = {
   gesture =             64,
   smell_blood =        128,
   muscle_stimulus =    256,
-  ep_bonus =           512,
-  drag_prey =         1024,
+  ep_bonus =           512,  -- fix this
+  drag_prey =         1024,  -- and this
 
   -- Brute
   claw =                 1,
