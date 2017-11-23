@@ -5,7 +5,7 @@ local Tile =         require('code.location.tile.tile')
 local map = class('map')
 
 -- make sure to set this up properly!
-local tile_type = 'hospital'
+local tile_type = 'Hospital'
 
 function map:initialize(size)
   self.humans = 0

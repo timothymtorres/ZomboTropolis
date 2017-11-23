@@ -64,4 +64,4 @@ College.item_chance = {
   }
 }
 
-return = {Library, School, College}
+return {Library, School, College}

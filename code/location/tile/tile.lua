@@ -32,7 +32,7 @@ local Tile = {
 }
 
 for _, Class in ipairs(Tile) do 
-  Tile[Tile.name] = Class 
+  Tile[Class.name] = Class 
 end
 
 return Tile
