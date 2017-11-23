@@ -1,13 +1,13 @@
 local class = require('code.libs.middleclass')
+local Tile =  require('code.location.tile.tile')
 -- local suburb = require('suburb')
-local Tile =         require('code.location.tile.tile')
 
-local map = class('map')
+local Map = class('Map')
 
 -- make sure to set this up properly!
 local tile_type = 'Hospital'
 
-function map:initialize(size)
+function Map:initialize(size)
   self.humans = 0
   self.zombies = 0
   self.dead = 0
@@ -23,15 +23,15 @@ function map:initialize(size)
   end
 end
 
-function map:getInside(y, x) return self[y][x].inside_players or false end 
+function Map:getInside(y, x) return self[y][x].inside_players or false end 
  
-function map:getOutside(y, x) return self[y][x].outside_players end
+function Map:getOutside(y, x) return self[y][x].outside_players end
 
-function map:getTile(y, x) return self[y][x] end
+function Map:getTile(y, x) return self[y][x] end
 
-function map:isBuilding(y, x) return self[y][x].inside_players and true or false end
+function Map:isBuilding(y, x) return self[y][x].inside_players and true or false end
 
-function map:get3x3(y, x)
+function Map:get3x3(y, x)
   local list = {}
   list[#list+1] = self[y][x]
   list[#list+1] = self[y][x+1]
@@ -45,4 +45,4 @@ function map:get3x3(y, x)
   return list
 end
 
-return map
+return Map
