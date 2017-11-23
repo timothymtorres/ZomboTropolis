@@ -1,4 +1,4 @@
-local map =               require('code.location.map.class')
+local Map =               require('code.location.map')
 local combat =            require('code.player.combat')
 local entangle =          require('code.player.condition.entangle')
 local equipmentActivate = require('code.location.building.equipment.operation.activate')

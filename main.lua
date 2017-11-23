@@ -17,7 +17,7 @@ print('NEW RUN')
 print()
 print()
 
-local map = require('code.location.map.class')
+local Map = require('code.location.map.class')
 local Item = require('code.item.item')  -- for testing item generation in main.lua
 player = require('code.player.class')
 table.copy = require('code.libs.copy')

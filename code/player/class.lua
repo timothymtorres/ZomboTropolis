@@ -12,7 +12,7 @@ local carcass =                 require('code.player.carcass')
 local organic_armor =           require('code.player.armor.organic_class')
 local item_armor =              require('code.player.armor.item_class')
 local Fist, Claw, Bite = unpack(require('code.player.organic_weaponry'))
-local map =                     require('code.location.map.class')
+local Map =                     require('code.location.map')
 local broadcastEvent =          require('code.server.event')
 
 local player = class('player')

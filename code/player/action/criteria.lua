@@ -1,4 +1,4 @@
-local map =         require('code.location.map.class')
+local Map =         require('code.location.map')
 local equipmentCriteria = require('code.location.building.equipment.operation.criteria')
 local skillCriteria = require('code.player.skills.criteria')
 local enzyme_list = require('code.player.enzyme_list')

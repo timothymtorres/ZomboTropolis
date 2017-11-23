@@ -3,7 +3,7 @@ print('NEW RUN')
 print()
 print()
 
-local map = require('location/map/class')
+local Map = require('location/map')
 local building = require('location/building/class')
 local player = require('player/class')
 local lookupItem = require('item/search')

@@ -1,6 +1,6 @@
 local class = require('code.libs.middleclass')
-local map = require('code.location.map.class')
+local Map = require('code.location.map')
 
-local suburb = class('suburb', map)
+local suburb = class('suburb', Map)
 
 return suburb
