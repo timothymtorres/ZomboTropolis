@@ -434,38 +434,6 @@ function scene:create( event )
     
     local total_h = total_h + location_bar_h + thickness*2
     
-    -- Description Scroll Bar  
-    local scrollView = widget.newScrollView
-    {
-        top = total_h + 10,
-        left = 10,
-        width = 300,
-        height = 150,
-        scrollWidth = 300,
-        scrollHeight = 500,
-        topPadding = 20,
-        bottomPadding = 20,
-        horizontalScrollDisabled = true,
-        listener = scrollListener
-    }
-
-    local desc_text
-    local location = main_player:getTile()
-    if main_player:isStaged('outside') then desc_text = location:getDesc('external')
-    elseif main_player:isStaged('inside') then desc_text = location:getDesc('internal')
-    end
-  
-    if location:isBuilding() then
-      desc_text = desc_text..'\n\n'..location:getBarrierDesc()
-    end
-   
-    local text_object = display.newText(desc_text, 0, 0, 285, 0, native.systemFont, 12, "right")
-    text_object:setTextColor(0)
-    text_object.x = display.contentCenterX - 5
-    scrollView:insert(text_object)
-    
-    location_group:insert(scrollView)
-    
     sceneGroup:insert(location_group)
   end
   

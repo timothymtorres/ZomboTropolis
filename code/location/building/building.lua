@@ -66,10 +66,8 @@ Building.item_chance = {
 }
 
 function Building:initialize(map, y, x, name)
-  tile.initialize(self, map, y, x, name)  
+  TileBase.initialize(self, map, y, x, name)  
   self.inside_players = {}
-
-  self.external_desc, self.internal_desc, self.powered_desc = buildDesc(tostring(self.class))
   
   self.door        = door:new(self)
   self.barricade   = barricade:new(self)
