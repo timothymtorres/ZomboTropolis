@@ -1,5 +1,5 @@
 local class =          require('code.libs.middleclass')
-local IsWeapon =       require('code.mixin.is_weapon')
+local IsWeapon =       require('code.item.mixin.is_weapon')
 
 local Fist = class('Fist'):include(IsWeapon)
 
