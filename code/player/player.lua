@@ -15,16 +15,16 @@ local Fist, Claw, Bite = unpack(require('code.player.organic_weaponry'))
 local Map =                     require('code.location.map')
 local broadcastEvent =          require('code.server.event')
 
-local player = class('player')
+local Player = class('Player')
 
 local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ep=10, ip=10, xp=   0, ap=0}
 local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, xp=false}
 
---Accounts[new_ID] = player:new(n, t)
+--Accounts[new_ID] = Player:new(n, t)
 
-function player:initialize(username, mob_type, map_zone, y, x) --add account name
+function Player:initialize(username, mob_type, map_zone, y, x) --add account name
   self.username = username
   self.map_zone = map_zone
   self.y, self.x = y, x
@@ -46,9 +46,9 @@ function player:initialize(username, mob_type, map_zone, y, x) --add account nam
 end
 
 -- broadcastEvent whenever player performs an action for others to see
-player.broadcastEvent = broadcastEvent.player
+Player.broadcastEvent = broadcastEvent.player
 
-function player:killed(cause_of_death) 
+function Player:killed(cause_of_death) 
 --[[ scenarios
 #1 - human  killed (turns into zombie)  [reset skills, xp, sp]
 #2 - zombie killed (decay)              [delete] 
@@ -71,11 +71,11 @@ function player:killed(cause_of_death)
   end  
 end
 
-function player:respawn()
+function Player:respawn()
   self:updateStat('hp', self:getStat('hp', 'max') ) 
 end
 
-function player:listen(speaker, message)
+function Player:listen(speaker, message)
 print(self:getUsername()..':listen()', speaker:getUsername()..': "'..message..'"')
   -- when we setup our event system
   -- self.eventlog:insert(speaker, message) 
@@ -85,35 +85,35 @@ end
 ---  TAKE [X]
 --]]
 
-function player:takeAction(task, ...) perform(task, self, unpack({...})) end
+function Player:takeAction(task, ...) perform(task, self, unpack({...})) end
 
 --[[
 -- IS [X]
 --]]
 
-function player:isMobType(mob) return self.mob_type == mob end
+function Player:isMobType(mob) return self.mob_type == mob end
 
-function player:isStanding() return self:getStat('hp') > 0 end
+function Player:isStanding() return self:getStat('hp') > 0 end
 
-function player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside') 
+function Player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside') 
   local map_zone, y, x = self:getMap(), self:getPos()  
   local tile = map_zone[y][x]
   return tile:check(self, setting)
 end
 
-function player:isSameLocation(target) return (player:getStage() == target:getStage()) and (player:getTile() == target:getTile()) end
+function Player:isSameLocation(target) return (self:getStage() == target:getStage()) and (self:getTile() == target:getTile()) end
 
 --[[
 --  GET [X]
 --]]
 
-function player:getID() return self.ID end
+function Player:getID() return self.ID end
 
-function player:getPos()  return self.y, self.x end
+function Player:getPos()  return self.y, self.x end
 
-function player:getMap() return self.map_zone end
+function Player:getMap() return self.map_zone end
 
-function player:getMobType() return self.mob_type end
+function Player:getMobType() return self.mob_type end
 
 
 local health_state_desc = {
@@ -121,12 +121,12 @@ local health_state_desc = {
   advanced = {'dying', 'critical', 'very wounded', 'wounded', 'injuried', 'slightly injuried', 'scratched', 'full'}, -- 8 states
 }
 
-function player:getHealthState(setting)
+function Player:getHealthState(setting)
   local status = self.health_state[setting]
   return health_state_desc[status] 
 end
 
-function player:getStat(stat, setting)
+function Player:getStat(stat, setting)
   if not setting then 
     return self[stat] -- current stat amount
   elseif setting == 'max' then  -- current stat maximum
@@ -145,23 +145,23 @@ function player:getStat(stat, setting)
   end
 end
 
-function player:getClass() return self.class end
+function Player:getClass() return self.class end
 
-function player:getClassName() return tostring(self.class) end
+function Player:getClassName() return tostring(self.class) end
 
-function player:getUsername() return self.username end
+function Player:getUsername() return self.username end
 
---function player:getAccountName() return self.account_name end
+--function Player:getAccountName() return self.account_name end
 
-function player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
+function Player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
-function player:getTile()
+function Player:getTile()
   local map_zone = self:getMap()
   local y,x = self:getPos() 
   return map_zone:getTile(y, x)
 end
 
-function player:getCost(stat, action)
+function Player:getCost(stat, action)
   local mob_type = self:getMobType()
   local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
   local cost = action_data.cost    
@@ -173,9 +173,9 @@ function player:getCost(stat, action)
 end
 
 -- client-side functions
-function player:getActions(category) return catalogAvailableActions[category](self) end
+function Player:getActions(category) return catalogAvailableActions[category](self) end
 
-function player:getWeapons()
+function Player:getWeapons()
   local list = {}
   
   if self:isMobType('human') then
@@ -192,7 +192,7 @@ function player:getWeapons()
   return list
 end  
 
-function player:getTargets(mode)
+function Player:getTargets(mode)
   local targets = {}
   
   local p_tile, setting = self:getTile(), self:getStage()
@@ -227,11 +227,11 @@ end
 -- UPDATE [X]
 --]]
 
-function player:updateMobType(mob_class) self.mob_type = mob_class end
+function Player:updateMobType(mob_class) self.mob_type = mob_class end
 
-function player:updatePos(y, x) self.y, self.x = y, x end
+function Player:updatePos(y, x) self.y, self.x = y, x end
 
-function player:updateStat(stat, num)
+function Player:updateStat(stat, num)
   local stat_max = self:getStat(stat, 'max')
   self[stat] = math.min(self[stat] + num, stat_max)
   
@@ -252,9 +252,9 @@ end
 -- METAMETHODS
 --]]
 
-function player:__tostring() 
+function Player:__tostring() 
   -- if self:isMobType('zombie') then return 'a zombie' 
   return self:getUsername() 
 end
 
-return player
+return Player
