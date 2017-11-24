@@ -101,12 +101,12 @@ function IsWeapon:getAccuracy(player, target)
       --if maimed condition then accuracy_bonus = modifier.zombie_melee[1]
     end
   else  -- is human, thus weapon is item
-    accuracy_bonus = self.damage_type == 'bullet' and modifier.projectile[self.condition]
+    accuracy_bonus = self.weapon.DAMAGE_TYPE == 'bullet' and modifier.projectile[self.condition]
   end
   
   -- accuracy bonus ONLY applies to ranged human weapons and zombie melee attacks  
   accuracy_bonus = accuracy_bonus or 0
-  return self.accuracy, accuracy_bonus
+  return self.weapon.ACCURACY, accuracy_bonus
 end
 
 local organic_modifier = {
