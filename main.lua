@@ -17,7 +17,7 @@ print('NEW RUN')
 print()
 print()
 
-local Map = require('code.location.map.class')
+local Map = require('code.location.map')
 local Item = require('code.item.item')  -- for testing item generation in main.lua
 Player = require('code.player.player')
 table.copy = require('code.libs.copy')
@@ -38,9 +38,9 @@ lookupMedical = require('code.item.medical.search')
 
 dummy = {}
 print()
-city = map:new(10)
-main_player = player:new('Fran', 'zombie', city, 4, 4)
-alt_player = player:new('Tim', 'human', city, 4, 4)
+city = Map:new(10)
+main_player = Player:new('Fran', 'zombie', city, 4, 4)
+alt_player = Player:new('Tim', 'human', city, 4, 4)
 
 p_tile = alt_player:getTile()
 p_tile.barricade.potential_hp = 28 
