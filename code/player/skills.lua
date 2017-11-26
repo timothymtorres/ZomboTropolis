@@ -83,23 +83,6 @@ print('[skills:buy]', 'player.xp='..xp, 'skill['..skill..'] cost='..cost)
   player.skills:add(skill)  
 end
 
---[[  Pretty sure these functions are deprecated bc they aren't referenced anywhere in this module...
-
-local function lookupFlags(skills, flag_list)
-  local array = {}
-  for i, skill in ipairs(skills) do 
---print('[player/skills/class lookupFlags] - '..skill, flags[skill])
---if not flags[skill] then return error('Skill does not exist') end    
-    array[i] = flag_list[skill] end
-  return array
-end
-
-local function combineFlags(requirements, flag_list)
-  local list = lookupFlags(requirements, flag_list)
-  return bor(unpack(list)) 
-end
---]]
-
 function skills:checkFlag(category, flag) return 
 --print('required flag = '..flag, 'current flags = '..self:getFlags())  
   band(self:getFlags(category), flag) == flag end
@@ -110,8 +93,5 @@ function skills:add(skill)
   local category = self.list.getCategory(skill)
   self.flags[category] = bor(self.flags[category], self.list.flag[skill]) 
 end
-
--- no removing skills for this game...
--- function skills:remove(skill) self.flags = band(self.flags, bnot(flags[skill])) end
 
 return skills
