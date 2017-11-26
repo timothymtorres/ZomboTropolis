@@ -4,11 +4,9 @@ local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
 local skills =                  require('code.player.skills.class')
 local inventory =               require('code.player.inventory')
-local log =                     require('code.player.log.class')
 local condition =               require('code.player.condition.class')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist = unpack(require('code.player.organic_weaponry'))
-local broadcastEvent =          require('code.server.event')
 local Player =                  require('code.player.player')
 
 local Human = class('Human', Player)
@@ -27,15 +25,11 @@ function Human:initialize(username, mob_type, map_zone, y, x) --add account name
   self.inventory = inventory:new(self)  -- zombies don't need inventory...
   self.skills = skills:new(self)
   self.condition = condition:new(self)
-  self.carcass = carcass:new(self)
   
   map_zone[y][x]:insert(self)
   
   --self.armor = item_armor:new(self)
 end
-
--- broadcastEvent whenever player performs an action for others to see
-Human.broadcastEvent = broadcastEvent.player
 
 function Human:killed(cause_of_death) 
 --[[ scenarios

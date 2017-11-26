@@ -5,10 +5,8 @@ local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
 local skills =                  require('code.player.skills.class')
 local condition =               require('code.player.condition.class')
-local carcass =                 require('code.player.carcass')
 --local organic_armor =           require('code.player.armor.organic_class')
 local Claw, Bite = unpack(require('code.player.organic_weaponry'))
-local broadcastEvent =          require('code.server.event')
 local Player =                  require('code.player.player')
 
 local Zombie = class('Zombie', Player)
@@ -18,8 +16,6 @@ local default_max = {hp=50, ep=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ep=10, xp=   0, ap=0}
 local bonus_flag_name = {hp='hp_bonus', ep='ep_bonus', ap=false, xp=false}
 
---Accounts[new_ID] = Zombie:new(n, t)
-
 function Zombie:initialize(username, mob_type, map_zone, y, x) --add account name
   Player:initialize(username, mob_type, map_zone, y, x)
 
@@ -27,10 +23,8 @@ function Zombie:initialize(username, mob_type, map_zone, y, x) --add account nam
   --self.abilities = abilities:new(self)
   self.skills = skills:new(self)
   self.condition = condition:new(self)
-  self.carcass = carcass:new(self)
   
   map_zone[y][x]:insert(self)
-  
   --self.armor = organic_armor:new(self)
 end
 
