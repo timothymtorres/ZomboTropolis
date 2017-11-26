@@ -250,7 +250,7 @@ end
 
 -------------------------------------------------------------------
 
-local equipment = {name='equipment'
+local equipment = {name='equipment'}
 
 function equipment.client_criteria(name, player) -- operation)
   local p_tile = player:getTile()  
