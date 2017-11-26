@@ -1,38 +1,38 @@
 local class =                   require('code.libs.middleclass')
-local combat =                  require('code.player.combat')
 local action_list =             require('code.player.action.list')
-local enzyme_list =             require('code.player.enzyme_list')
+
 local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
+
 local skills =                  require('code.player.skills.class')
 local inventory =               require('code.player.inventory')
 local log =                     require('code.player.log.class')
 local condition =               require('code.player.condition.class')
-local carcass =                 require('code.player.carcass')
-local organic_armor =           require('code.player.armor.organic_class')
-local item_armor =              require('code.player.armor.item_class')
-local Fist, Claw, Bite = unpack(require('code.player.organic_weaponry'))
+--local item_armor =              require('code.player.armor.item_class')
+local Fist = unpack(require('code.player.organic_weaponry'))
 local broadcastEvent =          require('code.server.event')
 
 local Player = class('Player')
 
-local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
-local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}
-local skill_bonus = {hp=10, ep=10, ip=10, xp=   0, ap=0}
-local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, xp=false}
+local default =     {hp=50, ip= 0, xp=   0, ap=50}
+local default_max = {hp=50, ip=50, xp=1000, ap=50}
+local skill_bonus = {hp=10, ip=10, xp=   0, ap=0}
+local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ap=false, xp=false}
 
 --Accounts[new_ID] = Player:new(n, t)
 
 function Player:initialize(username, mob_type, map_zone, y, x) --add account name
-  self.username = username
-  self.mob_type = mob_type
-  self.map_zone = map_zone
-  self.y, self.x = y, x
-  self.health_state = {basic=4, advanced=8}
-  self.ID = self  
-  self.log = log:new()
+  Player:initialize(username, mob_type, map_zone, y, x)
 
+  self.xp, self.hp, self.ap, self.ip = default.xp, default.hp, default.ap, default.ip
+  self.inventory = inventory:new(self)  -- zombies don't need inventory...
+  self.skills = skills:new(self)
+  self.condition = condition:new(self)
+  self.carcass = carcass:new(self)
+  
   map_zone[y][x]:insert(self)
+  
+  --self.armor = item_armor:new(self)
 end
 
 -- broadcastEvent whenever player performs an action for others to see
@@ -61,10 +61,6 @@ function Player:killed(cause_of_death)
   end  
 end
 
-function Player:respawn()
-  self:updateStat('hp', self:getStat('hp', 'max') ) 
-end
-
 --[[
 ---  TAKE [X]
 --]]
@@ -72,43 +68,8 @@ end
 function Player:takeAction(task, ...) perform(task, self, unpack({...})) end
 
 --[[
--- IS [X]
---]]
-
-function Player:isMobType(mob) return self.mob_type == mob end
-
-function Player:isStanding() return self:getStat('hp') > 0 end
-
-function Player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside') 
-  local map_zone, y, x = self:getMap(), self:getPos()  
-  local tile = map_zone[y][x]
-  return tile:check(self, setting)
-end
-
-function Player:isSameLocation(target) return (self:getStage() == target:getStage()) and (self:getTile() == target:getTile()) end
-
---[[
 --  GET [X]
 --]]
-
-function Player:getID() return self.ID end
-
-function Player:getPos()  return self.y, self.x end
-
-function Player:getMap() return self.map_zone end
-
-function Player:getMobType() return self.mob_type end
-
-
-local health_state_desc = {
-  basic = {'dying', 'wounded', 'scratched', 'full'}, -- 4 states
-  advanced = {'dying', 'critical', 'very wounded', 'wounded', 'injuried', 'slightly injuried', 'scratched', 'full'}, -- 8 states
-}
-
-function Player:getHealthState(setting)
-  local status = self.health_state[setting]
-  return health_state_desc[status] 
-end
 
 function Player:getStat(stat, setting)
   if not setting then 
@@ -129,22 +90,6 @@ function Player:getStat(stat, setting)
   end
 end
 
-function Player:getClass() return self.class end
-
-function Player:getClassName() return tostring(self.class) end
-
-function Player:getUsername() return self.username end
-
---function Player:getAccountName() return self.account_name end
-
-function Player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
-
-function Player:getTile()
-  local map_zone = self:getMap()
-  local y,x = self:getPos() 
-  return map_zone:getTile(y, x)
-end
-
 function Player:getCost(stat, action)
   local mob_type = self:getMobType()
   local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
@@ -159,13 +104,59 @@ end
 -- client-side functions
 function Player:getActions(category) return catalogAvailableActions[category](self) end
 
+function Player:getWeapons()
+  local list = {}
+  
+  if self:isMobType('human') then
+    for inv_ID, item in ipairs(self.inventory) do
+      if item:isWeapon() then
+        list[#list+1] = {weapon=item, inventory_ID=inv_ID}        
+      end  
+    end
+    list[#list+1] = {weapon=Fist} -- organic           
+  elseif self:isMobType('zombie') then
+    list[#list+1] = {weapon=Claw} -- organic
+    list[#list+1] = {weapon=Bite} -- organic
+  end
+  return list
+end  
+
+function Player:getTargets(mode)
+  local targets = {}
+  
+  local p_tile, setting = self:getTile(), self:getStage()
+  local all_players = p_tile:getPlayers(setting)
+  
+  for player in pairs(all_players) do 
+    if player:isStanding() and player ~= self then targets[#targets+1] = player end 
+  end 
+  
+  if p_tile:isBuilding() then
+    --[[  Add this at a later time
+    if p_tile:isFortified() then targets[#targets+1] = p_tile:getBarrier() end  -- is this right?  (do I need a class instead?)
+    if p_tile:isPresent('equipment') then
+      for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
+    end 
+    --]]
+  end
+  
+  if mode == 'gesture' then
+    local map_zone = self:getMap()
+    local y, x = self:getPos()
+    for _,tile in ipairs(map_zone:get3x3(y, x)) do targets[#targets+1] = tile end
+    local dir = {1, 2, 3, 4, 5, 6, 7, 8}
+    for _, direction in ipairs(dir) do targets[#targets+1] = direction end
+  end
+  
+  return targets
+end
+
+
 --[[
 -- UPDATE [X]
 --]]
 
 function Player:updateMobType(mob_class) self.mob_type = mob_class end
-
-function Player:updatePos(y, x) self.y, self.x = y, x end
 
 function Player:updateStat(stat, num)
   local stat_max = self:getStat(stat, 'max')
