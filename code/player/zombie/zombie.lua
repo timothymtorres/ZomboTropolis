@@ -25,7 +25,7 @@ function Zombie:initialize(username, mob_type, map_zone, y, x) --add account nam
   --self.armor = organic_armor:new(self)
 end
 
-function Zombie:killed(cause_of_death)
+function Zombie:killed() -- cause_of_death arg not needed yet?
   self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
   self.condition = condition:new(self)
   -- Reset other things?  Like tracking?  Armor? etc.
@@ -44,7 +44,9 @@ end
 ---  TAKE [X]
 --]]
 
-function Zombie:takeAction(task, ...) perform(task, self, unpack({...})) end
+function Zombie:perform(action, ...) 
+  
+end
 
 --[[
 --  GET [X]

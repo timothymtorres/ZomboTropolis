@@ -29,7 +29,8 @@ function Human:initialize(username, mob_type, map_zone, y, x) --add account name
 end
 
 function Human:killed()
-  -- we need to create a carcass for zombies to feed on, then afterwards create a new Zombie instance from the carcass?
+  -- Corpse:new()   ???
+  -- we need to create a carcass for zombies to feed on, then afterwards create a new Zombie instance from the carcass? (pass useful human data as args to corpse)
   -- But we need to retain all info for the player to see next time they log in, (so they can witness their gory death)
   self:permadeath()   -- deletes human instance
 end
@@ -38,7 +39,9 @@ end
 ---  TAKE [X]
 --]]
 
-function Human:takeAction(task, ...) perform(task, self, unpack({...})) end
+function Human:perform(action, ...) 
+
+end
 
 --[[
 --  GET [X]
