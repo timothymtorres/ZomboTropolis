@@ -9,17 +9,18 @@ local carcass =                 require('code.player.carcass')
 --local organic_armor =           require('code.player.armor.organic_class')
 local Claw, Bite = unpack(require('code.player.organic_weaponry'))
 local broadcastEvent =          require('code.server.event')
+local Player =                  require('code.player.player')
 
-local Player = class('Player')
+local Zombie = class('Zombie', Player)
 
 local default =     {hp=50, ep=50, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ep=10, xp=   0, ap=0}
 local bonus_flag_name = {hp='hp_bonus', ep='ep_bonus', ap=false, xp=false}
 
---Accounts[new_ID] = Player:new(n, t)
+--Accounts[new_ID] = Zombie:new(n, t)
 
-function Player:initialize(username, mob_type, map_zone, y, x) --add account name
+function Zombie:initialize(username, mob_type, map_zone, y, x) --add account name
   Player:initialize(username, mob_type, map_zone, y, x)
 
   self.xp, self.hp, self.ap, self.ep = default.xp, default.hp, default.ap, default.ep
@@ -33,7 +34,7 @@ function Player:initialize(username, mob_type, map_zone, y, x) --add account nam
   --self.armor = organic_armor:new(self)
 end
 
-function Player:killed(cause_of_death) -- change the method name to permadeath?
+function Zombie:killed(cause_of_death) -- change the method name to permadeath?
 --[[ scenarios
 #1 - human  killed (turns into zombie)  [reset skills, xp, sp]
 #2 - zombie killed (decay)              [delete] 
@@ -56,7 +57,7 @@ function Player:killed(cause_of_death) -- change the method name to permadeath?
   end  
 end
 
-function Player:respawn()
+function Zombie:respawn()
   self:updateStat('hp', self:getStat('hp', 'max') ) 
 end
 
@@ -64,13 +65,13 @@ end
 ---  TAKE [X]
 --]]
 
-function Player:takeAction(task, ...) perform(task, self, unpack({...})) end
+function Zombie:takeAction(task, ...) perform(task, self, unpack({...})) end
 
 --[[
 --  GET [X]
 --]]
 
-function Player:getStat(stat, setting)
+function Zombie:getStat(stat, setting)
   if not setting then 
     return self[stat] -- current stat amount
   elseif setting == 'max' then  -- current stat maximum
@@ -89,7 +90,7 @@ function Player:getStat(stat, setting)
   end
 end
 
-function Player:getCost(stat, action)
+function Zombie:getCost(stat, action)
   local mob_type = self:getMobType()
   local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
   local cost = action_data.cost    
@@ -101,9 +102,9 @@ function Player:getCost(stat, action)
 end
 
 -- client-side functions
-function Player:getActions(category) return catalogAvailableActions[category](self) end
+function Zombie:getActions(category) return catalogAvailableActions[category](self) end
 
-function Player:getWeapons()
+function Zombie:getWeapons()
   local list = {}
   
   if self:isMobType('human') then
@@ -120,7 +121,7 @@ function Player:getWeapons()
   return list
 end  
 
-function Player:getTargets(mode)
+function Zombie:getTargets(mode)
   local targets = {}
   
   local p_tile, setting = self:getTile(), self:getStage()
@@ -155,9 +156,9 @@ end
 -- UPDATE [X]
 --]]
 
-function Player:updateMobType(mob_class) self.mob_type = mob_class end
+function Zombie:updateMobType(mob_class) self.mob_type = mob_class end
 
-function Player:updateStat(stat, num)
+function Zombie:updateStat(stat, num)
   local stat_max = self:getStat(stat, 'max')
   self[stat] = math.min(self[stat] + num, stat_max)
   
@@ -178,9 +179,9 @@ end
 -- METAMETHODS
 --]]
 
-function Player:__tostring() 
+function Zombie:__tostring() 
   -- if self:isMobType('zombie') then return 'a zombie' 
   return self:getUsername() 
 end
 
-return Player
+return Zombie

@@ -1,9 +1,7 @@
 local class =                   require('code.libs.middleclass')
 local action_list =             require('code.player.action.list')
-
 local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
-
 local skills =                  require('code.player.skills.class')
 local inventory =               require('code.player.inventory')
 local log =                     require('code.player.log.class')
@@ -11,17 +9,18 @@ local condition =               require('code.player.condition.class')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist = unpack(require('code.player.organic_weaponry'))
 local broadcastEvent =          require('code.server.event')
+local Player =                  require('code.player.player')
 
-local Player = class('Player')
+local Human = class('Human', Player)
 
 local default =     {hp=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ip=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ip=10, xp=   0, ap=0}
 local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ap=false, xp=false}
 
---Accounts[new_ID] = Player:new(n, t)
+--Accounts[new_ID] = Human:new(n, t)
 
-function Player:initialize(username, mob_type, map_zone, y, x) --add account name
+function Human:initialize(username, mob_type, map_zone, y, x) --add account name
   Player:initialize(username, mob_type, map_zone, y, x)
 
   self.xp, self.hp, self.ap, self.ip = default.xp, default.hp, default.ap, default.ip
@@ -36,9 +35,9 @@ function Player:initialize(username, mob_type, map_zone, y, x) --add account nam
 end
 
 -- broadcastEvent whenever player performs an action for others to see
-Player.broadcastEvent = broadcastEvent.player
+Human.broadcastEvent = broadcastEvent.player
 
-function Player:killed(cause_of_death) 
+function Human:killed(cause_of_death) 
 --[[ scenarios
 #1 - human  killed (turns into zombie)  [reset skills, xp, sp]
 #2 - zombie killed (decay)              [delete] 
@@ -65,13 +64,13 @@ end
 ---  TAKE [X]
 --]]
 
-function Player:takeAction(task, ...) perform(task, self, unpack({...})) end
+function Human:takeAction(task, ...) perform(task, self, unpack({...})) end
 
 --[[
 --  GET [X]
 --]]
 
-function Player:getStat(stat, setting)
+function Human:getStat(stat, setting)
   if not setting then 
     return self[stat] -- current stat amount
   elseif setting == 'max' then  -- current stat maximum
@@ -90,7 +89,7 @@ function Player:getStat(stat, setting)
   end
 end
 
-function Player:getCost(stat, action)
+function Human:getCost(stat, action)
   local mob_type = self:getMobType()
   local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
   local cost = action_data.cost    
@@ -102,9 +101,9 @@ function Player:getCost(stat, action)
 end
 
 -- client-side functions
-function Player:getActions(category) return catalogAvailableActions[category](self) end
+function Human:getActions(category) return catalogAvailableActions[category](self) end
 
-function Player:getWeapons()
+function Human:getWeapons()
   local list = {}
   
   if self:isMobType('human') then
@@ -121,7 +120,7 @@ function Player:getWeapons()
   return list
 end  
 
-function Player:getTargets(mode)
+function Human:getTargets(mode)
   local targets = {}
   
   local p_tile, setting = self:getTile(), self:getStage()
@@ -156,9 +155,9 @@ end
 -- UPDATE [X]
 --]]
 
-function Player:updateMobType(mob_class) self.mob_type = mob_class end
+function Human:updateMobType(mob_class) self.mob_type = mob_class end
 
-function Player:updateStat(stat, num)
+function Human:updateStat(stat, num)
   local stat_max = self:getStat(stat, 'max')
   self[stat] = math.min(self[stat] + num, stat_max)
   
@@ -179,9 +178,9 @@ end
 -- METAMETHODS
 --]]
 
-function Player:__tostring() 
+function Human:__tostring() 
   -- if self:isMobType('zombie') then return 'a zombie' 
   return self:getUsername() 
 end
 
-return Player
+return Human
