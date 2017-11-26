@@ -2,13 +2,6 @@ local class = require('code.libs.middleclass')
 local bit = require('plugin.bit')
 local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit.rshift
 
---local flag = require('code.player.skills.flag')
---local s_list = require('code.player.skills.list')
-
--------------------------------
-
----------------------
-
 local skills = class('skills')
 
 function skills:initialize(skill_list)
