@@ -6,7 +6,8 @@ local skills =                  require('code.player.skills.class')
 local inventory =               require('code.player.inventory')
 local condition =               require('code.player.condition.class')
 --local item_armor =              require('code.player.armor.item_class')
-local Fist = unpack(require('code.player.organic_weaponry'))
+local Fist =                    require('code.player.organic_weaponry')
+local human_skill_list =        require('code.player.human.skill_list')
 local Player =                  require('code.player.player')
 
 local Human = class('Human', Player)
@@ -20,7 +21,7 @@ function Human:initialize(username, mob_type, map_zone, y, x) --add account name
 
   self.ip = default_IP
   self.inventory = inventory:new(self)  -- zombies don't need inventory...
-  self.skills = skills:new(self)
+  self.skills = skills:new(human_skill_list)
   self.condition = condition:new(self)
   
   map_zone[y][x]:insert(self)
