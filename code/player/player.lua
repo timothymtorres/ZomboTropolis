@@ -1,6 +1,6 @@
 local class =                   require('code.libs.middleclass')
 local combat =                  require('code.player.combat')
-local log =                     require('code.player.log.class')
+local log =                     require('code.player.log')
 local broadcastEvent =          require('code.server.event')
 
 local Player = class('Player')
