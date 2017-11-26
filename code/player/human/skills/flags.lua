@@ -63,65 +63,6 @@ local skill_flags = {
   power_tech =         128,
   radio_tech =         256,
   computer_tech =      512,
-  
-  
-  
-  --------------
-  --- ZOMBIE ---
-  --------------
-  
-  -- Classes
-  brute =                1,
-  hunter =               2,
-  hive =                 4,
-
-  -- General
-  hp_bonus =             1,  -- hp_bonus MUST remain flag 1 b/c it's used for both zombies & humans on the bitflag 1 slot
-  hand_stimulus =        2,
-  head_stimulus =        4,
-  grapple =             16,
-  groan =               32,
-  gesture =             64,
-  smell_blood =        128,
-  muscle_stimulus =    256,
-  ep_bonus =           512,  -- fix this
-  drag_prey =         1024,  -- and this
-
-  -- Brute
-  claw =                 1,
-  dual_claw =            2,
-  claw_adv =             4,
-  power_claw =           8,
-  impale =              16,
-  armor =               32,
-  liquid_armor =        64,
-  ranged_armor =       128,
-  pain_armor =         256,
-  dying_grasp =        512,
-  
-  -- Hunter
-  sprint =               1,
-  leap =                 2,
-  leap_adv =             4,
-  track =                8,
-  scavenge =            16,
-  track_adv =           32,
-  dodge =               64,
-  smell_blood_adv =    128,
-  night_vision =       256,
-  mark_prey =          512,
-  
-  -- Hive  
-  hivemind =             1,  
-  bite =                 2,
-  bite_adv =             4,
-  corrode =              8,
-  acid =                16,
-  acid_adv =            32,
-  ruin =                64,
-  ransack =            128,
-  infection =          256,
-  infection_adv =      512,
 }
 
 return skill_flags
