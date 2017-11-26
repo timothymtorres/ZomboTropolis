@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local getTimeStamp = require('code.player.log.getTimeStamp')
+local getTimeStamp = require('code.player.getTimeStamp')
 
 local log = class('log')
 
