@@ -1,7 +1,5 @@
 local class =                   require('code.libs.middleclass')
 local combat =                  require('code.player.combat')
---local perform =                 require('code.player.action.perform')
---local catalogAvailableActions = require('code.player.action.catalog')
 local log =                     require('code.player.log.class')
 local broadcastEvent =          require('code.server.event')
 
@@ -28,39 +26,6 @@ end
 
 -- broadcastEvent whenever player performs an action for others to see
 Player.broadcastEvent = broadcastEvent.player
-
-function Player:killed(cause_of_death) 
---[[ scenarios
-#1 - human  killed (turns into zombie)  [reset skills, xp, sp]
-#2 - zombie killed (decay)              [delete] 
-#3 - zombie killed (regular death)      [nothing]
---]]
-
-  self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
-
-  if self:isMobType('human') then
-    self.hp, self.health_state = 0, {basic=4, advanced=8}
-    self:updateMobType('zombie')
-    self.skills, self.xp = skills:new(self), default.xp        
-    self.condition = condition:new(self)
-  --elseif cause_of_death == 'syringe' then    cause decay?
-  --elseif cause_of_death == 'burns' then     cause decay?
-  end
-  
-  if cause_of_death == 'decay' then self = nil
-  else self.carcass:killed(self)
-  end  
-end
-
-function Player:respawn()
-  self:updateStat('hp', self:getStat('hp', 'max') ) 
-end
-
---[[
----  TAKE [X]
---]]
-
-function Player:takeAction(task, ...) perform(task, self, unpack({...})) end
 
 --[[
 -- IS [X]
@@ -147,14 +112,9 @@ function Player:getCost(stat, action)
   return cost
 end
 
--- client-side functions
-function Player:getActions(category) return catalogAvailableActions[category](self) end
-
 --[[
 -- UPDATE [X]
 --]]
-
-function Player:updateMobType(mob_class) self.mob_type = mob_class end
 
 function Player:updatePos(y, x) self.y, self.x = y, x end
 
