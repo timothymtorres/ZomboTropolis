@@ -1,15 +1,16 @@
 local class = require('code.libs.middleclass')
 local bit = require('plugin.bit')
 local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit.rshift
+
 local flags = require('code.player.skills.flags')
 local s_list = require('code.player.skills.list')
+
 
 local skills = class('skills')
 
 function skills:initialize(player)
   self.flags = {}
-  local mob_type = player:getMobType()
-  for _, category in pairs(s_list.order[mob_type].category) do self.flags[category] = 0 end
+  for _, category in pairs(s_list.order.category) do self.flags[category] = 0 end
 end
 
 function skills:getFlags(category) return self.flags[category] end
@@ -57,19 +58,16 @@ end
 -- class prices, 100, 300, 600, 1000
 -- skill buy formula (y = .2*(x)^2 + .25*(x) + 50)
 function skills:buy(player, skill)
-  local player_mob_type = player:getMobType()
   local xp = player:getStat('xp')
   
   local class = s_list.isClass(skill)  
   local cost = (class and self:getCost('classes') ) or self:getCost('skills')  
   local required_flags = s_list.getRequiredFlags(skill)
-  local skill_mob_type = s_list.getMobType(skill)
 print('[skills:buy]', 'player.xp='..xp, 'skill['..skill..'] cost='..cost)  
 --print('required_flags = ', required_flags)  
   
   -- should return error msgs?
   assert(xp >= cost, 'Not enough xp')
-  assert(skill_mob_type == player_mob_type, 'Player mob type does not match skill')
   assert(player:isStanding(), 'Player must revive first')
   assert(not player.skills:check(skill), 'Already have skill')  
   
