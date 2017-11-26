@@ -39,7 +39,7 @@ function Zombie:starve()
   self:permadeath()   -- deletes zombie instance
 end
 
-function Zombie:respawn()
+function Zombie:revive()
   self:updateStat('hp', self:getStat('hp', 'max') ) 
 end
 
