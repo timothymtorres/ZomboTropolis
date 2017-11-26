@@ -11,17 +11,14 @@ local Player =                  require('code.player.player')
 
 local Human = class('Human', Player)
 
-local default =     {hp=50, ip= 0, xp=   0, ap=50}
-local default_max = {hp=50, ip=50, xp=1000, ap=50}
-local skill_bonus = {hp=10, ip=10, xp=   0, ap=0}
-local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ap=false, xp=false}
+local default_IP= 0
 
 --Accounts[new_ID] = Human:new(n, t)
 
 function Human:initialize(username, mob_type, map_zone, y, x) --add account name
   Player:initialize(username, mob_type, map_zone, y, x)
 
-  self.xp, self.hp, self.ap, self.ip = default.xp, default.hp, default.ap, default.ip
+  self.ip = default_IP
   self.inventory = inventory:new(self)  -- zombies don't need inventory...
   self.skills = skills:new(self)
   self.condition = condition:new(self)
@@ -46,25 +43,6 @@ function Human:takeAction(task, ...) perform(task, self, unpack({...})) end
 --[[
 --  GET [X]
 --]]
-
-function Human:getStat(stat, setting)
-  if not setting then 
-    return self[stat] -- current stat amount
-  elseif setting == 'max' then  -- current stat maximum
-    if stat ~= 'ap' then
-      local bonus_skill_name = bonus_flag_name[stat]
-      local bonus_skill_purchased = (bonus_skill_name and self.skills:check(bonus_skill_name)) or false
-      return default_max[stat] + (bonus_skill_purchased and skill_bonus[stat] or 0)
-    else  -- there is no ap_bonus skill
-      return default_max[stat]
-    end
-  elseif setting == 'default' then -- default starting stat amount
-    return default[stat]
-  elseif setting == 'bonus' then -- stat's bonus skill amount
-    local bonus_skill_name = bonus_flag_name[stat]
-    return (bonus_skill_name and skill_bonus[stat]) or 0
-  end
-end
 
 function Human:getCost(stat, action)
   local mob_type = self:getMobType()
@@ -125,30 +103,6 @@ function Human:getTargets(mode)
   end
   
   return targets
-end
-
-
---[[
--- UPDATE [X]
---]]
-
-function Human:updateMobType(mob_class) self.mob_type = mob_class end
-
-function Human:updateStat(stat, num)
-  local stat_max = self:getStat(stat, 'max')
-  self[stat] = math.min(self[stat] + num, stat_max)
-  
-  if stat == 'hp' then
-    if self.hp <= 0 then 
-      self.hp = 0
-      self:killed()
-    else
-      -- we add self.hp+1 so that if health_percent == 100% that it puts it slightly over and math.ceil rounds it to the 'full' state 
-      local health_percent = self.hp+1/stat_max 
-      self.health_basic = math.ceil(health_percent/(1/3))
-      self.health_advanced = math.ceil(health_percent/(1/7)) 
-    end  
-  end
 end
 
 --[[

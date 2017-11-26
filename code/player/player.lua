@@ -17,6 +17,7 @@ function Player:initialize(username, mob_type, map_zone, y, x) --add account nam
   self.mob_type = mob_type
   self.map_zone = map_zone
   self.y, self.x = y, x
+  self.xp, self.hp, self.ap = default.xp, default.hp, default.ap
   self.health_state = {basic=4, advanced=8}
   self.ID = self  
   self.log = log:new()
@@ -101,17 +102,6 @@ function Player:getTile()
   local map_zone = self:getMap()
   local y,x = self:getPos() 
   return map_zone:getTile(y, x)
-end
-
-function Player:getCost(stat, action)
-  local mob_type = self:getMobType()
-  local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
-  local cost = action_data.cost    
-  
-  if action_data.modifier then -- Modifies cost of action based off of skills
-    for skill, modifier in pairs(action_data.modifier) do cost = (self.skills:check(skill) and cost + modifier) or cost end
-  end  
-  return cost
 end
 
 --[[
