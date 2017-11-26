@@ -64,31 +64,16 @@ end
 -- client-side functions
 function Zombie:getActions(category) return catalogAvailableActions[category](self) end
 
-function Zombie:getWeapons()
-  local list = {}
-  
-  if self:isMobType('human') then
-    for inv_ID, item in ipairs(self.inventory) do
-      if item:isWeapon() then
-        list[#list+1] = {weapon=item, inventory_ID=inv_ID}        
-      end  
-    end
-    list[#list+1] = {weapon=Fist} -- organic           
-  elseif self:isMobType('zombie') then
-    list[#list+1] = {weapon=Claw} -- organic
-    list[#list+1] = {weapon=Bite} -- organic
-  end
-  return list
-end  
+function Zombie:getWeapons() return {{weapon=Claw}, {weapon=Bite}} end  
 
 function Zombie:getTargets(mode)
   local targets = {}
   
   local p_tile, setting = self:getTile(), self:getStage()
-  local all_players = p_tile:getPlayers(setting)
+  local all_players = p_tile:getPlayers(setting) -- we need to filter so that it's only humans
   
   for player in pairs(all_players) do 
-    if player:isStanding() and player ~= self then targets[#targets+1] = player end 
+    if player:isStanding() and player ~= self then targets[#targets+1] = player end
   end 
   
   if p_tile:isBuilding() then

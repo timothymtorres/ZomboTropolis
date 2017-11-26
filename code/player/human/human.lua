@@ -59,19 +59,11 @@ end
 function Human:getActions(category) return catalogAvailableActions[category](self) end
 
 function Human:getWeapons()
-  local list = {}
-  
-  if self:isMobType('human') then
-    for inv_ID, item in ipairs(self.inventory) do
-      if item:isWeapon() then
-        list[#list+1] = {weapon=item, inventory_ID=inv_ID}        
-      end  
-    end
-    list[#list+1] = {weapon=Fist} -- organic           
-  elseif self:isMobType('zombie') then
-    list[#list+1] = {weapon=Claw} -- organic
-    list[#list+1] = {weapon=Bite} -- organic
-  end
+  local list = {{weapon=Fist}} -- organic   
+
+  for inv_ID, item in ipairs(self.inventory) do
+    if item:isWeapon() then list[#list+1] = {weapon=item, inventory_ID=inv_ID} end  
+  end          
   return list
 end  
 
@@ -79,7 +71,7 @@ function Human:getTargets(mode)
   local targets = {}
   
   local p_tile, setting = self:getTile(), self:getStage()
-  local all_players = p_tile:getPlayers(setting)
+  local all_players = p_tile:getPlayers(setting) -- maybe get only zombie targets instead of all?
   
   for player in pairs(all_players) do 
     if player:isStanding() and player ~= self then targets[#targets+1] = player end 
@@ -92,14 +84,6 @@ function Human:getTargets(mode)
       for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
     end 
     --]]
-  end
-  
-  if mode == 'gesture' then
-    local map_zone = self:getMap()
-    local y, x = self:getPos()
-    for _,tile in ipairs(map_zone:get3x3(y, x)) do targets[#targets+1] = tile end
-    local dir = {1, 2, 3, 4, 5, 6, 7, 8}
-    for _, direction in ipairs(dir) do targets[#targets+1] = direction end
   end
   
   return targets
