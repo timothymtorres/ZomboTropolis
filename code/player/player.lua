@@ -27,6 +27,8 @@ end
 -- broadcastEvent whenever player performs an action for others to see
 Player.broadcastEvent = broadcastEvent.player
 
+function Player:permadeath() end -- run code to remove player instance from map
+
 --[[
 -- IS [X]
 --]]

@@ -31,27 +31,10 @@ function Human:initialize(username, mob_type, map_zone, y, x) --add account name
   --self.armor = item_armor:new(self)
 end
 
-function Human:killed(cause_of_death) 
---[[ scenarios
-#1 - human  killed (turns into zombie)  [reset skills, xp, sp]
-#2 - zombie killed (decay)              [delete] 
-#3 - zombie killed (regular death)      [nothing]
---]]
-
-  self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
-
-  if self:isMobType('human') then
-    self.hp, self.health_state = 0, {basic=4, advanced=8}
-    self:updateMobType('zombie')
-    self.skills, self.xp = skills:new(self), default.xp        
-    self.condition = condition:new(self)
-  --elseif cause_of_death == 'syringe' then    cause decay?
-  --elseif cause_of_death == 'burns' then     cause decay?
-  end
-  
-  if cause_of_death == 'decay' then self = nil
-  else self.carcass:killed(self)
-  end  
+function Human:killed()
+  -- we need to create a carcass for zombies to feed on, then afterwards create a new Zombie instance from the carcass?
+  -- But we need to retain all info for the player to see next time they log in, (so they can witness their gory death)
+  self:permadeath()   -- deletes human instance
 end
 
 --[[
