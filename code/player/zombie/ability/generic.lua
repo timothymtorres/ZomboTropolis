@@ -421,5 +421,4 @@ function acid.activate(player, target)
   target.log:insert(target_msg, event)  
 end
 
-
-return client_criteria
+return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, acid}

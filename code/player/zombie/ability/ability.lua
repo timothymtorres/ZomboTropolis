@@ -1,9 +1,14 @@
-local move, attack, enter, exit =                          unpack(require('code.player.action.default'))
+local drag_prey, groan, gesture, armor, ransack, mark_prey, track, acid = unpack(require('code.player.zombie.ability.generic'))
+
 local ability = {
   -- GENERAL
+  groan, gesture,
   -- BRUTE
+  armor, drag_prey
   -- HIVE
+  acid, ransack
   -- HUNTER
+  track, mark_prey,
 }
 
 for _, ability_tbl in ipairs(ability) do
