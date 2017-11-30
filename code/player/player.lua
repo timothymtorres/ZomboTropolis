@@ -34,7 +34,7 @@ function Player:permadeath() end -- run code to remove player instance from map
 -- IS [X]
 --]]
 
-function Player:isMobType(mob) return self.mob_type == mob end
+function Player:isMobType(mob) return string.lower(self.class.name) == mob end
 
 function Player:isStanding() return self:getStat('hp') > 0 end
 
@@ -56,7 +56,7 @@ function Player:getPos()  return self.y, self.x end
 
 function Player:getMap() return self.map_zone end
 
-function Player:getMobType() return self.mob_type end
+function Player:getMobType() return string.lower(self.class.name) end
 
 
 local health_state_desc = {
@@ -87,10 +87,6 @@ function Player:getStat(stat, setting)
     return (bonus_skill_name and skill_bonus[stat]) or 0
   end
 end
-
-function Player:getClass() return self.class end
-
-function Player:getClassName() return tostring(self.class) end
 
 function Player:getUsername() return self.username end
 
