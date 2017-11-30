@@ -98,25 +98,6 @@ end
 
 function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade') or (self.door:getHP() > 0 and 'door') end  -- should this be a class?
 
-function Building:getBarrierDesc() 
-  local cade_str, space_str = self.barricade:getDesc()
-  local door_str = self.door:getDesc()
-  
-  local no_cades_exist = (cade_str == 'secured')
-  local is_entrance_open = no_cades_exist and (door_str == 'destroyed' or self.door:isOpen())
-  local is_door_damaged = door_str ~= 'undamaged'
-  
-  cade_str = (is_entrance_open and 'left wide open') or cade_str
-  door_str = (is_door_damaged and 'is '..door_str..' and ') or ''
-  
-  local door_desc = 'The building door '..door_str
-  
-  local cade_desc = (cade_str == 'left wide open' or cade_str == 'secured' and 'has been '..cade_str..'. ') or 'has a '..cade_str..' barricade. '
-  local space_desc = 'There is '..space_str..' room available for fortifications.'
-  
-  return door_desc..cade_desc..space_desc
-end
-
 function Building:getEquipment()
   local machines = {}
   for machine in pairs(equipment.subclasses) do 
@@ -148,9 +129,6 @@ function Building:isFortified() return self.barricade:getHP() > 0 and self.door:
 function Building:isPowered() return self.generator:isActive() end
 
 function Building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
-
--- do we need this?!
-function Building:isDescPresent(desc_type) return (self[desc_type] and #self[desc_type] > 0) or false end
 
 function Building:updateHP(num) 
   if self:getBarrier() == 'barricade' then 

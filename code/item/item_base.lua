@@ -58,18 +58,16 @@ end
 
 function ItemBase:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
 
-function ItemBase:getClass() return self.class end
-
 function ItemBase:getCondition() return self.condition end
 
 local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine'}
 
-function ItemBase:getConditionState() return condition_states[self.condition] or '???' end
+function ItemBase:getConditionStr() return condition_states[self.condition] end
 
 function ItemBase:getClassCategory() return self.CLASS_CATEGORY end
 
 function ItemBase:getWeight() return self.WEIGHT end
 
-function ItemBase:__tostring() return tostring(self.class) end
+function ItemBase:__tostring() return tostring(self.class.name) end
 
 return ItemBase

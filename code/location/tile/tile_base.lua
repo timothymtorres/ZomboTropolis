@@ -71,8 +71,6 @@ function TileBase:countCorpses(setting)
   return count
 end
 
-function TileBase:getClass() return self.class end
-
 function TileBase:getMap() return self.map_zone end
 
 function TileBase:getPos() return self.y, self.x end
@@ -81,41 +79,6 @@ function TileBase:getIntegrityState()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
-end
-
-function TileBase:getDesc(setting)
-  local str, desc
-  
-  if not setting or setting == 'external' then
-    desc = self.external_desc
-    
-    if not self:isBuilding() then  -- no building external desc
-      str = 'You are at '..self:getName()..'.'
-    else -- outside building external desc
-      local adjective, color = (desc.adjective and ' '..desc.adjective) or '', (desc.color and ' '..desc.color) or ''
-      local material = ' '..desc.material..' building'
-      local details, surroundings = (desc.details and ' with '..desc.details) or '', (desc.surroundings and ' '..desc.surroundings) or ''
-      str = 'You are standing outside the '..self:getName()..' '..self:getClassName()..', a'..adjective..color..material..details..surroundings..'.'   
-    end
-  elseif setting == 'internal' and self:isBuilding() then
-    str = 'You are standing inside the '..self:getName() 
-    
-    if self:isDescPresent('powered_desc') and self:isPowered() then -- inside building powered desc
-      desc = self.powered_desc
-      if desc:sub(1, 3) == '...' then str = str..','
-      else str = str..'. ' end
-    elseif self:isDescPresent('internal_desc') then     -- inside building unpowered desc
-      desc = self.internal_desc
-      if desc:sub(1, 3) == '...' then str = str..','
-      else str = str..'. ' end  
-    else
-      desc = ''
-    end
-    
-    str = str..desc..'.'    
-  end
-
-  return str
 end
 
 function TileBase:getPlayers(setting) 
@@ -185,6 +148,6 @@ function TileBase:search(player, setting, was_flashlight_used)
   return item
 end
 
-function TileBase:__tostring() return self:getName()..' '..self:getClassName() end
+function TileBase:__tostring() return self.name..' '..self.class.name end
 
 return TileBase

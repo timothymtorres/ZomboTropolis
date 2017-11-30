@@ -22,12 +22,6 @@ end
 
 function equipment:isPresent() return self.hp > 0 end
 
-function equipment:getClass() return self.class end
-
-function equipment:getClassName() return tostring(self.class) end
-
-function equipment:getName() return self.name end
-
 function equipment:getHP() return self.hp end
 
 function equipment:getBuilding() return self.building end
