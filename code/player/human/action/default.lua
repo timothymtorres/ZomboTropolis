@@ -56,24 +56,22 @@ function move.outcome(player, dir)
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
-    if player:isMobType('human') and map:isBuilding(dir_y, dir_x) and player.skills:check('roof_travel') then
+    if map:isBuilding(dir_y, dir_x) and player.skills:check('roof_travel') then
       map[dir_y][dir_x]:insert(player, 'inside')    
     else
       map[dir_y][dir_x]:insert(player, 'outside')
     end
   else  -- player is outside
-    if player:isMobType('human') then
-      local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
-        local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
-        local GPS_usage = GPS_chance >= math.random()
-        
-        -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-        if GPS_usage then player:updateStat('ap', 1) end
-        
-        local GPS = player.inventory:lookup(inv_ID)
-        if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
-      end
+    local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
+    if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
+      local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+      local GPS_usage = GPS_chance >= math.random()
+      
+      -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+      if GPS_usage then player:updateStat('ap', 1) end
+      
+      local GPS = player.inventory:lookup(inv_ID)
+      if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
     end
     
     map[y][x]:remove(player)
