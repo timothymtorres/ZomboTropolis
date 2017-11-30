@@ -19,15 +19,10 @@ function Leather:activate(player)
   local msg = 'You equip a leather jacket.'
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'leather', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'leather', player}  
   player.log:insert(msg, event)  
 end
 
@@ -49,15 +44,10 @@ function Firesuit:activate(player)
   local msg = 'You equip a firesuit.'
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'firesuit', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'firesuit', player}  
   player.log:insert(msg, event)  
 end
 

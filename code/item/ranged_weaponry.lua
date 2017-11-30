@@ -148,15 +148,11 @@ function Flare:activate(player)
   msg =               msg:replace(words)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+
   player:broadcastEvent(nearby_msg, self_msg, event)
   
   local settings = {stage='inside', exclude={}} -- broadcast to players on the same tile that are inside  

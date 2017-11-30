@@ -55,14 +55,10 @@ function drag_prey.activate(player, target)
   msg =   msg and msg:replace(target)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'drag_prey', player, target, has_been_dragged}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
+
+  local event = {'drag_prey', player, target, has_been_dragged}  
 
   if has_been_dragged then
     local tile = player:getTile()    
@@ -116,17 +112,13 @@ function groan.activate(player)
   human_msg =   human_msg:replace(words)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
   
   local event = {'groan', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
   --local event_human_inside, event_human_outside = {'groan', player}, {'groan', player, y, x}
   --humans with military class can pinpoint the groan exactly?  
-  
-  --------------------------------------------
-  ---------   B R O A D C A S T   ------------
-  --------------------------------------------  
-  
+
   local exclude = {}
   exclude[player] = true
   exclude[tile] = true
@@ -193,15 +185,10 @@ function gesture.activate(player, target)
   msg =           msg:replace(object)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'gesture', player, target}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'gesture', player, target}  
   player:broadcastEvent(msg, self_msg, event)  
 end
 
@@ -311,15 +298,10 @@ function track.activate(player)
   end  
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'track', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
-  --------------------------------------------  
-  
+  --------------------------------------------
+
+  local event = {'track', player}
   player:broadcastEvent(msg, self_msg, event)  
 end
 
@@ -407,16 +389,12 @@ function acid.activate(player, target)
     self_msg = self_msg..'  The '..tostring(destroyed_item_INST)..' was destroyed!'
     target_msg = target_msg..'  Your '..tostring(destroyed_item_INST)..' was destroyed!'
   end  
-  --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'acid', player, target, acid_successful, target_acid_immune}  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'acid', player, target, acid_successful, target_acid_immune}    
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
 end

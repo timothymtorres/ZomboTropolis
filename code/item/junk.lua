@@ -31,15 +31,10 @@ function Book:activate(player)
   msg = msg:replace(tile:isPowered() and 'in the light' or '')
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'book', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'book', player}  
   player.log:insert(msg, event)    
 end
 
@@ -61,15 +56,10 @@ function Bottle:activate(player)
   local msg = 'You drink some liquor from the bottle.'
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'bottle', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'bottle', player}  
   player.log:insert(msg, event)   
 end
 

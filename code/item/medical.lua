@@ -55,15 +55,10 @@ function FAK:activate(player, target)
   target_msg = target_msg:replace(player)  
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'FAK', player, target}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'FAK', player, target}    
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
 end
@@ -113,15 +108,10 @@ function Bandage:activate(player, target)
   target_msg = target_msg:replace(player)   
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'bandage', player, target}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
 
+  local event = {'bandage', player, target}  
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)   
 end
@@ -198,15 +188,10 @@ function Syringe:activate(player, target)
   target_msg = target_msg:replace(player)    
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}    
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
 end
@@ -248,15 +233,10 @@ function Vaccine:activate(player, target)
   target_msg = target_msg:replace(player)  
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'vaccine', player, target}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'vaccine', player, target}   
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
 end
@@ -289,15 +269,10 @@ function Antidote:activate(player, target)
   target_msg = target_msg:replace(player) 
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'antidote', player, target}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'antidote', player, target}    
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)   
 end

@@ -22,15 +22,10 @@ function respawn.outcome(player)
   local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'  
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'respawn', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'respawn', player}  
   player:broadcastEvent(msg, self_msg, event)    
 end
 
@@ -78,15 +73,10 @@ function ransack.outcome(player)
   msg =           msg:replace(destruction_type..'s')
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'ransack', player, integrity_state}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'ransack', player, integrity_state}  
   player:broadcastEvent(msg, self_msg, event)  
 end
 
@@ -173,15 +163,10 @@ function feed.outcome(player)
   local msg, self_msg = 'A zombie feeds on a corpse.', 'You feed on a corpse.'
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'feed', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'feed', player}  
   player:broadcastEvent(msg, self_msg, event)   
 end
 

@@ -5,7 +5,7 @@ local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 
 local Item =              require('code.item.item')
---local Skill =     		  require('code.player.skills.skill')  Dunno how we are going to do this?
+--local Skill =           require('code.player.skills.skill')  Dunno how we are going to do this?
 
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
@@ -56,24 +56,22 @@ function move.outcome(player, dir)
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
-    if player:isMobType('human') and map:isBuilding(dir_y, dir_x) and player.skills:check('roof_travel') then
+    if map:isBuilding(dir_y, dir_x) and player.skills:check('roof_travel') then
       map[dir_y][dir_x]:insert(player, 'inside')    
     else
       map[dir_y][dir_x]:insert(player, 'outside')
     end
   else  -- player is outside
-    if player:isMobType('human') then
-      local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-      if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
-        local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
-        local GPS_usage = GPS_chance >= math.random()
-        
-        -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-        if GPS_usage then player:updateStat('ap', 1) end
-        
-        local GPS = player.inventory:lookup(inv_ID)
-        if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
-      end
+    local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
+    if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
+      local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
+      local GPS_usage = GPS_chance >= math.random()
+      
+      -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
+      if GPS_usage then player:updateStat('ap', 1) end
+      
+      local GPS = player.inventory:lookup(inv_ID)
+      if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
     end
     
     map[y][x]:remove(player)
@@ -92,15 +90,10 @@ function move.outcome(player, dir)
   self_msg = self_msg:replace(names)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-
-  local event = {'move', player, dir, GPS_usage}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'move', player, dir, GPS_usage}    
   player.log:insert(self_msg, event)  
 end
 
@@ -260,16 +253,12 @@ function attack.outcome(player, target, weapon, inv_ID)
 
   -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
-
-  --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 
+
+  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
@@ -305,15 +294,10 @@ function enter.outcome(player)
   msg = msg:replace(map[y][x])
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'enter', player, map[y][x]}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'enter', player, map[y][x]}  
   player.log:insert(msg, event)
 end
 
@@ -341,15 +325,10 @@ function exit.outcome(player)
   msg = msg:replace(map[y][x])
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'exit', player, map[y][x]}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'exit', player, map[y][x]}  
   player.log:insert(msg, event)  
 end
 

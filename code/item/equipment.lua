@@ -32,15 +32,10 @@ function Generator:activate(player)
   msg = msg:replace(player)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'generator', player}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'generator', player}   
   player:broadcastEvent(msg, self_msg, event)     
 end
 
@@ -74,15 +69,10 @@ function Transmitter:activate(player)
   msg = msg:replace(player)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'transmitter', player}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'transmitter', player}    
   player:broadcastEvent(msg, self_msg, event)   
 end
 
@@ -116,15 +106,10 @@ function Terminal:activate(player)
   msg = msg:replace(player)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'terminal', player}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'terminal', player}  
   player:broadcastEvent(msg, self_msg, event)   
 end
 
@@ -158,15 +143,10 @@ function Fuel:activate(player)
   msg = msg:replace(player)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'fuel', player}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'fuel', player}    
   player:broadcastEvent(msg, self_msg, event)     
 end
 
@@ -200,17 +180,12 @@ function Barricade:activate(player)
   --------------------------------------------
   
   local msg = not did_zombies_interfere and 'You fortify the building with a barricade.' or 'You start to fortify the building, but a zombie lurches towards you.'
-    
-  --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'barricade', player, did_zombies_interfere}  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'barricade', player, did_zombies_interfere}    
   player.log:insert(msg, event)   
 end
 
@@ -255,15 +230,10 @@ function Toolbox:activate(player)
   msg =           msg:replace(names)   
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'toolbox', integrity_state}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'toolbox', integrity_state}    
   player:broadcastEvent(msg, self_msg, event)  
 end
 
