@@ -90,15 +90,10 @@ function move.outcome(player, dir)
   self_msg = self_msg:replace(names)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-
-  local event = {'move', player, dir, GPS_usage}  
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
+  local event = {'move', player, dir, GPS_usage}    
   player.log:insert(self_msg, event)  
 end
 
@@ -258,16 +253,12 @@ function attack.outcome(player, target, weapon, inv_ID)
 
   -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
-
-  --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 
+
+  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
@@ -303,15 +294,10 @@ function enter.outcome(player)
   msg = msg:replace(map[y][x])
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'enter', player, map[y][x]}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'enter', player, map[y][x]}  
   player.log:insert(msg, event)
 end
 
@@ -339,15 +325,10 @@ function exit.outcome(player)
   msg = msg:replace(map[y][x])
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-  
-  local event = {'exit', player, map[y][x]}
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
+  local event = {'exit', player, map[y][x]}  
   player.log:insert(msg, event)  
 end
 

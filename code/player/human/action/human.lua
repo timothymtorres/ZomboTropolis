@@ -36,15 +36,10 @@ function search.outcome(player)
   msg = msg:replace(names)
   
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------  
-  
-  local event = {'search', player, item, flashlight_was_used}   
-  
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------     
-  
+
+  local event = {'search', player, item, flashlight_was_used}   
   player.log:insert(msg, event)
 end
 
@@ -64,15 +59,10 @@ function discard.outcome(player, inv_ID)
   msg = msg:replace(item)    
     
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-    
-  local event = {'discard', player, inv_ID}    
-    
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------   
   
+  local event = {'discard', player, inv_ID}    
   player.log:insert(msg, event)
 end
 
@@ -126,17 +116,13 @@ function speak.outcome(player, message, target)
   local names = {player=player, target=target, msg=message}
   whispered_msg = whispered_msg and whispered_msg:replace(names)
   self_msg =                             self_msg:replace(names)
-  public_msg =                         public_msg:replace(names)
-  
-  --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-    
-  local event = {'speak', player, message, target}      
+  public_msg =                         public_msg:replace(names)  
     
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
-  -------------------------------------------- 
+  --------------------------------------------
+
+  local event = {'speak', player, message, target}    
   
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true  
@@ -199,15 +185,10 @@ function reinforce.outcome(player)
   msg = msg:replace(player)
     
   --------------------------------------------
-  -------------   E V E N T   ----------------
-  --------------------------------------------
-    
-  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?    
-    
-  --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------   
   
+  local event = {'reinforce', player, did_zombies_interfere, building_was_reinforced, potential_hp} -- should we do something with potential hp?      
   player:broadcastEvent(msg, self_msg, event)  
 end
 
