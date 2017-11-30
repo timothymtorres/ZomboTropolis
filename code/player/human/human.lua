@@ -93,13 +93,4 @@ function Human:getTargets(mode)
   return targets
 end
 
---[[
--- METAMETHODS
---]]
-
-function Human:__tostring() 
-  -- if self:isMobType('zombie') then return 'a zombie' 
-  return self:getUsername() 
-end
-
 return Human
