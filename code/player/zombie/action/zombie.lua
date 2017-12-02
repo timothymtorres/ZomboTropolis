@@ -11,7 +11,7 @@ function respawn.client_criteria(player) assert(not player:isStanding(), 'Must b
 
 function respawn.server_criteria(player) assert(not player:isStanding(), 'You are already standing') end
 
-function respawn.outcome(player) 
+function respawn.activate(player) 
   player:respawn()  
   
   --------------------------------------------
@@ -51,7 +51,7 @@ function ransack.server_criteria(player)
   assert(can_ransack_building, 'Unable to ransack building in current state')
 end
 
-function ransack.outcome(player)
+function ransack.activate(player)
   local ransack_dice = dice:new('2d3')
   if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
   if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
@@ -126,7 +126,7 @@ local corpse_effects = {
   },
 }
 
-function feed.outcome(player) 
+function feed.activate(player) 
   local p_tile, p_stage = player:getTile(), player:getStage()
   local tile_player_group = p_tile:getPlayers(p_stage)
   local target
@@ -193,7 +193,7 @@ function ability.server_criteria(name, player, ...)
   if skillCriteria[name] then skillCriteria[name](player, ...) end 
 end
 
-function ability.outcome(name, player, target)
+function ability.activate(name, player, target)
   if enzyme_list[name] then
     local cost = player:getCost('ep', name)
     player:updateStat('ep', cost)

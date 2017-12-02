@@ -48,7 +48,7 @@ end
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
 local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
 
-function move.outcome(player, dir)
+function move.activate(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
@@ -158,7 +158,7 @@ end
 
 local ARMOR_DAMAGE_MOD = 2.5
 
-function attack.outcome(player, target, weapon, inv_ID)
+function attack.activate(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
   local caused_infection  
@@ -280,7 +280,7 @@ function enter.server_criteria(player)
   assert(player:isStaged('outside'), 'Player must be outside building to enter')
 end
 
-function enter.outcome(player)
+function enter.activate(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'outside')
@@ -311,7 +311,7 @@ function exit.server_criteria(player)
   assert(player:isStaged('inside'), 'Player must be inside building to exit')
 end
 
-function exit.outcome(player)
+function exit.activate(player)
   local y, x = player:getPos()
   local map = player:getMap()
   map[y][x]:remove(player, 'inside')
@@ -342,8 +342,8 @@ function criteria.default(action, player, ...)
   if criteria[action] then criteria[action](player, ...) end
 end
 
-function default.outcome(action, player, ...)
-  return outcome[action](player, ...)
+function default.activate(action, player, ...)
+  return activate[action](player, ...)
 end
 --]]
 

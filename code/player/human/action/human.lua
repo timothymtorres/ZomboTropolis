@@ -7,7 +7,7 @@ string.replace =          require('code.libs.replace')
 
 local search = {name='search'}
 
-function search.outcome(player)
+function search.activate(player)
   local p_tile = player:getTile()
   local flashlight_was_used
   
@@ -47,7 +47,7 @@ end
 
 local discard = {name='discard'}
 
-function discard.outcome(player, inv_ID)
+function discard.activate(player, inv_ID)
   local item = player.inventory:lookup(inv_ID)
   player:remove(inv_ID)
   
@@ -97,7 +97,7 @@ function speak.server_criteria(player, message) --, target)
 end
 
 
-function speak.outcome(player, message, target)  
+function speak.activate(player, message, target)  
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
@@ -161,7 +161,7 @@ function reinforce.server_criteria(player)
   assert(player.skills:check('reinforce'), 'Must have skill to reinforce building')  
 end
 
-function reinforce.outcome(player)
+function reinforce.activate(player)
   local p_tile = player:getTile()
   local building_was_reinforced, potential_hp = p_tile.barricade:reinforceAttempt()
   local did_zombies_interfere = p_tile.barricade:didZombiesIntervene(player)
@@ -206,7 +206,7 @@ function item.server_criteria(name, player, inv_ID, ...)
   if itemObj.server_criteria then itemObj:server_criteria(player, ...) end
 end
 
-function item.outcome(name, player, inv_ID, target)
+function item.activate(name, player, inv_ID, target)
   local itemObj = player.inventory:lookup(inv_ID)
   local result = itemObj:activate(player, target) 
   
@@ -255,7 +255,7 @@ function equipment.server_criteria(name, player, operation)
   if equipmentCriteria[name] then equipmentCriteria[name](player, operation) end  
 end
 
-function equipment.outcome(name, player, operation, ...)  -- condition degrade on use?
+function equipment.activate(name, player, operation, ...)  -- condition degrade on use?
   return equipmentActivate[name](player, operation, ...) --unpack({...}))
 end
 
