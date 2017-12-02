@@ -1,30 +1,30 @@
 local class = require('code.libs.middleclass')
 
-local equipment = class('equipment')
+local Equipment = class('EquipmentBase')
 local max_hp = 7
 
-function equipment:initialize(building) 
+function EquipmentBase:initialize(building) 
   self.hp = 0
   self.building = building
 end
 
-function equipment:install() self.hp = max_hp end
+function EquipmentBase:install() self.hp = max_hp end
 
-function equipment:destroy()
+function EquipmentBase:destroy()
   self.hp = 0
   -- update building stuff... (ie. power out if generator, player notification event)
 end
 
-function equipment:updateHP(num)
+function EquipmentBase:updateHP(num)
   self.hp = math.min(math.max(self.hp + num, 0), max_hp) 
   if self.hp <= 0 then self:destroy() end  
 end
 
-function equipment:isPresent() return self.hp > 0 end
+function EquipmentBase:isPresent() return self.hp > 0 end
 
-function equipment:getHP() return self.hp end
+function EquipmentBase:getHP() return self.hp end
 
-function equipment:getBuilding() return self.building end
+function EquipmentBase:getBuilding() return self.building end
 
 --[[
   self.generator = 0        -- 1 bit {exist}, 3 bit {08hp}, 4 bit {fuel} 
@@ -45,4 +45,4 @@ function equipment:getBuilding() return self.building end
   }
 --]]
 
-return equipment
+return EquipmentBase
