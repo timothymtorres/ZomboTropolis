@@ -5,6 +5,10 @@ local Terminal = class('Terminal', EquipmentBase)
 local MAX_HP = 7
 local operations = {}
 
+Terminal.FULL_NAME = 'terminal'
+Terminal.DURABILITY = 100
+Terminal.CATEGORY = 'engineering'
+
 function Terminal:initialize() 
   equipment.initialize(self)
 end

@@ -5,6 +5,10 @@ local Transmitter = class('Transmitter', EquipmentBase)
 local MAX_HP = 7
 local operations = {'broadcast', 'retune'}
 
+Transmitter.FULL_NAME = 'transmitter'
+Transmitter.DURABILITY = 100
+Transmitter.CATEGORY = 'engineering'
+
 function Transmitter:initialize() 
   equipment.initialize(self)
   self.freq = 0
