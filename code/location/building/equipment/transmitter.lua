@@ -28,4 +28,17 @@ function Transmitter:getOperations() return operations end
 
 function Transmitter:hasOperations() return true end
 
+------------------------------------------------------
+
+--function Transmitter:client_criteria() end
+
+--function Transmitter:server_criteria() end
+
+function Transmitter:activate(player, operation, ...)
+  self[operation](player, ...)
+
+  --local building = player:getTile()  
+  --building.transmitter[operation](building.transmitter, player, unpack({...}))
+end
+
 return Transmitter
