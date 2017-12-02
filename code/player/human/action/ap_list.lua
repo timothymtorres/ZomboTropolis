@@ -30,6 +30,15 @@ local ap_list = {
       leather =       {cost= 1},
       firesuit =      {cost= 1},
       toolbox =       {cost=10, modifier={repair = -2, repair_adv = -3}},
+      --[[ 
+      **RELOADING**
+      assualt rifle - ? ap (3 bursts)         [10 ap, 8ap,  5ap]
+      magnum        - ? ap (6 shots)          [5 ap,  4ap,  2ap]
+      pistol        - ? ap (14 shots)         [5 ap,  4ap,  2ap]
+      shotgun       - ? ap (2 shots)          [3 ap,  2ap, .5ap]
+      bow           - ? ap (8 shots [quiver]) [8 ap,  6ap,  3ap]  
+      speed_loader =  {cost=3, modifier={guns = -2, handguns = -1},},  
+      --]]        
     },
     equipment = {
       broadcast =     {cost= 3, modifier={tech = -1, radio_tech = -1}},
