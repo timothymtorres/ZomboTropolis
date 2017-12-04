@@ -8,9 +8,12 @@ local condition =               require('code.player.condition.class')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist =                    require('code.player.organic_weaponry')
 local human_skill_list =        require('code.player.human.skill_list')
+local human_action_list =       require('code.player.human.action.action')
 local Player =                  require('code.player.player')
 
 local Human = class('Human', Player)
+
+Human.action_list = human_action_list
 
 local default_IP= 0
 
@@ -39,25 +42,6 @@ end
 --[[
 ---  TAKE [X]
 --]]
-
-function Human:perform(action, ...) 
-
-end
-
---[[
---  GET [X]
---]]
-
-function Human:getCost(stat, action)
-  local mob_type = self:getMobType()
-  local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
-  local cost = action_data.cost    
-  
-  if action_data.modifier then -- Modifies cost of action based off of skills
-    for skill, modifier in pairs(action_data.modifier) do cost = (self.skills:check(skill) and cost + modifier) or cost end
-  end  
-  return cost
-end
 
 -- client-side functions
 function Human:getActions(category) return catalogAvailableActions[category](self) end

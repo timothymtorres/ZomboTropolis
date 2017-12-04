@@ -5,6 +5,8 @@ local broadcastEvent =          require('code.server.event')
 
 local Player = class('Player')
 
+Player.broadcastEvent = broadcastEvent.player
+
 local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}
 local skill_bonus = {hp=10, ep=10, ip=10, xp=   0, ap=0}
@@ -25,8 +27,33 @@ function Player:initialize(username, mob_type, map_zone, y, x) --add account nam
   map_zone[y][x]:insert(self)
 end
 
--- broadcastEvent whenever player performs an action for others to see
-Player.broadcastEvent = broadcastEvent.player
+local function basicCriteria(player, action_str, ...)
+  assert(player.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later   
+  local ap, AP_cost = player:getStat('ap'), player:getCost('ap', action_str, ...)
+  assert(AP_cost, 'action has no ap_cost?')  -- remove this assertion once all actions have been added (will be unneccsary)
+  assert(ap >= AP_cost, 'not enough ap for action')
+  assert(player:isStanding() or (action_str == 'respawn' and player:isMobType('zombie')), 'Must be standing for action')
+end
+
+function Player:perform(action_str, ...) 
+  local action = self.class.action_list[action_str]
+
+  local ap_verification, ap_error_msg = pcall(basicCriteria, self, ...)
+  local verification, error_msg = pcall(action.server_criteria, self, ...)
+
+  if ap_verification and verification and class_verification then
+    local ap, AP_cost = self:getStat('ap'), self:getCost('ap', action_str)
+    action:activate(self, ...)
+
+    self.condition:elapse(player, AP_cost)   
+    self:updateStat('ap', -1*AP_cost)
+    self:updateStat('xp', AP_cost)
+  else -- Houston, we have a problem!
+    self.log:insert(ap_error_msg or class_error_msg or error_msg)
+  end
+  
+  --self:updateStat('IP', 1)  -- IP connection hits?  Hmmmm?
+end
 
 function Player:permadeath() end -- run code to remove player instance from map
 
@@ -50,8 +77,6 @@ function Player:isSameLocation(target) return (self:getStage() == target:getStag
 --  GET [X]
 --]]
 
-function Player:getID() return self.ID end
-
 function Player:getPos()  return self.y, self.x end
 
 function Player:getMap() return self.map_zone end
@@ -67,6 +92,23 @@ local health_state_desc = {
 function Player:getHealthState(setting)
   local status = self.health_state[setting]
   return health_state_desc[status] 
+end
+
+local function Player:getCost(stat, action_str, ID)
+  local action_data
+
+  if action_str == 'item' then            action_data = self.inventory:lookup(ID)
+  elseif action_str == 'equipment' then --action_data =
+  elseif action_str == 'ability' then   --action_data =
+  else                                    action_data = self.class.action_list[action_str] 
+  end
+
+  local cost = action_data[stat].cost
+  
+  if action_data[stat].modifier then -- Modifies cost of action based off of skills
+    for skill, modifier in pairs(action_data[stat].modifier) do cost = (player.skills:check(skill) and cost + modifier) or cost end
+  end  
+  return cost
 end
 
 function Player:getStat(stat, setting)
@@ -89,8 +131,6 @@ function Player:getStat(stat, setting)
 end
 
 function Player:getUsername() return self.username end
-
---function Player:getAccountName() return self.account_name end
 
 function Player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
