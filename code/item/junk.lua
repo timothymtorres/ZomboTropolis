@@ -11,6 +11,7 @@ Book.FULL_NAME = 'book'
 Book.WEIGHT = 2
 Book.CATEGORY = 'research'
 Book.DURABILITY = 0
+Book.ap = {cost = 5}
 
 local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 
@@ -45,6 +46,7 @@ local Bottle = class('Bottle', ItemBase)
 Bottle.FULL_NAME = 'bottle'
 Bottle.WEIGHT = 1
 Bottle.DURABILITY = 0
+Bottle.ap = {cost = 1}
 
 function Bottle:activate(player)
   player:updateHP(self.condition)
@@ -70,6 +72,7 @@ local Newspaper = class('Newspaper', ItemBase):include(isWeapon)
 Newspaper.FULL_NAME = 'newspaper'
 Newspaper.WEIGHT = 1
 Newspaper.DURABILITY = 0
+Newspaper.ap = {cost = 0}
 
 Newspaper.weapon = {
   ACCURACY = 1.00,

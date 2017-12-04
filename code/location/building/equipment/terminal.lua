@@ -8,6 +8,7 @@ local operations = {}
 Terminal.FULL_NAME = 'terminal'
 Terminal.DURABILITY = 100
 Terminal.CATEGORY = 'engineering'
+Terminal.ap = {cost = 3, modifier = {tech = -1, computer_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
 function Terminal:initialize() 
   equipment.initialize(self)

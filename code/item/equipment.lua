@@ -10,6 +10,7 @@ Generator.FULL_NAME = 'generator'
 Generator.WEIGHT = 25
 Generator.DURABILITY = 0
 Generator.CATEGORY = 'engineering'
+Generator.ap = {cost = 10, modifier = {tech = -2, power_tech = -4}}
 
 function Generator:client_criteria(player)
   local p_tile = player:getTile()
@@ -47,6 +48,7 @@ Transmitter.FULL_NAME = 'transmitter'
 Transmitter.WEIGHT = 25
 Transmitter.DURABILITY = 0
 Transmitter.CATEGORY = 'engineering'
+Transmitter.ap = {cost = 10, modifier = {tech = -2, radio_tech = -4}}
 
 function Transmitter:client_criteria(player)
   local p_tile = player:getTile()  
@@ -84,6 +86,7 @@ Terminal.FULL_NAME = 'terminal'
 Terminal.WEIGHT = 25
 Terminal.DURABILITY = 0
 Terminal.CATEGORY = 'engineering'
+Terminal.ap = {cost = 10, modifier = {tech = -2, computer_tech = -4}} 
 
 function Terminal:client_criteria(player)
   local p_tile = player:getTile()
@@ -121,6 +124,7 @@ Fuel.FULL_NAME = 'fuel tank'
 Fuel.WEIGHT = 10
 Fuel.DURABILITY = 0
 Fuel.CATEGORY = 'engineering'
+Fuel.ap = {cost = 1}
 
 function Fuel:client_criteria(player)
   local p_tile = player:getTile()
@@ -158,6 +162,7 @@ Barricade.FULL_NAME = 'barricade'
 Barricade.WEIGHT = 7
 Barricade.DURABILITY = 0
 Barricade.CATEGORY = 'engineering'
+Barricade.ap = {cost = 1}
 
 function Barricade:client_criteria(player)
   local p_tile = player:getTile()
@@ -197,7 +202,7 @@ Toolbox.FULL_NAME = 'toolbox'
 Toolbox.WEIGHT = 15
 Toolbox.DURABILITY = 10
 Toolbox.CATEGORY = 'engineering'
---Toolbox.MASTER_SKILL = 'repair_adv'
+Toolbox.ap = {cost = 10, modifier = {repair = -2, repair_adv = -3}} --{cost= 5, modifier={repair= -1, repair_adv = -1}}
 
 function Toolbox:client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to repair')

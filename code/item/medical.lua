@@ -13,6 +13,7 @@ FAK.FULL_NAME = 'first aid kit'
 FAK.WEIGHT = 8
 FAK.DURABILITY = 0
 FAK.CATEGORY = 'research'
+FAK.ap = {cost = 1}
 
 FAK.medical = {DICE = '1d5'}
 
@@ -71,6 +72,7 @@ Bandage.FULL_NAME = 'bandage'
 Bandage.WEIGHT = 3
 Bandage.DURABILITY = 0
 Bandage.CATEGORY = 'research'
+Bandage.ap = {cost = 1}
 
 Bandage.medical = {DICE = '1d3'}
 
@@ -124,6 +126,7 @@ Syringe.FULL_NAME = 'syringe'
 Syringe.WEIGHT = 5
 Syringe.DURABILITY = 0
 Syringe.CATEGORY = 'research'
+Syringe.ap = {cost = 1}
 
 Syringe.medical = {ACCURACY = 0.99999} --0.05
 
@@ -204,6 +207,7 @@ Vaccine.FULL_NAME = 'antibodies'
 Vaccine.WEIGHT = 5
 Vaccine.DURABILITY = 0
 Vaccine.CATEGORY = 'research'
+Vaccine.ap = {cost = 1}
 
 Vaccine.medical = {DICE = '10d10'}
 
@@ -249,6 +253,7 @@ Antidote.FULL_NAME = 'antidote'
 Antidote.WEIGHT = 5
 Antidote.DURABILITY = 1
 Antidote.CATEGORY = 'research'
+Antidote.ap = {cost = 1}
 
 function Antidote:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')

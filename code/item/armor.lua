@@ -8,6 +8,7 @@ local Leather = class('Leather', ItemBase)
 Leather.FULL_NAME = 'leather jacket'
 Leather.DURABILITY = 0
 Leather.CATEGORY = 'military'
+Leather.ap = {cost = 1}
 
 function Leather:activate(player)
   player.armor:equip('leather', self.condition)
@@ -33,6 +34,7 @@ local Firesuit = class('Firesuit', ItemBase)
 Firesuit.FULL_NAME = 'firesuit'
 Firesuit.DURABILITY = 0
 Firesuit.CATEGORY = 'military'
+Firesuit.ap = {cost = 1}
 
 function Firesuit:activate(player)
   player.armor:equip('firesuit', self.condition)

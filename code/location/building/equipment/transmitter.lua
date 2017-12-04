@@ -8,6 +8,7 @@ local operations = {'broadcast', 'retune'}
 Transmitter.FULL_NAME = 'transmitter'
 Transmitter.DURABILITY = 100
 Transmitter.CATEGORY = 'engineering'
+Transmitter.ap = {cost = 3, modifier = {tech = -1, radio_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
 function Transmitter:initialize() 
   equipment.initialize(self)
