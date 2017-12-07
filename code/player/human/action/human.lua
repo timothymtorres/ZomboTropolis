@@ -71,7 +71,6 @@ end
 local speak = {name='speak', ap={cost=0}}
 
 function speak.client_criteria(player) 
-  if player:isMobType('zombie') then assert(player.skills:check('speech'), 'Must have "speech" skill to speak') end
   local p_tile = player:getTile()
   local player_n = p_tile:countPlayers('all', player:getStage()) - 1
   assert(player_n > 0, 'No available players to speak to')
@@ -87,12 +86,8 @@ function speak.server_criteria(player, message) --, target)
      
 --[[  This is a later feature used for whispering to a single person     
   assert(target, 'Must have a target to speak')      
-  local target_class = target:getClassName()
-  if target_class == 'player' then
-    local p_spot, t_spot = player:getSpot(), target:getSpot()
-    assert(target:isStanding(), 'target has been killed')
-    assert(p_spot == t_spot, 'target has moved out of range, error #3')  
-  end
+  assert(target:isStanding(), 'Target has been killed')
+  assert(player:isSameLocation(target), 'Target has moved out of range')  
 --]]  
 end
 

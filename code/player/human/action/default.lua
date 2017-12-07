@@ -115,45 +115,22 @@ function attack.client_criteria(player)
 end
 
 function attack.server_criteria(player, target, weapon, inv_ID)
--- Weapon/Inventory checks [start]
   local organic_weapon = weapon:isOrganic()
 
   if organic_weapon then 
     assert(organic_weapon == player:getMobType(), 'Cannot use this attack')
     assert(not inv_ID, "Organic weapon shouldn't be in inventory")
-    if weapon:isSkillRequired() then
-      local weapon_skill_present = player.skills:check(weapon:getSkillRequired())
-      assert(weapon_skill_present, 'Cannot use this attack without required skill')
-    end
   else -- Weapon is NOT organic
-    assert(player:isMobType('human'), 'Must be human to attack with items')
     assert(weapon and inv_ID, 'Weapon not selected properly')
     assert(player.inventory:check(inv_ID), 'Weapon missing from inventory')    
     
     local inv_item = player.inventory:lookup(inv_ID) 
-    assert(inv_item:getFlag() == weapon:getFlag(), "Inventory item doesn't match weapon")    
+    assert(inv_item == weapon, "Inventory item doesn't match weapon")    
   end
--- Weapon/Inventory checks [finish]
-  
-  local p_tile = player:getTile()
-  local target_class = target:getClassName()
---print('target_class', target_class, target)
 
-  if target_class == 'player' then
-    -- need to check if target actually exists in player database... aka - target:isPresent()?!
-    assert(target:isStanding(), 'Target has been killed')
-    local t_tile = target:getTile()
-    assert(p_tile == t_tile and player:getStage() == target:getStage(), 'Target has moved out of range')
-  elseif target_class == 'equipment' then
-    assert(p_tile:isBuilding(), 'No building present to target equipment for attack')
-    assert(player:isStaged('inside'), 'Player must be inside building to attack equipment')
-    assert(weapon:getObjectDamage('equipment'), 'Selected weapon unable to attack equipment')
-    assert(p_tile[target_class]:isPresent(), 'Equipment target does not exist in building')     
-  else -- target_class == 'building' then
-    assert(p_tile:isBuilding(), 'No building near player to attack')
-    assert(weapon:getObjectDamage('barricade'), 'Selected weapon cannot attack barricade') -- fix this later (check for door too!)
-    assert(p_tile:isFortified(), 'No barricade or door on building to attack')
-  end
+  -- need to check if target actually exists in player database... aka - target:isPresent()?!
+  assert(target:isStanding(), 'Target has been killed')
+  assert(player:isSameLocation(target), 'Target has moved out of range')
 end
 
 local ARMOR_DAMAGE_MOD = 2.5
@@ -161,70 +138,46 @@ local ARMOR_DAMAGE_MOD = 2.5
 function attack.activate(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
-  local caused_infection  
   
   if attack then 
-    if target_class == 'player' then
-      if target.armor:isPresent() and not weapon:isHarmless() then
-        local damage_type = weapon:getDamageType()
-        local resistance = target.armor:getProtection(damage_type)
-        damage = damage - resistance    
-        -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
-        
-        local retailation_damage = target.armor:getProtection('damage_melee_attacker')
-        local is_melee_attack = weapon:getStyle() == 'melee'
-        if is_melee_attack and retailation_damage > 0 then
-          local retailation_hp_loss = -1*dice.roll(retailation_damage)
-          player:updateStat('hp', retailation_hp_loss)
-          -- insert some type of event?
-        end
-        
-        local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1  -- might wanna change this later?  Damage affects degrade chance?       
-        if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
+    if target.armor:isPresent() and not weapon:isHarmless() then
+      local damage_type = weapon:getDamageType()
+      local resistance = target.armor:getProtection(damage_type)
+      damage = damage - resistance    
+      -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
+      
+      local retailation_damage = target.armor:getProtection('damage_melee_attacker')
+      local is_melee_attack = weapon:getStyle() == 'melee'
+      if is_melee_attack and retailation_damage > 0 then
+        local retailation_hp_loss = -1*dice.roll(retailation_damage)
+        player:updateStat('hp', retailation_hp_loss)
+        -- insert some type of event?
       end
       
-      local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and target)
-      local human = (player:isMobType('human') and player) or (target:isMobType('human') and target)
-      
-      if zombie.skills:check('track') then
-        zombie.condition.tracking:addScent(human)
-      end
-    --elseif target_class == 'building' then
-    --elseif target_class == 'barricade' then
-    --elseif target_class == equipment?
+      local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1  -- might wanna change this later?  Damage affects degrade chance?       
+      if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
+    end
+    
+    if target.skills:check('track') then
+      target.condition.tracking:addScent(player)
     end
     
     local hp_loss = -1*damage
     target:updateStat('hp', hp_loss)
   
-    if weapon:hasConditionEffect(player) then
+    if weapon:hasConditionEffect(player) then -- use this code for burn?  maime?
       local effect, duration, bonus_effect = weapon:getConditionEffect(player) --, condition)   for later?
-      if effect == 'entangle' then
-        local impale_bonus = bonus_effect and critical
-        entangle.add(player, target, impale_bonus)
-      elseif effect == 'infection' then
-        -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
-        if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
-          if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
-            target.condition.infection:add() 
-            caused_infection = true          
-          end
-        end         
-      else -- normal effect process
-        target.condition[effect]:add(duration, bonus_effect)
-      end
+      target.condition[effect]:add(duration, bonus_effect)
     end     
     
-    if player:isMobType('human') and not weapon:isOrganic() then
+    if not weapon:isOrganic() then
       local item = player.inventory:lookup(inv_ID)
       if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
       elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
       end
     end
   else
-    if player:isMobType('zombie') and player.skills:check('grapple') then 
-      player.condition.entangle:remove() 
-    elseif player:isMobType('human') and weapon:getStyle() == 'ranged' then
+    if weapon:getStyle() == 'ranged' then
       local item = player.inventory:lookup(inv_ID)
       if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
       elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
@@ -250,15 +203,12 @@ function attack.activate(player, target, weapon, inv_ID)
   self_msg =     self_msg:replace(names)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
-
-  -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
-  if caused_infection then self_msg = self_msg .. '  They become infected.' end
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 
 
-  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
+  local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
