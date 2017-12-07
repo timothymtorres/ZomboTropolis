@@ -36,9 +36,8 @@ local function basicCriteria(player, action_str, ...)
 end
 
 function Player:perform(action_str, ...) 
-  local action = self.class.action_list[action_str]
-
   local ap_verification, ap_error_msg = pcall(basicCriteria, self, ...)
+  local action = self.class.action_list[action_str]  
   local verification, error_msg = pcall(action.server_criteria, self, ...)
 
   if ap_verification and verification and class_verification then
