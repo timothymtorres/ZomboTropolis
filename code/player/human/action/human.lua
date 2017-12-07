@@ -205,6 +205,7 @@ function item.activate(name, player, inv_ID, target)
   local itemObj = player.inventory:lookup(inv_ID)
   local result = itemObj:activate(player, target) 
   
+  -- this durability code should really be it's own functions for Item class...
   if itemObj:isSingleUse() and not name == 'syringe' and not name == 'barricade' then 
     player.inventory:remove(inv_ID) 
   elseif name == 'syringe' then -- syringes are a special case
