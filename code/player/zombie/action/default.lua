@@ -1,12 +1,7 @@
 local combat =            require('code.player.combat')
 local entangle =          require('code.player.condition.entangle') -- there should be a better way to add this code to player condition effects...
-local equipmentActivate = require('code.location.building.equipment.operation.activate')
-local enzyme_list =       require('code.player.enzyme_list')
+--local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
-
-local Item =              require('code.item.item')
---local Skill =           require('code.player.skills.skill')  Dunno how we are going to do this?
-
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 
@@ -331,20 +326,5 @@ function exit.activate(player)
   local event = {'exit', player, map[y][x]}  
   player.log:insert(msg, event)  
 end
-
-
---[[    
-function check.default(player, action)
-  if check[action] then check[action](player) end
-end
-
-function criteria.default(action, player, ...)
-  if criteria[action] then criteria[action](player, ...) end
-end
-
-function default.activate(action, player, ...)
-  return activate[action](player, ...)
-end
---]]
 
 return {move, attack, enter, exit}
