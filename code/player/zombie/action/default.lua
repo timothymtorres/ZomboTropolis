@@ -47,28 +47,11 @@ function move.activate(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
-  local GPS_usage
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
-    if map:isBuilding(dir_y, dir_x) and player.skills:check('roof_travel') then
-      map[dir_y][dir_x]:insert(player, 'inside')    
-    else
-      map[dir_y][dir_x]:insert(player, 'outside')
-    end
-  else  -- player is outside
-    local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-    if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
-      local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
-      local GPS_usage = GPS_chance >= math.random()
-      
-      -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-      if GPS_usage then player:updateStat('ap', 1) end
-      
-      local GPS = player.inventory:lookup(inv_ID)
-      if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
-    end
-    
+    map[dir_y][dir_x]:insert(player, 'outside')
+  else  -- player is outside  
     map[y][x]:remove(player)
     map[dir_y][dir_x]:insert(player)
   end
@@ -79,16 +62,15 @@ function move.activate(player, dir)
   -----------   M E S S A G E   --------------
   --------------------------------------------
 
-  local GPS_str = GPS_usage and 'using a GPS'
-  local self_msg = 'You travel {dir} {with_GPS}.'
-  local names = {dir=compass[dir], with_GPS=GPS_str}
+  local self_msg = 'You travel {dir}.'
+  local names = {dir=compass[dir]}
   self_msg = self_msg:replace(names)
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local event = {'move', player, dir, GPS_usage}    
+  local event = {'move', player, dir}    
   player.log:insert(self_msg, event)  
 end
 
@@ -99,7 +81,7 @@ local attack = {name='attack'}
 function attack.client_criteria(player)
   local player_targets, building_targets  
   local p_tile = player:getTile()
-  local player_n = p_tile:countPlayers('all', player:getStage()) - 1  -- subtract one from total b/c player on tile 
+  local player_n = p_tile:countPlayers('all', player:getStage()) - 1  -- subtract one from total b/c player on tile (filter out other zombies)
   
   if player_n > 0 then player_targets = true end
   if p_tile:isBuilding() then
@@ -109,42 +91,28 @@ function attack.client_criteria(player)
   assert(player_targets or building_targets, 'No available targets to attack')
 end
 
-function attack.server_criteria(player, target, weapon, inv_ID)
--- Weapon/Inventory checks [start]
-  local organic_weapon = weapon:isOrganic()
-
-  if organic_weapon then 
-    assert(organic_weapon == player:getMobType(), 'Cannot use this attack')
-    assert(not inv_ID, "Organic weapon shouldn't be in inventory")
-    if weapon:isSkillRequired() then
-      local weapon_skill_present = player.skills:check(weapon:getSkillRequired())
-      assert(weapon_skill_present, 'Cannot use this attack without required skill')
-    end
-  else -- Weapon is NOT organic
-    assert(player:isMobType('human'), 'Must be human to attack with items')
-    assert(weapon and inv_ID, 'Weapon not selected properly')
-    assert(player.inventory:check(inv_ID), 'Weapon missing from inventory')    
-    
-    local inv_item = player.inventory:lookup(inv_ID) 
-    assert(inv_item:getFlag() == weapon:getFlag(), "Inventory item doesn't match weapon")    
-  end
--- Weapon/Inventory checks [finish]
+function attack.server_criteria(player, target, weapon)
+--[[ this code is unused (I may possibly add acid/special attacks for zombies later that requires a skill to unlock) 
+  if weapon:isSkillRequired() then
+    local weapon_skill_present = player.skills:check(weapon:getSkillRequired())
+    assert(weapon_skill_present, 'Cannot use this attack without required skill')
+  end 
+--]] 
   
   local p_tile = player:getTile()
-  local target_class = target:getClassName()
+  local target_class = target:getName()
 --print('target_class', target_class, target)
 
   if target_class == 'player' then
     -- need to check if target actually exists in player database... aka - target:isPresent()?!
     assert(target:isStanding(), 'Target has been killed')
-    local t_tile = target:getTile()
-    assert(p_tile == t_tile and player:getStage() == target:getStage(), 'Target has moved out of range')
+    assert(player:isSameLocation(target), 'Target has moved out of range')
   elseif target_class == 'equipment' then
     assert(p_tile:isBuilding(), 'No building present to target equipment for attack')
     assert(player:isStaged('inside'), 'Player must be inside building to attack equipment')
     assert(weapon:getObjectDamage('equipment'), 'Selected weapon unable to attack equipment')
     assert(p_tile[target_class]:isPresent(), 'Equipment target does not exist in building')     
-  else -- target_class == 'building' then
+  elseif target_class == 'building' then
     assert(p_tile:isBuilding(), 'No building near player to attack')
     assert(weapon:getObjectDamage('barricade'), 'Selected weapon cannot attack barricade') -- fix this later (check for door too!)
     assert(p_tile:isFortified(), 'No barricade or door on building to attack')
@@ -153,7 +121,7 @@ end
 
 local ARMOR_DAMAGE_MOD = 2.5
 
-function attack.activate(player, target, weapon, inv_ID)
+function attack.activate(player, target, weapon)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
   local caused_infection  
@@ -178,11 +146,8 @@ function attack.activate(player, target, weapon, inv_ID)
         if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
       end
       
-      local zombie = (player:isMobType('zombie') and player) or (target:isMobType('zombie') and target)
-      local human = (player:isMobType('human') and player) or (target:isMobType('human') and target)
-      
-      if zombie.skills:check('track') then
-        zombie.condition.tracking:addScent(human)
+      if player.skills:check('track') then
+        player.condition.tracking:addScent(target)
       end
     --elseif target_class == 'building' then
     --elseif target_class == 'barricade' then
@@ -209,22 +174,8 @@ function attack.activate(player, target, weapon, inv_ID)
         target.condition[effect]:add(duration, bonus_effect)
       end
     end     
-    
-    if player:isMobType('human') and not weapon:isOrganic() then
-      local item = player.inventory:lookup(inv_ID)
-      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
-      end
-    end
-  else
-    if player:isMobType('zombie') and player.skills:check('grapple') then 
-      player.condition.entangle:remove() 
-    elseif player:isMobType('human') and weapon:getStyle() == 'ranged' then
-      local item = player.inventory:lookup(inv_ID)
-      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
-      end
-    end
+  else -- attack missed
+    if player.skills:check('grapple') then player.condition.entangle:remove() end
   end
   
   --------------------------------------------
@@ -278,6 +229,7 @@ end
 function enter.activate(player)
   local y, x = player:getPos()
   local map = player:getMap()
+  -- make sure there are no fortifications and buildings door is open
   map[y][x]:remove(player, 'outside')
   map[y][x]:insert(player, 'inside')
   
