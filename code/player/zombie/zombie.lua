@@ -42,27 +42,8 @@ function Zombie:revive()
 end
 
 --[[
----  TAKE [X]
---]]
-
-function Zombie:perform(action, ...) 
-  
-end
-
---[[
 --  GET [X]
 --]]
-
-function Zombie:getCost(stat, action)
-  local mob_type = self:getMobType()
-  local action_data = (stat == 'ap' and action_list[mob_type][action]) or (stat == 'ep' and enzyme_list[action])
-  local cost = action_data.cost    
-  
-  if action_data.modifier then -- Modifies cost of action based off of skills
-    for skill, modifier in pairs(action_data.modifier) do cost = (self.skills:check(skill) and cost + modifier) or cost end
-  end  
-  return cost
-end
 
 -- client-side functions
 function Zombie:getActions(category) return catalogAvailableActions[category](self) end
