@@ -50,10 +50,9 @@ function ItemBase:failDurabilityCheck(player)
   return dice.roll(durability or self.DURABILITY) <= 1
 end
 
-function ItemBase:updateCondition(num, player, inv_ID)
+function ItemBase:updateCondition(num)
   self.condition = math.min(self.condition + num, 4)
-  if self.condition <= 0 then player.inventory:remove(inv_ID) end -- item is destroyed
-  return self.condition, num
+  return self.condition
 end
 
 function ItemBase:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
