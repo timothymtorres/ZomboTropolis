@@ -20,7 +20,6 @@ print()
 local Map = require('code.location.map')
 local Item = require('code.item.item')  -- for testing item generation in main.lua
 Player = require('code.player.player')
-table.copy = require('code.libs.copy')
 table.inspect = require('code.libs.inspect')
 
 

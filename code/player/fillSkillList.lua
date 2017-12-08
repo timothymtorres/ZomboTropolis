@@ -1,3 +1,5 @@
+local copy = require('code.libs.copy')
+
 local function lookupFlags(skill_list, skills)
   local array = {}
   for _, category in ipairs(skill_list.order.category) do array[category] = {} end
@@ -31,7 +33,7 @@ local function fillRequirements(skill_list)
   for skill_tree in pairs(skill_list.info) do 
     for skill, data in pairs(skill_list.info[skill_tree]) do                 
       local class_criteria = (not (skill_tree == 'general' or skill_tree == 'classes') and skill_tree) or nil
-      local skills_criteria = skill_list[skill].requires and table.copy(skill_list[skill].requires)
+      local skills_criteria = skill_list[skill].requires and copy(skill_list[skill].requires)
       
       skill_list[skill].requires = skill_list[skill].requires or {}
       skill_list[skill].requires[#skill_list[skill].requires+1] = class_criteria        
