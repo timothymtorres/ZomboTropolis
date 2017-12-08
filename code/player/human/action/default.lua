@@ -170,19 +170,9 @@ function attack.activate(player, target, weapon, inv_ID)
       target.condition[effect]:add(duration, bonus_effect)
     end     
     
-    if not weapon:isOrganic() then
-      local item = player.inventory:lookup(inv_ID)
-      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
-      end
-    end
-  else
-    if weapon:getStyle() == 'ranged' then
-      local item = player.inventory:lookup(inv_ID)
-      if item:isSingleUse() then player.inventory:remove(inv_ID) -- no need to do a durability check
-      elseif item:failDurabilityCheck(player) then item:updateCondition(-1, player, inv_ID)
-      end
-    end
+    if not weapon:isOrganic() then player.inventory:updateDurability(inv_ID) end
+  else -- attack missed
+    if weapon:getStyle() == 'ranged' then player.inventory:updateDurability(inv_ID) end -- ranged weapons lose durability even when they miss
   end
   
   --------------------------------------------
