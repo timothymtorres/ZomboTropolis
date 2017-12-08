@@ -340,15 +340,22 @@ function acid.activate(player, target)
     
   if acid_successful and not target_acid_immune and n_items > 0 then    
     local acid_dice = dice:new(ACID[acid_type].DICE, 0) - acid_resistance
-    for i=n_items, 1, -1 do  -- count backwards due to table.remove being used in item_INST:updateCondition
-      local item_INST = target.inventory:lookup(i)
+    for inv_ID=n_items, 1, -1 do  -- count backwards due to table.remove being used in item_INST:updateCondition
+      local item_INST = target.inventory:lookup(inv_ID)
       local acid_damage = acid_dice:roll()      
       
       -- firesuits are immune from acid
       if item_INST:getClassName() ~= 'firesuit' and acid_damage > 0 then 
-        local condition = item_INST:updateCondition(-1 * acid_damage, target, i)
-        if condition <= 0 then destroyed_items[#destroyed_items + 1] = item_INST -- item was destroyed
-        else                   damaged_items[#damaged_items + 1]     = item_INST -- item was damaged  
+        local condition 
+        if itemObj:isSingleUse() then condition = 0 
+        else condition = item_INST:updateCondition(-1 * acid_damage)
+        end
+
+        if condition <= 0 then 
+          destroyed_items[#destroyed_items + 1] = item_INST -- item was destroyed
+          target.inventory:remove(inv_ID)
+        else                   
+          damaged_items[#damaged_items + 1]     = item_INST -- item was damaged  
         end        
       end 
     end
