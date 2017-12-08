@@ -1,4 +1,3 @@
-local entangle =    require('code.player.condition.entangle')
 local dice =        require('code.libs.dice')
 
 local IsWeapon = {}
@@ -91,10 +90,16 @@ function IsWeapon:getAccuracy(player, target)
   
   if player:isMobType('zombie') then
     if self:getStyle() == 'melee' then
-      if entangle.isTangledTogether(player, target) then
+      if player:isTangledTogether(target) then
+
+        --[[ Remove this once we add maime feature
         if player.condition.entangle:isImpaleActive() then accuracy_bonus = modifier.zombie_melee[4]
         else accuracy_bonus = modifier.zombie_melee[3]
         end
+        --]]
+
+        accuracy_bonus = modifier.zombie_melee[3]
+
       elseif target:getClassName() ~= 'player' then -- equipment or building
         if player.skills:check('power_claw') then accuracy_bonus = modifier.power_claw end
       end

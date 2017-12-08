@@ -72,6 +72,14 @@ end
 
 function Player:isSameLocation(target) return (self:getStage() == target:getStage()) and (self:getTile() == target:getTile()) end
 
+function Player:isTangledTogether(target)
+  if not self.condition.entangle:isActive() or not target.condition.entangle:isActive() then return false end
+
+  local tangled_player, tangled_target  = self.condition.entangle.grapple, target.condition.entangle.grapple
+  return tangled_player == target and tangled_target == self
+end
+
+
 --[[
 --  GET [X]
 --]]
