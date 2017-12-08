@@ -191,38 +191,19 @@ end
 
 local item = {name='item'}
 
-function item.server_criteria(name, player, inv_ID, ...)
+function item.server_criteria(player, inv_ID, ...)
   assert(inv_ID, 'Missing inventory ID for item')
   assert(player.inventory:check(inv_ID), 'Item not in inventory')  
   
   local itemObj = player.inventory:lookup(inv_ID)
-  assert(name == itemObj:getClassName(), "Item in inventory doesn't match one being used")
-
   if itemObj.server_criteria then itemObj.server_criteria(player, ...) end
 end
 
-function item.activate(name, player, inv_ID, target)
+function item.activate(player, inv_ID, target)
   local itemObj = player.inventory:lookup(inv_ID)
-  local result = itemObj:activate(player, target) 
-  
-  -- this durability code should really be it's own functions for Item class...
-  if itemObj:isSingleUse() and not name == 'syringe' and not name == 'barricade' then 
-    player.inventory:remove(inv_ID) 
-  elseif name == 'syringe' then -- syringes are a special case
-    local antidote_was_created, syringe_was_salvaged = result[2], result[3]
-    if antidote_was_created or not syringe_was_salvaged then player.inventory:remove(inv_ID) end
-  elseif name == 'barricade' then -- barricades are also a special case
-    local did_zombies_interfere = result[1]
-    if not did_zombies_interfere then player.inventory:remove(inv_ID) end
-  elseif itemObj:failDurabilityCheck(player) then 
-    local condition = itemObj:updateCondition(-1, player, inv_ID)
-    if condition <= 0 then -- item is destroyed
-      player.log:append('Your '..tostring(itemObj)..' is destroyed!')
-    elseif itemObj:isConditionVisible(player) then
-      player.log:append('Your '..tostring(itemObj)..' degrades to a '..itemObj:getConditionState()..' state.')  
-    end    
-  end
-  --return result (pretty sure we don't need to return the result anymore)
+
+  local is_durability_skipped = itemObj:activate(player, target)
+  if not is_durability_skipped then player.inventory:updateDurability(inv_ID) end
 end
 
 -------------------------------------------------------------------
