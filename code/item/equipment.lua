@@ -192,6 +192,8 @@ function Barricade:activate(player)
   
   local event = {'barricade', player, did_zombies_interfere}    
   player.log:insert(msg, event)   
+
+  return did_zombies_interefere -- not sure if there is a better way to deal with returning the result (needed for the item:updateDurability() code) [only used by syringes and barricades]
 end
 
 -------------------------------------------------------------------

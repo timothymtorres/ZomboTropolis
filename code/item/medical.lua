@@ -168,6 +168,8 @@ function Syringe:activate(player, target)
     player.inventory:insert(antidote)
   elseif inject_success then
     syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1  
+  else
+    syringe_salvage_successful = true
   end
   
   --------------------------------------------
@@ -197,6 +199,8 @@ function Syringe:activate(player, target)
   local event = {'syringe', player, target, inject_success, target_weak_enough, syringe_salvage_successful}    
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
+
+  return syringe_salvage_successful -- not sure if there is a better way to deal with returning the result (needed for the item:updateDurability() code) [only used by syringes and barricades]
 end
 
 -------------------------------------------------------------------
