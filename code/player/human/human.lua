@@ -1,5 +1,4 @@
 local class =                   require('code.libs.middleclass')
-local action_list =             require('code.player.action.list')
 local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
 local skills =                  require('code.player.skills.class')
