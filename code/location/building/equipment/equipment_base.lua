@@ -10,9 +10,10 @@ end
 
 function EquipmentBase:destroy()
   local building = self.building
+  local machine = string.lower(self.class.name)
 
-  building[self.class.name] = nil -- this isn't right?
-  -- update building stuff... (ie. power out if generator, player notification event)
+  building[machine] = nil
+  -- update building stuff... (ie. power out if generator, player notification event, broadcast event, etc.)
 end
 
 function EquipmentBase:updateHP(num)
