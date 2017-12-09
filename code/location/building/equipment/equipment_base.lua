@@ -9,6 +9,9 @@ function EquipmentBase:initialize(building)
 end
 
 function EquipmentBase:destroy()
+  local building = self.building
+
+  building[self.class.name] = nil -- this isn't right?
   -- update building stuff... (ie. power out if generator, player notification event)
 end
 
@@ -18,8 +21,6 @@ function EquipmentBase:updateHP(num)
 end
 
 function EquipmentBase:getHP() return self.hp end
-
-function EquipmentBase:getBuilding() return self.building end
 
 --[[
   self.generator = 0        -- 1 bit {exist}, 3 bit {08hp}, 4 bit {fuel} 
