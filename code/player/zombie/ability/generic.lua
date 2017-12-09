@@ -340,22 +340,19 @@ function acid.activate(player, target)
     
   if acid_successful and not target_acid_immune and n_items > 0 then    
     local acid_dice = dice:new(ACID[acid_type].DICE, 0) - acid_resistance
-    for inv_ID=n_items, 1, -1 do  -- count backwards due to table.remove being used in item_INST:updateCondition
-      local item_INST = target.inventory:lookup(inv_ID)
+    for inv_ID=n_items, 1, -1 do  -- count backwards due to table.remove being used in item:updateCondition
+      local item = target.inventory:lookup(inv_ID)
       local acid_damage = acid_dice:roll()      
       
       -- firesuits are immune from acid
-      if item_INST:getClassName() ~= 'firesuit' and acid_damage > 0 then 
-        local condition 
-        if itemObj:isSingleUse() then condition = 0 
-        else condition = item_INST:updateCondition(-1 * acid_damage)
-        end
+      if item:getClassName() ~= 'firesuit' and acid_damage > 0 then 
 
-        if condition <= 0 then 
-          destroyed_items[#destroyed_items + 1] = item_INST -- item was destroyed
-          target.inventory:remove(inv_ID)
-        else                   
-          damaged_items[#damaged_items + 1]     = item_INST -- item was damaged  
+        local condition = target.inventory:updateDurability(inv_ID, -1 * acid_damage)
+
+        if condition == 0  or item:isSingleUse() then 
+          destroyed_items[#destroyed_items + 1] = item -- item was destroyed
+        else
+          damaged_items[#damaged_items + 1] = item -- item was damaged  
         end        
       end 
     end
@@ -383,18 +380,18 @@ function acid.activate(player, target)
   
   self_msg = self_msg:replace(target)
   
-  for _, damaged_item_INST in ipairs(damaged_items) do
-    self_msg = self_msg..'  The '..tostring(damaged_item_INST)..' was damaged.'
-    if damaged_item_INST:isConditionVisible(target) then
-      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' degrades to a '..damaged_item_INST:getConditionState()..' state.'
+  for _, damaged_item in ipairs(damaged_items) do
+    self_msg = self_msg..'  The '..tostring(damaged_item)..' was damaged.'
+    if damaged_item:isConditionVisible(target) then
+      target_msg = target_msg..'  Your '..tostring(damaged_item)..' degrades to a '..damaged_item:getConditionState()..' state.'
     else
-      target_msg = target_msg..'  Your '..tostring(damaged_item_INST)..' was damaged.'
+      target_msg = target_msg..'  Your '..tostring(damaged_item)..' was damaged.'
     end
   end
   
-  for _, destroyed_item_INST in ipairs(destroyed_items) do
-    self_msg = self_msg..'  The '..tostring(destroyed_item_INST)..' was destroyed!'
-    target_msg = target_msg..'  Your '..tostring(destroyed_item_INST)..' was destroyed!'
+  for _, destroyed_item in ipairs(destroyed_items) do
+    self_msg = self_msg..'  The '..tostring(destroyed_item)..' was destroyed!'
+    target_msg = target_msg..'  Your '..tostring(destroyed_item)..' was destroyed!'
   end  
   
   --------------------------------------------
