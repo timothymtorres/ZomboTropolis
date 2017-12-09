@@ -51,7 +51,7 @@ function ItemBase:failDurabilityCheck(player)
 end
 
 function ItemBase:updateCondition(num)
-  self.condition = math.min(self.condition + num, 4)
+  self.condition = math.max(math.min(self.condition + num, 4), 0)
   return self.condition
 end
 
