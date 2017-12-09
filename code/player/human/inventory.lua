@@ -42,22 +42,23 @@ function inventory:catalog()
   return contents
 end
 
-function inventory:updateDurability(inv_ID)
-  local itemObj = self[inv_ID] 
-  local player = self.player
-  
-  if itemObj:isSingleUse() then 
-    self:remove(inv_ID) 
-  elseif itemObj:failDurabilityCheck(player) then 
-    local condition = itemObj:updateCondition(-1)
-
-    if condition <= 0 then
-      player.log:append('Your '..tostring(itemObj)..' is destroyed!')
-      self:remove(inv_ID)
-    elseif itemObj:isConditionVisible(player) then
-      player.log:append('Your '..tostring(itemObj)..' degrades to a '..itemObj:getConditionState()..' state.')  
-    end    
+function inventory:updateDurability(inv_ID, num)
+  local item, player = self[inv_ID], self.player
+  local is_single_use = item:isSingleUse()
+  local failed_durability_test = not is_single_use and item:failDurabilityCheck(player)
+  local condition 
+ 
+  if not num and failed_durability_test then
+    condition = item:updateCondition(-1)
+  elseif num and not is_single_use then
+    condition = item:updateCondition(num)   
+  else -- no change to condition
+    condition = nil
   end
+
+  if condition == 0 or is_single_use then self:remove(inv_ID) end
+
+  return condition
 end
 
 --[[ This code is deprecated and needs to be rewritten
