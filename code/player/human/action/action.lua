@@ -1,5 +1,5 @@
-local move, attack, enter, exit =                          unpack(require('code.player.action.default'))
-local search, discard, speak, reinforce, item, equipment = unpack(require('code.player.action.human'))
+local move, attack, enter, exit =                          unpack(require('code.player.human.action.default'))
+local search, discard, speak, reinforce, item, equipment = unpack(require('code.player.human.action.human'))
 
 local action = {
   -- DEFAULT
