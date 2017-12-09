@@ -10,8 +10,8 @@ Terminal.DURABILITY = 100
 Terminal.CATEGORY = 'engineering'
 Terminal.ap = {cost = 3, modifier = {tech = -1, computer_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
-function Terminal:initialize() 
-  equipment.initialize(self)
+function Terminal:initialize(building) 
+  EquipmentBase.initialize(self, building)
 end
 
 function Terminal:install() 

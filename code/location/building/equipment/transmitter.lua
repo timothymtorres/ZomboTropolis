@@ -10,8 +10,8 @@ Transmitter.DURABILITY = 100
 Transmitter.CATEGORY = 'engineering'
 Transmitter.ap = {cost = 3, modifier = {tech = -1, radio_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
-function Transmitter:initialize() 
-  equipment.initialize(self)
+function Transmitter:initialize(buiilding) 
+  EquipmentBase.initialize(self, building)
   self.freq = 0
 end
 

@@ -8,14 +8,14 @@ Generator.FULL_NAME = 'generator'
 Generator.DURABILITY = 100
 Generator.CATEGORY = 'engineering'
 
-function Generator:initialize() 
-  EquipmentBase.initialize(self)
+function Generator:initialize(building) 
+  EquipmentBase.initialize(self, building)
   self.fuel = 0 
 end
 
 function Generator:refuel() self.fuel = MAX_FUEL end
 
-function Generator:isActive() return (self:isPresent() and self.fuel > 0) or false end 
+function Generator:isActive() return self.fuel > 0 end 
 
 function Generator:hasOperations() return false end
 
