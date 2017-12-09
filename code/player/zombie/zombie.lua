@@ -1,5 +1,4 @@
 local class =                   require('code.libs.middleclass')
-local action_list =             require('code.player.action.list')
 local enzyme_list =             require('code.player.enzyme_list')
 local perform =                 require('code.player.action.perform')
 local catalogAvailableActions = require('code.player.action.catalog')
@@ -8,9 +7,12 @@ local condition =               require('code.player.condition.class')
 --local organic_armor =           require('code.player.armor.organic_class')
 local Claw, Bite =       unpack(require('code.player.organic_weaponry'))
 local zombie_skill_list =       require('code.player.zombie.skill_list')
+local zombie_action_list =       require('code.player.zombie.action.action')
 local Player =                  require('code.player.player')
 
 local Zombie = class('Zombie', Player)
+
+Zombie.action_list = zombie_action_list
 
 local default_EP = 50
 
