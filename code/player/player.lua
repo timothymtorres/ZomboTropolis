@@ -101,7 +101,7 @@ function Player:getHealthState(setting)
   return health_state_desc[status] 
 end
 
-local function Player:getCost(stat, action_str, ID)
+function Player:getCost(stat, action_str, ID)
   local action_data
 
   if action_str == 'item' then            action_data = self.inventory:lookup(ID)

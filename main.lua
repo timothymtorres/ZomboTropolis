@@ -22,11 +22,6 @@ local Item = require('code.item.item')  -- for testing item generation in main.l
 Player = require('code.player.player')
 table.inspect = require('code.libs.inspect')
 
-
-
-
-local arm_CL = require('code.player.armor.item_class')
-
 --[[
 local building = require('code.location.building.class')
 lookupItem = require('code.item.search')

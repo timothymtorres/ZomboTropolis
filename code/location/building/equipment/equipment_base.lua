@@ -1,6 +1,6 @@
 local class = require('code.libs.middleclass')
 
-local Equipment = class('EquipmentBase')
+local EquipmentBase = class('EquipmentBase')
 local MAX_HP = 8
 
 function EquipmentBase:initialize(building) 
