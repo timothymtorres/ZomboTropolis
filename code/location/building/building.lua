@@ -1,9 +1,6 @@
 local class = require('code.libs.middleclass')
 local TileBase = require('code.location.tile.tile_base')
-local equipment = require('code.location.building.equipment.class')
-local generator = require('code.location.building.equipment.generator.class')
-local transmitter = require('code.location.building.equipment.transmitter.class')
-local terminal = require('code.location.building.equipment.terminal.class')
+local Equipment = require('code.location.building.equipment.equipment')
 local door = require('code.location.building.barrier.door.class')
 local barricade = require('code.location.building.barrier.barricade.class')
 local integrity = require('code.location.building.integrity.class')
@@ -72,10 +69,6 @@ function Building:initialize(map, y, x, name)
   self.door        = door:new(self)
   self.barricade   = barricade:new(self)
   self.integrity   = integrity:new(self) 
-  
-  self.generator   = generator:new(self)
-  self.transmitter = transmitter:new(self)
-  self.terminal    = terminal:new(self) 
 end
 
 function Building:insert(player, setting) 
@@ -90,7 +83,7 @@ function Building:remove(player, setting)
   end
 end
 
-function Building:install(equipment_type, condition) self[equipment_type]:install(condition) end
+function Building:install(machine, condition) self[machine] = Equipment[machine]:new(condition) end
 
 function Building:blackout()
   -- 3x3 area do blackout event on tile(s)
@@ -100,8 +93,8 @@ function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade
 
 function Building:getEquipment()
   local machines = {}
-  for machine in pairs(equipment.subclasses) do 
-    if self[machine]:isPresent() then machines[#machines+1] = tostring(machine) end  -- should this be a class?
+  for machine in pairs(Equipment.subclasses) do 
+    if self[machine] then machines[#machines+1] = tostring(machine) end  -- should this be a class?
   end
   return machines
 end
@@ -111,14 +104,14 @@ end
 function Building:isPresent(setting)
   if setting == 'equipment' then
     for machine, i in pairs(equipment.subclasses) do
-      if self[tostring(machine)]:isPresent() then return true end
+      if self[machine] then return true end
     end
     return false 
   elseif setting == 'powered equipment' then
     return self:isPresent('equipment') and self:isPowered()
   else -- individual equipment
     local machine = setting
-    return self[machine]:isPresent()
+    return self[machine]
   end
 end
 
@@ -126,7 +119,7 @@ end
 
 function Building:isFortified() return self.barricade:getHP() > 0 and self.door:getHP() > 0 end
 
-function Building:isPowered() return self.generator:isActive() end
+function Building:isPowered() return self.generator and self.generator:isActive() end
 
 function Building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
 
