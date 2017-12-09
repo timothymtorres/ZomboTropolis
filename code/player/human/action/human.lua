@@ -201,9 +201,17 @@ end
 
 function item.activate(player, inv_ID, target)
   local itemObj = player.inventory:lookup(inv_ID)
-
   local is_durability_skipped = itemObj:activate(player, target)
-  if not is_durability_skipped then player.inventory:updateDurability(inv_ID) end
+
+  if not is_durability_skipped then 
+    local condition = player.inventory:updateDurability(inv_ID) 
+
+    if condition == 0 then 
+      player.log:append('Your '..tostring(itemObj)..' is destroyed!')
+    elseif condition and itemObj:isConditionVisible(player) then 
+      player.log:append('Your '..tostring(itemObj)..' degrades to a '..itemObj:getConditionState()..' state.')
+    end
+  end
 end
 
 -------------------------------------------------------------------
