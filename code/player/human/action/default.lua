@@ -138,7 +138,8 @@ local ARMOR_DAMAGE_MOD = 2.5
 function attack.activate(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
-  
+  local condition
+
   if attack then 
     if target.armor:isPresent() and not weapon:isHarmless() then
       local damage_type = weapon:getDamageType()
@@ -170,9 +171,9 @@ function attack.activate(player, target, weapon, inv_ID)
       target.condition[effect]:add(duration, bonus_effect)
     end     
     
-    if not weapon:isOrganic() then player.inventory:updateDurability(inv_ID) end
+    if not weapon:isOrganic() then condition = player.inventory:updateDurability(inv_ID) end
   else -- attack missed
-    if weapon:getStyle() == 'ranged' then player.inventory:updateDurability(inv_ID) end -- ranged weapons lose durability even when they miss
+    if weapon:getStyle() == 'ranged' then condition = player.inventory:updateDurability(inv_ID) end -- ranged weapons lose durability even when they miss
   end
   
   --------------------------------------------
@@ -193,12 +194,18 @@ function attack.activate(player, target, weapon, inv_ID)
   self_msg =     self_msg:replace(names)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
-  
+
+  if condition == 0 and then
+    self_msg = self_msg..'Your '..tostring(weapon)..' is destroyed!')
+  elseif condition and weapon:isConditionVisible(player) then 
+    self_msg = self_msg..'Your '..tostring(weapon)..' degrades to a '..weapon:getConditionState()..' state.')  
+  end
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 
 
-  local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  
+  local event = {'attack', player, target, weapon, attack, damage, critical}  -- maybe remove damage from event list?  -- also add condition/single_use/item_destruction to this list?
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
