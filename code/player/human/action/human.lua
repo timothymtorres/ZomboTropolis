@@ -216,4 +216,26 @@ end
 
 -------------------------------------------------------------------
 
+local equipment = {name='equipment'}
+
+function equipment.client_criteria(name, player) -- operation)
+  local p_tile = player:getTile()  
+  assert(p_tile:isBuilding(), 'No building near player')
+  assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
+  assert(p_tile:isPowered(), 'Building must be powered to use equipment')
+end
+
+function equipment.server_criteria(name, player, operation)
+  assert(operation, 'Missing equipment operation for action')
+  
+  local p_tile = player:getTile()  
+  assert(p_tile:isBuilding(), 'No building near player to use equipment')
+  assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
+  assert(p_tile:isPowered(), 'Building must be powered to use equipment')
+end
+
+function equipment.activate(name, player, operation, ...)  
+  -- condition degrade code goes here
+end
+
 return {search, discard, speak, reinforce, item, equipment}
