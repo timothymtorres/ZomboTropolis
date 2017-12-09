@@ -29,7 +29,7 @@ local function getNewPos(y, x, dir)
   return dir_y, dir_x
 end
 
-local move = {name='move'}
+local move = {name='move', ap={cost=2, modifier={sprint = -1}}}
 
 function move.server_criteria(player, dir)
   assert(dir, 'Cannot move without direction')  
@@ -76,7 +76,7 @@ end
 
 -------------------------------------------------------------------
 
-local attack = {name='attack'}
+local attack = {name='attack', ap={cost=1}}
 
 function attack.client_criteria(player)
   local player_targets, building_targets  
@@ -218,7 +218,7 @@ end
 
 -------------------------------------------------------------------
 
-local enter = {name='enter'}
+local enter = {name='enter', ap={cost=1}}
 
 function enter.server_criteria(player)
   local p_tile = player:getTile()
@@ -250,7 +250,7 @@ end
 
 -------------------------------------------------------------------
 
-local exit = {name='exit'}
+local exit = {name='exit', ap={cost=1}}
 
 function exit.server_criteria(player)
   local p_tile = player:getTile()

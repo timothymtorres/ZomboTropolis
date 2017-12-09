@@ -4,7 +4,7 @@ local organic_armor_list = require('code.player.armor.organic_list')
 
 -------------------------------------------------------------------
 
-local drag_prey = {name='drag_prey'}
+local drag_prey = {name='drag_prey', ap={cost=1}}
 
 function drag_prey.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -72,7 +72,7 @@ end
 
 -------------------------------------------------------------------
 
-local groan = {name='groan'}
+local groan = {name='groan', ap={cost=1}}
 
 function groan.client_criteria(player)
   local p_tile = player:getTile()
@@ -151,7 +151,7 @@ end
 
 -------------------------------------------------------------------
 
-local gesture = {name='gesture'}
+local gesture = {name='gesture', ap={cost=1}}
 
 function gesture.client_criteria(player)
   local p_tile = player:getTile()
@@ -194,7 +194,7 @@ end
 
 -------------------------------------------------------------------
 
-local armor = {name='armor'}
+local armor = {name='armor', ap={cost=1}}
 
 local MIN_EP_ARMOR_COST = 1  -- this is a bit of a hack
 
@@ -237,19 +237,58 @@ end
 
 -------------------------------------------------------------------
 
-local ransack = {name='ransack'}
+local ransack = {name='ransack', ap={cost=5, modifier={ransack = -1, ruin = -2}}}
 
 function ransack.client_criteria(player)
-  assert(player:isStaged('inside'), 'Must be inside to ransack building')
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to ransack')
+  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
+  
+  local can_ransack_building = p_tile.integrity:canModify(player)
+  assert(can_ransack_building, 'Unable to ransack building in current state')
 end
 
 function ransack.server_criteria(player)
-  assert(player:isStaged('inside'), 'Must be inside to ransack building')
+  local p_tile = player:getTile()
+  assert(p_tile:isBuilding(), 'No building nearby to ransack')
+  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
+  
+  local can_ransack_building = p_tile.integrity:canModify(player)
+  assert(can_ransack_building, 'Unable to ransack building in current state')
+end
+
+function ransack.activate(player)
+  local ransack_dice = dice:new('2d3')
+  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
+  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
+  
+  local building = player:getTile()
+  building.integrity:updateHP(-1 * ransack_dice:roll() )
+  local integrity_state = building.integrity:getState()
+  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg =      'A zombie {destruction} the building.'
+  local self_msg = 'You {destruction} the building.'  
+  local destruction_type = building_was_ransacked and 'ransack' or 'ruin'
+  
+  self_msg = self_msg:replace(destruction_type)
+  msg =           msg:replace(destruction_type..'s')
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'ransack', player, integrity_state}  
+  player:broadcastEvent(msg, self_msg, event)  
 end
 
 -------------------------------------------------------------------
 
-local mark_prey = {name='mark_prey'}
+local mark_prey = {name='mark_prey', ap={cost=1}}
 
 function mark_prey.client_criteria(player)
   
@@ -261,7 +300,7 @@ end
 
 -------------------------------------------------------------------
 
-local track = {name='track'}
+local track = {name='track', ap={cost=1}}
 
 function track.client_criteria(player)
    assert(player:isStaged('outside'), 'Must be outside to track prey')   
@@ -307,7 +346,7 @@ end
 
 -------------------------------------------------------------------
 
-local acid = {name='acid'}
+local acid = {name='acid', ap={cost=1}}
 
 function acid.client_criteria(player)
   local p_tile = player:getTile()

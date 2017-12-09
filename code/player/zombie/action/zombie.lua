@@ -5,7 +5,7 @@ string.replace =          require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local respawn = {name='respawn'}
+local respawn = {name='respawn', ap={cost=10, modifier={hivemind = -5}}}
 
 function respawn.client_criteria(player) assert(not player:isStanding(), 'Must be dead for action') end  
 
@@ -31,58 +31,7 @@ end
 
 -------------------------------------------------------------------
 
-local ransack = {name='ransack'}
-
-function ransack.client_criteria(player)
-  local p_tile = player:getTile()
-  assert(p_tile:isBuilding(), 'No building nearby to ransack')
-  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
-end
-
-function ransack.server_criteria(player)
-  local p_tile = player:getTile()
-  assert(p_tile:isBuilding(), 'No building nearby to ransack')
-  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
-end
-
-function ransack.activate(player)
-  local ransack_dice = dice:new('2d3')
-  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
-  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
-  
-  local building = player:getTile()
-  building.integrity:updateHP(-1 * ransack_dice:roll() )
-  local integrity_state = building.integrity:getState()
-  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
-  
-  --------------------------------------------
-  -----------   M E S S A G E   --------------
-  --------------------------------------------
-  
-  local msg =      'A zombie {destruction} the building.'
-  local self_msg = 'You {destruction} the building.'  
-  local destruction_type = building_was_ransacked and 'ransack' or 'ruin'
-  
-  self_msg = self_msg:replace(destruction_type)
-  msg =           msg:replace(destruction_type..'s')
-  
-  --------------------------------------------
-  ---------   B R O A D C A S T   ------------
-  --------------------------------------------  
-  
-  local event = {'ransack', player, integrity_state}  
-  player:broadcastEvent(msg, self_msg, event)  
-end
-
--------------------------------------------------------------------
-
-local feed = {name='feed'}
+local feed = {name='feed', ap={cost=1}}
 
 function feed.client_criteria(player)
   local p_tile, p_stage = player:getTile(), player:getStage()
@@ -201,4 +150,4 @@ function ability.activate(name, player, target)
   return skillActivate[name](player, target)  
 end
 
-return {respawn, ransack, feed, ability}
+return {respawn, feed, ability}
