@@ -19,8 +19,8 @@ local default_IP= 0
 
 --Accounts[new_ID] = Human:new(n, t)
 
-function Human:initialize(username, mob_type, map_zone, y, x) --add account name
-  Player:initialize(username, mob_type, map_zone, y, x)
+function Human:initialize(username, map_zone, y, x) --add account name
+  Player:initialize(username, map_zone, y, x)
 
   self.ip = default_IP
   self.inventory = inventory:new(self)

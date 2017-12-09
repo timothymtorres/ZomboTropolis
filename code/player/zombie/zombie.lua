@@ -14,8 +14,8 @@ local Zombie = class('Zombie', Player)
 
 local default_EP = 50
 
-function Zombie:initialize(username, mob_type, map_zone, y, x) --add account name
-  Player:initialize(username, mob_type, map_zone, y, x)
+function Zombie:initialize(username, map_zone, y, x) --add account name
+  Player:initialize(username, map_zone, y, x)
 
   self.ep = default_EP
   --self.abilities = abilities:new(self)

@@ -14,9 +14,8 @@ local bonus_flag_name = {hp='hp_bonus', ip='ip_bonus', ep='ep_bonus', ap=false, 
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(username, mob_type, map_zone, y, x) --add account name
+function Player:initialize(username, map_zone, y, x) --add account name
   self.username = username
-  self.mob_type = mob_type
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.xp, self.hp, self.ap = default.xp, default.hp, default.ap
