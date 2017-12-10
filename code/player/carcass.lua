@@ -11,12 +11,15 @@ function carcass:initialize(player)
   self.has_reanimated = player:isMobType('zombie')
 end
 
+--[[ Deprecated function?
+
 function carcass:killed(player)
   if player:isMobType('human') then
     local starting_infestation = player.condition.infection.time
     self.infestation = starting_infestation 
   end
 end
+--]]
 
 function carcass:infest(amount)
   self.infestation = self.infestation + amount

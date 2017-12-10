@@ -320,7 +320,7 @@ function track.activate(player)
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local targets, targets_ranges = player.condition.tracking:getPrey()
+  local targets, targets_ranges = player.status_effect:isActive('track') and player.status_effect.track:getPrey()
   
   local self_msg = 'You sniff the air for prey.'
   local msg = 'A zombie smells the air for prey.'

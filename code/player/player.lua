@@ -47,7 +47,7 @@ function Player:perform(action_str, ...)
     local ap, AP_cost = self:getStat('ap'), self:getCost('ap', action_str)
     action:activate(self, ...)
 
-    self.condition:elapse(player, AP_cost)   
+    self.status_condition:elapse(AP_cost)   
     self:updateStat('ap', -1*AP_cost)
     self:updateStat('xp', AP_cost)
   else -- Houston, we have a problem!

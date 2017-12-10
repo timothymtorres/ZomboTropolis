@@ -91,15 +91,10 @@ function IsWeapon:getAccuracy(player, target)
   if player:isMobType('zombie') then
     if self:getStyle() == 'melee' then
       if player:isTangledTogether(target) then
+        accuracy_bonus = modifier.zombie_melee[3] -- no need for modifier.zombie_melee[3], can't we just use 0.05% directly?
 
-        --[[ Remove this once we add maime feature
-        if player.condition.entangle:isImpaleActive() then accuracy_bonus = modifier.zombie_melee[4]
-        else accuracy_bonus = modifier.zombie_melee[3]
-        end
-        --]]
-
-        accuracy_bonus = modifier.zombie_melee[3]
-
+        -- future feature:  think about adding multiple tangledTogether attack bonus for every zombie grappling target 
+        
       elseif target:getClassName() ~= 'player' then -- equipment or building
         if player.skills:check('power_claw') then accuracy_bonus = modifier.power_claw end
       end
