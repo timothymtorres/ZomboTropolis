@@ -1,6 +1,6 @@
 local class =                   require('code.libs.middleclass')
 local skills =                  require('code.player.skills')
-local inventory =               require('code.player.human.inventory')
+local Inventory =               require('code.player.human.inventory')
 local condition =               require('code.player.human.condition.class')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist =                    require('code.player.human.organic_weaponry')
@@ -20,8 +20,8 @@ function Human:initialize(username, map_zone, y, x) --add account name
   Player:initialize(username, map_zone, y, x)
 
   self.ip = default_IP
-  --self.inventory = inventory:new(self)
-  self.skills = skills:new(human_skill_list)
+  self.inventory = Inventory:new(self)
+  self.skills = Skills:new(human_skill_list)
   self.condition = condition:new(self)
   
   map_zone[y][x]:insert(self)

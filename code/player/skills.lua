@@ -2,15 +2,15 @@ local class = require('code.libs.middleclass')
 local bit = require('plugin.bit')
 local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit.rshift
 
-local skills = class('skills')
+local Skills = class('Skills')
 
-function skills:initialize(skill_list)
+function Skills:initialize(skill_list)
   self.flags = {}
   for _, category in pairs(skill_list.order.category) do self.flags[category] = 0 end
   self.list = skill_list  
 end
 
-function skills:getFlags(category) return self.flags[category] end
+function Skills:getFlags(category) return self.flags[category] end
 
 local function countSetFlags(bits)  -- count the number of set bits
   local count = 0
@@ -22,7 +22,7 @@ local function countSetFlags(bits)  -- count the number of set bits
   return count
 end
 
-function skills:countFlags(category)
+function Skills:countFlags(category)
   local count = 0
   if category == 'skills' then -- seperates skill bitflags from classes (ie. isolate skill bitflags)  
     for flag_category, flags in pairs(self.flags) do
@@ -40,7 +40,7 @@ end
 
 local class_cost = {100, 300, 600, 1000}
 
-function skills:getCost(mode)
+function Skills:getCost(mode)
   local cost, total_flags
   if mode == 'skills' then  
     total_flags = self:countFlags('skills')
@@ -54,7 +54,7 @@ end
 
 -- class prices, 100, 300, 600, 1000
 -- skill buy formula (y = .2*(x)^2 + .25*(x) + 50)
-function skills:buy(player, skill)
+function Skills:buy(player, skill)
   local xp = player:getStat('xp')
   
   local class = self.list.isClass(skill)  
@@ -76,15 +76,15 @@ print('[skills:buy]', 'player.xp='..xp, 'skill['..skill..'] cost='..cost)
   player.skills:add(skill)  
 end
 
-function skills:checkFlag(category, flag) return 
+function Skills:checkFlag(category, flag) return 
 --print('required flag = '..flag, 'current flags = '..self:getFlags())  
   band(self:getFlags(category), flag) == flag end
 
-function skills:check(skill) return self:checkFlag(self.list:getCategory(skill), self.list.flag[skill]) end
+function Skills:check(skill) return self:checkFlag(self.list:getCategory(skill), self.list.flag[skill]) end
 
-function skills:add(skill) 
+function Skills:add(skill) 
   local category = self.list.getCategory(skill)
   self.flags[category] = bor(self.flags[category], self.list.flag[skill]) 
 end
 
-return skills
+return Skills

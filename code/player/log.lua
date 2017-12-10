@@ -1,13 +1,13 @@
 local class = require('code.libs.middleclass')
 local getTimeStamp = require('code.player.getTimeStamp')
 
-local log = class('log')
+local Log = class('Log')
 
-function log:initiallize() 
+function Log:initiallize() 
   -- need to save data to client?
 end
 
-function log:insert(msg, event, date)
+function Log:insert(msg, event, date)
   date = date or os.time()    
   
   self[#self+1] = {
@@ -17,15 +17,15 @@ function log:insert(msg, event, date)
   }
 end
 
-function log:append(msg)
+function Log:append(msg)
   self[#self].msg = self[#self].msg..'  '..msg
 end
 
-function log:reset()
+function Log:reset()
   for i=1, #self do self[i] = nil end
 end
 
-function log:read()
+function Log:read()
   local list = {}
   for _, event in ipairs(self) do  -- sort this by day
     local date = os.date('%x', event.date)
@@ -40,4 +40,4 @@ function log:read()
   return list
 end
 
-return log
+return Log

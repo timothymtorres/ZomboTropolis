@@ -1,6 +1,6 @@
 local class =                   require('code.libs.middleclass')
 local combat =                  require('code.player.combat')
-local log =                     require('code.player.log')
+local Log =                     require('code.player.log')
 local broadcastEvent =          require('code.server.event')
 local catalogAvailableActions = require('code.player.catalog')
 
@@ -20,10 +20,10 @@ function Player:initialize(username, map_zone, y, x) --add account name
   self.username = username
   self.map_zone = map_zone
   self.y, self.x = y, x
-  self.xp, self.hp, self.ap = default.xp, default.hp, default.ap
+  self.hp, self.xp, self.ap = default.hp, default.xp, default.ap
   self.health_state = {basic=4, advanced=8}
   self.ID = self  
-  self.log = log:new()
+  self.log = Log:new()
 
   map_zone[y][x]:insert(self)
 end
