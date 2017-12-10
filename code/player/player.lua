@@ -1,6 +1,7 @@
 local class =                   require('code.libs.middleclass')
 local combat =                  require('code.player.combat')
 local Log =                     require('code.player.log')
+local StatusEffect =            require('code.player.status_effect')
 local broadcastEvent =          require('code.server.event')
 local catalogAvailableActions = require('code.player.catalog')
 
@@ -24,6 +25,7 @@ function Player:initialize(username, map_zone, y, x) --add account name
   self.health_state = {basic=4, advanced=8}
   self.ID = self  
   self.log = Log:new()
+  self.status_effect = StatusEffect:new(self)
 
   map_zone[y][x]:insert(self)
 end
