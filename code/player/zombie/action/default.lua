@@ -145,7 +145,7 @@ function attack.activate(player, target, weapon)
       end
       
       if player.skills:check('track') then
-        player.condition.tracking:addScent(target)
+        player.status_effect.tracking:addScent(target)
       end
     --elseif target_class == 'building' then
     --elseif target_class == 'barricade' then
@@ -159,7 +159,7 @@ function attack.activate(player, target, weapon)
       local effect, duration, bonus_effect = weapon:getConditionEffect(player) --, condition)   for later?
       if effect == 'entangle' then
         --local impale_bonus = bonus_effect and critical
-        player.condition.entangle:add(player, target)
+        player.status_effect.entangle:add(player, target)
       elseif effect == 'infection' then
         -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
@@ -173,7 +173,7 @@ function attack.activate(player, target, weapon)
       end
     end     
   else -- attack missed
-    if player.skills:check('grapple') then player.condition.entangle:remove() end
+    if player.skills:check('grapple') then player.status_effect.entangle:remove() end
   end
   
   --------------------------------------------

@@ -15,7 +15,7 @@ end
 
 function carcass:killed(player)
   if player:isMobType('human') then
-    local starting_infestation = player.condition.infection.time
+    local starting_infestation = player.status_effect.infection.time
     self.infestation = starting_infestation 
   end
 end

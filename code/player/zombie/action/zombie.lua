@@ -102,7 +102,7 @@ function feed.activate(player)
   xp_gained, decay_loss = dice.roll(xp_gained), dice.roll(decay_loss)
     
   player:updateStat('xp', xp_gained)
-  player.condition.decay:add(-1*decay_loss) 
+  player.status_effect.decay:add(-1*decay_loss) 
   
   --------------------------------------------
   -----------   M E S S A G E   --------------

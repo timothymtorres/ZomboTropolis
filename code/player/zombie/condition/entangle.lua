@@ -11,7 +11,7 @@ function entangle:remove()
   local tangled_player = self.grapple
   if tangled_player then
     self.grapple = false
-    tangled_player.condition.entangle.grapple = false
+    tangled_player.status_effect.entangle.grapple = false
   end
 end
 
