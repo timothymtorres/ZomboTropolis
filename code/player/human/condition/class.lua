@@ -9,15 +9,11 @@ local tracking = require('code.player.human.condition.tracking')
 local condition = class('condition')
 
 function condition:initialize(player)
-  if player:isMobType('human') then
-    -- insert status conditions?
-    self.infection = infection:new()
-  elseif player:isMobType('zombie') then
-
-  end
-  
+  --[[
+  self.infection = infection:new()
   self.entangle = entangle:new()
   self.tracking = tracking:new(player)
+  --]]
 end
 
 function condition:isActive(effect)  
