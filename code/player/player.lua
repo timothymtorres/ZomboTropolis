@@ -2,10 +2,12 @@ local class =                   require('code.libs.middleclass')
 local combat =                  require('code.player.combat')
 local log =                     require('code.player.log')
 local broadcastEvent =          require('code.server.event')
+local catalogAvailableActions = require('code.player.catalog')
 
 local Player = class('Player')
 
 Player.broadcastEvent = broadcastEvent.player
+Player.getActions = catalogAvailableActions 
 
 local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}

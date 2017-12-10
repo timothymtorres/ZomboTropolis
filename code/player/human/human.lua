@@ -1,6 +1,4 @@
 local class =                   require('code.libs.middleclass')
-local perform =                 require('code.player.action.perform')
-local catalogAvailableActions = require('code.player.action.catalog')
 local skills =                  require('code.player.skills.class')
 local inventory =               require('code.player.inventory')
 local condition =               require('code.player.condition.class')
@@ -43,7 +41,6 @@ end
 --]]
 
 -- client-side functions
-function Human:getActions(category) return catalogAvailableActions[category](self) end
 
 function Human:getWeapons()
   local list = {{weapon=Fist}} -- organic   
@@ -63,15 +60,6 @@ function Human:getTargets(mode)
   for player in pairs(all_players) do 
     if player:isStanding() and player ~= self then targets[#targets+1] = player end 
   end 
-  
-  if p_tile:isBuilding() then
-    --[[  Add this at a later time
-    if p_tile:isFortified() then targets[#targets+1] = p_tile:getBarrier() end  -- is this right?  (do I need a class instead?)
-    if p_tile:isPresent('equipment') then
-      for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
-    end 
-    --]]
-  end
   
   return targets
 end

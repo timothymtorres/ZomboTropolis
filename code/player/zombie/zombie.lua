@@ -1,6 +1,4 @@
 local class =                   require('code.libs.middleclass')
-local perform =                 require('code.player.action.perform')
-local catalogAvailableActions = require('code.player.action.catalog')
 local skills =                  require('code.player.skills.class')
 local condition =               require('code.player.condition.class')
 --local organic_armor =           require('code.player.armor.organic_class')
@@ -47,8 +45,6 @@ end
 --]]
 
 -- client-side functions
-function Zombie:getActions(category) return catalogAvailableActions[category](self) end
-
 function Zombie:getWeapons() return {{weapon=Claw}, {weapon=Bite}} end  
 
 function Zombie:getTargets(mode)
