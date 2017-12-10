@@ -9,6 +9,8 @@ local class = require('code.libs.middleclass')
   }
 --]]
 
+local inventory = {}  -- fix this
+
 function inventory:initialize(player)
   self = {player = player}
   --self.radio_receivers = {}  

@@ -4,9 +4,9 @@ local ability = {
   -- GENERAL
   groan, gesture,
   -- BRUTE
-  armor, drag_prey
+  armor, drag_prey,
   -- HIVE
-  acid, ransack
+  acid, ransack,
   -- HUNTER
   track, mark_prey,
 }

@@ -20,7 +20,7 @@ function Human:initialize(username, map_zone, y, x) --add account name
   Player:initialize(username, map_zone, y, x)
 
   self.ip = default_IP
-  self.inventory = inventory:new(self)
+  --self.inventory = inventory:new(self)
   self.skills = skills:new(human_skill_list)
   self.condition = condition:new(self)
   

@@ -1,12 +1,6 @@
 local combat =            require('code.player.combat')
-local entangle =          require('code.player.condition.entangle') -- there should be a better way to add this code to player condition effects...
-local equipmentActivate = require('code.location.building.equipment.operation.activate')
-local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
-
 local Item =              require('code.item.item')
---local Skill =     		  require('code.player.skills.skill')  Dunno how we are going to do this?
-
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 
@@ -195,10 +189,10 @@ function attack.activate(player, target, weapon, inv_ID)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
 
-  if condition == 0 and then
-    self_msg = self_msg..'Your '..tostring(weapon)..' is destroyed!')
+  if condition == 0 then
+    self_msg = self_msg..'Your '..tostring(weapon)..' is destroyed!'
   elseif condition and weapon:isConditionVisible(player) then 
-    self_msg = self_msg..'Your '..tostring(weapon)..' degrades to a '..weapon:getConditionState()..' state.')  
+    self_msg = self_msg..'Your '..tostring(weapon)..' degrades to a '..weapon:getConditionState()..' state.'
   end
 
   --------------------------------------------
