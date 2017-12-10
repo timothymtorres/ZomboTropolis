@@ -1,4 +1,6 @@
 local copy = require('code.libs.copy')
+local bit = require('plugin.bit')
+local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit.rshift
 
 local function lookupFlags(skill_list, skills)
   local array = {}
@@ -58,17 +60,17 @@ function fillSkillList(skill_list)
   skill_list = fillData(skill_list)
   skill_list = fillRequirements(skill_list)
 
-  skill_list:getRequirement = function(skill, category) 
-    if category == 'skills' then return self[skill].required_skills
-    elseif category == 'class' then return self[skill].required_class
-    else return self[skill].requires  -- return all requirements
+  skill_list.getRequirement = function(list, skill, category) 
+    if category == 'skills' then return list[skill].required_skills
+    elseif category == 'class' then return list[skill].required_class
+    else return list[skill].requires  -- return all requirements
     end  
   end
 
-  skill_list:getRequiredFlags = function(skill) return self[skill].required_flags end
-  skill_list:getFlag =          function(skill) return self.flag[skill] end
-  skill_list:getCategory =      function(skill) return self[skill].category end
-  skill_list:isClass =          function(skill) return self[skill].category == 'classes' end
+  skill_list.getRequiredFlags = function(list, skill) return list[skill].required_flags end
+  skill_list.getFlag =          function(list, skill) return list.flag[skill] end
+  skill_list.getCategory =      function(list, skill) return list[skill].category end
+  skill_list.isClass =          function(list, skill) return list[skill].category == 'classes' end
 
   return skill_list
 end
