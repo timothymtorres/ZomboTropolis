@@ -1,9 +1,7 @@
 local class = require('code.libs.middleclass')
-local infection = require('code.player.condition.infection')
-local burn = require('code.player.condition.burn')
-local decay = require('code.player.condition.decay')
-local entangle = require('code.player.condition.entangle')
-local tracking = require('code.player.condition.tracking')
+local infection = require('code.player.human.condition.infection')
+local entangle = require('code.player.human.condition.entangle')
+local tracking = require('code.player.human.condition.tracking')
 
 -- poison|infection  confusion|blindness|sickness
 -- burn|delimbed|decayed|beheaded|maimed
@@ -15,8 +13,7 @@ function condition:initialize(player)
     -- insert status conditions?
     self.infection = infection:new()
   elseif player:isMobType('zombie') then
-    self.burn = burn:new()
-    self.decay = decay:new()
+
   end
   
   self.entangle = entangle:new()
