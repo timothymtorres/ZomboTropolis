@@ -1,6 +1,4 @@
 local combat =            require('code.player.combat')
-local entangle =          require('code.player.condition.entangle') -- there should be a better way to add this code to player condition effects...
---local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
@@ -160,8 +158,8 @@ function attack.activate(player, target, weapon)
     if weapon:hasConditionEffect(player) then
       local effect, duration, bonus_effect = weapon:getConditionEffect(player) --, condition)   for later?
       if effect == 'entangle' then
-        local impale_bonus = bonus_effect and critical
-        entangle.add(player, target, impale_bonus)
+        --local impale_bonus = bonus_effect and critical
+        player.condition.entangle:add(player, target)
       elseif effect == 'infection' then
         -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
         if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
