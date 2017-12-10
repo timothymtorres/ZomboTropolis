@@ -49,14 +49,14 @@ function IsWeapon:isHarmless() return self.weapon.NO_DAMAGE or false end
 
 --function IsWeapon:isCombustionSource() return self.combustion_source or false end
 
-function IsWeapon:hasConditionEffect(player)
+function IsWeapon:hasStatusEffect(player)
   if self:getClassName() == 'claw' and not player.skills:check('grapple') then 
     return false -- if attacking with claws and missing grapple skill then no condition effect  
   elseif self:getClassName() == 'bite' and not player.skills:check('infection') then
     return false -- if attacking with bite and missing infection skill then no condition effect
   end
   
-  return (self.condition_effect and true) or false 
+  return (self.status_effect and true) or false 
 end
 
 --function IsWeapon:getSkillRequired() return self.weapon.SKILL_REQUIRED end

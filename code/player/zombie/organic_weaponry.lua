@@ -15,7 +15,7 @@ Claw.weapon = {
   ACCURACY = 0.99, --0.25
   CRITICAL = 0.05,
   ORGANIC = 'zombie',
-  CONDITION_EFFECT = 'entangle',
+  STATUS_EFFECT = 'entangle',
   MASTER_SKILL = 'claw_adv',
 }
 
@@ -35,7 +35,7 @@ Bite.weapon = {
   ACCURACY = 0.20,
   CRITICAL = 0.05,
   ORGANIC = 'zombie',
-  CONDITION_EFFECT = 'infection',
+  STATUS_EFFECT = 'infection',
   MASTER_SKILL = 'bite_adv',
 }
 
