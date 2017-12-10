@@ -94,7 +94,7 @@ function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade
 function Building:getEquipment()
   local machines = {}
   for machine in pairs(Equipment.subclasses) do 
-    if self[machine] then machines[#machines+1] = tostring(machine) end  -- should this be a class?
+    if self[machine] then machines[#machines+1] = self[machine] end --tostring(machine) should this be a class?
   end
   return machines
 end

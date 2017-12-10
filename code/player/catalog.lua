@@ -14,8 +14,8 @@ local function determineAvailableActions(player, all_actions, check, available_a
       local p_tile = player:getTile()
       
       if p_tile:isBuilding() and p_tile:isPresent('powered equipment') and player:isStaged('inside') then
-        for machine in pairs(p_tile:getEquipment()) do
-          if p_tile[machine]:hasOperations() and machine.client_criteria and pcall(machine.client_criteria, player) then
+        for _, machine in ipairs(p_tile:getEquipment()) do
+          if machine:hasOperations() and machine.client_criteria and pcall(machine.client_criteria, player) then
             --available_actions.equipment[#available_actions]
           end
         end
