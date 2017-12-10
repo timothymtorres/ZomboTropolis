@@ -1,4 +1,3 @@
-local enzyme_list =       require('code.player.enzyme_list')
 local dice =              require('code.libs.dice')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
@@ -123,6 +122,11 @@ end
 
 local ability = {name='ability'}
 
+--[[
+ R E F A C T O R    T H I S    L A T E R 
+]]--
+
+-- remove enzyme_list, skillCheck, skillCriteria, skillActivate, etc.
 function ability.client_criteria(name, player) --, target)
   assert(player.skills:check(name), 'Must have required skill to use ability')
   if enzyme_list[name] then
