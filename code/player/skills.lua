@@ -80,7 +80,7 @@ function skills:checkFlag(category, flag) return
 --print('required flag = '..flag, 'current flags = '..self:getFlags())  
   band(self:getFlags(category), flag) == flag end
 
-function skills:check(skill) return self:checkFlag(self.list.getCategory(skill), self.list.flag[skill]) end
+function skills:check(skill) return self:checkFlag(self.list:getCategory(skill), self.list.flag[skill]) end
 
 function skills:add(skill) 
   local category = self.list.getCategory(skill)
