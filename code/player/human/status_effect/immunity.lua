@@ -12,7 +12,7 @@ function Immunity:initialize(player, time)
   if player.status_condition:isActive('infection') then player.log:append('You feel the infection become dormant.') end  
 end
 
-function Immunity:addImmunity(time) self.ticks = math.min(MAX_TIME, self.ticks + time) end
+function Immunity:add(time) self.ticks = math.min(MAX_TIME, self.ticks + time) end
 
 function Immunity:elapse(time)
   self.ticks = math.max(self.ticks - time, 0)
