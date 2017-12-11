@@ -1,5 +1,6 @@
 local dice =              require('code.libs.dice')
 local broadcastEvent =    require('code.server.event')
+local Ability_Class =     require('code.player.zombie.ability.ability')
 string.replace =          require('code.libs.replace')
 
 -------------------------------------------------------------------
