@@ -4,11 +4,13 @@ local Log =                     require('code.player.log')
 local StatusEffect =            require('code.player.status_effect')
 local broadcastEvent =          require('code.server.event')
 local catalogAvailableActions = require('code.player.catalog')
+local chanceToHit =             require('code.player.chanceToHit')
 
 local Player = class('Player')
 
 Player.broadcastEvent = broadcastEvent.player
 Player.getActions = catalogAvailableActions 
+Player.chanceToHit = chanceToHit
 
 local default =     {hp=50, ep=50, ip= 0, xp=   0, ap=50}
 local default_max = {hp=50, ep=50, ip=50, xp=1000, ap=50}
