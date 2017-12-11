@@ -29,6 +29,7 @@ function Human:killed()
   -- Corpse:new()   ???
   -- we need to create a carcass for zombies to feed on, then afterwards create a new Zombie instance from the carcass? (pass useful human data as args to corpse)
   -- But we need to retain all info for the player to see next time they log in, (so they can witness their gory death)
+  -- need to also update status_effects so that trackers lose their scents, etc.
   self:permadeath()   -- deletes human instance
 end
 

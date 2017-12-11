@@ -33,6 +33,7 @@ end
 
 function Zombie:starve()
   -- need to retain all info for the player to see next time they log in
+  -- need to update all status_effects so other players are untangled, not tracked, etc.
   self:permadeath()   -- deletes zombie instance
 end
 
