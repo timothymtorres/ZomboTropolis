@@ -156,24 +156,29 @@ function attack.activate(player, target, weapon)
     target:updateStat('hp', hp_loss)
   
     if weapon:hasConditionEffect(player) then
-      local effect, duration, bonus_effect = weapon:getConditionEffect(player) --, condition)   for later?
+      local effect = weapon:getConditionEffect(player) --, condition)   for later?
       if effect == 'entangle' then
-        --local impale_bonus = bonus_effect and critical
-        player.status_effect.entangle:add(player, target)
+        if not player:isTangledTogether(target) then 
+          if player.status_effect:isActive('entagle') then player.status_effect.entagle:remove() end
+          if target.status_effect:isActive('entagle') then target.status_effect.entagle:remove() end
+
+          player.status_effect:add('entangle', target) 
+          target.status_effect:add('entangle', player)
+        end
       elseif effect == 'infection' then
         -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
-        if player.skills:check('infection_adv') or (player.skills:check('infection') and entangle.isTangledTogether(player, target)) then
-          if not target.condition.infection:isImmune() and not target.condition.infection:isActive() then  --target cannot be immune or infection already active
-            target.condition.infection:add() 
-            caused_infection = true          
+        if player.skills:check('infection_adv') or (player.skills:check('infection') and player:isTangledTogether(target)) then
+          if not target.status_effect:isActive('infection') then
+            target.status_effect:add('infection') 
+            caused_infection = true
           end
         end         
       else -- normal effect process
-        target.condition[effect]:add(duration, bonus_effect)
+        target.status_effect:add(effect)
       end
     end     
   else -- attack missed
-    if player.skills:check('grapple') then player.status_effect.entangle:remove() end
+    if player.skills:check('grapple') and player.status_effect:isActive('entangle') then player.status_effect.entagle:remove() end
   end
   
   --------------------------------------------
