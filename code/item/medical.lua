@@ -2,12 +2,11 @@ local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
 local broadcastEvent = require('code.server.event')
 local dice =           require('code.libs.dice')
-local IsMedical =      require('code.item.mixin.is_medical')
 string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local FAK = class('FAK', ItemBase):include(IsMedical)
+local FAK = class('FAK', ItemBase)
 
 FAK.FULL_NAME = 'first aid kit'
 FAK.WEIGHT = 8
@@ -66,7 +65,7 @@ end
 
 -------------------------------------------------------------------
 
-local Bandage = class('Bandage', ItemBase):include(IsMedical)
+local Bandage = class('Bandage', ItemBase)
 
 Bandage.FULL_NAME = 'bandage'
 Bandage.WEIGHT = 3
@@ -120,7 +119,7 @@ end
 
 -------------------------------------------------------------------
 
-local Syringe = class('Syringe', ItemBase):include(IsMedical)
+local Syringe = class('Syringe', ItemBase)
 
 Syringe.FULL_NAME = 'syringe'
 Syringe.WEIGHT = 5
@@ -205,7 +204,7 @@ end
 
 -------------------------------------------------------------------
 
-local Vaccine = class('Vaccine', ItemBase):include(IsMedical)
+local Vaccine = class('Vaccine', ItemBase)
 
 Vaccine.FULL_NAME = 'antibodies'
 Vaccine.WEIGHT = 5
@@ -254,7 +253,7 @@ end
 
 -------------------------------------------------------------------
 
-local Antidote = class('Antidote', ItemBase) -- no need to make this IsMedical since this item does not utilize dice
+local Antidote = class('Antidote', ItemBase)
 
 Antidote.FULL_NAME = 'antidote'
 Antidote.WEIGHT = 5
