@@ -122,36 +122,39 @@ end
 
 local ability = {name='ability'}
 
---[[
- R E F A C T O R    T H I S    L A T E R 
-]]--
-
--- remove enzyme_list, skillCheck, skillCriteria, skillActivate, etc.
+-- I'm pretty sure we can skip having ability client_critera here?  Client_critera will be called via composer scenes in UI code.
 function ability.client_criteria(name, player) --, target)
-  assert(player.skills:check(name), 'Must have required skill to use ability')
+  local skill = Ability_Class[name].REQUIRED_SKILL
+  assert(player.skills:check(skill), 'Must have required skill to use ability')
+  --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
     local cost, ep = player:getCost('ep', name), player:getStat('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
-  if skillCheck[name] then skillCheck[name](player) end   -- we need to require ability.client_criteria this
+  --]]
+  if Ability_Class[name].client_criteria then Ability_Class[name].client_criteria(player, ...)
 end
 
 function ability.server_criteria(name, player, ...)
---for k,v in pairs(player) do print(k,v) end
-  assert(player.skills:check(name), 'Must have required skill to use ability')
+  local skill = Ability_Class[name].REQUIRED_SKILL
+  assert(player.skills:check(skill), 'Must have required skill to use ability')
+  --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
     local cost, ep = player:getCost('ep', name), player:getStat('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
-  end  
-  if skillCriteria[name] then skillCriteria[name](player, ...) end 
+  end
+  --]]
+  if Ability_Class[name].server_criteria then Ability_Class[name].server_criteria(player, ...)
 end
 
 function ability.activate(name, player, target)
+  --[[
   if enzyme_list[name] then
     local cost = player:getCost('ep', name)
     player:updateStat('ep', cost)
-  end    
-  return skillActivate[name](player, target)  
+  end 
+  --]]   
+  Ability_Class[name].activate(player, target)
 end
 
 return {respawn, feed, ability}
