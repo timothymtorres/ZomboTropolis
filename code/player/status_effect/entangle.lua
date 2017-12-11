@@ -5,8 +5,6 @@ local Entangle = class('Entangle')
 function Entangle:initialize(player, target)
   self.player = player
   self.tangled_player = target
-
-  target.status_effect:add('entangle', player)
 end
 
 function Entangle:getTangledPlayer() return self.tangled_player end
