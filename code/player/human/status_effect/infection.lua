@@ -9,8 +9,9 @@ function Infection:initialize(player)
   self.player = player
 end
 
-function Infection:elapse(player, time)  
-  if not self.player.status_condition:isActive('immune') then
+function Infection:elapse(time) 
+  local player = self.player 
+  if not player.status_condition:isActive('immune') then
     player.log:append('You feel the infection spreading.')    
     player:updateStat('hp', INFECTION_DAMAGE_PER_TICK*time)    
   end
