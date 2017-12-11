@@ -25,7 +25,7 @@ function FAK:server_criteria(player, target)
 end
 
 function FAK:activate(player, target)
-  local FAK_dice = dice:new(medical.FAK:getDice())
+  local FAK_dice = dice:new(self.medical.DICE)
   local tile = player:getTile()  
  
   if player.skills:check('healing') and tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then
@@ -84,7 +84,7 @@ function Bandage:server_criteria(player, target)
 end
 
 function Bandage:activate(player, target)
-  local bandage_dice = dice:new(medical.bandage:getDice())  
+  local bandage_dice = dice:new(self.medical.DICE)
   local tile = player:getTile()
  
   if tile:isBuilding() and tile:isPowered() and player:isStaged('inside') then bandage_dice = bandage_dice+1 end
@@ -147,8 +147,8 @@ local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
 function Syringe:activate(player, target)
-  local syringe = medical.syringe
-  local inject_chance = syringe:getAccuracy()
+  local inject_chance = self.medical.ACCURACY
+
   if player.skills:check('syringe') then
     inject_chance = inject_chance + 0.15
     if player.skills:check("syringe_adv") then
@@ -205,7 +205,7 @@ end
 
 -------------------------------------------------------------------
 
-local Vaccine = class('Vaccine', ItemBase)
+local Vaccine = class('Vaccine', ItemBase):include(IsMedical)
 
 Vaccine.FULL_NAME = 'antibodies'
 Vaccine.WEIGHT = 5
@@ -222,15 +222,18 @@ function Vaccine:server_criteria(player, target)
 end
 
 function Vaccine:activate(player, target)
-  local antibodies = medical.antibodies
-  local antibodies_dice = dice:new(medical.antibodies:getDice())
+  local vaccine_dice = dice:new(self.medical.DICE)
   
-  antibodies_dice = antibodies_dice + (self.condition*100)
+  vaccine_dice = vaccine_dice + (self.condition*100)
   --if player.skills:check('') then        Should we utilize a skill that affects antibodies?
   
-  local immunity_gained = antibodies_dice:roll()
-  target.condition.infection:addImmunity(immunity_gained)
-  
+  local immunity_gained = vaccine_dice:roll()
+  if not target.status_effect:isActive('immunity') then 
+    target.status_effect:new('immunity', immunity_gained)
+  else
+    target.status_effect.immunity:add(immunity_gained)
+  end
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
