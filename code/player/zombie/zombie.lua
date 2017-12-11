@@ -1,5 +1,6 @@
 local class =                   require('code.libs.middleclass')
 local Skills =                  require('code.player.skills')
+local Hunger =                  require('code.player.zombie.hunger')
 --local organic_armor =           require('code.player.armor.organic_class')
 local Claw, Bite =       unpack(require('code.player.zombie.organic_weaponry'))
 local zombie_skill_list =       require('code.player.zombie.skill_list')
@@ -18,6 +19,7 @@ function Zombie:initialize(username, map_zone, y, x) --add account name
   self.ep = default_EP
   --self.abilities = abilities:new(self)
   self.skills = Skills:new(zombie_skill_list)
+  self.hunger = Hunger:new(self)
   
   map_zone[y][x]:insert(self)
   --self.armor = organic_armor:new(self)

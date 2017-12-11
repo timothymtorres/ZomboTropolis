@@ -50,6 +50,8 @@ function Player:perform(action_str, ...)
     self.status_condition:elapse(AP_cost)   
     self:updateStat('ap', -1*AP_cost)
     self:updateStat('xp', AP_cost)
+
+    if self:isMobType('zombie') then self.hunger:elapse(AP_cost) end -- bit of a hack to put this in here...
   else -- Houston, we have a problem!
     self.log:insert(ap_error_msg or class_error_msg or error_msg)
   end

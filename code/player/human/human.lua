@@ -13,8 +13,6 @@ Human.action_list = human_action_list
 
 local default_IP= 0
 
---Accounts[new_ID] = Human:new(n, t)
-
 function Human:initialize(username, map_zone, y, x) --add account name
   Player:initialize(username, map_zone, y, x)
 
