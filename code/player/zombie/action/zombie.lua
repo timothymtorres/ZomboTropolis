@@ -41,7 +41,7 @@ function feed.client_criteria(player)
   local edible_corpse_present 
   local tile_player_group = p_tile:getPlayers(p_stage)
   for tile_player in pairs(tile_player_group) do
-    if not tile_player:isStanding() and tile_player.carcass:edible(player) then
+    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
       edible_corpse_present = true
       break
     end
@@ -57,22 +57,19 @@ function feed.server_criteria(player)
   local edible_corpse_present 
   local tile_player_group = p_tile:getPlayers(p_stage)
   for tile_player in pairs(tile_player_group) do
-    if not tile_player:isStanding() and tile_player.carcass:edible(player) then
+    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
       edible_corpse_present = true
       break
     end
   end
-  assert(edible_corpse_present, 'All corpses have been eaten')  
+  assert(edible_corpse_present, 'All corpses have been eaten')
 end
 
 local corpse_effects = { 
   -- First come, first serve! (less xp and decay loss as corpse becomes more devoured)
-  xp = {'1d10+5', '1d9+3', '1d7+2', '1d5+1', '1d3',
-    digestion = {'1d18+12', '1d16+8', '1d12+6', '1d8+4', '1d4+2'},
-  },  
-  decay = {'1d200+300', '1d200+250', '1d200+200', '1d200+150', '1d200+100',
-    digestion = {'1d400+600', '1d400+500', '1d400+400', '1d400+300', '1d400+200'},
-  },
+  xp = {'1d10+5', '1d9+3', '1d7+2', '1d5+1', '1d3'},
+  satiation = {'1d400+600', '1d400+500', '1d400+400', '1d400+300', '1d400+200'},
+  description = {'very fresh', 'fresh', '', 'old', 'very old'}
 }
 
 function feed.activate(player) 
@@ -83,34 +80,29 @@ function feed.activate(player)
   
   -- finds the corpse with the lowest number of scavengers (fresh meat) 
   for tile_player in pairs(tile_player_group) do
-    local corpse_scavenger_num = #tile_player.carcass.carnivour_list
-    if not tile_player:isStanding() and tile_player.carcass:edible(player) and lowest_scavenger_num > corpse_scavenger_num then
-      target = tile_player
-      lowest_scavenger_num = corpse_scavenger_num 
+
+    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player)
+      local corpse_scavenger_num = #tile_player.carcass.carnivour_list
+      if lowest_scavenger_num > corpse_scavenger_num then
+        target = tile_player
+        lowest_scavenger_num = corpse_scavenger_num 
+      end
     end
   end
   
-  local nutrition_lvl = target.carcass:devour(player)
-  local xp_gained, decay_loss
-  if player.skills:check('digestion') then 
-    xp_gained = corpse_effects.xp.digestion[nutrition_lvl]
-    decay_loss = corpse_effects.decay.digestion[nutrition_lvl]
-  else
-    xp_gained = corpse_effects.xp[nutrition_lvl]
-    decay_loss = corpse_effects.decay[nutrition_lvl]
-  end
-  
-  xp_gained, decay_loss = dice.roll(xp_gained), dice.roll(decay_loss)
+  local nutrition = target.carcass:devour(player)
+  local xp, satiation = corpse_effects.xp[nutrition], corpse_effects.satiation[nutrition]
     
-  player:updateStat('xp', xp_gained)
-  player.status_effect.decay:add(-1*decay_loss) 
+  player:updateStat('xp', dice.roll(xp))
+  player.hunger:update(-1*dice.roll(satiation)) 
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local msg, self_msg = 'A zombie feeds on a corpse.', 'You feed on a corpse.'
-  
+  local msg, self_msg = 'A zombie feeds on a corpse.', 'You feed on a [description] corpse.'
+  self_msg = self_msg:replace(corpse_effects.description[nutrition])
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
