@@ -1,9 +1,9 @@
 local class = require('code.libs.middleclass')
 local TileBase = require('code.location.tile.tile_base')
 local Equipment = require('code.location.building.equipment.equipment')
-local door = require('code.location.building.barrier.door.class')
-local barricade = require('code.location.building.barrier.barricade.class')
-local integrity = require('code.location.building.integrity.class')
+local Door = require('code.location.building.barrier.door.class')
+local Barricade = require('code.location.building.barrier.barricade.class')
+local Integrity = require('code.location.building.integrity.class')
 
 local Building = class('Building', TileBase)
 
@@ -66,9 +66,9 @@ function Building:initialize(map, y, x, name)
   TileBase.initialize(self, map, y, x, name)  
   self.inside_players = {}
   
-  self.door        = door:new(self)
-  self.barricade   = barricade:new(self)
-  self.integrity   = integrity:new(self) 
+  self.door        = Door:new(self)
+  self.barricade   = Barricade:new(self)
+  self.integrity   = Integrity:new(self) 
 end
 
 function Building:insert(player, setting) 
