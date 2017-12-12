@@ -3,6 +3,7 @@ local skills =                  require('code.player.skills')
 local Inventory =               require('code.player.human.inventory')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist =                    require('code.player.human.organic_weaponry')
+local Carcass =                 require('code.player.human.carcass')
 local human_skill_list =        require('code.player.human.skill_list')
 local human_action_list =       require('code.player.human.action.action')
 local Player =                  require('code.player.player')
@@ -26,11 +27,12 @@ function Human:initialize(username, map_zone, y, x) --add account name
 end
 
 function Human:killed()
+  self.carcass = Carcass:new(self)
   -- Corpse:new()   ???
   -- we need to create a carcass for zombies to feed on, then afterwards create a new Zombie instance from the carcass? (pass useful human data as args to corpse)
   -- But we need to retain all info for the player to see next time they log in, (so they can witness their gory death)
   -- need to also update status_effects so that trackers lose their scents, etc.
-  self:permadeath()   -- deletes human instance
+  self:permadeath()   -- deletes human instance... not quite... delete player from controling human instance
 end
 
 --[[
