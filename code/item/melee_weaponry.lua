@@ -1,8 +1,6 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
-local broadcastEvent = require('code.server.event')
 local IsWeapon =       require('code.item.mixin.is_weapon')
-string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 

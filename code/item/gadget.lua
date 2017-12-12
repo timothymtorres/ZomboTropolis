@@ -1,8 +1,5 @@
 local class =          require('code.libs.middleclass')
 local ItemBase =       require('code.item.item_base')
-local broadcastEvent = require('code.server.event')
-string.replace =       require('code.libs.replace')
-local dice =           require('code.libs.dice')
 
 local Radio = class('Radio', ItemBase)
 
