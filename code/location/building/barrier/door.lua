@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
-local barrier = require('code.location.building.barrier.class')
+local Barrier = require('code.location.building.barrier.class')
 
-local Door = class('Door', barrier)  
+local Door = class('Door', Barrier)  
 local default_hp, max_hp = 3, 3
 
 local door_desc = {[0] = 'destroyed', [1] = 'smashed', [2] = 'dented', [3] = 'undamaged'}
