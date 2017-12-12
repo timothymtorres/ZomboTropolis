@@ -2,7 +2,7 @@ local class = require('code.libs.middleclass')
 local dice = require('code.libs.dice')
 local barrier = require('code.location.building.barrier.class')
 
-local barricade = class('barricade', barrier)
+local Barricade = class('Barricade', barrier)
 local DEFAULT_HP, DEFAULT_POTENTIAL_HP = 0, 15
 local MIN_POTENTIAL_HP = 15
 local MAX_HP = 63
@@ -25,7 +25,7 @@ local room_available = {
   {desc = 'plenty',    range = 63},            --   7-63
 }
 
-function barricade:initialize()
+function Barricade:initialize()
   barrier.initialize(self) 
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
@@ -34,20 +34,20 @@ function barricade:initialize()
   self.potential_hp_desc = room_available[4].desc
 end  
 
-barricade.max_hp = MAX_HP
+Barricade.max_hp = MAX_HP
 
-function barricade:getDesc() return self.hp_desc, self.potential_hp_desc end
+function Barricade:getDesc() return self.hp_desc, self.potential_hp_desc end
 
-function barricade:updateHP(num) 
+function Barricade:updateHP(num) 
   self.hp = math.min( math.max(self.hp+num, 0), self.potential_hp) 
   -- if damage done to barricade, need to subtract it from potential_hp as well (default_potential_hp is the lowest it can go)
   if num < 0 then self.potential_hp = math.max(self.potential_hp - num, MIN_POTENTIAL_HP) end 
   self:updateDesc()
 end
 
-function barricade:isDestroyed() return self.hp == 0 end
+function Barricade:isDestroyed() return self.hp == 0 end
 
-function barricade:roomForFortification() return self.potential_hp > self.hp end
+function Barricade:roomForFortification() return self.potential_hp > self.hp end
 
 local reinforce_potential_params = {
   {margin =    12, range = 26}, --         9-26 [17]
@@ -58,7 +58,7 @@ local reinforce_potential_params = {
 
 local MIN_HP_TO_REINFORCE = 9
 
-function barricade:canReinforce()
+function Barricade:canReinforce()
  
 --[[----  REASONING FOR REINFORCE LIMITS/RANGES --------
     In order to reinforce three critera needs to be met:
@@ -97,7 +97,7 @@ local reinforce_params = {
   {dice = '2d4-7', range = 63}, --        63-61 [3]
 }
 
-function barricade:reinforceAttempt()
+function Barricade:reinforceAttempt()
   local dice_str
   for i, reinforce in ipairs(reinforce_params) do
     if reinforce.range >= self.hp then
@@ -114,12 +114,12 @@ function barricade:reinforceAttempt()
   return building_was_reinforced, potential_hp
 end
 
-function barricade:reinforce(potential_hp)
+function Barricade:reinforce(potential_hp)
   self.potential_hp = math.min(self.potential_hp + potential_hp, MAX_HP) 
   self:updateDesc()
 end
 
-function barricade:updateDesc()
+function Barricade:updateDesc()
   for _, fort in ipairs(fortification_status) do
     if fort.range >= self.hp then
       self.hp_desc = fort.desc
@@ -137,7 +137,7 @@ function barricade:updateDesc()
   end
 end
 
-function barricade:canPlayerFortify(player)
+function Barricade:canPlayerFortify(player)
   local regular_cade_value, v_strong_cade_value = fortification_status[4].range, fortification_status[6].range
   local cade_past_regular = self.hp >= regular_cade_value
   local cade_past_v_strong = self.hp >= v_strong_cade_value
@@ -152,7 +152,7 @@ local ransack_blockade_bonus = 1
 local skill_bypass_bonus = 1
 local default_bypass_n = 2
 
-function barricade:didZombiesIntervene(player)  -- make brute zombie count as x2 for blockade_n
+function Barricade:didZombiesIntervene(player)  -- make brute zombie count as x2 for blockade_n
   local p_tile = player:getTile()
   local zombie_n = p_tile:countPlayers('zombie', 'inside')
   local human_n = p_tile:countPlayers('human', 'inside')
@@ -174,7 +174,7 @@ end
 
 local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]
 
-function barricade:fortify(player, cade_condition)
+function Barricade:fortify(player, cade_condition)
   local dice_str = cade_dice[cade_condition]
   local barricade_dice = dice:new(dice_str)
   if player.skills:check('barricade') then barricade_dice = barricade_dice / 1 end
@@ -183,4 +183,4 @@ function barricade:fortify(player, cade_condition)
   self:updateHP(barricade_dice:roll())
 end
 
-return barricade
+return Barricade
