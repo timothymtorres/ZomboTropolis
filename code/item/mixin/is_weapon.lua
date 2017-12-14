@@ -1,4 +1,4 @@
-local dice =        require('code.libs.dice')
+local dice = require('code.libs.dice')
 
 local IsWeapon = {}
 

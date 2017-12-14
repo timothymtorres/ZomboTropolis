@@ -1,6 +1,6 @@
-local dice =              require('code.libs.dice')
-local broadcastEvent =    require('code.server.event')
-string.replace =          require('code.libs.replace')
+local dice = require('code.libs.dice')
+local broadcastEvent = require('code.server.event')
+string.replace = require('code.libs.replace')
 
 -------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
-local class =          require('code.libs.middleclass')
-local Item =           require('code.item.item')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 local broadcastEvent = require('code.server.event')
-local dice =           require('code.libs.dice')
-string.replace =       require('code.libs.replace')
+local dice = require('code.libs.dice')
+string.replace = require('code.libs.replace')
 
 -------------------------------------------------------------------
 

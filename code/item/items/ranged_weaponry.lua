@@ -1,8 +1,8 @@
-local class =          require('code.libs.middleclass')
-local Item =           require('code.item.item')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 local broadcastEvent = require('code.server.event')
-local IsWeapon =       require('code.item.mixin.is_weapon')
-string.replace =       require('code.libs.replace')
+local IsWeapon = require('code.item.mixin.is_weapon')
+string.replace = require('code.libs.replace')
 
 -- need to add designated_weapon var to items?  Or do this via mixins?
 -- weaponry[item].designated_weapon = true 

@@ -1,6 +1,6 @@
-local class =           require('code.libs.middleclass')
-local Items =            require('code.item.items')
-local broadcastEvent =  require('code.server.event')
+local class = require('code.libs.middleclass')
+local Items = require('code.item.items')
+local broadcastEvent = require('code.server.event')
 
 local Tile = class('Tile')
 

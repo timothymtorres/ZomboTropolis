@@ -1,4 +1,4 @@
-local class =    require('code.libs.middleclass')
+local class = require('code.libs.middleclass')
 local Building = require('code.location.building.building')
 
 -------------------------------------------------------------------

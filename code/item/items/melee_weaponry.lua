@@ -1,6 +1,6 @@
-local class =          require('code.libs.middleclass')
-local Item =           require('code.item.item')
-local IsWeapon =       require('code.item.mixin.is_weapon')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
+local IsWeapon = require('code.item.mixin.is_weapon')
 
 -------------------------------------------------------------------
 

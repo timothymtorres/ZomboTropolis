@@ -1,10 +1,10 @@
-local class =                   require('code.libs.middleclass')
-local combat =                  require('code.player.combat')
-local Log =                     require('code.player.log')
-local StatusEffect =            require('code.player.status_effect.status_effect')
-local broadcastEvent =          require('code.server.event')
+local class = require('code.libs.middleclass')
+local combat = require('code.player.combat')
+local Log = require('code.player.log')
+local StatusEffect = require('code.player.status_effect.status_effect')
+local broadcastEvent = require('code.server.event')
 local catalogAvailableActions = require('code.player.catalog')
-local chanceToHit =             require('code.player.chanceToHit')
+local chanceToHit = require('code.player.chanceToHit')
 
 local Player = class('Player')
 

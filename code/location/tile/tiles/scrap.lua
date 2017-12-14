@@ -1,5 +1,5 @@
-local class =           require('code.libs.middleclass')
-local Tile = 		require('code.location.tile.tile')
+local class = require('code.libs.middleclass')
+local Tile = require('code.location.tile.tile')
 
 -------------------------------------------------------------------
 
