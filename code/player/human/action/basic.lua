@@ -273,19 +273,4 @@ function exit.activate(player)
   player.log:insert(msg, event)  
 end
 
-
---[[    
-function check.default(player, action)
-  if check[action] then check[action](player) end
-end
-
-function criteria.default(action, player, ...)
-  if criteria[action] then criteria[action](player, ...) end
-end
-
-function default.activate(action, player, ...)
-  return activate[action](player, ...)
-end
---]]
-
 return {move, attack, enter, exit}

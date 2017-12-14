@@ -1,14 +1,5 @@
 local fillSkillList = require('code.player.fillSkillList')
 
---[[
-  skill = {
-    name = 'string', 
-    desc = 'string', 
-    icon = 'image-name'  
-    requires = {'skill_name1', 'skill_name2', etc.}/nil,
-  }
---]]
-
 local skill_list = {
   flag = {
     -- Classes

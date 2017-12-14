@@ -1,6 +1,6 @@
 local class = require('code.libs.middleclass')
 local TileBase = require('code.location.tile.tile_base')
-local Equipment = require('code.location.building.equipment.equipment')
+local Machines = require('code.location.building.equipment.equipment')
 local Door = require('code.location.building.barrier.door.class')
 local Barricade = require('code.location.building.barrier.barricade.class')
 local Integrity = require('code.location.building.integrity.class')
@@ -83,7 +83,7 @@ function Building:remove(player, setting)
   end
 end
 
-function Building:install(machine, condition) self[machine] = Equipment[machine]:new(condition) end
+function Building:install(equipment, condition) self[equipment] = Machines[equipment]:new(condition) end
 
 function Building:blackout()
   -- 3x3 area do blackout event on tile(s)
@@ -93,7 +93,7 @@ function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade
 
 function Building:getEquipment()
   local machines = {}
-  for machine in pairs(Equipment.subclasses) do 
+  for machine in ipairs(Machines) do 
     if self[machine] then machines[#machines+1] = self[machine] end --tostring(machine) should this be a class?
   end
   return machines
