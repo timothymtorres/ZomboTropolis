@@ -1,5 +1,5 @@
 local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local Item =           require('code.item.item')
 local IsWeapon =       require('code.item.mixin.is_weapon')
 
 -------------------------------------------------------------------
@@ -8,7 +8,7 @@ local IsWeapon =       require('code.item.mixin.is_weapon')
 ---  BRUTE
 --]]
 
-local Crowbar = class('Crowbar', ItemBase):include(IsWeapon)
+local Crowbar = class('Crowbar', Item):include(IsWeapon)
 
 Crowbar.FULL_NAME = 'crowbar'
 Crowbar.WEIGHT = 8
@@ -27,7 +27,7 @@ Crowbar.weapon = {
 
 -------------------------------------------------------------------
 
-local Bat = class('Bat', ItemBase):include(IsWeapon)
+local Bat = class('Bat', Item):include(IsWeapon)
 
 Bat.FULL_NAME = 'baseball bat'
 Bat.WEIGHT = 9
@@ -46,7 +46,7 @@ Bat.weapon = {
 
 -------------------------------------------------------------------
 
-local Sledge = class('Sledge', ItemBase):include(IsWeapon)
+local Sledge = class('Sledge', Item):include(IsWeapon)
 
 Sledge.FULL_NAME = 'sledgehammer'
 Sledge.WEIGHT = 25
@@ -71,7 +71,7 @@ Sledge.weapon = {
 
 -------------------------------------------------------------------
 
-local Knife = class('Knife', ItemBase):include(IsWeapon)
+local Knife = class('Knife', Item):include(IsWeapon)
 
 Knife.FULL_NAME = 'knife'
 Knife.WEIGHT = 3
@@ -90,7 +90,7 @@ Knife.weapon = {
 
 -------------------------------------------------------------------
 
-local Katanna = class('Katanna', ItemBase):include(IsWeapon)
+local Katanna = class('Katanna', Item):include(IsWeapon)
 
 Katanna.FULL_NAME = 'katanna'
 Katanna.WEIGHT = 7

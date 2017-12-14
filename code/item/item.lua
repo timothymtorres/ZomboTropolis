@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
 local dice = require('code.libs.dice')
 
-local ItemBase = class('ItemBase')
+local Item = class('Item')
 
 local function selectFrom(spawn_list)
   local chance, total = math.random(), 0
@@ -18,26 +18,26 @@ local condition_spawn_odds = {  -- used when spawning new item
   intact =    {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
 }
 
-function ItemBase:initialize(condition_setting) 
+function Item:initialize(condition_setting) 
   if type(condition_setting) == 'string' then self.condition = selectFrom(condition_spawn_odds[condition_setting])
   elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
   else error('Item initialization has a malformed condition setting')
   end
 end
 
---function ItemBase:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
+--function Item:hasConditions() return not self.CONDITION_OMITTED end  -- not currently used (only use when condition is irrelevant to item) [newspapers?]
 
-function ItemBase:isWeapon() return self.weapon or false end
+function Item:isWeapon() return self.weapon or false end
 
-function ItemBase:isMedical() return self.medical or false end
+function Item:isMedical() return self.medical or false end
 
-function ItemBase:isArmor() return self.armor or false end
+function Item:isArmor() return self.armor or false end
 
-function ItemBase:isReloadable() return self.reload or false end
+function Item:isReloadable() return self.reload or false end
 
-function ItemBase:isSingleUse() return self.DURABILITY == 0 end
+function Item:isSingleUse() return self.DURABILITY == 0 end
 
-function ItemBase:failDurabilityCheck(player)
+function Item:failDurabilityCheck(player)
   local durability
   
   -- need to add a Item.DURABILITY_SKILL for items that are not weapons and check them here with weapons
@@ -50,23 +50,23 @@ function ItemBase:failDurabilityCheck(player)
   return dice.roll(durability or self.DURABILITY) <= 1
 end
 
-function ItemBase:updateCondition(num)
+function Item:updateCondition(num)
   self.condition = math.max(math.min(self.condition + num, 4), 0)
   return self.condition
 end
 
-function ItemBase:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
+function Item:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
 
-function ItemBase:getCondition() return self.condition end
+function Item:getCondition() return self.condition end
 
 local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine'}
 
-function ItemBase:getConditionStr() return condition_states[self.condition] end
+function Item:getConditionStr() return condition_states[self.condition] end
 
-function ItemBase:getClassCategory() return self.CLASS_CATEGORY end
+function Item:getClassCategory() return self.CLASS_CATEGORY end
 
-function ItemBase:getWeight() return self.WEIGHT end
+function Item:getWeight() return self.WEIGHT end
 
-function ItemBase:__tostring() return tostring(self.class.name) end
+function Item:__tostring() return tostring(self.class.name) end
 
-return ItemBase
+return Item

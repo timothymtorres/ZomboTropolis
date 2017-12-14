@@ -1,15 +1,15 @@
 local class =           require('code.libs.middleclass')
-local TileBase = 		require('code.location.tile.tile_base')
+local Tile = 		require('code.location.tile.tile')
 
 -------------------------------------------------------------------
 
-local Carpark = class('Carpark', TileBase)
+local Carpark = class('Carpark', Tile)
 
 Carpark.FULL_NAME = 'carpark'
 
 -------------------------------------------------------------------
 
-local Junkyard = class('Junkyard', TileBase)
+local Junkyard = class('Junkyard', Tile)
 
 Junkyard.FULL_NAME = 'junkyard'
 

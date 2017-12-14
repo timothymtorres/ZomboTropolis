@@ -1,12 +1,12 @@
 local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local Item =           require('code.item.item')
 local broadcastEvent = require('code.server.event')
 local dice =           require('code.libs.dice')
 string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local FAK = class('FAK', ItemBase)
+local FAK = class('FAK', Item)
 
 FAK.FULL_NAME = 'first aid kit'
 FAK.WEIGHT = 8
@@ -65,7 +65,7 @@ end
 
 -------------------------------------------------------------------
 
-local Bandage = class('Bandage', ItemBase)
+local Bandage = class('Bandage', Item)
 
 Bandage.FULL_NAME = 'bandage'
 Bandage.WEIGHT = 3
@@ -119,7 +119,7 @@ end
 
 -------------------------------------------------------------------
 
-local Syringe = class('Syringe', ItemBase)
+local Syringe = class('Syringe', Item)
 
 Syringe.FULL_NAME = 'syringe'
 Syringe.WEIGHT = 5
@@ -204,7 +204,7 @@ end
 
 -------------------------------------------------------------------
 
-local Vaccine = class('Vaccine', ItemBase)
+local Vaccine = class('Vaccine', Item)
 
 Vaccine.FULL_NAME = 'antibodies'
 Vaccine.WEIGHT = 5
@@ -253,7 +253,7 @@ end
 
 -------------------------------------------------------------------
 
-local Antidote = class('Antidote', ItemBase)
+local Antidote = class('Antidote', Item)
 
 Antidote.FULL_NAME = 'antidote'
 Antidote.WEIGHT = 5

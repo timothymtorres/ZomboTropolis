@@ -1,14 +1,14 @@
 local class =           require('code.libs.middleclass')
-local Item =            require('code.item.item')
+local Items =            require('code.item.items')
 local broadcastEvent =  require('code.server.event')
 
-local TileBase = class('TileBase')
+local Tile = class('Tile')
 
 local OUTSIDE_SEARCH_ODDS = .50
 
-TileBase.search_chance = {OUTSIDE=OUTSIDE_SEARCH_ODDS}
-TileBase.item_chance = {}
-TileBase.item_chance.outside = {
+Tile.search_chance = {OUTSIDE=OUTSIDE_SEARCH_ODDS}
+Tile.item_chance = {}
+Tile.item_chance.outside = {
   -- WEAPONS =  00.1%
   Knife = .001,
 
@@ -19,20 +19,20 @@ TileBase.item_chance.outside = {
   Barricade = .90,
 }
 
-function TileBase:initialize(map, y, x, name)
+function Tile:initialize(map, y, x, name)
   self.y, self.x = y, x
   self.outside_players = {}
   self.name = name
   self.map_zone = map
 end
 
-TileBase.broadcastEvent = broadcastEvent.tile
+Tile.broadcastEvent = broadcastEvent.tile
 
-function TileBase:insert(player) self.outside_players[player] = player end
+function Tile:insert(player) self.outside_players[player] = player end
 
-function TileBase:remove(player) self.outside_players[player] = nil end
+function Tile:remove(player) self.outside_players[player] = nil end
 
-function TileBase:check(player, setting)
+function Tile:check(player, setting)
   local attendance
   if setting == 'outside' or setting == nil then attendance = self.outside_players[player]
   elseif setting == 'inside' and self:isBuilding() then attendance = self.inside_players[player] 
@@ -40,7 +40,7 @@ function TileBase:check(player, setting)
   return (attendance and true) or false
 end
 
-function TileBase:countPlayers(mob_type, setting)
+function Tile:countPlayers(mob_type, setting)
   local players
   
   if setting == 'outside' then players = self.outside_players 
@@ -57,7 +57,7 @@ function TileBase:countPlayers(mob_type, setting)
   return count
 end
 
-function TileBase:countCorpses(setting)
+function Tile:countCorpses(setting)
   local players 
   if setting == 'outside' then players = self.outside_players
   elseif setting == 'inside' then players = self.inside_players 
@@ -71,17 +71,17 @@ function TileBase:countCorpses(setting)
   return count
 end
 
-function TileBase:getMap() return self.map_zone end
+function Tile:getMap() return self.map_zone end
 
-function TileBase:getPos() return self.y, self.x end
+function Tile:getPos() return self.y, self.x end
 
-function TileBase:getIntegrityState()
+function Tile:getIntegrityState()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
 end
 
-function TileBase:getPlayers(setting) 
+function Tile:getPlayers(setting) 
   local players
   if setting == 'inside' then 
     players = self.inside_players
@@ -97,7 +97,7 @@ function TileBase:getPlayers(setting)
   return players 
 end
 
-function TileBase:isBuilding() return self.inside_players and true or false end
+function Tile:isBuilding() return self.inside_players and true or false end
 
 local modifier = {
   building_condition = {ruined = -0.90, ransacked = -0.20, intact = 0.00},
@@ -105,7 +105,7 @@ local modifier = {
   looting_skill = 0.05,
 }
 
-function TileBase:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
+function Tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
   
   local condition_bonus = modifier.building_condition[integrity_status]
@@ -133,7 +133,7 @@ local function select_item(list)
   end
 end
 
-function TileBase:search(player, setting, was_flashlight_used)
+function Tile:search(player, setting, was_flashlight_used)
   local integrity_state = self:getIntegrityState()  
   
   local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
@@ -144,10 +144,10 @@ function TileBase:search(player, setting, was_flashlight_used)
   local tile_item_list = self.item_chance[setting] 
   local selected_item_type = select_item(tile_item_list)
   
-  local item = Item[selected_item_type]:new(integrity_state) 
+  local item = Items[selected_item_type]:new(integrity_state) 
   return item
 end
 
-function TileBase:__tostring() return self.name..' '..self.class.name end
+function Tile:__tostring() return self.name..' '..self.class.name end
 
-return TileBase
+return Tile

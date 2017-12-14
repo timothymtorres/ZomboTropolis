@@ -1,5 +1,5 @@
 local class =                   require('code.libs.middleclass')
-local skills =                  require('code.player.skills')
+local Skills =                  require('code.player.skills')
 local Inventory =               require('code.player.human.inventory')
 --local item_armor =              require('code.player.armor.item_class')
 local Fist =                    require('code.player.human.organic_weaponry')

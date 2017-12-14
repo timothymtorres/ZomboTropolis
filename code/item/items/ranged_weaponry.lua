@@ -1,5 +1,5 @@
 local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local Item =           require('code.item.item')
 local broadcastEvent = require('code.server.event')
 local IsWeapon =       require('code.item.mixin.is_weapon')
 string.replace =       require('code.libs.replace')
@@ -13,7 +13,7 @@ string.replace =       require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local Pistol = class('Pistol', ItemBase):include(IsWeapon)
+local Pistol = class('Pistol', Item):include(IsWeapon)
 
 Pistol.FULL_NAME = 'pistol'
 Pistol.WEIGHT = 6
@@ -35,7 +35,7 @@ Pistol.RELOAD_AMOUNT = 14
 
 -------------------------------------------------------------------
 
-local Magnum = class('Magnum', ItemBase):include(IsWeapon)
+local Magnum = class('Magnum', Item):include(IsWeapon)
 
 Magnum.FULL_NAME = 'magnum'
 Magnum.WEIGHT = 6
@@ -57,7 +57,7 @@ Magnum.RELOAD_AMOUNT = 6
 
 -------------------------------------------------------------------
 
-local Shotgun = class('Shotgun', ItemBase):include(IsWeapon)
+local Shotgun = class('Shotgun', Item):include(IsWeapon)
 
 Shotgun.FULL_NAME = 'shotgun'
 Shotgun.WEIGHT = 10
@@ -79,7 +79,7 @@ Shotgun.RELOAD_AMOUNT = 1
 
 -------------------------------------------------------------------
 
-local Rifle = class('Rifle', ItemBase):include(IsWeapon)
+local Rifle = class('Rifle', Item):include(IsWeapon)
 
 Rifle.FULL_NAME = 'assualt rifle'
 Rifle.WEIGHT = 15
@@ -101,7 +101,7 @@ Rifle.RELOAD_AMOUNT = 5
 
 -------------------------------------------------------------------
 
-local Flare = class('Flare', ItemBase):include(IsWeapon)
+local Flare = class('Flare', Item):include(IsWeapon)
 
 Flare.FULL_NAME = 'flare'
 Flare.WEIGHT = 5
@@ -166,7 +166,7 @@ end
 
 -------------------------------------------------------------------
 
-local Molotov = class('Molotov', ItemBase):include(IsWeapon)
+local Molotov = class('Molotov', Item):include(IsWeapon)
 
 Molotov.FULL_NAME = 'molotov cocktail'
 Molotov.WEIGHT = 5

@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
-local EquipmentBase = require('code.location.building.equipment.equipment_base')
+local Machine = require('code.location.building.machine.machine')
 
-local Transmitter = class('Transmitter', EquipmentBase)
+local Transmitter = class('Transmitter', Machine)
 local MAX_HP = 7
 local operations = {'broadcast', 'retune'}
 
@@ -11,7 +11,7 @@ Transmitter.CATEGORY = 'engineering'
 Transmitter.ap = {cost = 3, modifier = {tech = -1, radio_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
 function Transmitter:initialize(buiilding) 
-  EquipmentBase.initialize(self, building)
+  Machine.initialize(self, building)
   self.freq = 0
 end
 

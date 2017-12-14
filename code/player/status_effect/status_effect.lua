@@ -1,6 +1,6 @@
 local class =          require('code.libs.middleclass')
-local zombie_effects = require('code.player.zombie.status_effect.effect')
-local human_effects =  require('code.player.human.status_effect.effect')
+local zombie_effects = require('code.player.zombie.status_effect.effects')
+local human_effects =  require('code.player.human.status_effect.effects')
 
 local StatusEffect = class('StatusEffect')
 

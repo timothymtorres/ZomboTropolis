@@ -1,13 +1,13 @@
-local Crowbar, Bat, Sledge, Knife, Katanna =                       unpack(require('code.item.melee_weaponry'))
-local Pistol, Magnum, Shotgun, Rifle, Flare, Molotov =             unpack(require('code.item.ranged_weaponry'))
-local FAK, Bandage, Syringe, Vaccine, Antidote =                   unpack(require('code.item.medical'))
-local Generator, Transmitter, Terminal, Fuel, Barricade, Toolbox = unpack(require('code.item.equipment'))
-local Radio, GPS, Flashlight, Sampler =                            unpack(require('code.item.gadget'))
-local Book, Bottle, Newspaper =                                    unpack(require('code.item.junk'))
-local Magazine, Shell, Clip, Quiver =                              unpack(require('code.item.ammo'))
-local Leather, Firesuit =                                          unpack(require('code.item.armor'))
+local Crowbar, Bat, Sledge, Knife, Katanna =                       unpack(require('code.item.items.melee_weaponry'))
+local Pistol, Magnum, Shotgun, Rifle, Flare, Molotov =             unpack(require('code.item.items.ranged_weaponry'))
+local FAK, Bandage, Syringe, Vaccine, Antidote =                   unpack(require('code.item.items.medical'))
+local Generator, Transmitter, Terminal, Fuel, Barricade, Toolbox = unpack(require('code.item.items.equipment'))
+local Radio, GPS, Flashlight, Sampler =                            unpack(require('code.item.items.gadget'))
+local Book, Bottle, Newspaper =                                    unpack(require('code.item.items.junk'))
+local Magazine, Shell, Clip, Quiver =                              unpack(require('code.item.items.ammo'))
+local Leather, Firesuit =                                          unpack(require('code.item.items.armor'))
 
-local Item = {
+local Items = {
   -- WEAPONRY
   Crowbar, Bat, Sledge, Knife, Katanna, Pistol, Magnum, Shotgun, Rifle, Flare, Molotov, 
   -- MEDICAL
@@ -24,8 +24,8 @@ local Item = {
   Leather, Firesuit,
 }
 
-for _, Class in ipairs(Item) do 
-  Item[Class.name] = Class 
+for _, Class in ipairs(Items) do 
+  Items[Class.name] = Class 
 end
 
-return Item
+return Items

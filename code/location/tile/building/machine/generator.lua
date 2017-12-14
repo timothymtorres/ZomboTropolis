@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
-local EquipmentBase = require('code.location.building.equipment.equipment_base')
+local Machine = require('code.location.building.machine.machine')
 
-local Generator = class('Generator', EquipmentBase)
+local Generator = class('Generator', Machine)
 local MAX_FUEL = 15
 
 Generator.FULL_NAME = 'generator'
@@ -9,7 +9,7 @@ Generator.DURABILITY = 100
 Generator.CATEGORY = 'engineering'
 
 function Generator:initialize(building) 
-  EquipmentBase.initialize(self, building)
+  Machine.initialize(self, building)
   self.fuel = 0 
 end
 

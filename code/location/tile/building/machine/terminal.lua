@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
-local EquipmentBase = require('code.location.building.equipment.equipment_base')
+local Machine = require('code.location.building.machine.machine')
 
-local Terminal = class('Terminal', EquipmentBase)
+local Terminal = class('Terminal', Machine)
 local MAX_HP = 7
 local operations = {}
 
@@ -11,7 +11,7 @@ Terminal.CATEGORY = 'engineering'
 Terminal.ap = {cost = 3, modifier = {tech = -1, computer_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
 function Terminal:initialize(building) 
-  EquipmentBase.initialize(self, building)
+  Machine.initialize(self, building)
 end
 
 function Terminal:install() 

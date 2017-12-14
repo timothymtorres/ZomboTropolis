@@ -1,6 +1,5 @@
 local combat =            require('code.player.combat')
 local dice =              require('code.libs.dice')
-local Item =              require('code.item.item')
 local broadcastEvent =    require('code.server.event')
 string.replace =          require('code.libs.replace')
 

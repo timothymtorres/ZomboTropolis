@@ -1,9 +1,9 @@
-local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 local broadcastEvent = require('code.server.event')
-string.replace =       require('code.libs.replace')
+string.replace = require('code.libs.replace')
 
-local Leather = class('Leather', ItemBase)
+local Leather = class('Leather', Item)
 
 Leather.FULL_NAME = 'leather jacket'
 Leather.DURABILITY = 0
@@ -29,7 +29,7 @@ end
 
 -------------------------------------------------------------------
 
-local Firesuit = class('Firesuit', ItemBase)
+local Firesuit = class('Firesuit', Item)
 
 Firesuit.FULL_NAME = 'firesuit'
 Firesuit.DURABILITY = 0

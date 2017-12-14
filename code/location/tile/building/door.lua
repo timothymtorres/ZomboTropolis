@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local Barrier = require('code.location.building.barrier.class')
+local Barrier = require('code.location.building.barrier')
 
 local Door = class('Door', Barrier)  
 local default_hp, max_hp = 3, 3

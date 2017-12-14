@@ -1,4 +1,4 @@
-local ability = require('code.player.zombie.ability.ability')
+local abilities = require('code.player.zombie.ability.abilities')
 
 local function determineAvailableActions(player)
   local available_actions = {default = {}} -- should our available_actions table have {item={}, ability={}, equipment={}}  how will this look/work?
@@ -26,7 +26,7 @@ local function determineAvailableActions(player)
     elseif action.name == 'ability' then
       --available_actions.ability = {}  ???
 
-      for _, ability in ipairs(ability) do
+      for _, ability in ipairs(abilities) do
         local cost = player:getCost('ap', ability.name)        
         if ap >= cost and ability.client_criteria and pcall(ability.client_criteria, player) then -- add an ep cost to the checks?
           --available_actions.ability[#a]

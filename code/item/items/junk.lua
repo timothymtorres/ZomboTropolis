@@ -1,11 +1,11 @@
-local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
-local dice =           require('code.libs.dice')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
+local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
-local isWeapon =       require('code.item.mixin.is_weapon')
-string.replace =       require('code.libs.replace')
+local isWeapon = require('code.item.mixin.is_weapon')
+string.replace = require('code.libs.replace')
 
-local Book = class('Book', ItemBase)
+local Book = class('Book', Item)
 
 Book.FULL_NAME = 'book'
 Book.WEIGHT = 2
@@ -41,7 +41,7 @@ end
 
 -------------------------------------------------------------------
 
-local Bottle = class('Bottle', ItemBase)
+local Bottle = class('Bottle', Item)
 
 Bottle.FULL_NAME = 'bottle'
 Bottle.WEIGHT = 1
@@ -67,7 +67,7 @@ end
 
 -------------------------------------------------------------------
 
-local Newspaper = class('Newspaper', ItemBase):include(isWeapon)
+local Newspaper = class('Newspaper', Item):include(isWeapon)
 
 Newspaper.FULL_NAME = 'newspaper'
 Newspaper.WEIGHT = 1

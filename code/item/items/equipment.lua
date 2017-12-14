@@ -1,10 +1,10 @@
-local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 local broadcastEvent = require('code.server.event')
-string.replace =       require('code.libs.replace')
-local dice =           require('code.libs.dice')
+string.replace = require('code.libs.replace')
+local dice = require('code.libs.dice')
 
-local Generator = class('Generator', ItemBase)
+local Generator = class('Generator', Item)
 
 Generator.FULL_NAME = 'generator'
 Generator.WEIGHT = 25
@@ -42,7 +42,7 @@ end
 
 -------------------------------------------------------------------
 
-local Transmitter = class('Transmitter', ItemBase)
+local Transmitter = class('Transmitter', Item)
 
 Transmitter.FULL_NAME = 'transmitter'
 Transmitter.WEIGHT = 25
@@ -80,7 +80,7 @@ end
 
 -------------------------------------------------------------------
 
-local Terminal = class('Terminal', ItemBase)
+local Terminal = class('Terminal', Item)
 
 Terminal.FULL_NAME = 'terminal'
 Terminal.WEIGHT = 25
@@ -118,7 +118,7 @@ end
 
 -------------------------------------------------------------------
 
-local Fuel = class('Fuel', ItemBase)
+local Fuel = class('Fuel', Item)
 
 Fuel.FULL_NAME = 'fuel tank'
 Fuel.WEIGHT = 10
@@ -156,7 +156,7 @@ end
 
 -------------------------------------------------------------------
 
-local Barricade = class('Barricade', ItemBase)
+local Barricade = class('Barricade', Item)
 
 Barricade.FULL_NAME = 'barricade'
 Barricade.WEIGHT = 7
@@ -198,7 +198,7 @@ end
 
 -------------------------------------------------------------------
 
-local Toolbox = class('Toolbox', ItemBase)
+local Toolbox = class('Toolbox', Item)
 
 Toolbox.FULL_NAME = 'toolbox'
 Toolbox.WEIGHT = 15

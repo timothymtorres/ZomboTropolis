@@ -1,6 +1,6 @@
 local drag_prey, groan, gesture, armor, ransack, mark_prey, track, acid = unpack(require('code.player.zombie.ability.generic'))
 
-local ability = {
+local abilities = {
   -- GENERAL
   groan, gesture,
   -- BRUTE
@@ -11,8 +11,8 @@ local ability = {
   track, mark_prey,
 }
 
-for _, ability_tbl in ipairs(ability) do
-  ability[ability_tbl.name] = ability_tbl
+for _, ability in ipairs(abilities) do
+  abilities[ability.name] = ability
 end
 
-return ability
+return abilities

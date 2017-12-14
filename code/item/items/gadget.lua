@@ -1,7 +1,7 @@
-local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 
-local Radio = class('Radio', ItemBase)
+local Radio = class('Radio', Item)
 
 Radio.FULL_NAME = 'portable radio'
 Radio.WEIGHT = 3
@@ -23,7 +23,7 @@ end
 
 -------------------------------------------------------------------
 
-local GPS = class('GPS', ItemBase)
+local GPS = class('GPS', Item)
 
 GPS.FULL_NAME = 'global position system'
 GPS.WEIGHT = 2
@@ -32,7 +32,7 @@ GPS.CATEGORY = 'research'
 
 ---------------------------------------------------------------------
 
-local Flashlight = class('Flashlight', ItemBase)
+local Flashlight = class('Flashlight', Item)
 
 Flashlight.FULL_NAME = 'flashlight'
 Flashlight.WEIGHT = 4
@@ -41,7 +41,7 @@ Flashlight.CATEGORY = 'research'
 
 ---------------------------------------------------------------------
 
-local Sampler = class('Sampler', ItemBase)
+local Sampler = class('Sampler', Item)
 
 Sampler.FULL_NAME = 'lab sampler'
 Sampler.WEIGHT = 4

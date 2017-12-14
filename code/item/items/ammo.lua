@@ -1,7 +1,7 @@
-local class =          require('code.libs.middleclass')
-local ItemBase =       require('code.item.item_base')
+local class = require('code.libs.middleclass')
+local Item = require('code.item.item')
 
-local Magazine = class('Magazine', ItemBase)
+local Magazine = class('Magazine', Item)
 
 Magazine.FULL_NAME = 'pistol magazine'
 Magazine.WEIGHT = 3
@@ -11,7 +11,7 @@ Magazine.ap = {cost = 3, modifier = {guns = -2, handguns = -1}}
 
 -------------------------------------------------------------------
 
-local Shell = class('Shell', ItemBase)
+local Shell = class('Shell', Item)
 
 Shell.FULL_NAME = 'shotgun shell'
 Shell.WEIGHT = 2
@@ -21,7 +21,7 @@ Shell.ap = {cost = 2, modifier = {guns = -1, shotguns = -1}}
 
 -------------------------------------------------------------------
 
-local Clip = class('Clip', ItemBase)
+local Clip = class('Clip', Item)
 
 Clip.FULL_NAME = 'rifle clip'
 Clip.WEIGHT = 5
@@ -31,7 +31,7 @@ Clip.ap = {cost = 4, modifier = {guns = -3,   rifles = -1}}
 
 -------------------------------------------------------------------
 
-local Quiver = class('Quiver', ItemBase)
+local Quiver = class('Quiver', Item)
 
 Quiver.FULL_NAME = 'quiver'
 Quiver.WEIGHT = 4

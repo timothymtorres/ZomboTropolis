@@ -1,22 +1,22 @@
 local class =           require('code.libs.middleclass')
-local TileBase = 		require('code.location.tile.tile_base')
+local Tile = 		require('code.location.tile.tile')
 
 -------------------------------------------------------------------
 
-local Monument = class('Monument', TileBase)
+local Monument = class('Monument', Tile)
 
 Monument.FULL_NAME = 'monument'
 
 -------------------------------------------------------------------
 
-local Park = class('Park', TileBase)
+local Park = class('Park', Tile)
 
 Park.FULL_NAME = 'park'
 
 -------------------------------------------------------------------
 
 
-local Stadium = class('Stadium', TileBase)
+local Stadium = class('Stadium', Tile)
 
 Stadium.FULL_NAME = 'stadium'
 

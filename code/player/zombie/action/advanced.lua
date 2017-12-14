@@ -1,6 +1,6 @@
 local dice =              require('code.libs.dice')
 local broadcastEvent =    require('code.server.event')
-local Ability_Class =     require('code.player.zombie.ability.ability')
+local abilities =     require('code.player.zombie.ability.abilities')
 string.replace =          require('code.libs.replace')
 
 -------------------------------------------------------------------
@@ -117,7 +117,7 @@ local ability = {name='ability'}
 
 -- I'm pretty sure we can skip having ability client_critera here?  Client_critera will be called via composer scenes in UI code.
 function ability.client_criteria(name, player) --, target)
-  local skill = Ability_Class[name].REQUIRED_SKILL
+  local skill = abilities[name].REQUIRED_SKILL
   assert(player.skills:check(skill), 'Must have required skill to use ability')
   --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
@@ -125,11 +125,11 @@ function ability.client_criteria(name, player) --, target)
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
-  if Ability_Class[name].client_criteria then Ability_Class[name].client_criteria(player, ...)
+  if abilities[name].client_criteria then abilities[name].client_criteria(player, ...)
 end
 
 function ability.server_criteria(name, player, ...)
-  local skill = Ability_Class[name].REQUIRED_SKILL
+  local skill = abilities[name].REQUIRED_SKILL
   assert(player.skills:check(skill), 'Must have required skill to use ability')
   --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
@@ -137,7 +137,7 @@ function ability.server_criteria(name, player, ...)
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
-  if Ability_Class[name].server_criteria then Ability_Class[name].server_criteria(player, ...)
+  if abilities[name].server_criteria then abilities[name].server_criteria(player, ...)
 end
 
 function ability.activate(name, player, target)
@@ -147,7 +147,7 @@ function ability.activate(name, player, target)
     player:updateStat('ep', cost)
   end 
   --]]   
-  Ability_Class[name].activate(player, target)
+  abilities[name].activate(player, target)
 end
 
 return {respawn, feed, ability}

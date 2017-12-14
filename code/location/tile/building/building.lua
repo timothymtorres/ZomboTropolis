@@ -1,11 +1,11 @@
 local class = require('code.libs.middleclass')
-local TileBase = require('code.location.tile.tile_base')
-local Machines = require('code.location.building.equipment.equipment')
-local Door = require('code.location.building.barrier.door.class')
-local Barricade = require('code.location.building.barrier.barricade.class')
-local Integrity = require('code.location.building.integrity.class')
+local Tile = require('code.location.tile.tile')
+local Machines = require('code.location.building.machine.machines')
+local Door = require('code.location.building.door')
+local Barricade = require('code.location.building.barricade')
+local Integrity = require('code.location.building.integrity')
 
-local Building = class('Building', TileBase)
+local Building = class('Building', Tile)
 
 --[[
   FULL_NAME = 'insert name'
@@ -63,7 +63,7 @@ Building.item_chance = {
 }
 
 function Building:initialize(map, y, x, name)
-  TileBase.initialize(self, map, y, x, name)  
+  Tile.initialize(self, map, y, x, name)  
   self.inside_players = {}
   
   self.door        = Door:new(self)
