@@ -4,7 +4,7 @@ local Inventory = require('code.player.human.inventory')
 local Fist = require('code.player.human.organic_weaponry')
 local Carcass = require('code.player.human.carcass')
 local human_skill_list = require('code.player.human.skill_list')
-local human_action_list = require('code.player.human.action.action')
+local human_action_list = require('code.player.human.action.actions')
 local Player = require('code.player.player')
 
 local Human = class('Human', Player)

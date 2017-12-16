@@ -3,7 +3,7 @@ local Skills = require('code.player.skills')
 local Hunger = require('code.player.zombie.hunger')
 local Claw, Bite = unpack(require('code.player.zombie.organic_weaponry'))
 local zombie_skill_list = require('code.player.zombie.skill_list')
-local zombie_action_list = require('code.player.zombie.action.action')
+local zombie_action_list = require('code.player.zombie.action.actions')
 local Player = require('code.player.player')
 
 local Zombie = class('Zombie', Player)
