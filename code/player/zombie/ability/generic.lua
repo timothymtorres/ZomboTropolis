@@ -1,6 +1,5 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
---local organic_armor_list = require('code.player.armor.organic_list')
 
 -------------------------------------------------------------------
 

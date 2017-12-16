@@ -1,5 +1,4 @@
 local class = require('code.libs.middleclass')
-local dice = require('code.libs.dice')
 
 local Integrity = class('Integrity')
 
