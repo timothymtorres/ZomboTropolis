@@ -1,9 +1,9 @@
 local class = require('code.libs.middleclass')
 local Tile = require('code.location.tile.tile')
-local Machines = require('code.location.building.machine.machines')
-local Door = require('code.location.building.door')
-local Barricade = require('code.location.building.barricade')
-local Integrity = require('code.location.building.integrity')
+local Machines = require('code.location.tile.building.machine.machines')
+local Door = require('code.location.tile.building.door')
+local Barricade = require('code.location.tile.building.barricade')
+local Integrity = require('code.location.tile.building.integrity')
 
 local Building = class('Building', Tile)
 

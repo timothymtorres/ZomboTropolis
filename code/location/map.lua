@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local Tile = require('code.location.tile.tile')
+local Tiles = require('code.location.tile.tiles')
 -- local suburb = require('suburb')
 
 local Map = class('Map')
@@ -18,7 +18,7 @@ function Map:initialize(size)
     self[y] = {}
     for x=1, size do
             
-      self[y][x] = Tile[tile_type]:new(self, y, x, '[insert name]')
+      self[y][x] = Tiles[tile_type]:new(self, y, x, '[insert name]')
     end
   end
 end

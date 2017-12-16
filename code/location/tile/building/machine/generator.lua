@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local Machine = require('code.location.building.machine.machine')
+local Machine = require('code.location.tile.building.machine.machine')
 
 local Generator = class('Generator', Machine)
 local MAX_FUEL = 15

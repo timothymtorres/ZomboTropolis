@@ -1,6 +1,6 @@
 local class = require('code.libs.middleclass')
 local dice = require('code.libs.dice')
-local Barrier = require('code.location.building.barrier')
+local Barrier = require('code.location.tile.building.barrier')
 
 local Barricade = class('Barricade', Barrier)
 local DEFAULT_HP, DEFAULT_POTENTIAL_HP = 0, 15
@@ -26,7 +26,7 @@ local room_available = {
 }
 
 function Barricade:initialize()
-  barrier.initialize(self) 
+  Barrier.initialize(self) 
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
   

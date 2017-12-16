@@ -1,11 +1,11 @@
-local Street, Cemetary, Wasteland = unpack(require('code.location.tile.barren')) 
-local Carpark, Junkyard = unpack(require('code.location.tile.scrap'))
-local Monument, Park, Stadium = unpack(require('code.location.tile.tourist'))
-local Apartment, Hotel = unpack(require('code.location.building.residential'))
-local Library, School, College = unpack(require('code.location.building.public'))
-local Warehouse, Factory = unpack(require('code.location.building.industrial'))
-local PD, FD, Hospital, Courthouse = unpack(require('code.location.building.government'))
-local News, Sport, Bar, Mall = unpack(require('code.location.building.commercial'))
+local Street, Cemetary, Wasteland = unpack(require('code.location.tile.tiles.barren')) 
+local Carpark, Junkyard = unpack(require('code.location.tile.tiles.scrap'))
+local Monument, Park, Stadium = unpack(require('code.location.tile.tiles.tourist'))
+local Apartment, Hotel = unpack(require('code.location.tile.building.buildings.residential'))
+local Library, School, College = unpack(require('code.location.tile.building.buildings.public'))
+local Warehouse, Factory = unpack(require('code.location.tile.building.buildings.industrial'))
+local PD, FD, Hospital, Courthouse = unpack(require('code.location.tile.building.buildings.government'))
+local News, Sport, Bar, Mall = unpack(require('code.location.tile.building.buildings.commercial'))
 
 local Tile = {
 ---- OUTSIDE ----

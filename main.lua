@@ -18,7 +18,7 @@ print()
 print()
 
 local Map = require('code.location.map')
-local Item = require('code.item.item')  -- for testing item generation in main.lua
+local Items = require('code.item.items')  -- for testing item generation in main.lua
 Zombie = require('code.player.zombie.zombie')
 Human = require('code.player.human.human')
 table.inspect = require('code.libs.inspect')
@@ -53,11 +53,11 @@ end
 
 main_player:updateStat('hp', -49)
 
-local toolbox = Item.Toolbox:new(4)
+local toolbox = Items.Toolbox:new(4)
 alt_player.inventory:insert(toolbox)
 
 for i=1, 10 do
-  local barricade = Item.Barricade:new('intact')
+  local barricade = Items.Barricade:new('intact')
   alt_player.inventory:insert(barricade)
 end
 

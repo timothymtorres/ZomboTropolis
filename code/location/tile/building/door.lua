@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local Barrier = require('code.location.building.barrier')
+local Barrier = require('code.location.tile.building.barrier')
 
 local Door = class('Door', Barrier)  
 local default_hp, max_hp = 3, 3
@@ -7,7 +7,7 @@ local default_hp, max_hp = 3, 3
 local door_desc = {[0] = 'destroyed', [1] = 'smashed', [2] = 'dented', [3] = 'undamaged'}
 
 function Door:initialize()
-  barrier.initialize(self)
+  Barrier.initialize(self)
   
   self.hp = default_hp
   self.is_open = false

@@ -1,6 +1,6 @@
-local Generator = require('code.location.building.machine.generator')
-local Transmitter = require('code.location.building.machine.transmitter')
-local Terminal = require('code.location.building.machine.terminal')
+local Generator = require('code.location.tile.building.machine.generator')
+local Transmitter = require('code.location.tile.building.machine.transmitter')
+local Terminal = require('code.location.tile.building.machine.terminal')
 
 local Machines = {Generator, Transmitter, Terminal,}
 

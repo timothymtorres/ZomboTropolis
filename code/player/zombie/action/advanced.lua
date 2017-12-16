@@ -81,7 +81,7 @@ function feed.activate(player)
   -- finds the corpse with the lowest number of scavengers (fresh meat) 
   for tile_player in pairs(tile_player_group) do
 
-    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player)
+    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
       local corpse_scavenger_num = #tile_player.carcass.carnivour_list
       if lowest_scavenger_num > corpse_scavenger_num then
         target = tile_player
@@ -125,7 +125,7 @@ function ability.client_criteria(name, player) --, target)
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
-  if abilities[name].client_criteria then abilities[name].client_criteria(player, ...)
+  if abilities[name].client_criteria then abilities[name].client_criteria(player) end
 end
 
 function ability.server_criteria(name, player, ...)
@@ -137,7 +137,7 @@ function ability.server_criteria(name, player, ...)
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
-  if abilities[name].server_criteria then abilities[name].server_criteria(player, ...)
+  if abilities[name].server_criteria then abilities[name].server_criteria(player, ...) end
 end
 
 function ability.activate(name, player, target)

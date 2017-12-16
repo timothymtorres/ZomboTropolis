@@ -5,7 +5,7 @@ local Track =     require('code.player.zombie.status_effect.track')
 local effects = {Entangle, Burn, Track}
 
 for _, Class in ipairs(effects) do
-  effects[class_name] = Class
+  effects[Class.name] = Class
 end
 
 return effects

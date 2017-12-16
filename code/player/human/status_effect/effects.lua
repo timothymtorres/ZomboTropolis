@@ -6,7 +6,7 @@ local Track = require('code.player.human.status_effect.track')
 local effects = {Entangle, Infection, Immunity, Track}
 
 for _, Class in ipairs(effects) do
-  effects[class_name] = Class
+  effects[Class.name] = Class
 end
 
 return effects

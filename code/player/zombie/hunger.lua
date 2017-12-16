@@ -18,6 +18,8 @@ function Hunger:update(amt)
 	  	if dice.roll(10) == 1 then
 	  	  return self.player:starve() -- game over pal
 	  	end
+    end
+    
 	  self.hunger = MAX_HUNGER
 	  local player = self.player   	  
 	  player.log:append('You are starving!')
