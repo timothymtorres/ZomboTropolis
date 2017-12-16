@@ -11,9 +11,10 @@ function StatusEffect:initialize(player)
   self.player = player
 end
 
-function StatusEffect:add(effect, ...) 
+function StatusEffect:add(effect, ...)
   local mob_type = self.player:getMobType()
-  self[effect] = StatusEffect[mob_type][effect]:new(self.player, ...)
+  local Effect = effect:sub(1,1):upper()..effect:sub(2) -- capitalize effect
+  self[effect] = StatusEffect[mob_type][Effect]:new(self.player, ...)
 end
 
 function StatusEffect:remove(effect) self[effect] = nil end
@@ -22,9 +23,9 @@ function StatusEffect:isActive(effect) return self[effect] end
 
 function StatusEffect:elapse(ap)
   local mob_type = self.player:getMobType()
-  for _, effect_class in ipairs(StatusEffect[mob_type]) do
-  	local effect = string.lower(effect_class.name)    -- Because the class is capitalized, we have to hack it lowercase
-    if self[effect] then self[effect.name]:elapse(player, ap) end
+  for _, Effect in ipairs(StatusEffect[mob_type]) do
+  	local effect = string.lower(Effect.name)    -- lowercase the class name
+    if self[effect] then self[effect]:elapse(player, ap) end
   end
 end
 

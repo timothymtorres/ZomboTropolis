@@ -22,6 +22,8 @@ end
 
 function Machine:getHP() return self.hp end
 
+function Machine:__tostring() return self.name end
+
 --[[
   self.generator = 0        -- 1 bit {exist}, 3 bit {08hp}, 4 bit {fuel} 
   self.transmitter = 0      -- 1 bit {exist}, 3 bit {08hp}, 10 bit {radio freq}

@@ -83,7 +83,10 @@ function Building:remove(player, setting)
   end
 end
 
-function Building:install(equipment, condition) self[equipment] = Machines[equipment]:new(condition) end
+function Building:install(machine, condition) 
+  local Machine = machine:sub(1,1):upper()..machine:sub(2)  -- capitalize machine
+  self[machine] = Machines[Machine]:new(condition) 
+end
 
 function Building:blackout()
   -- 3x3 area do blackout event on tile(s)
@@ -93,8 +96,9 @@ function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade
 
 function Building:getEquipment()
   local machines = {}
-  for machine in ipairs(Machines) do 
-    if self[machine] then machines[#machines+1] = self[machine] end --tostring(machine) should this be a class?
+  for Machine in ipairs(Machines) do
+    machine = string.lower(tostring(Machine))
+    if self[machine] then machines[#machines+1] = self[machine] end
   end
   return machines
 end
