@@ -8,8 +8,11 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require('widget')
-local skill_list = require('code.player.skills.list')
 local mob_type = main_player:getMobType()
+
+local skill_list = {}
+skill_list.zombie = require('code.player.zombie.skill_list')
+skill_list.human = require('code.player.human.skill_list')
 
 local imageSheet = {
   human = {
@@ -57,19 +60,13 @@ local function titleCaseHelper(first, rest)
 end    
 
 local function canPurchaseSkill(skill) 
-  local player_mob_type = main_player:getMobType()
   local xp = main_player:getStat('xp')
   
-  local class = skill_list.isClass(skill)  
+  local class = skill_list[mob_type]:isClass(skill)  
   local cost = (class and main_player.skills:getCost('classes') ) or main_player.skills:getCost('skills')  
-  local required_flags = skill_list.getRequiredFlags(skill)
-  local skill_mob_type = skill_list.getMobType(skill) 
+  local required_flags = skill_list[mob_type]:getRequiredFlags(skill) 
   
-  if (xp >= cost) and  -- Enough XP
-  skill_mob_type == player_mob_type and  -- Player mob type must match skill
-  main_player:isStanding() and  -- Player must be standing
-  not (main_player.skills:check(skill))  -- Skill must not have already been purchased 
-  then
+  if (xp >= cost) and main_player:isStanding() and not (main_player.skills:check(skill)) then
     for category, flags in pairs(required_flags) do -- Have all required skills
       if not (flags == 0 or main_player.skills:checkFlag(category, flags)) then return false end
     end    
@@ -108,7 +105,7 @@ function scene:create( event )
     top_background_bar:setFillColor(1, 1, 1, 0.70)
     container:insert(top_background_bar)
     
-    local cost = (skill_list.isClass(params.id) and main_player.skills:getCost('classes')) or main_player.skills:getCost('skills')
+    local cost = (skill_list[mob_type]:isClass(params.id) and main_player.skills:getCost('classes')) or main_player.skills:getCost('skills')
     local next_skill_cost = display.newText{
       text = 'Purchase Skill For: '..cost..' XP', 
       x = 0, 
@@ -122,7 +119,7 @@ function scene:create( event )
     local icon
 
     if params.icon then
-      local category = skill_list.getCategory(params.id)
+      local category = skill_list[mob_type]:getCategory(params.id)
       icon = display.newImage(imageSheet[mob_type][category].png, imageSheet[mob_type][category].info:getFrameIndex(params.icon))
       icon.x, icon.y = 0, -1*(container_h/6)
     else
@@ -137,8 +134,8 @@ function scene:create( event )
     skill_title:setFillColor( 0, 1, 0 )
     container:insert(skill_title)        
    
-    local skill_critera = skill_list.getRequirement(params.id, 'skills')
-    local class_critera = skill_list.getRequirement(params.id, 'class')
+    local skill_critera = skill_list[mob_type]:getRequirement(params.id, 'skills')
+    local class_critera = skill_list[mob_type]:getRequirement(params.id, 'class')
     
     local divider_h, icon_size = 8, 32    
     
@@ -156,12 +153,12 @@ for category in pairs(imageSheet) do
   imageSheet[category].png = graphics.newImageSheet('graphics/icons/skills/human/'..category..'@1x.png', sheet)
 end      
 
-      local category = skill_list.getCategory(params.id)
+      local category = skill_list[mob_type]:getCategory(params.id)
       icon = display.newImage(imageSheet[category].png, imageSheet[category].info:getFrameIndex(params.icon))
 --]]     
-        local skill_icon = skill_list[skill].icon
+        local skill_icon = skill_list[mob_type][skill].icon
         if skill_icon then
-          local category = skill_list.getCategory(skill)
+          local category = skill_list[mob_type]:getCategory(skill)
           skill_icon = display.newImage(imageSheet[mob_type][category].png, imageSheet[mob_type][category].info:getFrameIndex(skill_icon))
           skill_icon.x, skill_icon.y = -1*(container_w/3 + 10), -75+(icon_size*(i-1))+(divider_h*(i-1))       
           skill_icon:scale(0.25, 0.25)            
@@ -177,8 +174,8 @@ end
       require_class_text:setFillColor( 1, 1, 0 )
       container:insert(require_class_text)
 
-      local category = skill_list.getCategory(class_critera)
-      local class_icon = skill_list[class_critera].icon
+      local category = skill_list[mob_type]:getCategory(class_critera)
+      local class_icon = skill_list[mob_type][class_critera].icon
       class_icon = display.newImage(imageSheet[mob_type][category].png, imageSheet[mob_type][category].info:getFrameIndex(class_icon))
       class_icon.x, class_icon.y = (container_w/3 + 10), -75            
       class_icon:scale(0.25, 0.25)
