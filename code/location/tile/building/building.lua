@@ -11,7 +11,7 @@ local Building = class('Building', Tile)
   FULL_NAME = 'insert name'
   BUILDING_TYPE = residential/government/industrial/commercial/generic
   door_missing = true/nil
-  search_odds = {internal = num, external = num}/nil  
+  search_odds = {outside = num, inside = num}/nil  
   item_chance = {item = .00 chance}
 --]]
 
