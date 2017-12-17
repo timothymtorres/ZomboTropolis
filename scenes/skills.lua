@@ -96,7 +96,6 @@ local button_color
 -- -------------------------------------------------------------------------------
 
 local function canPurchaseSkill(skill, check_xp)  
-  local mob_type = main_player:getMobType()
   local xp = main_player:getStat('xp')
   
   local class = skill_list[mob_type]:isClass(skill)  
@@ -128,7 +127,6 @@ local function getButtonColor(skill)
 end
 
 local function getButtonCategoryColor(skill)
-  local mob_type = main_player:getMobType()
   local category = (skill_list[mob_type]:getCategory(skill) == 'classes' and skill) or skill_list[mob_type]:getCategory(skill)
   if category == 'general' then return {1, 1, 1, 1}
   elseif category == 'military' then return {1, 0, 0, 1}
@@ -142,7 +140,6 @@ local skill_buttons, categoryText, scrollView = {}, {}
 
 -- THIS IS TEMPORARY!!!
 local function handleButtonEvent( event )
-    local mob_type = main_player:getMobType()
     skill_buttons[event.target.id]:setFillColor(unpack(getButtonColor(event.target.id)))
 
     if ( "ended" == event.phase ) then      
@@ -180,8 +177,6 @@ function scene:create( event )
   sceneGroup:insert(scrollView)
   
   local num = 0
-
-  local mob_type = main_player:getMobType()
 
   for i, category in ipairs(skill_list[mob_type].order.category) do
     num = num + 1  -- vary the amount because category ~= icon_size
@@ -252,8 +247,6 @@ function scene:show( event )
 
     local sceneGroup = self.view
     local phase = event.phase
-
-    local mob_type = main_player:getMobType()
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
