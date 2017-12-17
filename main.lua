@@ -157,12 +157,14 @@ local tabButtons = {
       --selected = true,
         onPress = handleTabBarEvent      
     },
+    --[[
     {
         label = "Action",
         id = 'action',
       --selected = true,
         onPress = handleTabBarEvent
-    },        
+    },  
+    --]]      
     {
         label = "Skills",
         id = 'skills',
