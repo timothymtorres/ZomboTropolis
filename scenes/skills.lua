@@ -6,8 +6,12 @@
 
 local widget = require("widget")
 local composer = require("composer")
-local skill_list = require('code.player.skills.list')
 local mob_type = main_player:getMobType()
+
+
+local skill_list = {}
+skill_list.zombie = require('code.player.zombie.skill_list')
+skill_list.human = require('code.player.human.skill_list')
 
 local imageSheet = {
   human = {
@@ -92,13 +96,12 @@ local button_color
 -- -------------------------------------------------------------------------------
 
 local function canPurchaseSkill(skill, check_xp)  
-  local player_mob_type = main_player:getMobType()
+  local mob_type = main_player:getMobType()
   local xp = main_player:getStat('xp')
   
-  local class = skill_list.isClass(skill)  
+  local class = skill_list[mob_type]:isClass(skill)  
   local cost = (class and main_player.skills:getCost('classes') ) or main_player.skills:getCost('skills')  
-  local required_flags = skill_list.getRequiredFlags(skill)
-  local skill_mob_type = skill_list.getMobType(skill) 
+  local required_flags = skill_list[mob_type]:getRequiredFlags(skill)
 
   if check_xp == 'with xp' then 
     check_xp = xp >= cost  -- Enough Xp?
@@ -106,11 +109,7 @@ local function canPurchaseSkill(skill, check_xp)
     check_xp = true
   end
   
-  if check_xp and
-  skill_mob_type == player_mob_type and  -- Player mob type must match skill
-  main_player:isStanding() and  -- Player must be standing
-  not (main_player.skills:check(skill))  -- Skill must not have already been purchased 
-  then
+  if check_xp and main_player:isStanding() and not (main_player.skills:check(skill)) then
     for category, flags in pairs(required_flags) do  -- Have all required skills
       if not (flags == 0 or main_player.skills:checkFlag(category, flags)) then return false end
     end    
@@ -129,7 +128,8 @@ local function getButtonColor(skill)
 end
 
 local function getButtonCategoryColor(skill)
-  local category = (skill_list.getCategory(skill) == 'classes' and skill) or skill_list.getCategory(skill)
+  local mob_type = main_player:getMobType()
+  local category = (skill_list[mob_type]:getCategory(skill) == 'classes' and skill) or skill_list[mob_type]:getCategory(skill)
   if category == 'general' then return {1, 1, 1, 1}
   elseif category == 'military' then return {1, 0, 0, 1}
   elseif category == 'medical' then return {0, 0, 1, 1}
@@ -142,10 +142,11 @@ local skill_buttons, categoryText, scrollView = {}, {}
 
 -- THIS IS TEMPORARY!!!
 local function handleButtonEvent( event )
+    local mob_type = main_player:getMobType()
     skill_buttons[event.target.id]:setFillColor(unpack(getButtonColor(event.target.id)))
-    
+
     if ( "ended" == event.phase ) then      
-        local skill, params = skill_list[event.target.id], options.params
+        local skill, params = skill_list[mob_type][event.target.id], options.params
         params.id = event.target.id
         params.name = skill.name
         params.desc = skill.desc
@@ -180,11 +181,13 @@ function scene:create( event )
   
   local num = 0
 
-  for i, category in ipairs(skill_list.order[mob_type].category) do
+  local mob_type = main_player:getMobType()
+
+  for i, category in ipairs(skill_list[mob_type].order.category) do
     num = num + 1  -- vary the amount because category ~= icon_size
     local row = 0
     
-    local purchasedChoices, maxChoices = main_player.skills:countFlags(category), #skill_list.order[mob_type][category]
+    local purchasedChoices, maxChoices = main_player.skills:countFlags(category), #skill_list[mob_type].order[category]
     local str = "--"..category.."-- ["..purchasedChoices..'/'..maxChoices..']'
     categoryText[category] = {} 
     categoryText[category].info = {text=str, x=offset + 70, y=offset + icon_size*(num) + divider*(num) + icon_size*0.5 + divider*0.5, font=native.systemFont, font_size=32, fillColor = {1, 0, 0}} 
@@ -196,9 +199,9 @@ function scene:create( event )
     categoryText[category].button = category_title_text
     scrollView:insert(category_title_text)
  
-    for ii, skill in ipairs(skill_list.order[mob_type][category]) do      
+    for ii, skill in ipairs(skill_list[mob_type].order[category]) do      
       if row == 0 then num = num + 1 end
-      local skill_data = skill_list.info[mob_type][category][skill]
+      local skill_data = skill_list[mob_type].info[category][skill]
       --local category = skill_list.getCategory(skill)
       local sheetInfo = imageSheet[mob_type][category].info
       local icon
@@ -250,13 +253,15 @@ function scene:show( event )
     local sceneGroup = self.view
     local phase = event.phase
 
+    local mob_type = main_player:getMobType()
+
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-        for i, category in ipairs(skill_list.order[mob_type].category) do          
+        for i, category in ipairs(skill_list[mob_type].order.category) do          
           categoryText[category].button:removeSelf()
           categoryText[category].button = nil
           
-          local purchasedChoices, maxChoices = main_player.skills:countFlags(category), #skill_list.order[mob_type][category]
+          local purchasedChoices, maxChoices = main_player.skills:countFlags(category), #skill_list[mob_type].order[category]
           local str = "--"..category.."-- ["..purchasedChoices..'/'..maxChoices..']'          
           categoryText[category].info.text = str 
           local message = categoryText[category].info
@@ -266,7 +271,7 @@ function scene:show( event )
           categoryText[category].button = category_title_text
           scrollView:insert(category_title_text)          
         
-          for ii, skill in ipairs(skill_list.order[mob_type][category]) do       
+          for ii, skill in ipairs(skill_list[mob_type].order[category]) do       
             skill_buttons[skill]:setFillColor(unpack(getButtonColor(skill)))
           end     
         end  
