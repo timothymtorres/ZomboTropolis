@@ -40,7 +40,7 @@ local function basicCriteria(player, action_str, ...)
 end
 
 function Player:perform(action_str, ...) 
-  local ap_verification, ap_error_msg = pcall(basicCriteria, self, ...)
+  local ap_verification, ap_error_msg = pcall(basicCriteria, self, action_str, ...)
   local action = self.class.action_list[action_str]  
   local verification, error_msg = pcall(action.server_criteria, self, ...)
 
@@ -48,7 +48,7 @@ function Player:perform(action_str, ...)
     local ap, AP_cost = self:getStat('ap'), self:getCost('ap', action_str)
     action.activate(self, ...)
 
-    self.status_condition:elapse(AP_cost)   
+    self.status_effect:elapse(AP_cost)   
     self:updateStat('ap', -1*AP_cost)
     self:updateStat('xp', AP_cost)
 
