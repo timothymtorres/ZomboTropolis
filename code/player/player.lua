@@ -44,9 +44,9 @@ function Player:perform(action_str, ...)
   local action = self.class.action_list[action_str]  
   local verification, error_msg = pcall(action.server_criteria, self, ...)
 
-  if ap_verification and verification and class_verification then
+  if ap_verification and verification then
     local ap, AP_cost = self:getStat('ap'), self:getCost('ap', action_str)
-    action:activate(self, ...)
+    action.activate(self, ...)
 
     self.status_condition:elapse(AP_cost)   
     self:updateStat('ap', -1*AP_cost)
@@ -54,7 +54,7 @@ function Player:perform(action_str, ...)
 
     if self:isMobType('zombie') then self.hunger:elapse(AP_cost) end -- bit of a hack to put this in here...
   else -- Houston, we have a problem!
-    self.log:insert(ap_error_msg or class_error_msg or error_msg)
+    self.log:insert(ap_error_msg or error_msg)
   end
   
   --self:updateStat('IP', 1)  -- IP connection hits?  Hmmmm?
@@ -121,7 +121,7 @@ function Player:getCost(stat, action_str, ID)
   local cost = action_data[stat].cost
   
   if action_data[stat].modifier then -- Modifies cost of action based off of skills
-    for skill, modifier in pairs(action_data[stat].modifier) do cost = (player.skills:check(skill) and cost + modifier) or cost end
+    for skill, modifier in pairs(action_data[stat].modifier) do cost = (self.skills:check(skill) and cost + modifier) or cost end
   end  
   return cost
 end
