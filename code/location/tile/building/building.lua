@@ -72,8 +72,8 @@ function Building:initialize(map, y, x, name)
 end
 
 function Building:insert(player, setting) 
-  if setting == 'inside' then self.inside_players[player] = player 
-  elseif setting == 'outside' or setting == nil then self.outside_players[player] = player
+  if setting == 'inside' then self.inside_players[player] = true 
+  elseif setting == 'outside' or setting == nil then self.outside_players[player] = true
   end
 end
 

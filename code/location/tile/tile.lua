@@ -28,7 +28,7 @@ end
 
 Tile.broadcastEvent = broadcastEvent.tile
 
-function Tile:insert(player) self.outside_players[player] = player end
+function Tile:insert(player) self.outside_players[player] = true end
 
 function Tile:remove(player) self.outside_players[player] = nil end
 
