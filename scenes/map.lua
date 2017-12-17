@@ -103,7 +103,8 @@ function scene:create( event )
  
   local gridButtonEvent = function(event)
     if ("ended" == event.phase ) then
-      main_player:takeAction('move', event.target.id)
+      local dir = event.target.id
+      main_player:perform('move', dir)
       updateMap()
       updatePlayerBar()
       updateLocation()
@@ -114,7 +115,7 @@ function scene:create( event )
   local centerButtonEvent = function(event)
     if ("ended" == event.phase ) then
       -- event.target.id is one of the following - enter/exit
-      main_player:takeAction(event.target.id)
+      main_player:perform(event.target.id)
       updateMap()
       updatePlayerBar()
       updateLocation()
