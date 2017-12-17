@@ -1,5 +1,5 @@
 print()
-print('NEW RUN')
+print('PLAYER TEST RUN')
 print()
 print()
 

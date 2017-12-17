@@ -1,5 +1,5 @@
 print()
-print('NEW RUN')
+print('BUILDING TEST RUN')
 print()
 print()
 

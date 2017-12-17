@@ -13,7 +13,7 @@ composer.mySettings = "Some settings that can be accessed in any scene (highscor
 composer.myVolume = 100 
 
 print()
-print('NEW RUN')
+print('MAIN.LUA TEST RUN')
 print()
 print()
 
@@ -56,7 +56,7 @@ main_player:updateStat('hp', -49)
 local toolbox = Items.Toolbox:new(4)
 alt_player.inventory:insert(toolbox)
 
-for i=1, 10 do
+for i=1, 2 do
   local barricade = Items.Barricade:new('intact')
   alt_player.inventory:insert(barricade)
 end
