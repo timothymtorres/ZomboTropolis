@@ -12,14 +12,12 @@ Zombie.action_list = zombie_action_list
 
 local default_EP = 50
 
-function Zombie:initialize(username, map_zone, y, x) --add account name
-  Player:initialize(username, map_zone, y, x)
-
+function Zombie:initialize(...) --add account name
   self.ep = default_EP
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
-  
-  map_zone[y][x]:insert(self)
+
+  Player.initialize(self, ...)  
 end
 
 function Zombie:killed() -- cause_of_death arg not needed yet?

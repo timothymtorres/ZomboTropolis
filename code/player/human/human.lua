@@ -13,14 +13,12 @@ Human.action_list = human_action_list
 
 local default_IP= 0
 
-function Human:initialize(username, map_zone, y, x) --add account name
-  Player:initialize(username, map_zone, y, x)
-
+function Human:initialize(...) --add account name
   self.ip = default_IP
   self.inventory = Inventory:new(self)
   self.skills = Skills:new(human_skill_list)
   
-  map_zone[y][x]:insert(self)
+  Player.initialize(self, ...)  
 end
 
 function Human:killed()
