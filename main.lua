@@ -13,20 +13,15 @@ composer.mySettings = "Some settings that can be accessed in any scene (highscor
 composer.myVolume = 100 
 
 print()
-print('NEW RUN')
+print('MAIN.LUA TEST RUN')
 print()
 print()
 
-local map = require('code.location.map.class')
-local item = require('code.item.class')  -- for testing item generation in main.lua
-player = require('code.player.class')
-table.copy = require('code.libs.copy')
+local Map = require('code.location.map')
+local Items = require('code.item.items')  -- for testing item generation in main.lua
+Zombie = require('code.player.zombie.zombie')
+Human = require('code.player.human.human')
 table.inspect = require('code.libs.inspect')
-
-
-
-
-local arm_CL = require('code.player.armor.item_class')
 
 --[[
 local building = require('code.location.building.class')
@@ -38,9 +33,9 @@ lookupMedical = require('code.item.medical.search')
 
 dummy = {}
 print()
-city = map:new(10)
-main_player = player:new('Fran', 'zombie', city, 4, 4)
-alt_player = player:new('Tim', 'human', city, 4, 4)
+city = Map:new(10)
+main_player = Zombie:new('Fran', city, 4, 4)
+alt_player = Human:new('Tim', city, 4, 4)
 
 p_tile = alt_player:getTile()
 p_tile.barricade.potential_hp = 28 
@@ -58,16 +53,16 @@ end
 
 main_player:updateStat('hp', -49)
 
-local toolbox_INST = item.toolbox:new(4)
-alt_player.inventory:insert(toolbox_INST)
+local toolbox = Items.Toolbox:new(4)
+alt_player.inventory:insert(toolbox)
 
-for i=1, 10 do
-  local barricade_INST = item.barricade:new('intact')
-  alt_player.inventory:insert(barricade_INST)
+for i=1, 2 do
+  local barricade = Items.Barricade:new('intact')
+  alt_player.inventory:insert(barricade)
 end
 
 --[[
-local firesuit_INST = item.firesuit:new('ruined')
+local firesuit_INST = Item.firesuit:new('ruined')
 alt_player.inventory:insert(firesuit_INST)
 alt_player.armor:equip('firesuit', firesuit_INST:getCondition())
 
@@ -76,7 +71,7 @@ print('SYRINGE_ISNT IS:', syringe_INST, syringe_INST:getCondition())
 print('---------')
 
 alt_player:takeAction('syringe', 1, main_player)
---Outcome.item('syringe', alt_player, 1, main_player)
+--Outcome.Item('syringe', alt_player, 1, main_player)
 --]]
 
 --[[
@@ -94,7 +89,7 @@ dummy:updateStat('xp', 1000)
 dummy.skills:buy(dummy, 'hive')
 dummy.skills:buy(dummy, 'stinger')
 
-local weapon = require('code.item.weapon.class')
+local weapon = require('code.Item.weapon.class')
 local sting = weapon.sting:new()
 
 for i=1, 3 do
@@ -162,12 +157,14 @@ local tabButtons = {
       --selected = true,
         onPress = handleTabBarEvent      
     },
+    --[[
     {
         label = "Action",
         id = 'action',
       --selected = true,
         onPress = handleTabBarEvent
-    },        
+    },  
+    --]]      
     {
         label = "Skills",
         id = 'skills',

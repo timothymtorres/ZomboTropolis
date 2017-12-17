@@ -1,8 +1,7 @@
-local chanceToHit = require('code.item.weapon.chanceToHit')
 local dice = require('code.libs.dice')
 
 local function combat(player, target, weapon)
-  local attack = chanceToHit(player, target, weapon) >= math.random()
+  local attack = player:chanceToHit(target, weapon) >= math.random()
   local damage, critical
   
   if attack then -- successful!
