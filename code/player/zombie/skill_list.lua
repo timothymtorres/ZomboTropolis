@@ -36,9 +36,9 @@ local skill_list = {
     leap =                 2^1,
     leap_adv =             2^2,
     track =                2^3,
-    scavenge =             2^4,
-    track_adv =            2^5,
-    dodge =                2^6,
+    track_adv =            2^4,
+    hide =                 2^5,
+    hide_adv =             2^6,
     smell_blood_adv =      2^7,
     night_vision =         2^8,
     mark_prey =            2^9,
@@ -60,7 +60,7 @@ local skill_list = {
     classes = {'brute', 'hunter', 'hive'},
     general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
     brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},      
-    hunter = {'sprint', 'leap', 'leap_adv', 'track', 'scavenge', 'track_adv', 'dodge', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
+    hunter = {'sprint', 'leap', 'leap_adv', 'track', 'track_adv', 'hide', 'hide_adv', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
     hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'infection', 'infection_adv'},
   },
   info = {
@@ -207,20 +207,20 @@ local skill_list = {
         desc='Ability to locate humans',
         icon='eyeball',
       },
-      scavenge = {
-        name='scavenge',
-        desc='Gives a small chance to find wildlife that may be consumed for food',
-        icon='maggot',
-      },
       track_adv = {
         name='track advanced',
         desc='Ability to locate humans is improved',
         icon='brass-eye',
       },
-      dodge = {
-        name='dodge',
-        desc='Gives a small chance to dodge melee attaks',
-        icon='move',
+      hide = {
+        name='hide',
+        desc='Ability to hide inside unoccupied and unpowered buildings'
+        --icon ???
+      },
+      hide_adv = {
+        name='hide advanced',
+        desc='Improved chance and reduced ap cost to hide',
+        --icon ???
       },
       smell_blood_adv = {
         name='smell blood advanced',
