@@ -75,7 +75,7 @@ function Tile:getMap() return self.map_zone end
 
 function Tile:getPos() return self.y, self.x end
 
-function Tile:getIntegrityState()
+function Tile:getIntegrity()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
