@@ -345,6 +345,37 @@ end
 
 -------------------------------------------------------------------
 
+local hide = {name='hide', ap={cost=3, modifier={hide_adv = -2}}}
+
+function hide.client_criteria(player)
+  assert(player:isStaged('inside'), 'Must be inside building to hide')
+  local p_tile = player:getTile()
+  assert(p_tile:countPlayers('human', 'inside') == 0, 'Unable to hide with humans nearby')
+  assert(not p_tile:isPowered(), 'Unable to hide inside a powered building')
+end
+
+function hide.server_criteria(player)
+  assert(player:isStaged('inside'), 'Must be inside building to hide')
+  local p_tile = player:getTile()
+  assert(p_tile:countPlayers('human', 'inside') == 0, 'Unable to hide with humans nearby')
+  assert(not p_tile:isPowered(), 'Unable to hide inside a powered building')
+end
+
+function hide.activate(player)  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------
+
+  local event = {'hide', player}
+    
+end
+
+-------------------------------------------------------------------
+
 local acid = {name='acid', ap={cost=1}}
 
 function acid.client_criteria(player)
@@ -441,4 +472,4 @@ function acid.activate(player, target)
   target.log:insert(target_msg, event)  
 end
 
-return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, acid}
+return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, hide, acid}
