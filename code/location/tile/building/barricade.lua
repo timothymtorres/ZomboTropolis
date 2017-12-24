@@ -160,7 +160,7 @@ function Barricade:didZombiesIntervene(player)  -- make brute zombie count as x2
   local nullfied_zombies = math.floor(human_n/num_humans_to_nullify_zombie)
   local blockade_n = zombie_n - 1 - nullfied_zombies  -- the -1 is to prevent single zombies from blocking an entrance by themselves
   
-  local integrity_state = p_tile:getIntegrityState()
+  local integrity_state = p_tile:getIntegrity()
   if integrity_state == 'ransacked' then blockade_n = blockade_n + ransack_blockade_bonus end
   
   if blockade_n <= 0 then return false end -- not high enough chance at blocking to do a roll

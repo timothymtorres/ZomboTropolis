@@ -12,33 +12,62 @@ function search.activate(player)
   local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
   local player_inside_unpowered_building = not p_tile:isPowered() and player:isStaged('inside')
   
-  local item = p_tile:search(player, player:getStage(), player_has_flashlight)
-  
+  local discovery = p_tile:search(player, player:getStage(), player_has_flashlight)
+
   if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
     flashlight_was_used = true
     local flashlight = player.inventory:lookup(inv_ID)
     if flashlight:failDurabilityCheck(player) then flashlight:updateCondition(-1, player, inv_ID) end
   end
-  
+
+  local item, hidden_player
+
+  if discovery and discovery.class.name == 'Item' then item = discovery
+  elseif discovery then hidden_player = discovery
+  end
+
   if item then player.inventory:insert(item) end
-  
+  if hidden_player then hidden_player.status_effect:remove('hide') end
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
    
-  local msg = 'You search {with_flashlight} and find {item}.'
+  local self_msg = 'You search {with_flashlight} and find {discovery}.'
   local names = {
     with_flashlight = flashlight_was_used and 'with a flashlight' or '',
-    item = item and 'a '..tostring(item) or 'nothing', 
+    discovery = discovery and 'a '..tostring(discovery) or 'nothing',
+    player = player,
+    hidden_player = hidden_player, 
   }
-  msg = msg:replace(names)
+  self_msg = self_msg:replace(names)
   
+  local public_msg, hidden_player_msg
+
+  if hidden_player then
+    public_msg = '{player} searches and finds {hidden_player}.'
+    hidden_player_msg = 'You are discovered by {player}!'
+    public_msg = public_msg:replace(names)
+    hidden_player_msg = hidden_player_msg:replace(names)
+  end
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------     
 
-  local event = {'search', player, item, flashlight_was_used}   
-  player.log:insert(msg, event)
+  local event = {'search', player, discovery, flashlight_was_used}  
+
+  if hidden_player then
+    local settings = {stage=player:getStage(), exclude={}}
+    settings.exclude[player], settings.exclude[hidden_player] = true, true  
+    
+    player.log:insert(self_msg, event)
+    hidden_player.log:insert(hidden_player_msg, event)
+    
+    local tile = player:getTile()
+    tile:broadcastEvent(public_msg, event, settings)    
+  else 
+    player.log:insert(self_msg, event)
+  end
 end
 
 -------------------------------------------------------------------

@@ -50,7 +50,7 @@ function Tile:countPlayers(mob_type, setting)
   
   local count = 0
   for player in pairs(players) do
-    if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() then 
+    if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() and not player.status_effect:isActive('hide') then 
       count = count + 1
     end
   end
@@ -75,13 +75,13 @@ function Tile:getMap() return self.map_zone end
 
 function Tile:getPos() return self.y, self.x end
 
-function Tile:getIntegrityState()
+function Tile:getIntegrity()
   if self:isBuilding() then return self.integrity:getState()
   else return 'intact'
   end
 end
 
-function Tile:getPlayers(setting) 
+function Tile:getPlayers(setting, filter) 
   local players
   if setting == 'inside' then 
     players = self.inside_players
@@ -90,11 +90,24 @@ function Tile:getPlayers(setting)
   elseif not setting then -- get all players
     players = {}
     if self.inside_players then 
-      for k,v in pairs(self.inside_players) do players[k] = v end
+      for player in pairs(self.inside_players) do players[player] = true end
     end
-    for k,v in pairs(self.outside_players) do players[k] = v end
+    for player in pairs(self.outside_players) do players[player] = true end
   end
-  return players 
+
+  if filter then
+    for player in pairs(players) do
+      if not player.status_effect:isActive(filter) then players[player] = nil end
+    end
+  end
+
+  return next(players) and players or nil 
+end
+
+function Tile:isIntegrity(setting)
+  if self:isBuilding() then return self.integrity:getState() == setting 
+  else return 'intact' == setting 
+  end
 end
 
 function Tile:isBuilding() return self.inside_players and true or false end
@@ -134,18 +147,24 @@ local function select_item(list)
 end
 
 function Tile:search(player, setting, was_flashlight_used)
-  local integrity_state = self:getIntegrityState()  
+  local integrity_state = self:getIntegrity()  
   
   local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
   local search_success = odds >= math.random()
   
   if not search_success then return false end
 
-  local tile_item_list = self.item_chance[setting] 
-  local selected_item_type = select_item(tile_item_list)
-  
-  local item = Items[selected_item_type]:new(integrity_state) 
-  return item
+  local hidden_players = self:getPlayers(setting, 'hide')
+
+  if hidden_players then
+    return next(hidden_players) -- probably should shuffle and randomly select player instead of using next()
+  else
+    local tile_item_list = self.item_chance[setting] 
+    local selected_item_type = select_item(tile_item_list)
+    
+    local item = Items[selected_item_type]:new(integrity_state) 
+    return item
+  end
 end
 
 function Tile:__tostring() return self.name..' '..self.class.name end
