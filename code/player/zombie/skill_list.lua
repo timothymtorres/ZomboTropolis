@@ -215,12 +215,12 @@ local skill_list = {
       hide = {
         name='hide',
         desc='Ability to hide inside unoccupied and unpowered buildings'
-        --icon ???
+        icon='double-face-mask',
       },
       hide_adv = {
         name='hide advanced',
         desc='Improved chance and reduced ap cost to hide',
-        --icon ???
+        icon='shadow-follower',
       },
       smell_blood_adv = {
         name='smell blood advanced',
