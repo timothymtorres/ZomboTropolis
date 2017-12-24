@@ -101,7 +101,7 @@ function Tile:getPlayers(setting, filter)
     end
   end
 
-  return players 
+  return next(players) and players or nil 
 end
 
 function Tile:isIntegrity(setting)
@@ -154,8 +154,10 @@ function Tile:search(player, setting, was_flashlight_used)
   
   if not search_success then return false end
 
-  if hidden_players then
+  local hidden_players = self:getPlayers(setting, 'hide')
 
+  if hidden_players then
+    return next(hidden_players) -- probably should shuffle and randomly select player instead of using next()
   else
     local tile_item_list = self.item_chance[setting] 
     local selected_item_type = select_item(tile_item_list)
