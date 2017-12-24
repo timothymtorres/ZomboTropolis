@@ -81,7 +81,7 @@ function Tile:getIntegrity()
   end
 end
 
-function Tile:getPlayers(setting) 
+function Tile:getPlayers(setting, filter) 
   local players
   if setting == 'inside' then 
     players = self.inside_players
@@ -90,10 +90,17 @@ function Tile:getPlayers(setting)
   elseif not setting then -- get all players
     players = {}
     if self.inside_players then 
-      for k,v in pairs(self.inside_players) do players[k] = v end
+      for player in pairs(self.inside_players) do players[player] = true end
     end
-    for k,v in pairs(self.outside_players) do players[k] = v end
+    for player in pairs(self.outside_players) do players[player] = true end
   end
+
+  if filter then
+    for player in pairs(players) do
+      if not player.status_effect:isActive(filter) then players[player] = nil end
+    end
+  end
+
   return players 
 end
 
