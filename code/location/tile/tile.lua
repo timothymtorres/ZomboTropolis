@@ -50,7 +50,7 @@ function Tile:countPlayers(mob_type, setting)
   
   local count = 0
   for player in pairs(players) do
-    if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() then 
+    if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() and not player.status_effect:isActive('hide') then 
       count = count + 1
     end
   end
@@ -147,11 +147,15 @@ function Tile:search(player, setting, was_flashlight_used)
   
   if not search_success then return false end
 
-  local tile_item_list = self.item_chance[setting] 
-  local selected_item_type = select_item(tile_item_list)
-  
-  local item = Items[selected_item_type]:new(integrity_state) 
-  return item
+  if hidden_players then
+
+  else
+    local tile_item_list = self.item_chance[setting] 
+    local selected_item_type = select_item(tile_item_list)
+    
+    local item = Items[selected_item_type]:new(integrity_state) 
+    return item
+  end
 end
 
 function Tile:__tostring() return self.name..' '..self.class.name end
