@@ -97,7 +97,7 @@ function Tile:getPlayers(setting)
   return players 
 end
 
-function Tile:isIntegrityState(setting)
+function Tile:isIntegrity(setting)
   if self:isBuilding() then return self.integrity:getState() == setting 
   else return 'intact' == setting 
   end
@@ -140,7 +140,7 @@ local function select_item(list)
 end
 
 function Tile:search(player, setting, was_flashlight_used)
-  local integrity_state = self:getIntegrityState()  
+  local integrity_state = self:getIntegrity()  
   
   local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
   local search_success = odds >= math.random()
