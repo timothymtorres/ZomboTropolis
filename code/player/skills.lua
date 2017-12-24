@@ -57,9 +57,9 @@ end
 function Skills:buy(player, skill)
   local xp = player:getStat('xp')
   
-  local class = self.list.isClass(skill)  
+  local class = self.list:isClass(skill)  
   local cost = (class and self:getCost('classes') ) or self:getCost('skills')  
-  local required_flags = self.list.getRequiredFlags(skill)
+  local required_flags = self.list:getRequiredFlags(skill)
 print('[skills:buy]', 'player.xp='..xp, 'skill['..skill..'] cost='..cost)  
 --print('required_flags = ', required_flags)  
   
@@ -83,7 +83,7 @@ function Skills:checkFlag(category, flag) return
 function Skills:check(skill) return self:checkFlag(self.list:getCategory(skill), self.list.flag[skill]) end
 
 function Skills:add(skill) 
-  local category = self.list.getCategory(skill)
+  local category = self.list:getCategory(skill)
   self.flags[category] = bor(self.flags[category], self.list.flag[skill]) 
 end
 
