@@ -214,7 +214,7 @@ local skill_list = {
       },
       hide = {
         name='hide',
-        desc='Ability to hide inside unoccupied and unpowered buildings'
+        desc='Ability to hide inside unoccupied and unpowered buildings',
         icon='double-face-mask',
       },
       hide_adv = {
