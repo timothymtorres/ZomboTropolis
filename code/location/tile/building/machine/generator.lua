@@ -19,4 +19,23 @@ function Generator:isActive() return self.fuel > 0 end
 
 function Generator:hasOperations() return false end
 
+function Generator:activate()
+  local hidden_players = self:getPlayers(setting, 'hide')
+  if hidden_players then for player in pairs(hidden_players) do player.status_effect:remove('hide') end end
+
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+   
+  local msg = 'The power to the {building} turns on.'
+  msg = msg:replace(self.building)
+
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------     
+
+  local event = {'generator', hidden_players} -- maybe change event[1] to 'lightup', 'illumiinate', etc.?
+  tile:broadcastEvent(msg, event, settings)  
+end
+
 return Generator
