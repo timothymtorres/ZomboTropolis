@@ -97,6 +97,12 @@ function Tile:getPlayers(setting)
   return players 
 end
 
+function Tile:isIntegrityState(setting)
+  if self:isBuilding() then return self.integrity:getState() == setting 
+  else return 'intact' == setting 
+  end
+end
+
 function Tile:isBuilding() return self.inside_players and true or false end
 
 local modifier = {
