@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:56573165e59c64f2e975c634bd4ed5f6:52d41783d469d77c6e9ae6a246979757:a1b23113e7f37280822ccd80e84fd6ef$
+-- $TexturePacker:SmartUpdate:73b96c901306f900d0175496377aab6a:60fda7a1364362d7d9ad6dbb672180dd:a1b23113e7f37280822ccd80e84fd6ef$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- eyeball
+            -- double-face-mask
             x=0,
             y=512,
             width=512,
@@ -31,9 +31,17 @@ SheetInfo.sheet =
 
         },
         {
-            -- fire-dash
+            -- eyeball
             x=0,
             y=1024,
+            width=512,
+            height=512,
+
+        },
+        {
+            -- fire-dash
+            x=512,
+            y=0,
             width=512,
             height=512,
 
@@ -41,21 +49,13 @@ SheetInfo.sheet =
         {
             -- hidden
             x=512,
-            y=0,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- maggot
-            x=512,
             y=512,
             width=512,
             height=512,
 
         },
         {
-            -- move
+            -- nose-side
             x=512,
             y=1024,
             width=512,
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- nose-side
+            -- run
             x=1024,
             y=0,
             width=512,
@@ -71,7 +71,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- run
+            -- shadow-follower
             x=1536,
             y=0,
             width=512,
@@ -104,13 +104,13 @@ SheetInfo.frameIndex =
 {
 
     ["brass-eye"] = 1,
-    ["eyeball"] = 2,
-    ["fire-dash"] = 3,
-    ["hidden"] = 4,
-    ["maggot"] = 5,
-    ["move"] = 6,
-    ["nose-side"] = 7,
-    ["run"] = 8,
+    ["double-face-mask"] = 2,
+    ["eyeball"] = 3,
+    ["fire-dash"] = 4,
+    ["hidden"] = 5,
+    ["nose-side"] = 6,
+    ["run"] = 7,
+    ["shadow-follower"] = 8,
     ["spill"] = 9,
     ["sprint"] = 10,
 }

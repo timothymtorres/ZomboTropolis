@@ -25,7 +25,7 @@ function StatusEffect:elapse(ap)
   local mob_type = self.player:getMobType()
   for _, Effect in ipairs(StatusEffect[mob_type]) do
   	local effect = string.lower(Effect.name)    -- lowercase the class name
-    if self[effect] then self[effect]:elapse(player, ap) end
+    if self[effect] and self[effect].elapse then self[effect]:elapse(player, ap) end
   end
 end
 
