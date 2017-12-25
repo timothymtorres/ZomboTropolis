@@ -3,54 +3,44 @@ local Item = require('code.item.item')
 local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
 
-local Leather = class('Leather', Item)
+-------------------------------------------------------------------
 
-Leather.FULL_NAME = 'leather jacket'
-Leather.DURABILITY = 0
-Leather.CATEGORY = 'military'
-Leather.ap = {cost = 1}
+local Armor = class('Armor', Item)  -- this is the base class for Armor objects
 
-function Leather:activate(player)
-  player.armor:equip('leather', self.condition)
+Armor.ap = {cost = 1}
+
+function Armor:activate(player)
+  --player.armor:equip('leather', self.condition) -- not sure how this will be handled... wait until equipment code is written for player
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local msg = 'You equip a leather jacket.'
-  
+  local msg = 'You equip a {armor}.'
+  msg = msg:replace(self) -- This should work? Needs to be tested
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
-  local event = {'leather', player}  
+  local event = {'armor', player}  
   player.log:insert(msg, event)  
 end
 
 -------------------------------------------------------------------
 
-local Firesuit = class('Firesuit', Item)
+local Leather = class('Leather', Armor)
+
+Leather.FULL_NAME = 'leather jacket'
+Leather.DURABILITY = 0
+Leather.CATEGORY = 'military'
+
+-------------------------------------------------------------------
+
+local Firesuit = class('Firesuit', Armor)
 
 Firesuit.FULL_NAME = 'firesuit'
 Firesuit.DURABILITY = 0
 Firesuit.CATEGORY = 'military'
-Firesuit.ap = {cost = 1}
-
-function Firesuit:activate(player)
-  player.armor:equip('firesuit', self.condition)
-  
-  --------------------------------------------
-  -----------   M E S S A G E   --------------
-  --------------------------------------------
-  
-  local msg = 'You equip a firesuit.'
-  
-  --------------------------------------------
-  ---------   B R O A D C A S T   ------------
-  --------------------------------------------
-  
-  local event = {'firesuit', player}  
-  player.log:insert(msg, event)  
-end
 
 return {Leather, Firesuit}
