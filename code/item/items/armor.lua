@@ -6,12 +6,16 @@ string.replace = require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local Armor = class('Armor', Item):include(IsArmor)  -- this is the base class for Armor objects
+local Armor = class('Armor', Item):include(IsArmor)
 
-Armor.ap = {cost = 1}
+Armor.ap = {cost = 1} -- default AP cost for armor
 
 function Armor:activate(player)
-  --player.armor:equip('leather', self.condition) -- not sure how this will be handled... wait until equipment code is written for player
+  if player.equipment:isActive('armor') then -- remove old armor and put into inventory 
+    local old_armor = player.equipment.armor
+    player.inventory:insert(old_armor) 
+  end
+  player.equipment:add('armor', self)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -24,8 +28,8 @@ function Armor:activate(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
-  local event = {'armor', player}  
-  player.log:insert(msg, event)  
+  local event = {'armor', player}
+  player.log:insert(msg, event)
 end
 
 -------------------------------------------------------------------
