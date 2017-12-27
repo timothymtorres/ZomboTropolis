@@ -34,14 +34,14 @@ end
 local feed = {name='feed', ap={cost=1}}
 
 function feed.client_criteria(player)
-  local p_tile, p_stage = player:getTile(), player:getStage()
-  local corpse_n = p_tile:countCorpses(p_stage)
-  assert(corpse_n > 0, 'No available corpses to eat')
+  local p_tile = player:getTile()
+  local p_stage = player:getStage()
+  local corpses = p_tile:getCorpses(p_stage)
+  assert(corpses, 'No available corpses to eat')
   
   local edible_corpse_present 
-  local tile_player_group = p_tile:getPlayers(p_stage)
-  for tile_player in pairs(tile_player_group) do
-    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
+  for corpse in pairs(corpses) do
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
       edible_corpse_present = true
       break
     end
@@ -50,19 +50,19 @@ function feed.client_criteria(player)
 end
 
 function feed.server_criteria(player)
-  local p_tile, p_stage = player:getTile(), player:getStage()
-  local corpse_n = p_tile:countCorpses(p_stage)
-  assert(corpse_n > 0, 'No available corpses to eat')
+  local p_tile = player:getTile()
+  local p_stage = player:getStage()
+  local corpses = p_tile:getCorpses(p_stage)
+  assert(corpses, 'No available corpses to eat')
   
   local edible_corpse_present 
-  local tile_player_group = p_tile:getPlayers(p_stage)
-  for tile_player in pairs(tile_player_group) do
-    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
+  for corpse in pairs(corpses) do
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
       edible_corpse_present = true
       break
     end
   end
-  assert(edible_corpse_present, 'All corpses have been eaten')
+  assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
 local corpse_effects = { 
@@ -73,18 +73,19 @@ local corpse_effects = {
 }
 
 function feed.activate(player) 
-  local p_tile, p_stage = player:getTile(), player:getStage()
-  local tile_player_group = p_tile:getPlayers(p_stage)
+  local p_tile = player:getTile()
+  local p_stage = player:getStage()
+  local corpses = p_tile:getCorpses()
   local target
   local lowest_scavenger_num = 5
   
   -- finds the corpse with the lowest number of scavengers (fresh meat) 
-  for tile_player in pairs(tile_player_group) do
+  for corpse in pairs(corpses) do
 
-    if not tile_player:isStanding() and tile_player:isMobType('human') and tile_player.carcass:edible(player) then
-      local corpse_scavenger_num = #tile_player.carcass.carnivour_list
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
+      local corpse_scavenger_num = #corpse.carcass.carnivour_list
       if lowest_scavenger_num > corpse_scavenger_num then
-        target = tile_player
+        target = corpse
         lowest_scavenger_num = corpse_scavenger_num 
       end
     end
