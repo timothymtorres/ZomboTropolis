@@ -9,13 +9,39 @@ OrganicArmor.ap = {cost = 5, modifier={armor_adv = -2}}
 
 function OrganicArmor:client_criteria(player)
 	assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
-	-- add feed/corpse asserts here
+
+  local p_tile = player:getTile()
+  local p_stage = player:getStage()
+  local corpses = p_tile:getCorpses(p_stage)
+  assert(corpses, 'No available corpses to eat')
+  
+  local edible_corpse_present 
+  for corpse in pairs(corpses) do
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
+      edible_corpse_present = true
+      break
+    end
+  end
+  assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
 function OrganicArmor:server_criteria(player, armor)
 	assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
   assert(not armor or player.skills:check('armor_adv'), 'Must have "armor_adv" skill to select armor')  
-	-- add feed/corpse asserts here
+
+  local p_tile = player:getTile()
+  local p_stage = player:getStage()
+  local corpses = p_tile:getCorpses(p_stage)
+  assert(corpses, 'No available corpses to eat')
+  
+  local edible_corpse_present 
+  for corpse in pairs(corpses) do
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
+      edible_corpse_present = true
+      break
+    end
+  end
+  assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
 function OrganicArmor:activate(player)
