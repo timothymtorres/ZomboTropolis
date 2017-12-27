@@ -104,6 +104,21 @@ function Tile:getPlayers(setting, filter)
   return next(players) and players or nil 
 end
 
+function Tile:getCorpses(setting)
+  local corpses, players = {}
+
+  if setting == 'outside' then players = self.outside_players
+  elseif setting == 'inside' then players = self.inside_players 
+  else error('Tile:getCorpses setting arg not present')  
+  end
+  
+  for player in pairs(players) do
+    if not player:isStanding() then corpses[#corpses+1] = player end
+  end  
+  
+  return next(corpses) and corpses or nil 
+end
+
 function Tile:isIntegrity(setting)
   if self:isBuilding() then return self.integrity:getState() == setting 
   else return 'intact' == setting 
