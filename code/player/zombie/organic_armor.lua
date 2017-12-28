@@ -84,7 +84,7 @@ Scale.armor.resistance = {
 
 local Blubber = class('Blubber', OrganicArmor)
 
-Blubber.FULL_NAME = 'firesuit'
+Blubber.FULL_NAME = 'blubber'
 Blubber.DURABILITY = 16
 
 Blubber.armor.resistance = {
