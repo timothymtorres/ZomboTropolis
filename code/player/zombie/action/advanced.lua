@@ -67,9 +67,9 @@ end
 
 local corpse_effects = { 
   -- First come, first serve! (less xp and decay loss as corpse becomes more devoured)
-  xp = {'1d10+5', '1d9+3', '1d7+2', '1d5+1', '1d3'},
-  satiation = {'1d400+600', '1d400+500', '1d400+400', '1d400+300', '1d400+200'},
-  description = {'very fresh', 'fresh', '', 'old', 'very old'}
+  xp = {'1d10+5', '1d9+3', '1d7+2', '1d5+1'},
+  satiation = {'1d400+600', '1d400+500', '1d400+400', '1d400+300'},
+  description = {'very fresh', 'fresh', 'old', 'very old'}
 }
 
 function feed.activate(player) 
