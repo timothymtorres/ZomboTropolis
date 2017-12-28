@@ -45,7 +45,7 @@ function move.activate(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
-  local GPS_usage
+  local GPS, GPS_usage, condition
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
@@ -56,15 +56,14 @@ function move.activate(player, dir)
     end
   else  -- player is outside
     local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
+    GPS = player.inventory:lookup(inv_ID)
     if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
       local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
       local GPS_usage = GPS_chance >= math.random()
       
       -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
       if GPS_usage then player:updateStat('ap', 1) end
-      
-      local GPS = player.inventory:lookup(inv_ID)
-      if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
+      condition = player.inventory:updateDurability(inv_ID) 
     end
     
     map[y][x]:remove(player)
@@ -81,6 +80,12 @@ function move.activate(player, dir)
   local self_msg = 'You travel {dir} {with_GPS}.'
   local names = {dir=compass[dir], with_GPS=GPS_str}
   self_msg = self_msg:replace(names)
+
+  if condition == 0 then 
+    self_msg = self_msg..'Your '..tostring(GPS)..' is destroyed!'
+  elseif condition and GPS:isConditionVisible(player) then 
+    self_msg = self_msg..'Your '..tostring(GPS)..' degrades to a '..GPS:getConditionState()..' state.'
+  end  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
