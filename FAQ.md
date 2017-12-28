@@ -17,7 +17,7 @@
 >**Gameplay for ZT:**  
 >ZT seeks to take both of these games a step further and add roguelike features and complexity to the code.  All skills, abilities, and items in the game use dice rolls and dice modifiers to function.  This has been implemented in a (mostly) balanced fashion.  
 
->Just like UD, there is a persistent world, but with rubber banding enabled that stretches the map based on population size.    Respawns for the game are always enabled, but a player will lose all their items, abilities, and skills upon permadeath.  Permadeath is triggered for humans upon death, and zombies upon starvation.  The goal is to follow a prey/predator model of graphing.
+>Just like UD, there is a persistent world, but with rubber banding enabled that stretches the map based on population size.    Respawns for the game are always enabled, but a player will lose all their items, abilities, and skills upon permadeath.  Permadeath is triggered for humans upon death, and zombies upon starvation.  The goal is to follow a [prey/predator model](http://www.tiem.utk.edu/~gross/bioed/bealsmodules/pred-prey.gph1.gif) of graphing.
 
 >Leveling is based on time.  Players are no longer forced to heal, fight, or repair things to gain experience.  The longer a player's character survives in the game, the more experience they earn to unlock skills.  The skill system is setup to exponentially increase the skill cost after prior skills have been purchased.  With enough time, a player can even unlock a special class with it's own special abilities to enhance a certain playstyle.  
 
