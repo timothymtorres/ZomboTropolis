@@ -75,7 +75,7 @@ local corpse_effects = {
 function feed.activate(player) 
   local p_tile = player:getTile()
   local p_stage = player:getStage()
-  local corpses = p_tile:getCorpses()
+  local corpses = p_tile:getCorpses(p_stage)
   local target
   local lowest_scavenger_num = 5
   
