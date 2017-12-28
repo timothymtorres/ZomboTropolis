@@ -77,7 +77,7 @@ function feed.activate(player)
   local p_stage = player:getStage()
   local corpses = p_tile:getCorpses(p_stage)
   local target
-  local lowest_scavenger_num = 5
+  local lowest_scavenger_num = 4
   
   -- finds the corpse with the lowest number of scavengers (fresh meat) 
   for corpse in pairs(corpses) do
