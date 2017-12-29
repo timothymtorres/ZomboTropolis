@@ -202,7 +202,7 @@ function attack.activate(player, target, weapon)
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
 
   if armor_condition == 0 then 
-    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!' end  
+    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!'  
     target_msg = target_msg..'Your '..tostring(armor)..' is destroyed!'
   elseif armor_condition and armor:isConditionVisible(target) then 
     target_msg = target_msg..'Your '..tostring(armor)..' degrades to a '..armor:getConditionState()..' state.'
