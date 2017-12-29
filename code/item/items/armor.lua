@@ -40,6 +40,7 @@ Leather.FULL_NAME = 'leather jacket'
 Leather.DURABILITY = 32
 Leather.CATEGORY = 'military'
 
+Leather.armor = {}
 Leather.armor.resistance = {blunt=1}
 
 -------------------------------------------------------------------
@@ -50,6 +51,7 @@ Firesuit.FULL_NAME = 'firesuit'
 Firesuit.DURABILITY = 4
 Firesuit.CATEGORY = 'military'
 
+Firesuit.armor = {}
 Firesuit.armor.resistance = {
   {acid=1},
   {acid=2},

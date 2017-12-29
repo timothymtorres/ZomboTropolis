@@ -96,6 +96,7 @@ OrganicArmor.list[#OrganicArmor.list+1] = 'Scale'
 Scale.FULL_NAME = 'scale'
 Scale.DURABILITY = 8
 
+Scale.armor = {}
 Scale.armor.resistance = {
   {bullet=1,          pierce=1},
   {bullet=2, blunt=1, pierce=2},
@@ -111,6 +112,7 @@ OrganicArmor.list[#OrganicArmor.list+1] = 'Blubber'
 Blubber.FULL_NAME = 'blubber'
 Blubber.DURABILITY = 16
 
+Blubber.armor = {}
 Blubber.armor.resistance = {
   {          blunt=1, pierce=1},
   {bullet=1, blunt=1, pierce=1},  
@@ -126,6 +128,7 @@ OrganicArmor.list[#OrganicArmor.list+1] = 'Gel'
 Gel.FULL_NAME = 'gel'
 Gel.DURABILITY = 32
 
+Gel.armor = {}
 Gel.armor.resistance = {
   {          blunt=1, pierce=1, scorch=4},
   {          blunt=1, pierce=1, scorch=4},
@@ -141,6 +144,7 @@ OrganicArmor.list[#OrganicArmor.list+1] = 'Bone'
 Bone.FULL_NAME = 'bone'
 Bone.DURABILITY = 8
 
+Bone.armor = {}
 Bone.armor.resistance = {
   {damage_melee_attacker=1},
   {damage_melee_attacker=1},
