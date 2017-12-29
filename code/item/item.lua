@@ -37,7 +37,8 @@ function Item:isReloadable() return self.reload or false end
 
 function Item:isSingleUse() return self.DURABILITY == 0 end
 
-function Item:failDurabilityCheck(player)
+function Item:failDurabilityCheck(player, degrade_multiplier)
+  local degrade_multiplier = multiplier or 1
   local durability
   
   -- need to add a Item.DURABILITY_SKILL for items that are not weapons and check them here with weapons
@@ -47,7 +48,7 @@ function Item:failDurabilityCheck(player)
       durability = player.skills:check(self.weapon.MASTER_SKILL) and math.floor(self.DURABILITY*1.2 + 0.5) or durability
     end
   end
-  return dice.roll(durability or self.DURABILITY) <= 1
+  return dice.roll(durability or self.DURABILITY) <= degrade_multiplier
 end
 
 function Item:updateCondition(num)

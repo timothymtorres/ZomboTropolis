@@ -117,12 +117,11 @@ function attack.server_criteria(player, target, weapon)
   end
 end
 
-local ARMOR_DAMAGE_MOD = 2.5
-
 function attack.activate(player, target, weapon)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
   local caused_infection  
+  local armor_condition, armor
   
   if attack then 
     if target_class == 'player' then
@@ -140,8 +139,9 @@ function attack.activate(player, target, weapon)
           -- insert some type of event?
         end
         
-        local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1  -- might wanna change this later?  Damage affects degrade chance?       
-        if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
+        local degrade_multiplier = player.skills:check('power_claw') and 2 or 1
+        armor_condition = armor:updateArmorDurability(degrade_multiplier)
+        if armor_condiiton == 0 then target.equipment:remove('armor') end
       end
       
       if player.skills:check('track') then
@@ -200,7 +200,14 @@ function attack.activate(player, target, weapon)
 
   -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
-  
+
+  if armor_condition == 0 then 
+    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!'  
+    target_msg = target_msg..'Your '..tostring(armor)..' is destroyed!'
+  elseif armor_condition and armor:isConditionVisible(target) then 
+    target_msg = target_msg..'Your '..tostring(armor)..' degrades to a '..armor:getConditionState()..' state.'
+  end
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 

@@ -1,56 +1,62 @@
 local class = require('code.libs.middleclass')
 local Item = require('code.item.item')
+local IsArmor = require('code.item.mixin.is_armor')
 local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
 
-local Leather = class('Leather', Item)
+-------------------------------------------------------------------
 
-Leather.FULL_NAME = 'leather jacket'
-Leather.DURABILITY = 0
-Leather.CATEGORY = 'military'
-Leather.ap = {cost = 1}
+local Armor = class('Armor', Item):include(IsArmor)
 
-function Leather:activate(player)
-  player.armor:equip('leather', self.condition)
+Armor.ap = {cost = 1} -- default AP cost for armor
+
+function Armor:activate(player)
+  if player.equipment:isActive('armor') then -- remove old armor and put into inventory 
+    local old_armor = player.equipment.armor
+    player.inventory:insert(old_armor) 
+  end
+  player.equipment:add('armor', self)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local msg = 'You equip a leather jacket.'
-  
+  local msg = 'You equip a {armor}.'
+  msg = msg:replace(self) -- This should work? Needs to be tested
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
   
-  local event = {'leather', player}  
-  player.log:insert(msg, event)  
+  local event = {'armor', player}
+  player.log:insert(msg, event)
 end
 
 -------------------------------------------------------------------
 
-local Firesuit = class('Firesuit', Item)
+local Leather = class('Leather', Armor)
+
+Leather.FULL_NAME = 'leather jacket'
+Leather.DURABILITY = 32
+Leather.CATEGORY = 'military'
+
+Leather.armor = {}
+Leather.armor.resistance = {blunt=1}
+
+-------------------------------------------------------------------
+
+local Firesuit = class('Firesuit', Armor)
 
 Firesuit.FULL_NAME = 'firesuit'
-Firesuit.DURABILITY = 0
+Firesuit.DURABILITY = 4
 Firesuit.CATEGORY = 'military'
-Firesuit.ap = {cost = 1}
 
-function Firesuit:activate(player)
-  player.armor:equip('firesuit', self.condition)
-  
-  --------------------------------------------
-  -----------   M E S S A G E   --------------
-  --------------------------------------------
-  
-  local msg = 'You equip a firesuit.'
-  
-  --------------------------------------------
-  ---------   B R O A D C A S T   ------------
-  --------------------------------------------
-  
-  local event = {'firesuit', player}  
-  player.log:insert(msg, event)  
-end
+Firesuit.armor = {}
+Firesuit.armor.resistance = {
+  {acid=1},
+  {acid=2},
+  {acid=3},
+  {acid=4},
+}
 
 return {Leather, Firesuit}

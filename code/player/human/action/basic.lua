@@ -45,7 +45,7 @@ function move.activate(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
-  local GPS_usage
+  local GPS, GPS_usage, condition
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
@@ -56,15 +56,14 @@ function move.activate(player, dir)
     end
   else  -- player is outside
     local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
+    GPS = player.inventory:lookup(inv_ID)
     if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
       local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
       local GPS_usage = GPS_chance >= math.random()
       
       -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
       if GPS_usage then player:updateStat('ap', 1) end
-      
-      local GPS = player.inventory:lookup(inv_ID)
-      if GPS:failDurabilityCheck(player) then GPS:updateCondition(-1, player, inv_ID) end  
+      condition = player.inventory:updateDurability(inv_ID) 
     end
     
     map[y][x]:remove(player)
@@ -81,6 +80,12 @@ function move.activate(player, dir)
   local self_msg = 'You travel {dir} {with_GPS}.'
   local names = {dir=compass[dir], with_GPS=GPS_str}
   self_msg = self_msg:replace(names)
+
+  if condition == 0 then 
+    self_msg = self_msg..'Your '..tostring(GPS)..' is destroyed!'
+  elseif condition and GPS:isConditionVisible(player) then 
+    self_msg = self_msg..'Your '..tostring(GPS)..' degrades to a '..GPS:getConditionState()..' state.'
+  end  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
@@ -126,21 +131,21 @@ function attack.server_criteria(player, target, weapon, inv_ID)
   assert(player:isSameLocation(target), 'Target has moved out of range')
 end
 
-local ARMOR_DAMAGE_MOD = 2.5
-
 function attack.activate(player, target, weapon, inv_ID)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
-  local condition
+  local armor_condition, condition
+  local armor
 
   if attack then 
-    if target.armor:isPresent() and not weapon:isHarmless() then
+    if target.equipment:isPresent('armor') and not weapon:isHarmless() then
+      armor = target.equipment.armor
       local damage_type = weapon:getDamageType()
-      local resistance = target.armor:getProtection(damage_type)
+      local resistance = armor:getProtection(damage_type)
       damage = damage - resistance    
       -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
       
-      local retailation_damage = target.armor:getProtection('damage_melee_attacker')
+      local retailation_damage = armor:getProtection('damage_melee_attacker')
       local is_melee_attack = weapon:getStyle() == 'melee'
       if is_melee_attack and retailation_damage > 0 then
         local retailation_hp_loss = -1*dice.roll(retailation_damage)
@@ -148,8 +153,9 @@ function attack.activate(player, target, weapon, inv_ID)
         -- insert some type of event?
       end
       
-      local degrade_chance = math.floor(damage/ARMOR_DAMAGE_MOD) + 1  -- might wanna change this later?  Damage affects degrade chance?       
-      if target.armor:failDurabilityCheck(degrade_chance) then target.armor:degrade(target) end
+      local degrade_multiplier = 1 -- player.skills:check() some armor breaking skill?
+      armor_condition = armor:updateArmorDurability(degrade_multiplier)
+      if armor_condiiton == 0 then target.equipment:remove('armor') end
     end
     
     if target.skills:check('track') then
@@ -192,6 +198,13 @@ function attack.activate(player, target, weapon, inv_ID)
     self_msg = self_msg..'Your '..tostring(weapon)..' is destroyed!'
   elseif condition and weapon:isConditionVisible(player) then 
     self_msg = self_msg..'Your '..tostring(weapon)..' degrades to a '..weapon:getConditionState()..' state.'
+  end
+
+  if armor_condition == 0 then 
+    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!'
+    target_msg = target_msg..'Your '..tostring(armor)..' is destroyed!'
+  --elseif armor_condition and armor:isConditionVisible(target) then    (should organic armor condition be visible to zombies?)
+  --  target_msg = target_msg..'Your '..tostring(armor)..' degrades to a '..armor:getConditionState()..' state.'
   end
 
   --------------------------------------------

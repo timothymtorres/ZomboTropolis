@@ -1,7 +1,7 @@
 local class = require('code.libs.middleclass')
 
 local Carcass = class('Carcass')
-local MAX_FEEDINGS = 5
+local MAX_FEEDINGS = 4
 
 function Carcass:initialize(player)
   self.player = player
