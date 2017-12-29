@@ -1,3 +1,4 @@
+local dice = require('code.libs.dice')
 local class = require('code.libs.middleclass')
 local Item = require('code.item.item')
 local IsArmor = require('code.item.mixin.is_armor')
@@ -6,6 +7,7 @@ local IsArmor = require('code.item.mixin.is_armor')
 
 local OrganicArmor = class('OrganicArmor', Item):include(IsArmor)  -- remove Item superclass... do we need the methods?
 OrganicArmor.ap = {cost = 5, modifier={armor_adv = -2}}
+OrganicArmor.list = {}
 
 function OrganicArmor:client_criteria(player)
 	assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
@@ -25,9 +27,9 @@ function OrganicArmor:client_criteria(player)
   assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
-function OrganicArmor:server_criteria(player, armor)
+function OrganicArmor:server_criteria(player, armor_type)
 	assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
-  assert(not armor or player.skills:check('armor_adv'), 'Must have "armor_adv" skill to select armor')  
+  assert(not armor_type or player.skills:check('armor_adv'), 'Must have "armor_adv" skill to select armor')  
 
   local p_tile = player:getTile()
   local p_stage = player:getStage()
@@ -44,12 +46,32 @@ function OrganicArmor:server_criteria(player, armor)
   assert(edible_corpse_present, 'All corpses have been eaten')  
 end
 
-function OrganicArmor:activate(player)
-  -- run feed/corpse code
-  -- init armor obj
-  -- give armor obj condition?
+function OrganicArmor:activate(player, armor_type)
+  local corpses = p_tile:getCorpses(player:getStage())
+  local target
+  local lowest_scavenger_num = 4
+  
+  -- finds the corpse with the lowest number of scavengers (fresh meat) 
+  for corpse in pairs(corpses) do
+    if corpse:isMobType('human') and corpse.carcass:edible(player) then
+      local corpse_scavenger_num = #corpse.carcass.carnivour_list
+      if lowest_scavenger_num > corpse_scavenger_num then
+        target = corpse
+        lowest_scavenger_num = corpse_scavenger_num 
+      end
+    end
+  end
 
-  player.equipment:add('armor', self)
+  local nutrition_LV = target.carcass:devour(player)
+  local armor_dice = dice:new('1d'..nutrition_LV)
+
+  if player.skills:check('armor_adv') then armor_dice = armor_dice ^ 1 end
+  local condition = armor_dice:roll()
+
+  armor_type = armor_type or OrganicArmor.list[math.random(1, #OrganicArmor.list)]
+  armor = OrganicArmor.subclass[armor]:new(condition) -- This should work... 
+
+  player.equipment:add('armor', armor)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -69,6 +91,7 @@ end
 -------------------------------------------------------------------
 
 local Scale = class('Scale', OrganicArmor)
+OrganicArmor.list[#OrganicArmor.list+1] = 'Scale'
 
 Scale.FULL_NAME = 'scale'
 Scale.DURABILITY = 8
@@ -83,6 +106,7 @@ Scale.armor.resistance = {
 -------------------------------------------------------------------
 
 local Blubber = class('Blubber', OrganicArmor)
+OrganicArmor.list[#OrganicArmor.list+1] = 'Blubber'
 
 Blubber.FULL_NAME = 'blubber'
 Blubber.DURABILITY = 16
@@ -97,7 +121,8 @@ Blubber.armor.resistance = {
 ------------------------- ------------------------------------------
 
 local Gel = class('Gel', OrganicArmor)
-{
+OrganicArmor.list[#OrganicArmor.list+1] = 'Gel'
+
 Gel.FULL_NAME = 'gel'
 Gel.DURABILITY = 32
 
@@ -111,6 +136,7 @@ Gel.armor.resistance = {
 -------------------------------------------------------------------
 
 local Bone = class('Bone', OrganicArmor)
+OrganicArmor.list[#OrganicArmor.list+1] = 'Bone'
 
 Bone.FULL_NAME = 'bone'
 Bone.DURABILITY = 8
