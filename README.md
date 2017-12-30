@@ -1,6 +1,8 @@
 ZomboTropolis
 =============
 
+Join the [Discord Server](https://discord.gg/cnHUgMt)
+
 An **unfinished** zombie survival MMO using Corona and Lua. Play as either a zombie or a human in a fight for survival.  The game is set to replicate a [prey-predator model](http://www.tiem.utk.edu/~gross/bioed/bealsmodules/pred-prey.gph1.gif) of population. 
 
 Human Survivor
