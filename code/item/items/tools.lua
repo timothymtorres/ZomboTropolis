@@ -90,12 +90,13 @@ local Toolbox = class('Toolbox', Item)
 
 Toolbox.FULL_NAME = 'toolbox'
 Toolbox.WEIGHT = 15
-Toolbox.DURABILITY = 10
+Toolbox.DURABILITY = 1
 Toolbox.CATEGORY = 'engineering'
-Toolbox.ap = {cost = 10, modifier = {repair = -2, repair_adv = -3}} --{cost= 5, modifier={repair= -1, repair_adv = -1}}
+Toolbox.ap = {cost = 5, modifier = {repair = -1, repair_adv = -2}}
 
 function Toolbox:client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to repair')
+  -- need to look for door, integrity, and equipment
   local p_tile = player:getTile()
   local can_repair_building = p_tile.integrity:canModify(player)
   assert(can_repair_building, 'Unable to repair building in current state')
