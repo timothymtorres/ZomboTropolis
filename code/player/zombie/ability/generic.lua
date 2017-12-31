@@ -238,8 +238,6 @@ end
 
 local ruin = {name='ruin', ap={cost=5, modifier={ruin = -1, ruin_adv = -2}}}
 
-
-
 function ruin.client_criteria(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to ransack')
