@@ -254,15 +254,11 @@ end
 
 ruin.server_criteria = ruin.client_criteria
 
-function ransack.activate(player)
-  local ransack_dice = dice:new('2d3')
-  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
-  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
-  
+function ruin.activate(player)
   local building = player:getTile()
-  building.integrity:updateHP(-1 * ransack_dice:roll() )
+  building.integrity:updateHP(-1)
   local integrity_state = building.integrity:getState()
-  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
+  local building_was_ransacked = integrity_state == 'ransacked'
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -279,7 +275,7 @@ function ransack.activate(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local event = {'ransack', player, integrity_state}  
+  local event = {'ruin', player, integrity_state}  
   player:broadcastEvent(msg, self_msg, event)  
 end
 
