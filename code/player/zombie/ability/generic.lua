@@ -236,25 +236,23 @@ end
 
 -------------------------------------------------------------------
 
-local ransack = {name='ransack', ap={cost=5, modifier={ransack = -1, ruin = -2}}}
+local ruin = {name='ruin', ap={cost=5, modifier={ruin = -1, ruin_adv = -2}}}
 
-function ransack.client_criteria(player)
+
+
+function ruin.client_criteria(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to ransack')
   assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
+
+  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
+
+  local n_humans = self.building:countPlayers('human', 'inside')
+  local integrity_hp = p_tile.integrity:getHP()
+  assert(integrity_hp > 0 or (integrity_hp == 0 and n_humans == 0), 'Cannot ruin building ')
 end
 
-function ransack.server_criteria(player)
-  local p_tile = player:getTile()
-  assert(p_tile:isBuilding(), 'No building nearby to ransack')
-  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
-end
+ruin.server_criteria = ruin.client_criteria
 
 function ransack.activate(player)
   local ransack_dice = dice:new('2d3')
