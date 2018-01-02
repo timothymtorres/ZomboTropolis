@@ -5,6 +5,7 @@ local broadcastEvent = require('code.server.event')
 local catalogAvailableActions = require('code.player.catalog')
 local chanceToHit = require('code.player.chanceToHit')
 local Equipment = require('code.player.equipment')
+local Limb = require('code.player.limb')
 
 local Player = class('Player')
 
@@ -29,6 +30,7 @@ function Player:initialize(username, map_zone, y, x) --add account name
   self.log = Log:new()
   self.status_effect = StatusEffect:new(self)
   self.equipment = Equipment:new(self)
+  self.limb = Limb:new(self)
 
   map_zone[y][x]:insert(self)
 end
