@@ -17,7 +17,7 @@ function Door:toggle() self.is_open = not self.is_open end
 
 function Door:isDestroyed() return self.hp == 0 end
 
-function Door:isDamaged() return self.hp == MAX_HP
+function Door:isDamaged() return self.hp == MAX_HP end
 
 function Door:isOpen() return self.is_open end
 
