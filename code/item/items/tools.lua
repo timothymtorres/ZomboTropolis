@@ -98,7 +98,6 @@ function Toolbox:client_criteria(player)
   local p_building = player:getTile()  
   assert(p_building:isBuilding(), 'No building nearby to repair')
   assert(player:isStaged('inside'), 'Must be inside building to repair')  
-  -- need to look for door, integrity, and equipment
 
   -- integrity code
   assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
@@ -112,7 +111,7 @@ function Toolbox:client_criteria(player)
   assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')
 
   -- door code
-  assert(p_building)
+  assert(p_building.door:isDamaged(), 'No damaged door to repair')
 end
 
 Toolbox.server_criteria = Toolbox.client_criteria
