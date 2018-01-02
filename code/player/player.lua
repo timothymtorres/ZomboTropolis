@@ -24,7 +24,7 @@ function Player:initialize(username, map_zone, y, x) --add account name
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.hp, self.xp, self.ap = default.hp, default.xp, default.ap
-  self.health_state = {basic=4, advanced=8}
+  self.health_state = 4
   self.ID = self  
   self.log = Log:new()
   self.status_effect = StatusEffect:new(self)
@@ -101,14 +101,10 @@ function Player:getMap() return self.map_zone end
 function Player:getMobType() return string.lower(self.class.name) end
 
 
-local health_state_desc = {
-  basic = {'dying', 'wounded', 'scratched', 'full'}, -- 4 states
-  advanced = {'dying', 'critical', 'very wounded', 'wounded', 'injuried', 'slightly injuried', 'scratched', 'full'}, -- 8 states
-}
+local health_state_desc = {'dying', 'wounded', 'injuried', 'full'}
 
-function Player:getHealthState(setting)
-  local status = self.health_state[setting]
-  return health_state_desc[status] 
+function Player:getHealthState()
+  return health_state_desc[self.health_state] 
 end
 
 function Player:getCost(stat, action_str, ID)
@@ -174,8 +170,7 @@ function Player:updateStat(stat, num)
     else
       -- we add self.hp+1 so that if health_percent == 100% that it puts it slightly over and math.ceil rounds it to the 'full' state 
       local health_percent = self.hp+1/stat_max 
-      self.health_basic = math.ceil(health_percent/(1/3))
-      self.health_advanced = math.ceil(health_percent/(1/7)) 
+      self.health_state = math.ceil(health_percent/(1/3))
     end  
   end
 end
