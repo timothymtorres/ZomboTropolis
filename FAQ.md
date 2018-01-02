@@ -41,7 +41,7 @@ Yes.  If you die (as a human) or starve (as a zombie) then it's game over.  Fort
   
 Regarding dice, I felt like both UD and Q suffered from using what I call 'basic' math.  Weapons and items always did `x` amount of effect.  That wasn't realistic and pretty boring for gameplay.  So by adding dice it would allow ZT to be more dynamic!  Weapons in better condition do more damage or have better accuracy.  Skills either boost accuracy or grant rerolls to weapon attacks that successfully land.  This is a powerful system that works well and allows for interesting possibilities. 
 
-### Q: What about PK'ing?
+### Q: What about Player Killing? (PK'ing)
 
 Player killing is going to be disabled for both sides.  So a human cannot kill other humans, and vice-versa for zombies.  It would be too game breaking to have this feature enabled with permadeath functioning.  
 
