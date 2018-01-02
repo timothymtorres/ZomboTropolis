@@ -106,14 +106,21 @@ end
 -- function Building:getPos() return (NO NEED?)
 
 function Building:isPresent(setting)
-  if setting == 'equipment' then
-    for machine, i in pairs(equipment.subclasses) do
+  if setting == 'machines' then
+    for Machine in ipairs(Machines) do
+      machine = string.lower(tostring(Machine))
       if self[machine] then return true end
     end
+    return false
+  elseif setting == 'powered machines' then 
+    return self:isPresent('machines') and self:isPowered()
+  elseif setting == 'damaged machines' then
+    for Machine in ipairs(Machines) do
+      machine = string.lower(tostring(Machine))
+      if self[machine] and self[machine]:isDamaged() then return true end
+    end
     return false 
-  elseif setting == 'powered equipment' then
-    return self:isPresent('equipment') and self:isPowered()
-  else -- individual equipment
+  else -- individual machine
     local machine = setting
     return self[machine]
   end

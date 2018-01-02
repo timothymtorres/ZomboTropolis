@@ -236,35 +236,38 @@ end
 
 -------------------------------------------------------------------
 
-local ransack = {name='ransack', ap={cost=5, modifier={ransack = -1, ruin = -2}}}
+local ruin = {name='ruin', ap={cost=5, modifier={ruin = -1, ruin_adv = -2}}}
 
-function ransack.client_criteria(player)
+function ruin.client_criteria(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to ransack')
   assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
+
+  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
+
+
+  -- integrity code
+  assert(p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+  if p_building.integrity:isState('ruined') then
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+  end
+
+  local n_humans = p_tile:countPlayers('human', 'inside')
+
+  local integrity_hp = p_tile.integrity:getHP()
+  assert(integrity_hp >= 0, 'Cannot ruin building that is already ruined')
+  assert(integrity_hp == 0 and n_humans == 0, 'Cannot ruin building with humans present')
 end
 
-function ransack.server_criteria(player)
-  local p_tile = player:getTile()
-  assert(p_tile:isBuilding(), 'No building nearby to ransack')
-  assert(player:isStaged('inside'), 'Player must be inside building to ransack')
-  
-  local can_ransack_building = p_tile.integrity:canModify(player)
-  assert(can_ransack_building, 'Unable to ransack building in current state')
-end
+ruin.server_criteria = ruin.client_criteria
 
-function ransack.activate(player)
-  local ransack_dice = dice:new('2d3')
-  if player.skills:check('ransack') then ransack_dice = ransack_dice / 1 end
-  if player.skills:check('ruin') then ransack_dice = ransack_dice ^ 4 end
-  
+function ruin.activate(player)
   local building = player:getTile()
-  building.integrity:updateHP(-1 * ransack_dice:roll() )
+  building.integrity:updateHP(-1)
   local integrity_state = building.integrity:getState()
-  local building_was_ransacked = integrity_state == 'ransacked'  --local building_was_ruined = integrity_state == 'ruined'
+  local building_was_ransacked = integrity_state == 'ransacked'
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -281,7 +284,7 @@ function ransack.activate(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local event = {'ransack', player, integrity_state}  
+  local event = {'ruin', player, integrity_state}  
   player:broadcastEvent(msg, self_msg, event)  
 end
 
