@@ -245,9 +245,20 @@ function ruin.client_criteria(player)
 
   assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
 
-  local n_humans = self.building:countPlayers('human', 'inside')
+
+  -- integrity code
+  assert(p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+  if p_building.integrity:isState('ruined') then
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+  end
+
+  local n_humans = p_tile:countPlayers('human', 'inside')
+
   local integrity_hp = p_tile.integrity:getHP()
-  assert(integrity_hp > 0 or (integrity_hp == 0 and n_humans == 0), 'Cannot ruin building ')
+  assert(integrity_hp >= 0, 'Cannot ruin building that is already ruined')
+  assert(integrity_hp == 0 and n_humans == 0, 'Cannot ruin building with humans present')
 end
 
 ruin.server_criteria = ruin.client_criteria
