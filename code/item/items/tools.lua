@@ -95,16 +95,23 @@ Toolbox.CATEGORY = 'engineering'
 Toolbox.ap = {cost = 5, modifier = {repair = -1, repair_adv = -2}}
 
 function Toolbox:client_criteria(player)
+  local p_tile = player:getTile()  
   assert(player:isStaged('inside'), 'Must be inside building to repair')
+  assert(p_tile:isBuilding(), 'No building nearby to repair')  
   -- need to look for door, integrity, and equipment
-  local p_tile = player:getTile()
-  local can_repair_building = p_tile.integrity:canModify(player)
-  assert(can_repair_building, 'Unable to repair building in current state')
+
+  -- integrity code
+  local n_zombies = p_tile:countPlayers('zombie', 'inside')
+  local integrity_hp = p_tile.integrity:getHP()
+
+  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
+
+  local n_humans = self.building:countPlayers('human', 'inside')
+  local integrity_hp = p_tile.integrity:getHP()
+  assert(integrity_hp > 0 or (integrity_hp == 0 and n_humans == 0), 'Cannot ruin building ')  
 end
 
 Toolbox.server_criteria = Toolbox.client_criteria
-
-local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
 
 function Toolbox:activate(player)
   local repair_dice = dice:new(toolbox_dice[self.condition])
