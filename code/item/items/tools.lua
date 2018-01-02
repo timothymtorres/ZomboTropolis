@@ -95,25 +95,51 @@ Toolbox.CATEGORY = 'engineering'
 Toolbox.ap = {cost = 5, modifier = {repair = -1, repair_adv = -2}}
 
 function Toolbox:client_criteria(player)
-  assert(player:isStaged('inside'), 'Must be inside building to repair')
-  -- need to look for door, integrity, and equipment
-  local p_tile = player:getTile()
-  local can_repair_building = p_tile.integrity:canModify(player)
-  assert(can_repair_building, 'Unable to repair building in current state')
+  local p_building = player:getTile()  
+  assert(p_building:isBuilding(), 'No building nearby to repair')
+  assert(player:isStaged('inside'), 'Must be inside building to repair')  
+
+  -- integrity code
+  assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+  if p_building.integrity:isState('ruined') then
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+  end
+
+  --[[ Other targets to check (machines, doors, etc.)
+  -- machine code
+  assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')
+
+  -- door code
+  assert(p_building.door:isDamaged(), 'No damaged door to repair')
+  --]]
 end
 
-Toolbox.server_criteria = Toolbox.client_criteria
+function Toolbox.server_criteria(player) --, target)
+  local p_building = player:getTile()  
+  assert(p_building:isBuilding(), 'No building nearby to repair')
+  assert(player:isStaged('inside'), 'Must be inside building to repair')  
 
-local toolbox_dice = {'3d2-2', '3d2-1', '3d2', '3d2+1'}
+  assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+  if p_building.integrity:isState('ruined') then
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+  end
+--[[    Need a better system to identify targets
+  if target == 'building' then    
+  elseif target == 'door' then
+    assert(p_building.door:isDamaged(), 'No damaged door to repair')
+  else -- target is a machine
+    assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')    
+  end
+--]]
+end
 
-function Toolbox:activate(player)
-  local repair_dice = dice:new(toolbox_dice[self.condition])
-  if player.skills:check('repair') then repair_dice = repair_dice / 1 end
-  if player.skills:check('repair_adv') then repair_dice = repair_dice ^ 3 end
-  
+function Toolbox:activate(player, target)
   local building = player:getTile()
-  building.integrity:updateHP(repair_dice:roll() )
-  local integrity_state = building.integrity:getState()
+  building.integrity:updateHP(1)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -121,7 +147,7 @@ function Toolbox:activate(player)
   
   local self_msg = 'You repair the building {is_finished}.'
   local msg =      '{player} repairs the building {is_finished}.'
-  local names = {player=player, is_finished=integrity_state == 'intact' and 'completely' or ''}
+  local names = {player=player, is_finished=building.integrity:isState('intact') and 'completely' or ''}
   self_msg = self_msg:replace(names)
   msg =           msg:replace(names)   
   
@@ -129,7 +155,7 @@ function Toolbox:activate(player)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local event = {'toolbox', integrity_state}    
+  local event = {'toolbox'}    
   player:broadcastEvent(msg, self_msg, event)  
 end
 

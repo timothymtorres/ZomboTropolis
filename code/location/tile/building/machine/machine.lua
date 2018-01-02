@@ -22,6 +22,8 @@ end
 
 function Machine:getHP() return self.hp end
 
+function Machine:isDamaged() return self.hp ~= MAX_HP end
+
 function Machine:__tostring() return self.name end
 
 --[[
