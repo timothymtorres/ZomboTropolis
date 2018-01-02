@@ -95,20 +95,24 @@ Toolbox.CATEGORY = 'engineering'
 Toolbox.ap = {cost = 5, modifier = {repair = -1, repair_adv = -2}}
 
 function Toolbox:client_criteria(player)
-  local p_tile = player:getTile()  
-  assert(player:isStaged('inside'), 'Must be inside building to repair')
-  assert(p_tile:isBuilding(), 'No building nearby to repair')  
+  local p_building = player:getTile()  
+  assert(p_building:isBuilding(), 'No building nearby to repair')
+  assert(player:isStaged('inside'), 'Must be inside building to repair')  
   -- need to look for door, integrity, and equipment
 
   -- integrity code
-  local n_zombies = p_tile:countPlayers('zombie', 'inside')
-  local integrity_hp = p_tile.integrity:getHP()
+  assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+  if p_building.integrity:isState('ruined') then
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+  end
 
-  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
+  -- machine code
+  assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')
 
-  local n_humans = self.building:countPlayers('human', 'inside')
-  local integrity_hp = p_tile.integrity:getHP()
-  assert(integrity_hp > 0 or (integrity_hp == 0 and n_humans == 0), 'Cannot ruin building ')  
+  -- door code
+  assert(p_building)
 end
 
 Toolbox.server_criteria = Toolbox.client_criteria
