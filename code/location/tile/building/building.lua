@@ -107,21 +107,19 @@ end
 
 function Building:isPresent(setting)
   if setting == 'machines' then
-
-    for machine, i in pairs(Machines.subclasses) do
+    for Machine in ipairs(Machines) do
+      machine = string.lower(tostring(Machine))
       if self[machine] then return true end
     end
-    return false 
-    
+    return false
   elseif setting == 'powered machines' then 
     return self:isPresent('machines') and self:isPowered()
   elseif setting == 'damaged machines' then
-
-    for machine, i in pairs(Machines.subclasses) do
+    for Machine in ipairs(Machines) do
+      machine = string.lower(tostring(Machine))
       if self[machine] and self[machine]:isDamaged() then return true end
     end
-    return false     
-
+    return false 
   else -- individual machine
     local machine = setting
     return self[machine]
