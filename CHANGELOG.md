@@ -1,14 +1,18 @@
-#Changelog
+# Changelog
 
----
+-----------------------------------------------------------------------------------------
 
 All notable changes to this project will be documented in this file.  The format is based on [Keep a Changelog]() and this project adheres to [Semantic Versioning]().
 
----
+-----------------------------------------------------------------------------------------
 
 ## [Unreleased]()
 
----
+### Added
+- CHANGELOG.md
+- Maim ability for brute zombies that damages a humans max hp, and potentially amputates limbs if they have low health.
+
+-----------------------------------------------------------------------------------------
 
 ## [0.8.1] - 01/02/2018
 
@@ -33,7 +37,7 @@ All notable changes to this project will be documented in this file.  The format
 - A zombie can create organic armor from feeding on a corpse with the `armor` skill.  If the zombie has `armor_adv` they may select which armor to spawn, otherwise it is random.
 - Organic armor resistance values. 
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.8.0] - 12/24/2017
 
@@ -42,7 +46,7 @@ All notable changes to this project will be documented in this file.  The format
 - Powering a building with a hidden players inside will reveal their location.
 - Hide icons for `hide` and `hide_adv` skills.
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.7.0] - 12/17/2017
 
@@ -65,7 +69,7 @@ All notable changes to this project will be documented in this file.  The format
 - Radio transmission
 - Enzyme cost for zombie abilities
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.6.0] - 11/02/2017
 
@@ -86,7 +90,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Deprecated
 - Attacking barricades
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.5.0] - 08/28/2017
 
@@ -101,7 +105,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Item condition spawn odds based on ruined/ransacked/intact state instead of powered/unpowered state
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.4.2] - 08/17/2017
 
@@ -112,7 +116,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Tracking ability activation to require the zombie to be outside 
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.4.1] - 08/12/2017
 
@@ -122,7 +126,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Armor items are now single use.
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.4.0] - 08/12/2017
 
@@ -142,7 +146,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Items are now categorized into single use, limited use, and multi use durability. 
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.3.0] - 07/11/2017
 
@@ -155,7 +159,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Removed
 - Poison status effect
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.2.0] - 11/14/2016
 
@@ -167,7 +171,7 @@ All notable changes to this project will be documented in this file.  The format
 - Sentient zombie class
 - Medical human class
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.1.0] - 11/07/2016
 
@@ -179,7 +183,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Fixed
 - Item/armor degrades properly
 
----
+-----------------------------------------------------------------------------------------
 
 ## [0.0.0] - 05/24/2016
 
