@@ -10,10 +10,7 @@ local Zombie = class('Zombie', Player)
 
 Zombie.action_list = zombie_action_list
 
-local default_EP = 50
-
 function Zombie:initialize(...) --add account name
-  self.ep = default_EP
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
 
