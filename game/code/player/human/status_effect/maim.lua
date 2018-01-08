@@ -34,7 +34,7 @@ function Maim:check(flag)
   return band(limb_set, flag) == flag 
 end
 
-function Maim:add()
+function Maim:delimb()
   local limb_options = {}
   for limb, flag in pairs(Maim.flags) do 
     if not Maim:check(flag) then limb_options[#limb_options + 1] = limb end
