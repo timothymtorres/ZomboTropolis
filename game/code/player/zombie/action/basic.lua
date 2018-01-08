@@ -155,25 +155,22 @@ function attack.activate(player, target, weapon)
     local hp_loss = -1*damage
     target:updateStat('hp', hp_loss)
   
-    if weapon:hasConditionEffect(player) then
-      local effect = weapon:getConditionEffect(player) --, condition)   for later?
-      if effect == 'entangle' then
-        if not player:isTangledTogether(target) then 
-          if player.status_effect:isActive('entagle') then player.status_effect.entagle:remove() end
-          if target.status_effect:isActive('entagle') then target.status_effect.entagle:remove() end
+    if tostring(weapon) == 'claw' then
+      if not player:isTangledTogether(target) then 
+        if player.status_effect:isActive('entagle') then player.status_effect.entagle:remove() end
+        if target.status_effect:isActive('entagle') then target.status_effect.entagle:remove() end
 
-          player.status_effect:add('entangle', target) 
-          target.status_effect:add('entangle', player)
-        end
-      elseif effect == 'infection' then
-        -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
-        if player.skills:check('infection_adv') or (player.skills:check('infection') and player:isTangledTogether(target)) then
-          if not target.status_effect:isActive('infection') or not target.status_effect:isActive('immune') then
-            target.status_effect:add('infection') 
-            caused_infection = true
-          end
-        end         
+        player.status_effect:add('entangle', target) 
+        target.status_effect:add('entangle', player)
       end
+    elseif tostring(weapon) == 'bite' then
+      -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
+      if player.skills:check('infection_adv') or (player.skills:check('infection') and player:isTangledTogether(target)) then
+        if not target.status_effect:isActive('infection') or not target.status_effect:isActive('immune') then
+          target.status_effect:add('infection') 
+          caused_infection = true
+        end
+      end         
     end     
   else -- attack missed
     if player.skills:check('grapple') and player.status_effect:isActive('entangle') then player.status_effect.entagle:remove() end
