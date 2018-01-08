@@ -165,9 +165,9 @@ function attack.activate(player, target, weapon, inv_ID)
     local hp_loss = -1*damage
     target:updateStat('hp', hp_loss)
   
-    if weapon:hasConditionEffect(player) then -- use this code for burn?  maime?
-      local effect, duration, bonus_effect = weapon:getConditionEffect(player) --, condition)   for later?
-      target.condition[effect]:add(duration, bonus_effect)
+    if weapon:hasStatusEffect(player) then -- use this code for burn?  maime?
+      local effect = weapon:getStatusEffect(player)
+      target.status_effect:add(effect, player)
     end     
     
     if not weapon:isOrganic() then condition = player.inventory:updateDurability(inv_ID) end
