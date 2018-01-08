@@ -158,25 +158,7 @@ function IsWeapon:getDice(player, condition)
   
   return tostring(weapon_dice) 
 end
-
--- pretty sure this function serves no purpose currently 
-function IsWeapon:getConditionEffect(player) --, condition)  maybe for later...?
-  local effect = self.weapon.CONDITION_EFFECT
-  local duration, bonus_effect
-  
-  if player:isMobType('human') then
-    if effect == 'burn' then
-      duration = self:getFuelAmount()
-      bonus_effect = self:isCombustionSource()
-    end
-  elseif player:isMobType('zombie') then
-    if effect == 'entangle' then
-      -- deprecated code?  replace with maime?
-      --if player.skills:check('impale') then bonus_effect = true end -- possible to impale on crit hit
-    end
-  end
-  
-  return effect, duration, bonus_effect
-end
+ 
+function IsWeapon:getStatusEffect(player) return  self.weapon.CONDITION_EFFECT end
 
 return IsWeapon
