@@ -1,0 +1,18 @@
+--- MAIM DAMAGE VS ZOMBIES ---
+
+EACH WEAPON HAS A DIFFERENT COUP'DE'GRACE MOVE
+
+(guns) 				[more ap to stand up]
+(blade weapons) 	[remove max_satiation]
+(blunt weapons) 	[remove current_xp?  skill?]
+(scorch weapons)	[remove hp/mutation/genome catalog] (save for later updates) [set multiple zombies on fire?]
+
+Normal tangled grasp requires an attack to dislodge zombie
+Strong grip requires either a kill or blunt mastery attack to dislodge zombie
+
+--ATTACKING BONUS FOR WEAPONS--
+
+Blunt weapons - Disarm from brutes/tangled grasp [active]
+Blade weapons - THINKING                  (Disable skills? Remove satiation? Disable hivemind? Disarm too?) 
+Gun	weapons   - Stop Hunter leaps [passive]
+Pyro weapons  - Set on fire [active/passive]
