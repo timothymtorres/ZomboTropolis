@@ -17,8 +17,6 @@ opposite_limbs[2^2] = 'leg_left'
 opposite_limbs[2^1] = 'leg_right'
 opposite_limbs[2^0] = 'arm_right'
 
-
-
 function Maim:initialize() self.limbs = 0 end
 
 function Maim:countFlags()
