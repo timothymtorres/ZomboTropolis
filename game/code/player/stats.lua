@@ -1,4 +1,5 @@
 local class = require('code.libs.middleclass')
+local stringx = require('code.libs.pl.stringx')
 
 local Stats = class('Stats')
 Stats.bonus = {}
@@ -20,22 +21,22 @@ end
 
 --local vitality_desc = {'dying', 'wounded', 'injuried', 'full'}  (save this for later?)
 
-function Stats:getStatBonus(stat)
+function Stats:getBonus(stat)
   local player, skill = self.player, Stats.bonus.skill[stat]
 	return (skill and player.skills:check(skill) and Stats.bonus.value[stat]) or 0
 end
 
-function Stats:getValue(stat, setting)
-  if not setting then 								return self.current[stat]
-  elseif setting == 'potential' then 	return self.potential[stat]
-  elseif setting == 'max' then 				return Stats.max[stat] + self:getStatBonus(stat)
-  end
+function Stats:get(stat)
+  if stat == 'vitality' then return self.current[stat] end
+  return self.current[stat], self.potential[stat], Stats.max[stat] + self:getBonus(stat)
 end
 
 local HP_POTENTIAL_LOSS_FROM_LIMB = 20
 
-function Stats:updateValue(stat, num, setting)
-	if not setting then
+function Stats:update(stat, num)
+	local stat, potential = stringx.splitv(stat, ' ')
+
+	if not potential then
 	  self.current[stat] = math.min(self.current[stat] + num, self.potential[stat]) -- can reach negative ap for certain actions...
 	  -- what about inventory points?  We want it to go over max potential?
 	  
@@ -48,13 +49,13 @@ function Stats:updateValue(stat, num, setting)
 	      self.vitality = math.ceil(health_percent/(1/3))  -- not sure why this works but it does, lol
 	    end  
 	  end
-	elseif setting == 'potential' and stat == 'hp' then
+	elseif potential and stat == 'hp' then
 		local player = self.player
 		local maim_number
 		if player.status_effect:isActive('maim') then maim_number = player.status_effect.maim:count() end
 
-		local bonus = self:getStatBonus('hp')
-		local ceiling = self:getValue(stat, 'max') - maim_number*HP_POTENTIAL_LOSS_FROM_LIMB -- being maim'd takes a big chuck outta potential hp
+		local bonus = self:getBonus('hp')
+		local ceiling = (Stats.max.hp + bonus) - maim_number*HP_POTENTIAL_LOSS_FROM_LIMB -- being maim'd takes a big chuck outta potential hp
 		local change = self.potential[stat] + num
 		self.potential.hp = math.max(math.min(change, ceiling), bonus)
 	end
