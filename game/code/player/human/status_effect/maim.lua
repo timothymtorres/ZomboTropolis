@@ -4,9 +4,6 @@ local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit
 table.shuffle = require('code.libs.shuffle')
 
 local Maim = class('Maim')
-Maim.basic =    {POTENTIAL_HP_MOD = 1/3, HP_LOSS_UNTIL_DELIMB = 30}
-Maim.advanced = {POTENTIAL_HP_MOD = 1/2, HP_LOSS_UNTIL_DELIMB = 20}
-Maim.HP_POTENTIAL_LOSS_FROM_LIMB = 20
 
 Maim.flags ={
   arm_left =  2^0,
