@@ -122,6 +122,7 @@ function attack.activate(player, target, weapon)
   local attack, damage, critical = combat(player, target, weapon)
   local caused_infection  
   local armor_condition, armor
+  local maimed_limb
   
   if attack then 
     if target_class == 'player' then
@@ -153,7 +154,7 @@ function attack.activate(player, target, weapon)
     end
     
     local hp_loss = -1*damage
-    target:updateStat('hp', hp_loss)
+    target.stats:update('hp', hp_loss)
   
     if tostring(weapon) == 'claw' then
       if not player:isTangledTogether(target) then 
@@ -162,6 +163,27 @@ function attack.activate(player, target, weapon)
 
         player.status_effect:add('entangle', target) 
         target.status_effect:add('entangle', player)
+      end
+
+      if player.skills:check('maim') then
+        local expertise = player.skills:check('maim_adv') and 'advanced' or 'basic'        
+        local maim = {}
+        maim.basic =    {POTENTIAL_HP_MOD = 1/3, DELIMB_HP_THRESHOLD = 30}
+        maim.advanced = {POTENTIAL_HP_MOD = 1/2, DELIMB_HP_THRESHOLD = 20}
+
+        local maim_number = target.status_condition:isActive('maim') and target.status_condition.maim:count() or 0
+        local hp, _, max = target.stats:get('hp')
+
+        local hp_gap = max - hp
+        local maim_threshold = maim[expertise].DELIMB_HP_THRESHOLD*maim_number
+
+        if hp_gap >= maim_threshold and dice.roll(hp_gap) >= maim_threshold then
+          if not target.status_condition:isActive('maim') then target.status_condition:add('maim') end
+          maimed_limb = target.status_condition.maim:delimb()
+        end
+
+        local multiplier = maim[expertise].POTENTIAL_HP_MOD
+        target.stats:update('hp potential', hp_loss*multiplier)
       end
     elseif tostring(weapon) == 'bite' then
       -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
@@ -181,13 +203,13 @@ function attack.activate(player, target, weapon)
   --------------------------------------------
       
   local self_msg = 'You attack {target} with your {weapon}' ..(
-                                          (critical and   ' and score a critical hit!') or 
+                                       (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or 
                                           (not attack and ' and miss.') or '.')
   local target_msg = 'You are attacked by {player} with their {weapon}'..(
-                                                      (critical and   ' and they score a critical hit!') or 
+                                                   (maimed_limb and   ', and your '..maimed_limb..' sails off in an arc!') or  
                                                       (not attack and ' and they miss.') or '.')
   local msg = '{player} attacks {target} with their {weapon}'..(
-                                              (critical and ' and they score a critical hit!') or 
+                                         (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or 
                                             (not attack and ' and they miss.') or '.')                                                             
                                                             
   local names = {player=player, target=target, weapon=weapon}
@@ -209,7 +231,7 @@ function attack.activate(player, target, weapon)
   ---------   B R O A D C A S T   ------------
   -------------------------------------------- 
 
-  local event = {'attack', player, target, weapon, attack, damage, critical, caused_infection}  -- maybe remove damage from event list?  
+  local event = {'attack', player, target, weapon, attack, damage, maimed_limb or caused_infection}  -- maybe remove damage from event list? 
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
@@ -218,7 +240,7 @@ function attack.activate(player, target, weapon)
   target.log:insert(target_msg, event)
   
   local tile = player:getTile()
-  tile:broadcastEvent(msg, event, settings)  
+  tile:broadcastEvent(msg, event, settings) 
 end
 
 -------------------------------------------------------------------
