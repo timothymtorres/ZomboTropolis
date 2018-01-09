@@ -43,10 +43,6 @@ function Maim:delimb()
 
   local selected_limb = limb_options[math.random(1, #limb_options)]
   self.limbs = bor(self.limbs, Maim.flags[selected_limb]) 
-
-
-  -- mess with potential hp here?  Arrrghhh, lol.
-
   return selected_limb
 end
 
