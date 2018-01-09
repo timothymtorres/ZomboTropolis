@@ -51,15 +51,12 @@ function Stats:updateValue(stat, num, setting)
 	elseif setting == 'potential' and stat == 'hp' then
 		local player = self.player
 		local maim_number
-		if player.status_effect:isActive('maim') then maim_number = player.status_effect.maim:countSeveredLimbs end
+		if player.status_effect:isActive('maim') then maim_number = player.status_effect.maim:count() end
 
-
-		local self:getValue('hp', 'max'), )
-
-		self.potential.hp = math.max(math.min(self.potential[stat] + num, self:getValue(stat, 'max')), 10)
-
-
-
+		local bonus = self:getStatBonus('hp')
+		local ceiling = self:getValue(stat, 'max') - maim_number*HP_POTENTIAL_LOSS_FROM_LIMB -- being maim'd takes a big chuck outta potential hp
+		local change = self.potential[stat] + num
+		self.potential.hp = math.max(math.min(change, ceiling), bonus)
 	end
 end
 
