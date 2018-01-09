@@ -43,7 +43,7 @@ function FAK:activate(player, target)
   end
   
   local hp_gained = FAK_dice:roll()
-  target:updateHP(hp_gained)
+  target:update('hp', hp_gained)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -97,7 +97,7 @@ function Bandage:activate(player, target)
   end  
   
   local hp_gained = bandage_dice:roll()
-  target:updateHP(hp_gained)
+  target:update('hp', hp_gained)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -156,7 +156,7 @@ function Syringe:activate(player, target)
   end
   
   local inject_success = inject_chance >= math.random()
-  local target_weak_enough = syringe_hp_ranges[self.condition] >= target:getStat('hp') 
+  local target_weak_enough = syringe_hp_ranges[self.condition] >= target.stats:get('hp') 
   local syringe_salvage_successful
 
   if inject_success and target_weak_enough then  -- the syringe will create a antidote

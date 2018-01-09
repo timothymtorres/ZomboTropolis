@@ -94,7 +94,7 @@ function feed.activate(player)
   local nutrition = target.carcass:devour(player)
   local xp, satiation = corpse_effects.xp[nutrition], corpse_effects.satiation[nutrition]
     
-  player:updateStat('xp', dice.roll(xp))
+  player.stats:update('xp', dice.roll(xp))
   player.hunger:update(-1*dice.roll(satiation)) 
   
   --------------------------------------------
@@ -122,7 +122,7 @@ function ability.client_criteria(name, player) --, target)
   assert(player.skills:check(skill), 'Must have required skill to use ability')
   --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
-    local cost, ep = player:getCost('ep', name), player:getStat('ep')
+    local cost, ep = player:getCost('ep', name), player.stats:get('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
@@ -134,7 +134,7 @@ function ability.server_criteria(name, player, ...)
   assert(player.skills:check(skill), 'Must have required skill to use ability')
   --[[  Decide if we want enzyme code later...
   if enzyme_list[name] then
-    local cost, ep = player:getCost('ep', name), player:getStat('ep')
+    local cost, ep = player:getCost('ep', name), player.stats:get('ep')
     assert(ep >= cost, 'Not enough enzyme points to use skill')
   end
   --]]
@@ -145,7 +145,7 @@ function ability.activate(name, player, target)
   --[[
   if enzyme_list[name] then
     local cost = player:getCost('ep', name)
-    player:updateStat('ep', cost)
+    player.stats:update('ep', cost)
   end 
   --]]   
   abilities[name].activate(player, target)

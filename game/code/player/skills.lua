@@ -55,7 +55,7 @@ end
 -- class prices, 100, 300, 600, 1000
 -- skill buy formula (y = .2*(x)^2 + .25*(x) + 50)
 function Skills:buy(player, skill)
-  local xp = player:getStat('xp')
+  local xp = player.stats:get('xp')
   
   local class = self.list:isClass(skill)  
   local cost = (class and self:getCost('classes') ) or self:getCost('skills')  
@@ -72,7 +72,7 @@ print('[skills:buy]', 'player.xp='..xp, 'skill['..skill..'] cost='..cost)
     assert(flags == 0 or player.skills:checkFlag(category, flags), 'Missing required skills')
   end
   
-  player:updateStat('xp', (-1)*cost)  
+  player.stats:update('xp', (-1)*cost)  
   player.skills:add(skill)  
 end
 

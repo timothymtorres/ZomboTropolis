@@ -136,7 +136,7 @@ function attack.activate(player, target, weapon)
         local is_melee_attack = weapon:getStyle() == 'melee'
         if is_melee_attack and retailation_damage > 0 then
           local retailation_hp_loss = -1*dice.roll(retailation_damage)
-          player:updateStat('hp', retailation_hp_loss)
+          player.stats:update('hp', retailation_hp_loss)
           -- insert some type of event?
         end
         

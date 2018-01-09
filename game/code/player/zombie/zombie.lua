@@ -30,7 +30,7 @@ function Zombie:starve()
 end
 
 function Zombie:revive()
-  self:updateStat('hp', self:getStat('hp', 'max') ) 
+  self.stats:update('hp', self.stats:get('hp', 'max') ) 
 end
 
 --[[

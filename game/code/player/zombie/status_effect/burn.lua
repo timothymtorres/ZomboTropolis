@@ -11,7 +11,7 @@ end
 function Burn:elapse(time)
   local player = self.player   
   player.log:append('You burn in agony!')    
-  player:updateStat('hp', BURN_DAMAGE_PER_TICK*time)    
+  player.stats:update('hp', BURN_DAMAGE_PER_TICK*time)    
 end
 
 return Burn

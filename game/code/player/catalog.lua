@@ -2,7 +2,7 @@ local abilities = require('code.player.zombie.ability.abilities')
 
 local function determineAvailableActions(player)
   local available_actions = {default = {}} -- should our available_actions table have {item={}, ability={}, equipment={}}  how will this look/work?
-  local ap = player:getStat('ap')
+  local ap = player.stats:get('ap')
 
   for _, action in ipairs(player.action_list) do
     if action.name == 'item' then 

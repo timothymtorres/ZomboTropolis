@@ -30,7 +30,8 @@ end
 
 local function basicCriteria(player, action_str, ...)
   assert(player.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later   
-  local ap, AP_cost = player:getStat('ap'), player:getCost('ap', action_str, ...)
+  local ap = player.stats:get('ap')
+  local AP_cost = player:getCost('ap', action_str, ...)
   assert(AP_cost, 'action has no ap_cost?')  -- remove this assertion once all actions have been added (will be unneccsary)
   assert(ap >= AP_cost, 'not enough ap for action')
   assert(player:isStanding() or (action_str == 'respawn' and player:isMobType('zombie')), 'Must be standing for action')
@@ -42,19 +43,19 @@ function Player:perform(action_str, ...)
   local verification, error_msg = pcall(action.server_criteria, self, ...)
 
   if ap_verification and verification then
-    local ap, AP_cost = self:getStat('ap'), self:getCost('ap', action_str)
+    local AP_cost = self:getCost('ap', action_str)
     action.activate(self, ...)
 
     self.status_effect:elapse(AP_cost)   
-    self:updateStat('ap', -1*AP_cost)
-    self:updateStat('xp', AP_cost)
+    self.stats:update('ap', -1*AP_cost)
+    self.stats:update('xp', AP_cost)
 
     if self:isMobType('zombie') then self.hunger:elapse(AP_cost) end -- bit of a hack to put this in here...
   else -- Houston, we have a problem!
     self.log:insert(ap_error_msg or error_msg)
   end
   
-  --self:updateStat('IP', 1)  -- IP connection hits?  Hmmmm?
+  --self.stats:update('IP', 1)  -- IP connection hits?  Hmmmm?
 end
 
 function Player:permadeath() end -- run code to remove player instance from map
@@ -65,7 +66,7 @@ function Player:permadeath() end -- run code to remove player instance from map
 
 function Player:isMobType(mob) return string.lower(self.class.name) == mob end
 
-function Player:isStanding() return self:getStat('hp') > 0 end
+function Player:isStanding() return self.stats:get('hp') > 0 end
 
 function Player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside') 
   local map_zone, y, x = self:getMap(), self:getPos()  

@@ -62,7 +62,7 @@ function move.activate(player, dir)
       local GPS_usage = GPS_chance >= math.random()
       
       -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
-      if GPS_usage then player:updateStat('ap', 1) end
+      if GPS_usage then player.stats:update('ap', 1) end
       condition = player.inventory:updateDurability(inv_ID) 
     end
     
@@ -149,7 +149,7 @@ function attack.activate(player, target, weapon, inv_ID)
       local is_melee_attack = weapon:getStyle() == 'melee'
       if is_melee_attack and retailation_damage > 0 then
         local retailation_hp_loss = -1*dice.roll(retailation_damage)
-        player:updateStat('hp', retailation_hp_loss)
+        player.stats:update('hp', retailation_hp_loss)
         -- insert some type of event?
       end
       
@@ -163,7 +163,7 @@ function attack.activate(player, target, weapon, inv_ID)
     end
     
     local hp_loss = -1*damage
-    target:updateStat('hp', hp_loss)
+    target.stats:update('hp', hp_loss)
   
     if weapon:hasStatusEffect(player) then -- use this code for burn?  maime?
       local effect = weapon:getStatusEffect(player)
