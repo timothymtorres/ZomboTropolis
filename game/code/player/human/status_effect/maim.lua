@@ -23,7 +23,7 @@ opposite_limbs[2^0] = 'arm_right'
 
 function Maim:initialize() self.limbs = 0 end
 
-function Maim:countSeveredLimbs()
+function Maim:count()  -- counts severed limbs
   local count, bits = 0, self.limbs
   while bits > 0 do
     count = count + band(bits, 1)
