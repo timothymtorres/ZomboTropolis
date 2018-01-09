@@ -24,7 +24,7 @@ end
 local DRAG_PREY_HEALTH_THRESHOLD = 13
 
 function drag_prey.activate(player, target)
-  local has_been_dragged = DRAG_PREY_HEALTH_THRESHOLD >= target:getStat('hp')
+  local has_been_dragged = DRAG_PREY_HEALTH_THRESHOLD >= target.stats:get('hp')
   
   if has_been_dragged then
     local y, x = player:getPos()
@@ -198,40 +198,12 @@ local armor = {name='armor', ap={cost=1}}
 local MIN_EP_ARMOR_COST = 1  -- this is a bit of a hack
 
 function armor.client_criteria(player)
-  -- Must reclient_criteria EP cost since armor_type not specified in basic criteria EP assert, causing it to be skipped
-  local cost, ep = MIN_EP_ARMOR_COST, player:getStat('ep')
-  assert(ep >= cost, 'Not enough enzyme points to use skill')  
-  
-  assert(player.skills:client_criteria('armor'), 'Must have required skill to use ability')
-  assert(player.armor:hasRoomForLayer(), 'No remaining room for additional armor layers')
 end
 
 function armor.server_criteria(player, armor_type)
-  -- Must recheck EP cost since armor_type not specified in basic server_criteria EP assert, causing it to be skipped
-  local cost, ep = player:getCost('ep', armor_type), player:getStat('ep')
-  assert(ep >= cost, 'Not enough enzyme points to use skill')  
-  
-  local skill = organic_armor_list[armor_type].required_skill
-  assert(player.skills:check(skill), 'Must have required skill to use armor ability')
-  assert(player.armor:hasRoomForLayer(), 'No remaining room for additional armor layers')
 end
 
 function armor.activate(player, armor_type)
-  player.armor:equip(armor_type)  -- return # of layers?
-  
---[[  Planning on redoing the armor code so these msgs will probably change  
-  if armor_type == 'scale' then
-    msg[1] = 'Your skin shapeshifts into hard scales that are resistant to bladed weapons.'  
-  elseif armor_type == 'blubber' then
-    msg[1] = 'Your body shapeshifts into a blubbery mass that is skilled at absorbing blunt weapon impacts.'
-  elseif armor_type == 'gel' then
-    msg[1] = 'Your body oozes goo out of various pores that is effective at absorbing heat.'
-  elseif armor_type == 'sticky' then
-    msg[1] = 'Your body secretes slime causing the various armor layers to become more resillent.'
-  elseif armor_type == 'stretch' then
-    msg[1] = 'Your skin becomes loose and rubbery causing projectiles to slow as they make contact.'
-  end
---]]  
 end
 
 -------------------------------------------------------------------
