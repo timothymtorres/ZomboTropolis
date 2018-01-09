@@ -4,6 +4,10 @@ local band, bor, bxor, bnot, rshift = bit.band, bit.bor, bit.bxor, bit.bnot, bit
 table.shuffle = require('code.libs.shuffle')
 
 local Maim = class('Maim')
+Maim.basic =    {POTENTIAL_HP_MOD = 1/3, HP_LOSS_UNTIL_DELIMB = 30}
+Maim.advanced = {POTENTIAL_HP_MOD = 1/2, HP_LOSS_UNTIL_DELIMB = 20}
+Maim.HP_POTENTIAL_LOSS_FROM_LIMB = 20
+
 Maim.flags ={
   arm_left =  2^0,
   leg_left =  2^1,
@@ -19,7 +23,7 @@ opposite_limbs[2^0] = 'arm_right'
 
 function Maim:initialize() self.limbs = 0 end
 
-function Maim:countFlags()
+function Maim:countSeveredLimbs()
   local count, bits = 0, self.limbs
   while bits > 0 do
     count = count + band(bits, 1)
@@ -42,6 +46,10 @@ function Maim:delimb()
 
   local selected_limb = limb_options[math.random(1, #limb_options)]
   self.limbs = bor(self.limbs, Maim.flags[selected_limb]) 
+
+
+  -- mess with potential hp here?  Arrrghhh, lol.
+
   return selected_limb
 end
 
