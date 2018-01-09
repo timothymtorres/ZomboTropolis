@@ -6,7 +6,6 @@ local IsArmor = require('code.item.mixin.is_armor')
 -------------------------------------------------------------------
 
 local Scale = class('Scale', Item):include(IsArmor)
-OrganicArmor.list[#OrganicArmor.list+1] = 'Scale'
 
 Scale.FULL_NAME = 'scale'
 Scale.DURABILITY = 8
@@ -22,7 +21,6 @@ Scale.armor.resistance = {
 -------------------------------------------------------------------
 
 local Blubber = class('Blubber', Item):include(IsArmor)
-OrganicArmor.list[#OrganicArmor.list+1] = 'Blubber'
 
 Blubber.FULL_NAME = 'blubber'
 Blubber.DURABILITY = 16
@@ -38,7 +36,6 @@ Blubber.armor.resistance = {
 ------------------------- ------------------------------------------
 
 local Gel = class('Gel', Item):include(IsArmor)
-OrganicArmor.list[#OrganicArmor.list+1] = 'Gel'
 
 Gel.FULL_NAME = 'gel'
 Gel.DURABILITY = 32
@@ -54,7 +51,6 @@ Gel.armor.resistance = {
 -------------------------------------------------------------------
 
 local Bone = class('Bone', Item):include(IsArmor)
-OrganicArmor.list[#OrganicArmor.list+1] = 'Bone'
 
 Bone.FULL_NAME = 'bone'
 Bone.DURABILITY = 8

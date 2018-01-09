@@ -51,7 +51,7 @@ for i=1, 10 do
 end
 --]]
 
-main_player:updateStat('hp', -49)
+main_player.stats:update('hp', -49)
 
 local toolbox = Items.Toolbox:new(4)
 alt_player.inventory:insert(toolbox)
@@ -98,8 +98,8 @@ end
 
 --]]
 
-main_player:updateStat('xp', 1000)
-alt_player:updateStat('xp', 1000)
+main_player.stats:update('xp', 1000)
+alt_player.stats:update('xp', 1000)
 --main_player.skills:buy(main_player, 'melee')
 --main_player.condition.poison:add(7, 63)
 --main_player.condition.burn:add('1d1+60', true)

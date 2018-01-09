@@ -194,7 +194,7 @@ end
 
 -------------------------------------------------------------------
 
-local armor = {name='armor', ap={cost=5, modifier={armor_adv = -2}}
+local armor = {name='armor', ap={cost=5, modifier={armor_adv = -2}}}
 
 function armor:client_criteria(player)
   assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
