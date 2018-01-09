@@ -80,6 +80,20 @@ function OrganicArmor:activate(player, armor_type)
   local msg = 'You mutate a corpse and gain a {armor}.'
   msg = msg:replace(self) -- This should work? Needs to be tested
 
+--[[  Planning on redoing the armor code so these msgs will probably change  
+  if armor_type == 'scale' then
+    msg[1] = 'Your skin shapeshifts into hard scales that are resistant to bladed weapons.'  
+  elseif armor_type == 'blubber' then
+    msg[1] = 'Your body shapeshifts into a blubbery mass that is skilled at absorbing blunt weapon impacts.'
+  elseif armor_type == 'gel' then
+    msg[1] = 'Your body oozes goo out of various pores that is effective at absorbing heat.'
+  elseif armor_type == 'sticky' then
+    msg[1] = 'Your body secretes slime causing the various armor layers to become more resillent.'
+  elseif armor_type == 'stretch' then
+    msg[1] = 'Your skin becomes loose and rubbery causing projectiles to slow as they make contact.'
+  end
+--]]  
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
