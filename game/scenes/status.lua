@@ -31,15 +31,12 @@ function scene:create( event )
   local StatusGroup = display.newGroup()   
   
   local username, mob_type = main_player:getUsername(), main_player:getMobType()
-  local hp, max_hp = main_player:getStat('hp'), main_player:getStat('hp', 'max')
-  local ap, max_ap = main_player:getStat('ap'), main_player:getStat('ap', 'max')
-  local xp, max_xp = main_player:getStat('xp'), main_player:getStat('xp', 'max')  
+  local hp, max_hp = main_player.stats:get('hp')
+  local ap, max_ap = main_player.stats:get('ap')
+  local xp, max_xp = main_player.stats:get('xp') 
   local ip, max_ip
-  local ep, max_ep
   
-  if main_player:isMobType('human') then ip, max_ip = main_player:getStat('ip'), main_player:getStat('ip', 'max')
-  elseif main_player:isMobType('zombie') then ep, max_ep = main_player:getStat('ep'), main_player:getStat('ep', 'max')
-  end  
+  if main_player:isMobType('human') then ip, max_ip = main_player.stats:get('ip') end  
   
   local bars_y_offset = 40
   local bar_num = 1
@@ -144,31 +141,6 @@ function scene:create( event )
     IP_text.anchorX = 0  
     
     bar_num = bar_num + 1  
-    
-  elseif main_player:isMobType('zombie') then 
-    local background_EP_text = display.newRect( StatusGroup, width*0.05, bars_y_offset + height*((0.025*2.8)*bar_num),  background_stat_text_size*2.5, background_stat_text_size*1.25)
-    background_EP_text.anchorX = 0
-    background_EP_text:setFillColor( 0.5 )
-
-    local EP_text = display.newText(StatusGroup, "EP", width*0.115, bars_y_offset + height*((0.025*2.8)*bar_num), native.systemFontBold, 16 )
-    EP_text.anchorX = 0
-    
-    local background_bar_EP = display.newRoundedRect( StatusGroup, width*0.30, bars_y_offset + height*(0.025*2.5)*bar_num, width*0.65, height*0.05, 8 )
-    background_bar_EP.anchorX, background_bar_EP.anchorY = 0, 0
-    background_bar_EP.strokeWidth = 2
-    background_bar_EP:setFillColor( 0.5 )
-    background_bar_EP:setStrokeColor(0, 0, 0)
-      
-    local EP_bar = display.newRoundedRect( StatusGroup, width*0.30, bars_y_offset + height*(0.025*2.5)*bar_num, (width*0.65)*(math.max(ep,50)/max_ep), height*0.05, 8 )
-    EP_bar.anchorX, EP_bar.anchorY = 0, 0
-    EP_bar.strokeWidth = 2
-    EP_bar:setFillColor( 0.7, 0.7, 0.2 )
-    EP_bar:setStrokeColor( 0, 0, 0 )
-    
-    local EP_stat = display.newText(StatusGroup, '('..ep..'/'..max_ep..')', width*0.65, bars_y_offset + height*((0.025*2.75)*bar_num), native.systemFontBold, 12 )
-    EP_text.anchorX = 0  
-    
-    bar_num = bar_num + 1   
   end
   
   sceneGroup:insert(StatusGroup)

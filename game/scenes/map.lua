@@ -67,9 +67,9 @@ function scene:create( event )
     player_bar:insert(background_bar)
 
     local username, mob_type = main_player:getUsername(), main_player:getMobType()
-    local hp, max_hp = main_player:getStat('hp'), main_player:getStat('hp', 'max')
-    local ap, max_ap = main_player:getStat('ap'), main_player:getStat('ap', 'max')
-    local xp, max_xp = main_player:getStat('xp'), main_player:getStat('xp', 'max')
+    local hp, max_hp = main_player.stats:get('hp'), main_player.stats:get('hp', 'max')
+    local ap, max_ap = main_player.stats:get('ap'), main_player.stats:get('ap', 'max')
+    local xp, max_xp = main_player.stats:get('xp'), main_player.stats:get('xp', 'max')
     --local ip, max_ip = main_player:getIP(), main_player:getMaxIP()
 
     local player_text = display.newText( username..' - AP ['..ap..'/'..max_ap..'] HP ['..hp..'/'..max_hp..'] - XP ['..xp..'/'..max_xp..']', player_bar_w-offset, player_bar_h*0.5 + thickness, native.systemFontBold, 10 )

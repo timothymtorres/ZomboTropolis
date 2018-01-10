@@ -363,12 +363,14 @@ function scene:create( event )
 
     local stat_text
     if main_player:isMobType('human') then      
-      local ip, max_ip = main_player:getStat('ip'), main_player:getStat('ip', 'max')
+      local ip, max_ip = main_player.stats:get('ip'), main_player.stats:get('ip', 'max')
       stat_text = display.newText('IP ['..ip..'/'..max_ip..']', stat_bar_w+offset, stat_bar_h*0.5 + thickness, native.systemFontBold, 10 )
     elseif main_player:isMobType('zombie') then
-      local ep, max_ep = main_player:getStat('ep'), main_player:getStat('ep', 'max')
+    --[[  
+      local ep, max_ep = main_player.stats:get('ep'), main_player.stats:get('ep', 'max')
       local decay, max_decay = main_player.condition.decay:getTime(), 1023
       stat_text = display.newText('EP ['..ep..'/'..max_ep..']  DECAY ['..decay..'/'..max_decay..']', stat_bar_w+offset, stat_bar_h*0.5 + thickness, native.systemFontBold, 10 )      
+    --]]
     end
     stat_text:setFillColor( 0, 0, 0 )
     stat_bar:insert(stat_text)    

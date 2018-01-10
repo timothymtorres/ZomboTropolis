@@ -60,7 +60,7 @@ local function titleCaseHelper(first, rest)
 end    
 
 local function canPurchaseSkill(skill) 
-  local xp = main_player:getStat('xp')
+  local xp = main_player.stats:get('xp')
   
   local class = skill_list[mob_type]:isClass(skill)  
   local cost = (class and main_player.skills:getCost('classes') ) or main_player.skills:getCost('skills')  
