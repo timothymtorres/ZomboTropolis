@@ -1,21 +1,22 @@
 # Changelog
 
------------------------------------------------------------------------------------------
 
-All notable changes to this project will be documented in this file.  The format is based on [Keep a Changelog]() and this project adheres to [Semantic Versioning]().
+All notable changes to this project will be documented in this file.
 
------------------------------------------------------------------------------------------
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]()
 
+
+## [Unreleased]
 ### Added
 - CHANGELOG.md
-- Maim ability for brute zombies that damages a humans max hp, and potentially amputates limbs if they have low health.
+- Maim ability for brute zombies that damages a humans potential hp.  There is also a possiblity to severe limbs if a human has low health. (this will result in permanent hp loss, that is unhealable)
 
------------------------------------------------------------------------------------------
+### Fixed
+- Organic armor code to spawn correctly
 
 ## [0.8.1] - 01/02/2018
-
 ### Added
 - A link to the discord server on the README.md
 - FAQ.md
@@ -37,19 +38,13 @@ All notable changes to this project will be documented in this file.  The format
 - A zombie can create organic armor from feeding on a corpse with the `armor` skill.  If the zombie has `armor_adv` they may select which armor to spawn, otherwise it is random.
 - Organic armor resistance values. 
 
------------------------------------------------------------------------------------------
-
 ## [0.8.0] - 12/24/2017
-
 ### Added
 - Hide ability for Hunter class.  Can only hide in a unpowered building with no humans present.  Hidden players cannot be seen unless the area is successfully searched.  Performing any action while hidden will reveal a player.
 - Powering a building with a hidden players inside will reveal their location.
 - Hide icons for `hide` and `hide_adv` skills.
 
------------------------------------------------------------------------------------------
-
 ## [0.7.0] - 12/17/2017
-
 ### Added
 - Message for item destruction/degradation
 - README.md
@@ -69,10 +64,7 @@ All notable changes to this project will be documented in this file.  The format
 - Radio transmission
 - Enzyme cost for zombie abilities
 
------------------------------------------------------------------------------------------
-
 ## [0.6.0] - 11/02/2017
-
 ### Added
 - Item destruction/degradation messages for acid ability
 - Item condition change visible based on human class
@@ -90,10 +82,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Deprecated
 - Attacking barricades
 
------------------------------------------------------------------------------------------
-
 ## [0.5.0] - 08/28/2017
-
 ### Added
 - Humans can reinforce a building to make room for barricades
 - Humans can barricade a building provided they have available room
@@ -105,10 +94,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Item condition spawn odds based on ruined/ransacked/intact state instead of powered/unpowered state
 
------------------------------------------------------------------------------------------
-
 ## [0.4.2] - 08/17/2017
-
 ### Fixed
 - Selecting proper target for actions
 - Attacking with item causing problems due to defunct code
@@ -116,20 +102,14 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Tracking ability activation to require the zombie to be outside 
 
------------------------------------------------------------------------------------------
-
 ## [0.4.1] - 08/12/2017
-
 ### Fixed
 - Typo that was causing a crash.
 
 ### Changed
 - Armor items are now single use.
 
------------------------------------------------------------------------------------------
-
 ## [0.4.0] - 08/12/2017
-
 ### Added
 - Acid ability for hive zombies.  This ability melts a humans inventory causing item destruction/degradation.
 - Firesuit armor for humans that provides acid immunity. (fragile to melee attacks though)
@@ -146,10 +126,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Changed
 - Items are now categorized into single use, limited use, and multi use durability. 
 
------------------------------------------------------------------------------------------
-
 ## [0.3.0] - 07/11/2017
-
 ### Added
 - Flashlight gives a bonus to searching when not inside a powered building.
 
@@ -159,10 +136,7 @@ All notable changes to this project will be documented in this file.  The format
 ### Removed
 - Poison status effect
 
------------------------------------------------------------------------------------------
-
 ## [0.2.0] - 11/14/2016
-
 ### Added
 - GPS item that gives a chance of free movement when outside.
 - Durability values to flashlight and GPS
@@ -171,10 +145,7 @@ All notable changes to this project will be documented in this file.  The format
 - Sentient zombie class
 - Medical human class
 
------------------------------------------------------------------------------------------
-
 ## [0.1.0] - 11/07/2016
-
 ### Added
 - Durability checks for items
 - Barricade item that fortifies a building to prevent zombie entry.
@@ -183,8 +154,19 @@ All notable changes to this project will be documented in this file.  The format
 ### Fixed
 - Item/armor degrades properly
 
------------------------------------------------------------------------------------------
-
 ## [0.0.0] - 05/24/2016
-
 - This is the starting point where I moved my code from Dropbox to Git.
+
+[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/timothymtorres/zombotropolis/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.4.0...v0.5.0
+[0.4.2]: https://github.com/timothymtorres/zombotropolis/compare/v0.4.1...v0.4.2
+[0.4.1]: https://github.com/timothymtorres/zombotropolis/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.2.0...v0.3.0
+
+[0.2.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.0.0...v0.1.0
