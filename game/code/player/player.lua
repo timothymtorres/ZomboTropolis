@@ -20,7 +20,7 @@ function Player:initialize(username, map_zone, y, x) --add account name
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.ID = self  
-  self.stats = Stats:new(player)
+  self.stats = Stats:new(self)
   self.log = Log:new()
   self.status_effect = StatusEffect:new(self)
   self.equipment = Equipment:new(self)
