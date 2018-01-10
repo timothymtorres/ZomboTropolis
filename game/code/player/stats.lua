@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local stringx = require('code.libs.pl.stringx')
+local lume = require('code.libs.lume')
 
 local Stats = class('Stats')
 Stats.bonus = {}
@@ -10,12 +10,12 @@ Stats.bonus.value = {hp=10, ip=10, xp=   0, ap=0}
 Stats.bonus.skill = {hp='hp_bonus', ip='ip_bonus', ap=false, xp=false}
 
 function Stats:initialize(player)
-	self.player = player  
+  self.player = player  
 
   self.current, self.potential = {}, {} 
-  self.current.hp, self.potential.hp = default.hp, default_max.hp
-  self.current.ap, self.potential.ap = default.ap, default_max.ap
-  self.current.xp, self.potential.xp = default.xp, default_max.xp    
+  self.current.hp, self.potential.hp = Stats.default.hp, Stats.max.hp
+  self.current.ap, self.potential.ap = Stats.default.ap, Stats.max.ap
+  self.current.xp, self.potential.xp = Stats.default.xp, Stats.max.xp    
   self.current.vitality = 4   
 end
 
@@ -23,7 +23,7 @@ end
 
 function Stats:getBonus(stat)
   local player, skill = self.player, Stats.bonus.skill[stat]
-	return (skill and player.skills:check(skill) and Stats.bonus.value[stat]) or 0
+  return (skill and player.skills:check(skill) and Stats.bonus.value[stat]) or 0
 end
 
 function Stats:get(stat)
@@ -34,9 +34,11 @@ end
 local HP_POTENTIAL_LOSS_FROM_LIMB = 20
 
 function Stats:update(stat, num)
-	local stat, potential = stringx.splitv(stat, ' ')
+	local stat, potential = unpack(lume.split(stat))
 
 	if not potential then
+print('STAT UPDATE')
+print(stat, potential)
 	  self.current[stat] = math.min(self.current[stat] + num, self.potential[stat]) -- can reach negative ap for certain actions...
 	  -- what about inventory points?  We want it to go over max potential?
 	  
