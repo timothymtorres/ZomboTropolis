@@ -157,7 +157,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.0.0] - 05/24/2016
 - This is the starting point where I moved my code from Dropbox to Git.
 
-[Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/timothymtorres/zombotropolis/compare/v0.8.1...HEAD
 [0.8.1]: https://github.com/timothymtorres/zombotropolis/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.6.0...v0.7.0
