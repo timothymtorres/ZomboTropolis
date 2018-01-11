@@ -15,7 +15,12 @@ function Stats:initialize(player)
   self.current, self.potential = {}, {} 
   self.current.hp, self.potential.hp = Stats.default.hp, Stats.max.hp
   self.current.ap, self.potential.ap = Stats.default.ap, Stats.max.ap
-  self.current.xp, self.potential.xp = Stats.default.xp, Stats.max.xp    
+  self.current.xp, self.potential.xp = Stats.default.xp, Stats.max.xp
+
+  if player.class.name == 'Human' then
+  	self.current.ip, self.potential.ip = Stats.default.ip, Stats.max.ip
+  end
+
   self.current.vitality = 4   
 end
 
@@ -37,8 +42,6 @@ function Stats:update(stat, num)
 	local stat, potential = unpack(lume.split(stat))
 
 	if not potential then
-print('STAT UPDATE')
-print(stat, potential)
 	  self.current[stat] = math.min(self.current[stat] + num, self.potential[stat]) -- can reach negative ap for certain actions...
 	  -- what about inventory points?  We want it to go over max potential?
 	  
