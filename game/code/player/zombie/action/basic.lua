@@ -192,7 +192,10 @@ function attack.activate(player, target, weapon)
           target.status_effect:add('infection') 
           caused_infection = true
         end
-      end         
+      end      
+
+      local hp_gain = -1*hp_loss
+      if player.skills:check('rejuvenate') then player.stats:update('hp', hp_gain) end   
     end     
   else -- attack missed
     if player.skills:check('grapple') and player.status_effect:isActive('entangle') then player.status_effect.entagle:remove() end
@@ -217,7 +220,6 @@ function attack.activate(player, target, weapon)
   target_msg = target_msg:replace(names)
   msg =               msg:replace(names)
 
-  -- infection message to the ZOMBIE only!  (human isn't notified until incubation wears off)
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
 
   if armor_condition == 0 then 
