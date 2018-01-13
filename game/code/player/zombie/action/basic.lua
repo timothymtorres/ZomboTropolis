@@ -39,16 +39,26 @@ function move.server_criteria(player, dir)
 end
 
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
-local GPS_basic_chance, GPS_advanced_chance = 0.15, 0.20
+-- possibly add a high ap cost to leap from ruined to unruined
+-- default ap cost (or zero?) to leap from ruined to ruined 
 
 function move.activate(player, dir)
-  local y, x = player:getPos() 
+  local y, x = player:getPos()
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
-    map[dir_y][dir_x]:insert(player, 'outside')
+
+    local current_building_ruined = map[y][x].integrity:isState('ruined')
+    local target_building_ruined = map[dir_y][dir_x].integrity:isState('ruined')
+
+    if current_building_ruined and player.skills:check('leap') then
+      if target_building_ruined or player.skills:check('leap_adv') then map[dir_y][dir_x]:insert(player, 'inside')
+      else map[dir_y][dir_x]:insert(player, 'outside')
+      end
+    else map[dir_y][dir_x]:insert(player, 'outside')
+    end
   else  -- player is outside  
     map[y][x]:remove(player)
     map[dir_y][dir_x]:insert(player)
