@@ -21,15 +21,13 @@ local skill_list = {
 
     -- Brute
     claw =                 2^0,
-    dual_claw =            2^1,
-    claw_adv =             2^2,
-    power_claw =           2^3,
-    impale =               2^4,
-    armor =                2^5,
-    liquid_armor =         2^6,
-    ranged_armor =         2^7,
-    pain_armor =           2^8,
-    dying_grasp =          2^9,
+    claw_adv =             2^1,
+    power_claw =           2^2,
+    grapple_adv =          2^3,
+    armor =                2^4,
+    armor_adv =            2^5,
+    maime =                2^6,
+    maime_adv =            2^7,
     
     -- Hunter
     sprint =               2^0,
@@ -59,7 +57,7 @@ local skill_list = {
     category = {'classes', 'general', 'brute', 'hunter', 'hive'},
     classes = {'brute', 'hunter', 'hive'},
     general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
-    brute = {'claw', 'dual_claw', 'claw_adv', 'power_claw', 'impale', 'armor', 'liquid_armor', 'ranged_armor', 'pain_armor', 'dying_grasp',},      
+    brute = {'claw', 'claw_adv', 'power_claw', 'grapple_adv', 'armor', 'armor_adv', 'maime', 'maime_adv'},      
     hunter = {'sprint', 'leap', 'leap_adv', 'track', 'track_adv', 'hide', 'hide_adv', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
     hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'infection', 'infection_adv'},
   },
@@ -140,51 +138,41 @@ local skill_list = {
         desc='Claw attacks +10% to-hit and increased damage',
         icon = 'claw-slashes',
       },    
-      dual_claw = {
-        name='dual claw',
-        desc='Claw attacks receive an extra damage roll',
-        icon='wolverine-claws',
-      }, 
       claw_adv = {
         name='claw advanced',
-        desc='Claw attacks recieve +15% to-hit and a bonus reroll',
-        icon='grasping-claws',
+        desc='Claw attacks recieve +15% to-hit, an extra damage roll, and a bonus reroll',
+        icon='wolverine-claws',
       }, 
       power_claw = {
         name='power claw',
-        desc='[Not Implemented] Claw attacks against buildings or barricades deal double damage',
+        desc='[Not Implemented] Claw attacks against buildings, barricades, worn armor, and machines deals double damage',
         icon='flaming-claw',
-      }, 
-      impale = {
-        name='impale',
-        desc='Melee attacks +5% to-hit for selected target after critical claw attack (stacks with grappling)',
-        icon='pierced-body'
       }, 
       armor = {
         name='armor',
-        desc='Form a thick skin armor that grants [-1] damage protection from all types of weapons',
+        desc='Manifest an exterior hide of organic armor that is randomly selected after feeding on a corpse',
         icon='shieldcomb',
       }, 
-      pain_armor = {
-        name='pain armor',
-        desc='Form a bone armor that grants [-2] damage protection against pierce weapons',
+      armor_adv = {
+        name='armor advanced',
+        desc='Manually select which organic armor type to spawn and increase its starting condition',
         icon='spiked-armor',
-      }, 
-      liquid_armor = {
-        name='liquid armor',
-        desc='Form a gel armor that grants [-2] damage protection against brute weapons',
-        icon='dripping-honey',
-      }, 
-      ranged_armor = {
-        name='ranged armor',
-        desc='Form a stretch armor that grants [-2] damage protection against bullet weapons',
-        icon='meeple',
-      }, 
-      dying_grasp = {
-        name='dying grasp',
-        desc='[Not Implemented] If a melee weapon was used to strike a killing blow against yourself, the melee weapon is destroyed',
-        icon='blade-bite',
-      },         
+      },        
+      maim = {
+        name='maim',
+        desc='Claw attacks do a fraction of permanent damage and have a chance to delimb a weakened human',
+        icon = 'stigmata',
+      },
+      maim_adv = {
+        name='maim advanced',
+        desc='Increased permanent damage and chance to delimb for claw attacks',
+        icon = 'half-body-crawling',
+      },
+      grapple_adv = {
+        name='grapple advanced',
+        desc='Claw attacks +10% to-hit and increased damage',
+        icon = 'imprisoned',
+      },
     },
     hunter = {
       sprint = {

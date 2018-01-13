@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:cc2df7989c5abfd15826666566a45d2b:3bbe086e7b2deabaf86df2e5d923c380:5f6881ff55620094c7ffc467df14f758$
+-- $TexturePacker:SmartUpdate:f956bcfc9d1cfc45001948a4ca5abb00:a54d736276721b08edc9a3004b78b70a:5f6881ff55620094c7ffc467df14f758$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- blade-bite
+            -- claw-slashes
             x=0,
             y=0,
             width=128,
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- claw-slashes
+            -- flaming-claw
             x=128,
             y=0,
             width=128,
@@ -31,7 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- dripping-honey
+            -- half-body-crawling
             x=256,
             y=0,
             width=128,
@@ -39,7 +39,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- flaming-claw
+            -- imprisoned
             x=384,
             y=0,
             width=128,
@@ -47,7 +47,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- grasping-claws
+            -- shieldcomb
             x=512,
             y=0,
             width=128,
@@ -55,7 +55,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- meeple
+            -- spiked-armor
             x=640,
             y=0,
             width=128,
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- pierced-body
+            -- stigmata
             x=768,
             y=0,
             width=128,
@@ -71,24 +71,8 @@ SheetInfo.sheet =
 
         },
         {
-            -- shieldcomb
-            x=896,
-            y=0,
-            width=128,
-            height=128,
-
-        },
-        {
-            -- spiked-armor
-            x=1024,
-            y=0,
-            width=128,
-            height=128,
-
-        },
-        {
             -- wolverine-claws
-            x=1152,
+            x=896,
             y=0,
             width=128,
             height=128,
@@ -96,23 +80,21 @@ SheetInfo.sheet =
         },
     },
     
-    sheetContentWidth = 1280,
+    sheetContentWidth = 1024,
     sheetContentHeight = 128
 }
 
 SheetInfo.frameIndex =
 {
 
-    ["blade-bite"] = 1,
-    ["claw-slashes"] = 2,
-    ["dripping-honey"] = 3,
-    ["flaming-claw"] = 4,
-    ["grasping-claws"] = 5,
-    ["meeple"] = 6,
-    ["pierced-body"] = 7,
-    ["shieldcomb"] = 8,
-    ["spiked-armor"] = 9,
-    ["wolverine-claws"] = 10,
+    ["claw-slashes"] = 1,
+    ["flaming-claw"] = 2,
+    ["half-body-crawling"] = 3,
+    ["imprisoned"] = 4,
+    ["shieldcomb"] = 5,
+    ["spiked-armor"] = 6,
+    ["stigmata"] = 7,
+    ["wolverine-claws"] = 8,
 }
 
 function SheetInfo:getSheet()
