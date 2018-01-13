@@ -103,6 +103,7 @@ local corpse_effects = {
   xp = {'1d10+5', '1d9+3', '1d7+2', '1d5+1'},
   satiation = {'1d400+600', '1d400+500', '1d400+400', '1d400+300'},
   description = {'very fresh', 'fresh', 'old', 'very old'}
+  hp_gain = {default = 15, rejuvenate = 30}
 }
 
 function feed.activate(player) 
@@ -126,9 +127,11 @@ function feed.activate(player)
   
   local nutrition = target.carcass:devour(player)
   local xp, satiation = corpse_effects.xp[nutrition], corpse_effects.satiation[nutrition]
-    
+  local hp_gained = corpse_effects.hp_gain[player.skills:check('rejuvenate') and 'rejuvenate' or 'default']
+
   player.stats:update('xp', dice.roll(xp))
   player.hunger:update(-1*dice.roll(satiation)) 
+  player.stats:update('hp', hp_gained)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
