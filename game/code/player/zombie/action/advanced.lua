@@ -5,25 +5,58 @@ string.replace = require('code.libs.replace')
 
 -------------------------------------------------------------------
 
-local respawn = {name='respawn', ap={cost=10, modifier={hivemind = -5}}}
+local respawn = {name='respawn', ap={cost=0}} -- ap cost varies
 
-function respawn.client_criteria(player) assert(not player:isStanding(), 'Must be dead for action') end  
+local respawn_settings = {
+  MIN_HP = 20,
+  MAX_HP = 50,
+  ap_to_hp = {default = 5, resurrection = 10,}
+}
 
-function respawn.server_criteria(player) assert(not player:isStanding(), 'You are already standing') end
+function respawn.client_criteria(player) 
+  assert(not player:isStanding(), 'Must be dead for action')
 
-function respawn.activate(player) 
-  player:respawn()  
-  
+  local has_resurrection = player.skills:check('resurrection') 
+  local conversion_rate = respawn_settings.ap_to_hp[has_resurrection and 'resurrection' or 'default'] 
+
+  local ap = player.stats:get('ap') 
+  local ap_to_stand = respawn_settings.MIN_HP/conversion_rate
+  assert(ap >= ap_to_stand, 'Not enough ap to respawn')
+end  
+
+function respawn.server_criteria(player, spent_ap) 
+  assert(not player:isStanding(), 'You are already standing') 
+
+  local has_resurrection = player.skills:check('resurrection') 
+  local conversion_rate = respawn_settings.ap_to_hp[has_resurrection and 'resurrection' or 'default'] 
+
+  local ap = player.stats:get('ap')
+  local ap_to_stand = respawn_settings.MIN_HP/conversion_rate
+  assert(spent_ap >= ap_to_stand, 'Not enough ap to respawn')
+  assert(ap >= spent_ap, 'Ap spent to respawn exceeds current ap limit')
+
+  local max_ap_spending_limit = respawn_settings.MAX_HP/conversion_rate
+  assert(max_ap_spending_limit >= spent_ap, 'Ap spent to respawn exceeds hp limit bounds')
+end
+
+function respawn.activate(player, spent_ap) 
+  local has_resurrection = player.skills:check('resurrection') 
+  local conversion_rate = respawn_settings.ap_to_hp[has_resurrection and 'resurrection' or 'default'] 
+  local hp_gained = conversion_rate*spent_ap + player.stats:getBonus('hp')
+
+  player.stats:update('hp', hp_gained)
+  player.stats:update('ap', -1*spent_ap)
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
   local msg = 'A nearby corpse rises to life'
-  local self_msg = player.skills:check('hivemind') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'  
+  local self_msg = player.skills:check('resurrection') and 'You animate to life quickly and stand.' or 'You reanimate to life and struggle to stand.'  
   
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
-  --------------------------------------------  
+  --------------------------------------------
   
   local event = {'respawn', player}  
   player:broadcastEvent(msg, self_msg, event)    
