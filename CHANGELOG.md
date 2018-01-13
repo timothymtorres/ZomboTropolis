@@ -1,17 +1,18 @@
 # Changelog
 
-
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-
-
 ## [Unreleased]
 ### Added
 - CHANGELOG.md
-- Maim ability for brute zombies that damages a humans potential hp.  There is also a possiblity to severe limbs if a human has low health. (this will result in permanent hp loss, that is unhealable)
+- Maim ability for brute zombies that damages a humans potential hp.  There is also a possiblity to severe limbs if a human has low health. (this will result in permanent hp loss that is unhealable)
+
+### Changed
+- Human and Zombie skill names, descriptions, and icons  
+- Combat accuracy has been increased for certain skills
 
 ### Fixed
 - Organic armor code to spawn correctly
