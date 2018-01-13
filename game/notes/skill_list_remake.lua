@@ -33,15 +33,14 @@
     ankle_grap 			  -- revive better stats
 
     -- Hive  (remove infection_adv or ruin_adv)
-    hivemind_adv          -- communication with all nearby zombies? recovery? (can see what other zombies see?  Like a terminal for zombies?) (braodcast range limited to # of ALIVE zombies on tile)
     bite
         bite_adv
     acid
-        acid_adv
-    -- infestation (ruin + infection skill combined) 
-    ruin
-        ruin_adv
+        acid_adv 
+    ruin                   -- can only ransack
+        ruin_adv           -- can ruin
     infection
+        infection_adv
 
 -----------------------------------------------------------------------------
 

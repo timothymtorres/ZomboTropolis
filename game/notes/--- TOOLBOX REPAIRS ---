@@ -1,0 +1,28 @@
+--- TOOLBOX REPAIRS ---
+
+Toolbox
+- Durability = 1 (so 4 uses)
+- Weight = 15 (semi heavy)
+
+Toolbox repairs ruins for 1 hp?
+Building.integrity = [-10/+10]
+Door hp            = [+4]
+Equipment hp       = [+4]
+
+No Skill [5ap]
+ Door repair = 1hp
+ Equipment repair = 1 hp
+
+Repair [3ap]
+ Door repair = 2hp
+ Equipment repair = 2hp
+
+Repair_adv [2ap]
+ Door repair = 4hp
+ Equipment repair = 4hp
+ 
+------------------------------------------
+
+Repair Kit
+ Improve item/machine condition
+ ??? don't worry about it for now.

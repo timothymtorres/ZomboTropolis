@@ -59,4 +59,4 @@ Firesuit.armor.resistance = {
   {acid=4},
 }
 
-return {Leather, Firesuit}
+return {Leather, Firesuit} -- Add a biohazard suit that prevents infection but is fragile
