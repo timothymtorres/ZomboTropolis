@@ -29,10 +29,6 @@ function Zombie:starve()
   self:permadeath()   -- deletes zombie instance
 end
 
-function Zombie:revive()
-  self.stats:update('hp', self.stats:get('hp', 'max') ) 
-end
-
 --[[
 --  GET [X]
 --]]
