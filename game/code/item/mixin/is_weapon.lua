@@ -112,7 +112,7 @@ end
 local organic_modifier = {
   claw = {
     dice={'1d4', '2d4'}, 
-    included_skills={'claw', 'dual_claw'},
+    included_skills={'claw', 'claw_adv'},
   },
   bite = {
     dice={'1d5+1', '1d5+2'}, 
@@ -120,7 +120,7 @@ local organic_modifier = {
   },
   fist = {
     dice={'1d2'},
-    included_skills={'martial_arts_adv'},
+    included_skills={'martial_arts'},
   },
 }
 
