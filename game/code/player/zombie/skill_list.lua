@@ -26,8 +26,8 @@ local skill_list = {
     grapple_adv =          2^3,
     armor =                2^4,
     armor_adv =            2^5,
-    maime =                2^6,
-    maime_adv =            2^7,
+    maim =                2^6,
+    maim_adv =            2^7,
     
     -- Hunter
     sprint =               2^0,
@@ -57,7 +57,7 @@ local skill_list = {
     category = {'classes', 'general', 'brute', 'hunter', 'hive'},
     classes = {'brute', 'hunter', 'hive'},
     general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
-    brute = {'claw', 'claw_adv', 'power_claw', 'grapple_adv', 'armor', 'armor_adv', 'maime', 'maime_adv'},      
+    brute = {'claw', 'claw_adv', 'power_claw', 'grapple_adv', 'armor', 'armor_adv', 'maim', 'maim_adv'},      
     hunter = {'sprint', 'leap', 'leap_adv', 'track', 'track_adv', 'hide', 'hide_adv', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
     hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'infection', 'infection_adv'},
   },
