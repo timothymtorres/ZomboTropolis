@@ -123,6 +123,63 @@ function Player:getTile()
   return map_zone:getTile(y, x)
 end
 
+-- this function is used to count zombies, humans, and corpses inside/outside a 3x3 range 
+-- zombies with the smell_blood/smell_blood_adv skills get bonus data
+function Player:count3x3()
+  local map = self.map_zone
+  local y,x = self.y, self.x
+  local tile_list = map:get3x3(y, x)
+  local tile_counts = {}
+  local is_staged_outside = self:isStaged('outside')
+
+  for _, tile in ipairs(tile_list) do
+    tile_counts[#tile_counts + 1] = {}
+    tile_counts[#tile_counts].outside = {humans=0, zombies=0, corpses=0}
+    if tile:isBuilding() then tile_counts[#tile_counts].inside = {humans=0, zombies=0, corpses=0} end
+  end
+
+  if is_staged_outside then
+    for _, tile in ipairs(tile_list) do 
+      if tile:isBuilding() and self.skills:check('smell_blood') then 
+      end
+    end
+  else 
+    for _, tile in ipairs(tile_list) do
+      if self.skills:check('smell_blood') then
+        tile_counts.outside.zombies = tile:countPlayers('zombie', 'outside')
+        tile_counts.outside.corpses = tile:countCorpses('outside') 
+        if self.skills:check('smell_blood_adv') then tile_counts.outside.humans = tile:countPlayers('human', 'outside', 'wounded') end
+      end     
+
+    end      
+  end
+
+  for i, tile in ipairs(tile_list) do  -- i==1 is the tile the player is located
+    if self:isStaged('outside') then
+      tile_counts.outside.zombies = tile:countPlayers('zombie', 'outside')
+      tile_counts.outside.humans = tile:countPlayers('human', 'outside')
+      tile_counts.outside.corpses = tile:countCorpses('outside')      
+
+      if tile:isBuilding() and self.skills:check('smell_blood') then
+        tile_counts.inside.zombies = tile:countPlayers('zombie', 'inside')
+        tile_counts.inside.corpses = tile:countCorpses('inside')      
+        if self.skills:check('smell_blood_adv') then tile_counts.inside.humans = tile:countPlayers('human', 'inside', 'wounded') end
+      end
+    elseif self:isStaged('inside') then
+      if self.skills:check('smell_blood') then
+        tile_counts.outside.zombies = tile:countPlayers('zombie', 'outside')
+        tile_counts.outside.corpses = tile:countCorpses('outside') 
+        if self.skills:check('smell_blood_adv') then 
+          tile_counts.outside.humans = tile:countPlayers('human', 'outside', 'wounded') 
+          if tile:isBuilding() then tile_counts.inside.humans = tile:countPlayers('human', 'inside', 'wounded') end
+        end
+      end
+    end
+  end
+
+  return tile_counts
+end
+
 --[[
 -- UPDATE [X]
 --]]
