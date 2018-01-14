@@ -16,7 +16,7 @@
     claw
         claw_adv (dual_claw)
         power_claw
-    drag_prey
+    drag_prey/grappled_adv
     armor
         armor_adv
     maime                -- require claw? claw_adv?
@@ -24,13 +24,13 @@
 
     -- Hunter (x_ray _vision?)
     sprint 
-        leap
+    leap
+        leap_adv
     track                 -- mark prey included?
         track_adv
     hide                  -- can hide in unlit building, (humans have a bonus to discovery using a flashlight) (easier to hide in ruined building)
         hide_adv          -- improved hiding and less chance of discovery (auto hide in ruined buildings)
     smell_blood_adv       -- see hp, see wounded inside buildings from outside 
-    ankle_grap 			  -- revive better stats
 
     -- Hive  (remove infection_adv or ruin_adv)
     bite
