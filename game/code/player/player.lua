@@ -85,6 +85,8 @@ function Player:isTangledTogether(target)
   return mob_tangled_to_player == target and mob_tangled_to_target == self
 end
 
+function Player:isHPVisible() return player.skills:check('smell_blood_adv') or player.skills:check('diagnosis_adv') end
+
 
 --[[
 --  GET [X]
