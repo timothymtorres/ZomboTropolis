@@ -40,7 +40,7 @@ function Tile:check(player, setting)
   return (attendance and true) or false
 end
 
-function Tile:countPlayers(mob_type, setting)
+function Tile:countPlayers(mob_type, setting, filter)
   local players
   
   if setting == 'outside' then players = self.outside_players 
@@ -51,7 +51,11 @@ function Tile:countPlayers(mob_type, setting)
   local count = 0
   for player in pairs(players) do
     if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() and not player.status_effect:isActive('hide') then 
-      count = count + 1
+      if filter and filter == 'wounded' then 
+        if player.stats:get('vitality') ~= 4 then count = count + 1 end
+      else     
+        count = count + 1
+      end
     end
   end
   return count
