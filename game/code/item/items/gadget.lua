@@ -1,5 +1,8 @@
 local class = require('code.libs.middleclass')
 local Item = require('code.item.item')
+local Frequency = require('code.server.network.frequency')
+
+-------------------------------------------------------------------
 
 local Radio = class('Radio', Item)
 
@@ -7,18 +10,46 @@ Radio.FULL_NAME = 'portable radio'
 Radio.WEIGHT = 3
 Radio.DURABILITY = 100
 Radio.CATEGORY = 'research'
+Radio.ap = {cost = 1}
 
---function Radio.client_criteria(player) end --needs batteries/need light
-
--- this needs to be redone
-function Radio:server_criteria(player, freq) 
-  assert(freq > 0 and freq <= 1024, 'Radio frequency is out of range')  
+function Radio:initialize(condition_setting)
+  Item.initialize(self, condition_setting)
+  self.freq = math.random(1, 1024)
+  self.power = false
 end
 
--- this needs to be redone
-function Radio:activate(player, old_freq, new_freq)
-  player.inventory:updateRadio(player, 'remove', old_freq, self.condition)
-  player.inventory:updateRadio(player, 'insert', new_freq, self.condition)
+function Radio:server_criteria(player, setting)
+  local freq 
+
+  assert(setting, 'Must have selected a setting')
+  if type(setting) == 'number' then 
+    assert(setting > 0 and setting <= 1024, 'Radio frequency is out of range')
+    freq = setting 
+  elseif type(setting) == 'boolean' then
+    freq = self.freq
+    assert(self.power == setting, 'New radio power setting is identical to current state')
+  else
+    assert(false, 'Radio setting type is incorrect')
+  end
+
+  if setting ~= false then
+    assert(not Frequency:check(freq, player), 'You already have a radio set to this frequency')
+  end
+end
+
+function Radio:activate(player, setting)
+  if type(setting) == 'number' then
+    if self.power == true then
+      Frequency:remove(self.freq, player)
+      Frequency:add(setting, player)
+    end
+    self.freq = setting
+  elseif type(setting) == 'boolean' then
+    if setting == true then Frequency:add(self.freq, player)
+    elseif setting == false then Frequency:remove(self.freq, player)
+    end
+    self.power = setting
+  end
 end
 
 -------------------------------------------------------------------
