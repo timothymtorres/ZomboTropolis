@@ -8,11 +8,12 @@ function Radio:initialize()
 end
 
 function Radio:transmit(channel, speaker, message)
-  local event, settings = {'network', speaker}, {stage='inside'}
+  local event, settings = {'network', channel, speaker}, {stage='inside'}
+  local msg = tostring(speaker)..' ('..channel..'): '..message
 
   for listener in pairs(self[channel]) do 
-  	if tostring(listener) == 'building' then listener:broadcastEvent(message, event, settings)
-  	else listener.log:insert(tostring(speaker)..': '..message, event) -- listener is a player then
+  	if tostring(listener) == 'building' then listener:broadcastEvent(msg, event, settings)
+  	else listener.log:insert(msg, event) -- listener is a player then
   	end
   end
 end

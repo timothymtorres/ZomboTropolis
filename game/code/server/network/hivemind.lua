@@ -8,10 +8,11 @@ function Hivemind:initialize()
 end
 
 function Hivemind:transmit(channel, speaker, message)
-  local event = {'hivemind', speaker}
+  local event = {'hivemind', channel, speaker}
+  local msg = tostring(speaker)..' ('..channel..'): '..message
 
   for listener in pairs(self[channel]) do
-  	listener.log:insert(tostring(speaker)..': '..message, event)
+  	listener.log:insert(msg, event)
   end
 end
 
