@@ -253,7 +253,7 @@ local skill_list = {
       ruin_adv = {
         name='ruin advanced',
         desc='[Not Implemented] Ransack a building that is ruined',
-        icon='grass',
+        icon='cogsplosion',
       },     
     },
   },
