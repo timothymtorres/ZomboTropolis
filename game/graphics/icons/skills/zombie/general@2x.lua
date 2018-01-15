@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:476b16d902c6b3dda2b67edd865a0000:9a8be4fd741dd7d04c3e1bf3347a50fb:a41a9cfbabe87f4ee87f6dd690025223$
+-- $TexturePacker:SmartUpdate:57aee9a598ac6425f133183df8a86ec0:0e6691dbd933610092c106524d53b905:a41a9cfbabe87f4ee87f6dd690025223$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- dna1
+            -- conversation
             x=0,
             y=0,
             width=256,
@@ -23,9 +23,17 @@ SheetInfo.sheet =
 
         },
         {
-            -- embrassed-energy
+            -- cut-palm
             x=0,
             y=256,
+            width=256,
+            height=256,
+
+        },
+        {
+            -- embrassed-energy
+            x=256,
+            y=0,
             width=256,
             height=256,
 
@@ -33,15 +41,15 @@ SheetInfo.sheet =
         {
             -- evil-hand
             x=256,
-            y=0,
+            y=256,
             width=256,
             height=256,
 
         },
         {
-            -- gluttony
-            x=256,
-            y=256,
+            -- fat
+            x=512,
+            y=0,
             width=256,
             height=256,
 
@@ -49,21 +57,13 @@ SheetInfo.sheet =
         {
             -- grab
             x=512,
-            y=0,
+            y=256,
             width=256,
             height=256,
 
         },
         {
             -- heart-organ
-            x=512,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- pointing
             x=768,
             y=0,
             width=256,
@@ -71,7 +71,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- swallow
+            -- neck-bite
             x=768,
             y=256,
             width=256,
@@ -79,7 +79,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- terror
+            -- raise-zombie
             x=1024,
             y=0,
             width=256,
@@ -103,15 +103,15 @@ SheetInfo.sheet =
 SheetInfo.frameIndex =
 {
 
-    ["dna1"] = 1,
-    ["embrassed-energy"] = 2,
-    ["evil-hand"] = 3,
-    ["gluttony"] = 4,
-    ["grab"] = 5,
-    ["heart-organ"] = 6,
-    ["pointing"] = 7,
-    ["swallow"] = 8,
-    ["terror"] = 9,
+    ["conversation"] = 1,
+    ["cut-palm"] = 2,
+    ["embrassed-energy"] = 3,
+    ["evil-hand"] = 4,
+    ["fat"] = 5,
+    ["grab"] = 6,
+    ["heart-organ"] = 7,
+    ["neck-bite"] = 8,
+    ["raise-zombie"] = 9,
     ["totem-head"] = 10,
 }
 

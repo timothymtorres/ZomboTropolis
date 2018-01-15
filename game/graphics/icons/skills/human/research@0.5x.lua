@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:7035b298e0a6e6416b84377043dbeb95:64b4dd25d5ce123ee5a7ee19e0b95dce:848ff5c6cb8f71d964040041056bb1b7$
+-- $TexturePacker:SmartUpdate:18ac18daec2d42733614ca8d625a3b4d:f994d83deae262d3cc6e1d614cb9ac4b:848ff5c6cb8f71d964040041056bb1b7$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -31,7 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- medical-pack-alt
+            -- batteries
             x=128,
             y=0,
             width=64,
@@ -39,8 +39,40 @@ SheetInfo.sheet =
 
         },
         {
-            -- sticking-plaster
+            -- dna1
             x=192,
+            y=0,
+            width=64,
+            height=64,
+
+        },
+        {
+            -- keyboard
+            x=256,
+            y=0,
+            width=64,
+            height=64,
+
+        },
+        {
+            -- medical-pack-alt
+            x=320,
+            y=0,
+            width=64,
+            height=64,
+
+        },
+        {
+            -- sticking-plaster
+            x=384,
+            y=0,
+            width=64,
+            height=64,
+
+        },
+        {
+            -- syringe
+            x=448,
             y=0,
             width=64,
             height=64,
@@ -48,7 +80,7 @@ SheetInfo.sheet =
         },
     },
     
-    sheetContentWidth = 256,
+    sheetContentWidth = 512,
     sheetContentHeight = 64
 }
 
@@ -57,8 +89,12 @@ SheetInfo.frameIndex =
 
     ["anatomy"] = 1,
     ["bandage-roll"] = 2,
-    ["medical-pack-alt"] = 3,
-    ["sticking-plaster"] = 4,
+    ["batteries"] = 3,
+    ["dna1"] = 4,
+    ["keyboard"] = 5,
+    ["medical-pack-alt"] = 6,
+    ["sticking-plaster"] = 7,
+    ["syringe"] = 8,
 }
 
 function SheetInfo:getSheet()

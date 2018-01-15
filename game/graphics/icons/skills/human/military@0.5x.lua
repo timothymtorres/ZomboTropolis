@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:e6f2e98c058b304fefb3d0ec7ae55a6b:81d4f9021e987f3a1c23864779b383ac:755de0facc9b590f6bd6b331ea08eb7f$
+-- $TexturePacker:SmartUpdate:84e9f1b46a9e490d2ca1344f7b6900d6:c79c72893007145e86af7fdebb9a4413:755de0facc9b590f6bd6b331ea08eb7f$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- archery-target
+            -- crossed-slashes
             x=0,
             y=0,
             width=64,
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bowie-knife
+            -- fire-axe
             x=64,
             y=0,
             width=64,
@@ -31,7 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bowman
+            -- gavel
             x=128,
             y=0,
             width=64,
@@ -39,7 +39,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bullets
+            -- lighter
             x=192,
             y=0,
             width=64,
@@ -47,7 +47,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- crossed-slashes
+            -- molotov
             x=256,
             y=0,
             width=64,
@@ -55,7 +55,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- fire-axe
+            -- mp5
             x=320,
             y=0,
             width=64,
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- gavel
+            -- pistol-gun
             x=384,
             y=0,
             width=64,
@@ -71,40 +71,8 @@ SheetInfo.sheet =
 
         },
         {
-            -- molotov
-            x=448,
-            y=0,
-            width=64,
-            height=64,
-
-        },
-        {
-            -- mp5
-            x=512,
-            y=0,
-            width=64,
-            height=64,
-
-        },
-        {
-            -- pistol-gun
-            x=576,
-            y=0,
-            width=64,
-            height=64,
-
-        },
-        {
             -- reticule
-            x=640,
-            y=0,
-            width=64,
-            height=64,
-
-        },
-        {
-            -- spade
-            x=704,
+            x=448,
             y=0,
             width=64,
             height=64,
@@ -112,25 +80,21 @@ SheetInfo.sheet =
         },
     },
     
-    sheetContentWidth = 768,
+    sheetContentWidth = 512,
     sheetContentHeight = 64
 }
 
 SheetInfo.frameIndex =
 {
 
-    ["archery-target"] = 1,
-    ["bowie-knife"] = 2,
-    ["bowman"] = 3,
-    ["bullets"] = 4,
-    ["crossed-slashes"] = 5,
-    ["fire-axe"] = 6,
-    ["gavel"] = 7,
-    ["molotov"] = 8,
-    ["mp5"] = 9,
-    ["pistol-gun"] = 10,
-    ["reticule"] = 11,
-    ["spade"] = 12,
+    ["crossed-slashes"] = 1,
+    ["fire-axe"] = 2,
+    ["gavel"] = 3,
+    ["lighter"] = 4,
+    ["molotov"] = 5,
+    ["mp5"] = 6,
+    ["pistol-gun"] = 7,
+    ["reticule"] = 8,
 }
 
 function SheetInfo:getSheet()

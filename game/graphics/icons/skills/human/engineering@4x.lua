@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:ad36779889ba8f2b0f50f1c392072f67:6affa68a25f0e28cee65e5ea14100536:31a49f9b64123c8184d8f9d9ca4b1789$
+-- $TexturePacker:SmartUpdate:3a6ff56a11a2faf9284542ad644aa12d:6eb5e9b1eead0117b9c99305cb84fc3c:31a49f9b64123c8184d8f9d9ca4b1789$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- closed-doors
+            -- brick-pile
             x=0,
             y=512,
             width=512,
@@ -31,15 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- hammer-nails
-            x=0,
-            y=1024,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- keyboard
+            -- closed-doors
             x=512,
             y=0,
             width=512,
@@ -47,7 +39,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- light-bulb
+            -- power-generator
             x=512,
             y=512,
             width=512,
@@ -56,8 +48,8 @@ SheetInfo.sheet =
         },
         {
             -- processor
-            x=512,
-            y=1024,
+            x=1024,
+            y=0,
             width=512,
             height=512,
 
@@ -65,13 +57,13 @@ SheetInfo.sheet =
         {
             -- push
             x=1024,
-            y=0,
+            y=512,
             width=512,
             height=512,
 
         },
         {
-            -- radar-dish
+            -- spanner
             x=1536,
             y=0,
             width=512,
@@ -79,17 +71,9 @@ SheetInfo.sheet =
 
         },
         {
-            -- spanner
-            x=1024,
-            y=512,
-            width=512,
-            height=512,
-
-        },
-        {
             -- wooden-door
-            x=1024,
-            y=1024,
+            x=1536,
+            y=512,
             width=512,
             height=512,
 
@@ -97,22 +81,20 @@ SheetInfo.sheet =
     },
     
     sheetContentWidth = 2048,
-    sheetContentHeight = 1536
+    sheetContentHeight = 1024
 }
 
 SheetInfo.frameIndex =
 {
 
     ["auto-repair"] = 1,
-    ["closed-doors"] = 2,
-    ["hammer-nails"] = 3,
-    ["keyboard"] = 4,
-    ["light-bulb"] = 5,
-    ["processor"] = 6,
-    ["push"] = 7,
-    ["radar-dish"] = 8,
-    ["spanner"] = 9,
-    ["wooden-door"] = 10,
+    ["brick-pile"] = 2,
+    ["closed-doors"] = 3,
+    ["power-generator"] = 4,
+    ["processor"] = 5,
+    ["push"] = 6,
+    ["spanner"] = 7,
+    ["wooden-door"] = 8,
 }
 
 function SheetInfo:getSheet()

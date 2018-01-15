@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:75c0ab175136f18a927eb9b0afaa8ede:2e99795c1774a38d2fe4f239ad1daab4:5f6881ff55620094c7ffc467df14f758$
+-- $TexturePacker:SmartUpdate:ed38471a52ee8f02385ff33ce1c29038:09fccc28b1e05aeadf498bfaac0badac:5f6881ff55620094c7ffc467df14f758$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- claw-slashes
+            -- amputation
             x=0,
             y=0,
             width=512,
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- flaming-claw
+            -- claw-slashes
             x=0,
             y=512,
             width=512,
@@ -31,23 +31,23 @@ SheetInfo.sheet =
 
         },
         {
-            -- half-body-crawling
+            -- decapitation
             x=512,
             y=0,
+            width=512,
+            height=512,
+
+        },
+        {
+            -- layered-armor
+            x=512,
+            y=512,
             width=512,
             height=512,
 
         },
         {
             -- shieldcomb
-            x=512,
-            y=512,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- spiked-armor
             x=1024,
             y=0,
             width=512,
@@ -55,7 +55,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- stigmata
+            -- slashed-shield
             x=1024,
             y=512,
             width=512,
@@ -87,12 +87,12 @@ SheetInfo.sheet =
 SheetInfo.frameIndex =
 {
 
-    ["claw-slashes"] = 1,
-    ["flaming-claw"] = 2,
-    ["half-body-crawling"] = 3,
-    ["shieldcomb"] = 4,
-    ["spiked-armor"] = 5,
-    ["stigmata"] = 6,
+    ["amputation"] = 1,
+    ["claw-slashes"] = 2,
+    ["decapitation"] = 3,
+    ["layered-armor"] = 4,
+    ["shieldcomb"] = 5,
+    ["slashed-shield"] = 6,
     ["swallow"] = 7,
     ["wolverine-claws"] = 8,
 }
