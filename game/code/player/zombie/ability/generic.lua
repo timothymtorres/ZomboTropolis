@@ -1,6 +1,7 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 local organic_armor = require('code.player.zombie.organic_armor')
+local Hivemind = require('code.server.network.hivemind')
 
 -------------------------------------------------------------------
 
@@ -551,5 +552,40 @@ function acid.activate(player, target)
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)  
 end
+
+-------------------------------------------------------------------
+
+local hivemind = {name='hivemind', ap={cost=1}}
+
+function hivemind.initialize()
+  self.freq = math.random(1, 1024)
+end
+
+function hivemind.server_criteria(player, setting)
+  local freq 
+
+  assert(setting, 'Must have selected a setting')
+  if type(setting) == 'number' then 
+    assert(setting > 0 and setting <= 1024, 'Radio frequency is out of range')
+    freq = setting 
+  else
+    assert(false, 'Radio setting type is incorrect')
+  end
+  assert(not Frequency:check(freq, player), 'You already have a radio set to this frequency')
+end
+
+function hivemind.activate(player, setting)
+  if type(setting) == 'number' then
+    Frequency:remove(self.freq, player)
+    Frequency:add(setting, player)
+    self.freq = setting
+  elseif type(setting) == 'string' then -- it's a message
+
+  end
+end
+
+-------------------------------------------------------------------
+
+--local telepathy = {name='telepathy', ap={cost=1}}
 
 return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, hide, acid}
