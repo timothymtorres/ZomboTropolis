@@ -100,7 +100,7 @@ local skill_list = {
       smell_blood = {
         name='smell blood',
         desc='Vague health status of visible humans is displayed as well as the number of standing zombies both inside and outside buildings',
-        icon='gluttony',
+        icon='cut-palm',
       },
       hp_bonus = {
         name='hp bonus',
@@ -110,7 +110,7 @@ local skill_list = {
       hunger_bonus = {
         name='hunger bonus',
         desc='Bonus for max satiation',
-        icon='dna1',
+        icon='fat',
       },
       hivemind = {
         name='hivemind',
@@ -120,12 +120,12 @@ local skill_list = {
       rejuvenation = {
         name='rejuvenation',
         desc='Bite attacks replenish HP',
-        icon='dna1',
+        icon='neck-bite',
       },
       resurrection = {
         name='resurrection',
         desc='Lowered AP cost to revive after being killed',
-        icon='dna1',
+        icon='raise-zombie',
       },
     },
     brute = {
@@ -142,27 +142,27 @@ local skill_list = {
       power_claw = {
         name='power claw',
         desc='[Not Implemented] Claw attacks against buildings, barricades, worn armor, and machines deals double damage',
-        icon='flaming-claw',
+        icon='slashed-shield',
       }, 
       armor = {
         name='armor',
         desc='Manifest an exterior hide of organic armor that is randomly selected after feeding on a corpse',
-        icon='shieldcomb',
+        icon='layered-armor',
       }, 
       armor_adv = {
         name='armor advanced',
         desc='Manually select which organic armor type to spawn and increase its starting condition',
-        icon='spiked-armor',
+        icon='shieldcomb',
       },        
       maim = {
         name='maim',
         desc='Claw attacks do a fraction of permanent damage and have a chance to delimb a weakened human',
-        icon = 'stigmata',
+        icon = 'amputation',
       },
       maim_adv = {
         name='maim advanced',
         desc='Increased permanent damage and chance to delimb for claw attacks',
-        icon = 'half-body-crawling',
+        icon = 'decapitation',
       },
       grapple_adv = {
         name='grapple advanced',
@@ -199,17 +199,17 @@ local skill_list = {
       hide = {
         name='hide',
         desc='Ability to hide inside unoccupied and unpowered buildings',
-        icon='double-face-mask',
+        icon='worried-eyes',
       },
       hide_adv = {
         name='hide advanced',
         desc='Improved chance and reduced ap cost to hide',
-        icon='shadow-follower',
+        icon='hidden',
       },
       smell_blood_adv = {
         name='smell blood advanced',
         desc='Shows a precise health indication of nearby humans and detect wounded humans inside a building from the outside',
-        icon='nose-side',
+        icon='chewed-heart',
       },   
     },
     hive = {         

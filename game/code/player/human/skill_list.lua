@@ -107,7 +107,7 @@ local skill_list = {
       roof_travel = {
         name='roof travel',     
         desc='Travel through buildings', 
-        icon='sprint',
+        icon='jump-across',
       },
       hp_bonus = {
         name='hp bonus',        
@@ -117,7 +117,7 @@ local skill_list = {
       ip_bonus = {
         name='ip bonus',        
         desc='Bonus +10 max ip', 
-        icon='muscle-fat', 
+        icon='bindle', 
         requires={'hp_bonus'},
       },  
       looting = {
@@ -128,7 +128,7 @@ local skill_list = {
       diagnosis = {
         name='diagnosis',       
         desc='Grants ability to determine damage states of players', 
-        icon='pummeled',
+        icon='coma',
       },        
     },
     military = {
@@ -171,7 +171,7 @@ local skill_list = {
       pyrotech =     {
         name='pyrotech',      
         desc='Scorch weapons +10% to-hit', 
-        icon='molotov',
+        icon='lighter',
       }, 
       pyrotech_adv =     {
         name='pyrotech advanced',      
@@ -220,22 +220,22 @@ local skill_list = {
       gadgets =  {
         name='gadgets',       
         desc='Provides a bonus when using research items',
-        icon = 'anatomy',
+        icon = 'batteries',
       },    
       scanner =  {
         name='scanner',       
         desc='Provides a bonus when using research items',
-        icon = 'anatomy',
+        icon = 'dna1',
       }, 
       syringe =  {
         name='syringe',       
         desc='Provides a bonus when using research items',
-        icon = 'anatomy',
+        icon = 'syringe',
       }, 
       terminal =  {
         name='terminal',       
         desc='Provides a bonus when using research items',
-        icon = 'anatomy',
+        icon = 'keyboard',
       },    
     },
     engineering = {
@@ -267,7 +267,7 @@ local skill_list = {
       renovate =       {
         name='renovate',
         desc='Gain ability to repair ruins',
-        icon='hammer-nails'
+        icon='brick-pile'
       },      
       tech =           {
         name='tech',
@@ -277,7 +277,7 @@ local skill_list = {
       tech_adv =     {
         name='tech advanced',
         desc='Install machines for less AP',
-        icon='radar-dish',
+        icon='power-generator',
       },     
     },
   },
