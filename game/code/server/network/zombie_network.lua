@@ -1,13 +1,13 @@
 local Network = require('code.server.network.network')
 local class = require('code.libs.middleclass')
 
-local Hivemind = class('Hivemind', Network)
+local ZombieNetwork = class('ZombieNetwork', Network)
 
-function Hivemind:initialize()
+function ZombieNetwork:initialize()
   for i=1, 256 do self[i] = {} end
 end
 
-function Hivemind:transmit(channel, speaker, message)
+function ZombieNetwork:transmit(channel, speaker, message)
   local event = {'hivemind', channel, speaker}
   local msg = tostring(speaker)..' ('..channel..'): '..message
 
@@ -16,4 +16,4 @@ function Hivemind:transmit(channel, speaker, message)
   end
 end
 
-return Hivemind
+return ZombieNetwork

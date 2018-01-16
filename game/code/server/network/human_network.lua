@@ -1,13 +1,13 @@
 local Network = require('code.server.network.network')
 local class = require('code.libs.middleclass')
 
-local Frequency = class('Frequency', Network)
+local HumanNetwork = class('HumanNetwork', Network)
 
-function Frequency:initialize() 
+function HumanNetwork:initialize() 
   for i=1, 1024 do self[i] = {} end
 end
 
-function Frequency:transmit(channel, speaker, message)
+function HumanNetwork:transmit(channel, speaker, message)
   local event, settings = {'network', channel, speaker}, {stage='inside'}
   local msg = tostring(speaker)..' ('..channel..'): '..message
 
@@ -18,4 +18,4 @@ function Frequency:transmit(channel, speaker, message)
   end
 end
 
-return Frequency
+return HumanNetwork
