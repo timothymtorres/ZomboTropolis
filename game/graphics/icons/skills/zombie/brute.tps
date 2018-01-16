@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/human/general.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/zombie/brute.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -89,7 +89,7 @@
         <key>dataFormat</key>
         <string>corona-imagesheet</string>
         <key>textureFileName</key>
-        <filename>general{v}.png</filename>
+        <filename>brute{v}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -187,7 +187,7 @@
             <key>lua</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>general{v}.lua</filename>
+                <filename>brute{v}.lua</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -230,16 +230,14 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>general/bindle.png</filename>
-            <filename>general/coma.png</filename>
-            <filename>general/jump-across.png</filename>
-            <filename>general/large-slash.png</filename>
-            <filename>general/punch.png</filename>
-            <filename>general/quick-slash.png</filename>
-            <filename>general/serrated-slash.png</filename>
-            <filename>general/snatch.png</filename>
-            <filename>general/targeting.png</filename>
-            <filename>general/muscle-up.png</filename>
+            <filename>brute/amputation.png</filename>
+            <filename>brute/claw-slashes.png</filename>
+            <filename>brute/decapitation.png</filename>
+            <filename>brute/layered-armor.png</filename>
+            <filename>brute/shieldcomb.png</filename>
+            <filename>brute/slashed-shield.png</filename>
+            <filename>brute/swallow.png</filename>
+            <filename>brute/wolverine-claws.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

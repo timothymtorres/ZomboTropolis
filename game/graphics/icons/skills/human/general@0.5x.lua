@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:f54fe55f3dee6a4ee41b626b02c879f6:2a79796cbe3166f766d6508f733f62b7:a41a9cfbabe87f4ee87f6dd690025223$
+-- $TexturePacker:SmartUpdate:64e3c1bd73d82c22c067cdd60c95f5ad:17624fcae1a476aab3c61af09881f5a9:a41a9cfbabe87f4ee87f6dd690025223$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -47,7 +47,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- punch
+            -- muscle-up
             x=256,
             y=0,
             width=64,
@@ -55,7 +55,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- quick-slash
+            -- punch
             x=320,
             y=0,
             width=64,
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- serrated-slash
+            -- quick-slash
             x=384,
             y=0,
             width=64,
@@ -71,7 +71,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- snatch
+            -- serrated-slash
             x=448,
             y=0,
             width=64,
@@ -79,7 +79,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- sprint
+            -- snatch
             x=512,
             y=0,
             width=64,
@@ -107,11 +107,11 @@ SheetInfo.frameIndex =
     ["coma"] = 2,
     ["jump-across"] = 3,
     ["large-slash"] = 4,
-    ["punch"] = 5,
-    ["quick-slash"] = 6,
-    ["serrated-slash"] = 7,
-    ["snatch"] = 8,
-    ["sprint"] = 9,
+    ["muscle-up"] = 5,
+    ["punch"] = 6,
+    ["quick-slash"] = 7,
+    ["serrated-slash"] = 8,
+    ["snatch"] = 9,
     ["targeting"] = 10,
 }
 

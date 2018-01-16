@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/human/general.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/zombie/general.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -230,16 +230,16 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>general/bindle.png</filename>
-            <filename>general/coma.png</filename>
-            <filename>general/jump-across.png</filename>
-            <filename>general/large-slash.png</filename>
-            <filename>general/punch.png</filename>
-            <filename>general/quick-slash.png</filename>
-            <filename>general/serrated-slash.png</filename>
-            <filename>general/snatch.png</filename>
-            <filename>general/targeting.png</filename>
-            <filename>general/muscle-up.png</filename>
+            <filename>general/conversation.png</filename>
+            <filename>general/cut-palm.png</filename>
+            <filename>general/embrassed-energy.png</filename>
+            <filename>general/evil-hand.png</filename>
+            <filename>general/fat.png</filename>
+            <filename>general/grab.png</filename>
+            <filename>general/heart-organ.png</filename>
+            <filename>general/neck-bite.png</filename>
+            <filename>general/raise-zombie.png</filename>
+            <filename>general/totem-head.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
