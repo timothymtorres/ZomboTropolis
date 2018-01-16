@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tiim/Dropbox/Public/CoronaSDK/App test/graphics/icons/skills/human/general.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/human/general.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -230,18 +230,16 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>general/fulguro-punch.png</filename>
-            <filename>general/muscle-fat.png</filename>
-            <filename>general/muscle-up.png</filename>
-            <filename>general/pummeled.png</filename>
+            <filename>general/bindle.png</filename>
+            <filename>general/coma.png</filename>
+            <filename>general/jump-across.png</filename>
+            <filename>general/large-slash.png</filename>
             <filename>general/punch.png</filename>
             <filename>general/quick-slash.png</filename>
             <filename>general/serrated-slash.png</filename>
             <filename>general/snatch.png</filename>
-            <filename>general/sprint.png</filename>
             <filename>general/targeting.png</filename>
-            <filename>general/aerosol.png</filename>
-            <filename>general/large-slash.png</filename>
+            <filename>general/muscle-up.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

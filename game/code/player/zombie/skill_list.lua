@@ -12,22 +12,22 @@ local skill_list = {
     hand_stimulus =        2^1,
     head_stimulus =        2^2,
     grapple =              2^3,
-    groan =                2^4,
-    gesture =              2^5,
+    hivemind =             2^4,
+    rejuvenation =         2^5,
     smell_blood =          2^6,
     muscle_stimulus =      2^7,
-    ep_bonus =             2^8,  -- fix this
-    drag_prey =            2^9,  -- and this
+    hunger_bonus =         2^8,  
+    resurrection =         2^9,  
 
     -- Brute
     claw =                 2^0,
     claw_adv =             2^1,
     power_claw =           2^2,
-    grapple_adv =          2^3,
+    grapple_adv =          2^3, -- combine drag_prey with this?
     armor =                2^4,
     armor_adv =            2^5,
-    maim =                2^6,
-    maim_adv =            2^7,
+    maim =                 2^6,
+    maim_adv =             2^7,
     
     -- Hunter
     sprint =               2^0,
@@ -38,28 +38,24 @@ local skill_list = {
     hide =                 2^5,
     hide_adv =             2^6,
     smell_blood_adv =      2^7,
-    night_vision =         2^8,
-    mark_prey =            2^9,
     
     -- Hive  
-    hivemind =             2^0,  
-    bite =                 2^1,
-    bite_adv =             2^2,
-    corrode =              2^3,
-    acid =                 2^4,
-    acid_adv =             2^5,
-    ruin =                 2^6,
-    ransack =              2^7,
-    infection =            2^8,
-    infection_adv =        2^9,
+    bite =                 2^0,
+    bite_adv =             2^1,
+    acid =                 2^2,
+    acid_adv =             2^3,
+    ruin =                 2^4,
+    ruin_adv =             2^5,
+    infection =            2^6,
+    infection_adv =        2^7,
   },
   order = {
     category = {'classes', 'general', 'brute', 'hunter', 'hive'},
     classes = {'brute', 'hunter', 'hive'},
-    general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'groan', 'gesture', 'hp_bonus', 'ep_bonus', 'drag_prey', 'smell_blood'},    
+    general = {'muscle_stimulus', 'hand_stimulus', 'head_stimulus', 'grapple', 'hivemind', 'hp_bonus', 'hunger_bonus', 'smell_blood', 'rejuvenation', 'resurrection'},    
     brute = {'claw', 'claw_adv', 'power_claw', 'grapple_adv', 'armor', 'armor_adv', 'maim', 'maim_adv'},      
-    hunter = {'sprint', 'leap', 'leap_adv', 'track', 'track_adv', 'hide', 'hide_adv', 'smell_blood_adv', 'night_vision', 'mark_prey'},         
-    hive = {'hivemind', 'bite', 'bite_adv', 'corrode', 'acid', 'acid_adv', 'ruin', 'ransack', 'infection', 'infection_adv'},
+    hunter = {'sprint', 'leap', 'leap_adv', 'track', 'track_adv', 'hide', 'hide_adv', 'smell_blood_adv'},         
+    hive = {'bite', 'bite_adv', 'acid', 'acid_adv', 'ruin', 'ruin_adv', 'infection', 'infection_adv'},
   },
   info = {
     classes = {
@@ -101,36 +97,36 @@ local skill_list = {
         desc='Melee attacks +5% to-hit for selected target after successful claw attack',
         icon='grab',
       },
-      groan = {
-        name='groan',
-        desc='Emit a feeding groan with range dependent upon the number of humans in the vicinity',
-        icon='terror',
-      },
-      gesture = {
-        name='gesture',
-        desc='[Not Implemented] Ability to make various useful gestures',
-        icon='pointing',
-      },
       smell_blood = {
         name='smell blood',
-        desc='Vague health status of nearby humans is displayed',
-        icon='gluttony',
+        desc='Vague health status of visible humans is displayed as well as the number of standing zombies both inside and outside buildings',
+        icon='cut-palm',
       },
       hp_bonus = {
         name='hp bonus',
         desc='Bonus +10 max hp',
         icon='heart-organ',
       },
-      ep_bonus = {
-        name='ep bonus',
-        desc='Bonus +10 max ep',
-        icon='dna1',
+      hunger_bonus = {
+        name='hunger bonus',
+        desc='Bonus for max satiation',
+        icon='fat',
       },
-      drag_prey = {
-        name='drag prey',
-        desc='Ability to drag severely wounded humans outside of open buildings',
-        icon='swallow',
-      },       
+      hivemind = {
+        name='hivemind',
+        desc='Unlocks ability to communicate with the hive and emit feeding groans when humans are nearby.',
+        icon='conversation',
+      },
+      rejuvenation = {
+        name='rejuvenation',
+        desc='Bite attacks replenish HP',
+        icon='neck-bite',
+      },
+      resurrection = {
+        name='resurrection',
+        desc='Lowered AP cost to revive after being killed',
+        icon='raise-zombie',
+      },
     },
     brute = {
       claw = {
@@ -146,32 +142,32 @@ local skill_list = {
       power_claw = {
         name='power claw',
         desc='[Not Implemented] Claw attacks against buildings, barricades, worn armor, and machines deals double damage',
-        icon='flaming-claw',
+        icon='slashed-shield',
       }, 
       armor = {
         name='armor',
         desc='Manifest an exterior hide of organic armor that is randomly selected after feeding on a corpse',
-        icon='shieldcomb',
+        icon='layered-armor',
       }, 
       armor_adv = {
         name='armor advanced',
         desc='Manually select which organic armor type to spawn and increase its starting condition',
-        icon='spiked-armor',
+        icon='shieldcomb',
       },        
       maim = {
         name='maim',
         desc='Claw attacks do a fraction of permanent damage and have a chance to delimb a weakened human',
-        icon = 'stigmata',
+        icon = 'amputation',
       },
       maim_adv = {
         name='maim advanced',
         desc='Increased permanent damage and chance to delimb for claw attacks',
-        icon = 'half-body-crawling',
+        icon = 'decapitation',
       },
       grapple_adv = {
         name='grapple advanced',
-        desc='Claw attacks +10% to-hit and increased damage',
-        icon = 'imprisoned',
+        desc='Ability to drag severely wounded humans outside of open buildings (and perma grapple)',
+        icon = 'swallow',
       },
     },
     hunter = {
@@ -203,35 +199,20 @@ local skill_list = {
       hide = {
         name='hide',
         desc='Ability to hide inside unoccupied and unpowered buildings',
-        icon='double-face-mask',
+        icon='worried-eyes',
       },
       hide_adv = {
         name='hide advanced',
         desc='Improved chance and reduced ap cost to hide',
-        icon='shadow-follower',
+        icon='hidden',
       },
       smell_blood_adv = {
         name='smell blood advanced',
-        desc='Shows a precise health indication of nearby humans',
-        icon='nose-side',
-      },
-      night_vision = {
-        name='night vision',
-        desc='Removes attack penalty when in a dark building',
-        icon='hidden',
-      },
-      mark_prey = {
-        name='mark prey',
-        desc='Tags a human who later can be tracked',
-        icon='spill',
-      },      
+        desc='Shows a precise health indication of nearby humans and detect wounded humans inside a building from the outside',
+        icon='chewed-heart',
+      },   
     },
-    hive = {
-      hivemind = {
-        name='hivemind',
-        desc='Ability to communicate full speech and revive easier',
-        icon='brain-stem',
-      },         
+    hive = {         
       bite = {
         name='bite',
         desc='Bite attacks +10% to-hit and increased damage',
@@ -257,16 +238,11 @@ local skill_list = {
       acid = {
         name='acid',
         desc='Grants ability to attack with chemicals that ruin and destroy inventory items ',
-        icon='vomiting'
+        icon='lizard-tongue'
       }, 
-      corrode = {
-        name='corrode',
-        desc='Acid attack +5% to-hit, increased chance of ruined items',
-        icon='lizard-tongue',
-      },         
       acid_adv = {
         name='acid advanced',
-        desc='Acid attack +10% to-hit, increased chance of ruined items',
+        desc='Acid ability increased chance of ruined items',
         icon='fire-breath',
       }, 
       ruin = {
@@ -274,10 +250,10 @@ local skill_list = {
         desc='[Not Implemented] Ruins a building that is devoid of humans and unpowered',
         icon='groundbreaker',
       }, 
-      ransack = {
-        name='ransack',
+      ruin_adv = {
+        name='ruin advanced',
         desc='[Not Implemented] Ransack a building that is ruined',
-        icon='grass',
+        icon='cogsplosion',
       },     
     },
   },

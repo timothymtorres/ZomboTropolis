@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:315d25efd358e0c45240ebefe1ff9226:4e9f05e9c3a73bdc6be58643d5c0e6bc:a41a9cfbabe87f4ee87f6dd690025223$
+-- $TexturePacker:SmartUpdate:64e3c1bd73d82c22c067cdd60c95f5ad:17624fcae1a476aab3c61af09881f5a9:a41a9cfbabe87f4ee87f6dd690025223$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- aerosol
+            -- bindle
             x=0,
             y=0,
             width=512,
@@ -23,23 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- fulguro-punch
-            x=512,
-            y=0,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- large-slash
-            x=1024,
-            y=0,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- muscle-fat
+            -- coma
             x=0,
             y=512,
             width=512,
@@ -47,7 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- muscle-up
+            -- jump-across
             x=0,
             y=1024,
             width=512,
@@ -55,9 +39,17 @@ SheetInfo.sheet =
 
         },
         {
-            -- pummeled
-            x=0,
-            y=1536,
+            -- large-slash
+            x=512,
+            y=0,
+            width=512,
+            height=512,
+
+        },
+        {
+            -- muscle-up
+            x=512,
+            y=512,
             width=512,
             height=512,
 
@@ -65,7 +57,7 @@ SheetInfo.sheet =
         {
             -- punch
             x=512,
-            y=512,
+            y=1024,
             width=512,
             height=512,
 
@@ -73,31 +65,23 @@ SheetInfo.sheet =
         {
             -- quick-slash
             x=1024,
-            y=512,
+            y=0,
             width=512,
             height=512,
 
         },
         {
             -- serrated-slash
-            x=512,
-            y=1024,
+            x=1536,
+            y=0,
             width=512,
             height=512,
 
         },
         {
             -- snatch
-            x=512,
-            y=1536,
-            width=512,
-            height=512,
-
-        },
-        {
-            -- sprint
             x=1024,
-            y=1024,
+            y=512,
             width=512,
             height=512,
 
@@ -105,32 +89,30 @@ SheetInfo.sheet =
         {
             -- targeting
             x=1024,
-            y=1536,
+            y=1024,
             width=512,
             height=512,
 
         },
     },
     
-    sheetContentWidth = 1536,
-    sheetContentHeight = 2048
+    sheetContentWidth = 2048,
+    sheetContentHeight = 1536
 }
 
 SheetInfo.frameIndex =
 {
 
-    ["aerosol"] = 1,
-    ["fulguro-punch"] = 2,
-    ["large-slash"] = 3,
-    ["muscle-fat"] = 4,
+    ["bindle"] = 1,
+    ["coma"] = 2,
+    ["jump-across"] = 3,
+    ["large-slash"] = 4,
     ["muscle-up"] = 5,
-    ["pummeled"] = 6,
-    ["punch"] = 7,
-    ["quick-slash"] = 8,
-    ["serrated-slash"] = 9,
-    ["snatch"] = 10,
-    ["sprint"] = 11,
-    ["targeting"] = 12,
+    ["punch"] = 6,
+    ["quick-slash"] = 7,
+    ["serrated-slash"] = 8,
+    ["snatch"] = 9,
+    ["targeting"] = 10,
 }
 
 function SheetInfo:getSheet()

@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:12cdc1d69ddc2e9feb09490b0d7a4bc8:2fefb655485e16a7fac75764652ac7c6:2492d56173e5d52650a93ad822cbdf6a$
+-- $TexturePacker:SmartUpdate:a2af8207de1c2f25e3af245f08aa045f:49f90a8f4e9e0b3409d0b6ad5ef34fd6:2492d56173e5d52650a93ad822cbdf6a$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,17 +15,9 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- brain-stem
-            x=0,
-            y=0,
-            width=256,
-            height=256,
-
-        },
-        {
             -- carnivore-mouth
             x=0,
-            y=256,
+            y=0,
             width=256,
             height=256,
 
@@ -40,15 +32,15 @@ SheetInfo.sheet =
         },
         {
             -- drop
-            x=256,
-            y=256,
+            x=512,
+            y=0,
             width=256,
             height=256,
 
         },
         {
             -- fire-breath
-            x=512,
+            x=768,
             y=0,
             width=256,
             height=256,
@@ -56,15 +48,7 @@ SheetInfo.sheet =
         },
         {
             -- gluttonous-smile
-            x=512,
-            y=256,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- grass
-            x=768,
+            x=1024,
             y=0,
             width=256,
             height=256,
@@ -72,65 +56,45 @@ SheetInfo.sheet =
         },
         {
             -- groundbreaker
-            x=768,
-            y=256,
+            x=1280,
+            y=0,
             width=256,
             height=256,
 
         },
         {
             -- lizard-tongue
-            x=1024,
+            x=1536,
             y=0,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- scorpion-tail
-            x=1024,
-            y=256,
             width=256,
             height=256,
 
         },
         {
             -- vile-fluid
-            x=1280,
+            x=1792,
             y=0,
-            width=256,
-            height=256,
-
-        },
-        {
-            -- vomiting
-            x=1280,
-            y=256,
             width=256,
             height=256,
 
         },
     },
     
-    sheetContentWidth = 1536,
-    sheetContentHeight = 512
+    sheetContentWidth = 2048,
+    sheetContentHeight = 256
 }
 
 SheetInfo.frameIndex =
 {
 
-    ["brain-stem"] = 1,
-    ["carnivore-mouth"] = 2,
-    ["cogsplosion"] = 3,
-    ["drop"] = 4,
-    ["fire-breath"] = 5,
-    ["gluttonous-smile"] = 6,
-    ["grass"] = 7,
-    ["groundbreaker"] = 8,
-    ["lizard-tongue"] = 9,
-    ["scorpion-tail"] = 10,
-    ["vile-fluid"] = 11,
-    ["vomiting"] = 12,
+    ["carnivore-mouth"] = 1,
+    ["cogsplosion"] = 2,
+    ["drop"] = 3,
+    ["fire-breath"] = 4,
+    ["gluttonous-smile"] = 5,
+    ["groundbreaker"] = 6,
+    ["lizard-tongue"] = 7,
+    ["vile-fluid"] = 8,
 }
 
 function SheetInfo:getSheet()

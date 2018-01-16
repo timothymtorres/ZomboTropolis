@@ -18,11 +18,11 @@ Crowbar.CATEGORY = 'military'
 Crowbar.weapon = {
   ATTACK_STYLE = 'melee',
   DAMAGE_TYPE = 'blunt',
-  GROUP = {'brute', 'light_brute'},
+  GROUP = {'brute'},
   DICE = '1d4',
   ACCURACY = 0.25,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'smacking',
+  MASTER_SKILL = 'blunt_adv',
 }
 
 -------------------------------------------------------------------
@@ -37,11 +37,11 @@ Bat.CATEGORY = 'military'
 Bat.weapon = {
   ATTACK_STYLE = 'melee',
   DAMAGE_TYPE = 'blunt',
-  GROUP = {'brute', 'light_brute'},
+  GROUP = {'brute'},
   DICE = '1d5',
   ACCURACY = 0.25,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'smacking',
+  MASTER_SKILL = 'blunt_adv',
 }
 
 -------------------------------------------------------------------
@@ -56,11 +56,11 @@ Sledge.CATEGORY = 'military'
 Sledge.weapon = {
   ATTACK_STYLE = 'melee',
   DAMAGE_TYPE = 'blunt',
-  GROUP = {'brute', 'heavy_brute'},
+  GROUP = {'brute'},
   DICE = '1d8',
   ACCURACY = 0.25,
   CRITICAL = 0.025,
-  MASTER_SKILL = 'smashing',
+  MASTER_SKILL = 'blunt_adv',
 }
 
 -------------------------------------------------------------------
@@ -81,11 +81,11 @@ Knife.CATEGORY = 'military'
 Knife.weapon = {
   ATTACK_STYLE = 'melee',
   DAMAGE_TYPE = 'pierce',
-  GROUP = {'blade', 'light_blade'},
+  GROUP = {'cut'},
   DICE = '1d2+1',
   ACCURACY = 0.25,
   CRITICAL = 0.075,
-  MASTER_SKILL = 'slicing',
+  MASTER_SKILL = 'blade_adv',
 }
 
 -------------------------------------------------------------------
@@ -100,11 +100,11 @@ Katanna.CATEGORY = 'military'
 Katanna.weapon = {
   ATTACK_STYLE = 'melee',
   DAMAGE_TYPE = 'pierce',
-  GROUP = {'blade', 'heavy_blade'},
+  GROUP = {'cut'},
   DICE = '1d4+2',
   ACCURACY = 0.25,
   CRITICAL = 0.10,
-  MASTER_SKILL = 'chopping',
+  MASTER_SKILL = 'blade_adv',
 }
 
 --------------------------------------------------------------------

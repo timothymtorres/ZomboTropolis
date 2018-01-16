@@ -23,11 +23,11 @@ Pistol.CATEGORY = 'military'
 Pistol.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'bullet',
-  GROUP = {'guns', 'light_guns'},
+  GROUP = {'light_guns'},
   DICE = '1d6+2',
   ACCURACY = 0.30,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'light_guns',
+  MASTER_SKILL = 'sidearm',
 }
 
 Pistol.MAX_AMMO = 14
@@ -45,11 +45,11 @@ Magnum.CATEGORY = 'military'
 Magnum.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'bullet',
-  GROUP = {'guns', 'light_guns'},
+  GROUP = {'light_guns'},
   DICE = '1d9+4',
   ACCURACY = 0.30,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'light_guns',
+  MASTER_SKILL = 'sidearm',
 }
 
 Magnum.MAX_AMMO = 6
@@ -67,11 +67,11 @@ Shotgun.CATEGORY = 'military'
 Shotgun.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'bullet',
-  GROUP = {'guns', 'heavy_guns'},
+  GROUP = {'heavy_guns'},
   DICE = '3d3++1',
   ACCURACY = 0.30,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'heavy_guns',
+  MASTER_SKILL = 'primary',
 }
 
 Shotgun.MAX_AMMO = 2
@@ -89,11 +89,11 @@ Rifle.CATEGORY = 'military'
 Rifle.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'bullet',
-  GROUP = {'guns', 'heavy_guns'},
+  GROUP = {'heavy_guns'},
   DICE = '(1d5)x3',
   ACCURACY = 0.30,
   CRITICAL = 0.05,
-  MASTER_SKILL = 'heavy_guns',
+  MASTER_SKILL = 'primary',
 }
 
 Rifle.MAX_AMMO = 5
@@ -111,11 +111,11 @@ Flare.CATEGORY = 'military'
 Flare.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'scorch',
-  GROUP = {'guns'},  -- really?!
+  GROUP = {'explosives'},
   DICE = '5d3',
   ACCURACY = 0.15,
   CRITICAL = 0.30,
-  MASTER_SKILL = 'explosives',
+  MASTER_SKILL = 'pyrotech_adv',
   --combustion_source = true,
   --fuel_amount = {'1d2+3', '1d3+5', '1d4+8', '1d5+10'},
 }
@@ -166,6 +166,7 @@ end
 
 -------------------------------------------------------------------
 
+
 local Molotov = class('Molotov', Item):include(IsWeapon)
 
 Molotov.FULL_NAME = 'molotov cocktail'
@@ -174,12 +175,15 @@ Molotov.DURABILITY = 0
 Molotov.MASTER_SKILL = 'explosives'
 Molotov.CATEGORY = 'military'
 
-Molotov.ATTACK_STYLE = 'ranged'
-Molotov.DAMAGE_TYPE = 'scorch'
-Molotov.GROUP = {'special'}
-Molotov.DICE = '5d2'
-Molotov.ACCURACY = 0.20
-Molotov.CRITICAL = 0.30
+Molotov.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'scorch',
+  GROUP = {'explosives'},
+  DICE = '5d2',
+  ACCURACY = 0.20,
+  CRITICAL = 0.30,
+  MASTER_SKILL = 'pyrotech_adv',
+}
 --Molotov.combustion_source = true
 --Molotov.fuel_amount = {'1d5+10', '1d7+12', '1d9+14', '2d5+15'}
 

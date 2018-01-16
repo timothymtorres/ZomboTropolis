@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis-Roguelike/graphics/icons/skills/human/engineering.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/icons/skills/human/engineering.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -89,7 +89,7 @@
         <key>dataFormat</key>
         <string>corona-imagesheet</string>
         <key>textureFileName</key>
-        <filename>research{v}.png</filename>
+        <filename>engineering{v}.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -187,7 +187,7 @@
             <key>lua</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>research{v}.lua</filename>
+                <filename>engineering{v}.lua</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -230,10 +230,14 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>research/anatomy.png</filename>
-            <filename>research/bandage-roll.png</filename>
-            <filename>research/medical-pack-alt.png</filename>
-            <filename>research/sticking-plaster.png</filename>
+            <filename>engineering/auto-repair.png</filename>
+            <filename>engineering/brick-pile.png</filename>
+            <filename>engineering/closed-doors.png</filename>
+            <filename>engineering/power-generator.png</filename>
+            <filename>engineering/processor.png</filename>
+            <filename>engineering/push.png</filename>
+            <filename>engineering/spanner.png</filename>
+            <filename>engineering/wooden-door.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
