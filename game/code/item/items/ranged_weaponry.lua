@@ -176,12 +176,12 @@ Molotov.MASTER_SKILL = 'explosives'
 Molotov.CATEGORY = 'military'
 
 Molotov.weapon = {
-  ATTACK_STYLE = 'ranged'
-  DAMAGE_TYPE = 'scorch'
-  GROUP = {'explosives'}
-  DICE = '5d2'
-  ACCURACY = 0.20
-  CRITICAL = 0.30
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'scorch',
+  GROUP = {'explosives'},
+  DICE = '5d2',
+  ACCURACY = 0.20,
+  CRITICAL = 0.30,
   MASTER_SKILL = 'pyrotech_adv',
 }
 --Molotov.combustion_source = true

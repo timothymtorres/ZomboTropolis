@@ -156,7 +156,7 @@ local skill_list = {
         icon='crossed-slashes', 
         requires={'melee'},
       },
-      blade_adv =       
+      blade_adv =       {
         name='blade advanced weapons',        
         desc='Blade weapons +15% to-hit', 
         icon='fire-axe', 
