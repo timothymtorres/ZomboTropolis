@@ -1,7 +1,6 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 local organic_armor = require('code.player.zombie.organic_armor')
-local Hivemind = require('code.server.network.hivemind')
 
 -------------------------------------------------------------------
 
@@ -557,35 +556,44 @@ end
 
 local hivemind = {name='hivemind', ap={cost=1}}
 
-function hivemind.initialize()
-  self.freq = math.random(1, 1024)
-end
-
 function hivemind.server_criteria(player, setting)
-  local freq 
-
   assert(setting, 'Must have selected a setting')
   if type(setting) == 'number' then 
-    assert(setting > 0 and setting <= 1024, 'Radio frequency is out of range')
-    freq = setting 
+    assert(setting > 0 and setting <= 1024, 'Hivemind channel is out of range')
+    assert(not player.network:check(setting), 'Your hivemind is already set to this channel') 
+  elseif type(setting) == 'message' then
+    -- check size of string
   else
-    assert(false, 'Radio setting type is incorrect')
+    assert(false, 'Hivemind setting type is incorrect')
   end
-  assert(not Frequency:check(freq, player), 'You already have a radio set to this frequency')
 end
 
 function hivemind.activate(player, setting)
-  if type(setting) == 'number' then
-    Frequency:remove(self.freq, player)
-    Frequency:add(setting, player)
-    self.freq = setting
-  elseif type(setting) == 'string' then -- it's a message
-
+  if type(setting) == 'number' then player.network:update(setting)
+  elseif type(setting) == 'string' then player.network:transmit(setting)
   end
+
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local msg
+
+  if type(setting) == 'number' then
+    msg = 'You tune in to the {channel} hivemind channel.'
+    msg = msg:replace(player.network:getChannelName(setting))
+  else -- it's a message
+    msg = '('..channel..'): '..message    
+  end
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'hivemind', player, setting}    
+  player.log:insert(msg, event)
 end
 
 -------------------------------------------------------------------
 
---local telepathy = {name='telepathy', ap={cost=1}}
-
-return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, hide, acid}
+return {drag_prey, groan, gesture, armor, ransack, mark_prey, track, hide, acid, hivemind}
