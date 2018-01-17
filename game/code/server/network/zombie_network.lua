@@ -7,13 +7,4 @@ function ZombieNetwork:initialize()
   for channel=1, 256 do self[channel] = {} end
 end
 
-function ZombieNetwork:transmit(channel, speaker, message)
-  local event = {'hivemind', channel, speaker}
-  local msg = tostring(speaker)..' ('..channel..'): '..message
-
-  for listener in pairs(self[channel]) do
-  	listener.log:insert(msg, event)
-  end
-end
-
 return ZombieNetwork
