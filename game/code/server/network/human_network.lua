@@ -4,7 +4,7 @@ local class = require('code.libs.middleclass')
 local HumanNetwork = class('HumanNetwork', Network)
 
 function HumanNetwork:initialize() 
-  for i=1, 1024 do self[i] = {} end
+  for channel=1, 1024 do self[channel] = {} end
 end
 
 function HumanNetwork:transmit(channel, speaker, message)

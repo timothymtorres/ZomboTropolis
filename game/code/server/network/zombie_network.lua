@@ -4,7 +4,7 @@ local class = require('code.libs.middleclass')
 local ZombieNetwork = class('ZombieNetwork', Network)
 
 function ZombieNetwork:initialize()
-  for i=1, 256 do self[i] = {} end
+  for channel=1, 256 do self[channel] = {} end
 end
 
 function ZombieNetwork:transmit(channel, speaker, message)
