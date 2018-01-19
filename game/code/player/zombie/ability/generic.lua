@@ -581,7 +581,7 @@ function hivemind.activate(player, setting)
 
   if type(setting) == 'number' then
     msg = 'You tune in to the {channel} hivemind channel.'
-    msg = msg:replace(player.network:getChannelName(setting))
+    --msg = msg:replace(player.network:getChannelName(setting))     (don't worry about channel name string yet)
   else -- it's a message
     msg = '('..channel..'): '..message    
   end
