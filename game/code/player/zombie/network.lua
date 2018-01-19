@@ -1,5 +1,5 @@
 local class = require('code.libs.middleclass')
-local ZombieNetwork = require('code.server.network.zombie_network')
+local ServerNetwork = require('code.server.network')
 
 local Network = class('Network')
 
@@ -9,15 +9,13 @@ function Network:initialize(player)
 end
 
 function Network:update(channel)
-  ZombieNetwork:remove(self.player, self.channel)
-  ZombieNetwork:add(self.player, channel)
+  ServerNetwork:remove(self.player, self.channel)
+  ServerNetwork:insert(self.player, channel)
   self.channel = channel 
 end
 
-function Network:check(channel) return ZombieNetwork:check(self.player, channel) end
+function Network:check(channel) return ServerNetwork:check(self.player, channel) end
 
-function Network:transmit(msg) ZombieNetwork:transmit(self.player, self.channel, msg) end
-
-function Network:getChannelName(channel) return 'blah' end -- Setup a list of star constellations to return?
+function Network:transmit(msg) ServerNetwork:transmit(self.player, self.channel, msg) end
 
 return Network
