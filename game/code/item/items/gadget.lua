@@ -27,8 +27,7 @@ function Radio:server_criteria(player, setting)
     if setting == true then
       assert(not player.network:check(self.channel), 'You already have a radio set to this channel')  
     end
-  elseif type(setting) == 'string' then
-    -- check msg stuff
+  --elseif type(setting) == 'string' then  (handheld radios cannot transmit...)
   else
     assert(false, 'Radio setting type is incorrect')
   end
@@ -37,17 +36,16 @@ end
 function Radio:activate(player, setting)
   if type(setting) == 'number' then
     if self.power == true then
-      Frequency:remove(self.freq, player)
-      Frequency:add(setting, player)
+      player.network:remove(self.channel)
+      player.network:add(setting)
     end
-    self.freq = setting
+    self.channel = setting
   elseif type(setting) == 'boolean' then
-    if setting == true then Frequency:add(self.freq, player)
-    elseif setting == false then Frequency:remove(self.freq, player)
+    if setting == true then player.network:add(self.channel)
+    elseif setting == false then player.network:remove(self.channel)
     end
     self.power = setting
-  elseif type(setting) == 'string' then
-
+  --elseif type(setting) == 'string' then (handheld radios cannot transmit....)
   end
 end
 
