@@ -1,6 +1,5 @@
 local class = require('code.libs.middleclass')
 local Item = require('code.item.item')
-local Frequency = require('code.server.network.frequency')
 
 -------------------------------------------------------------------
 
@@ -14,26 +13,24 @@ Radio.ap = {cost = 1}
 
 function Radio:initialize(condition_setting)
   Item.initialize(self, condition_setting)
-  self.freq = math.random(1, 1024)
+  self.channel = math.random(1, 1024)
   self.power = false
 end
 
 function Radio:server_criteria(player, setting)
-  local freq 
-
-  assert(setting, 'Must have selected a setting')
+  assert(setting, 'Must have selected a radio setting')
   if type(setting) == 'number' then 
     assert(setting > 0 and setting <= 1024, 'Radio frequency is out of range')
-    freq = setting 
+    assert(not player.network:check(setting), 'You already have a radio set to this channel')
   elseif type(setting) == 'boolean' then
-    freq = self.freq
-    assert(self.power == setting, 'New radio power setting is identical to current state')
+    assert(self.power ~= setting, 'New radio power setting is identical to current state')
+    if setting == true then
+      assert(not player.network:check(self.channel), 'You already have a radio set to this channel')  
+    end
+  elseif type(setting) == 'string' then
+    -- check msg stuff
   else
     assert(false, 'Radio setting type is incorrect')
-  end
-
-  if setting ~= false then
-    assert(not Frequency:check(freq, player), 'You already have a radio set to this frequency')
   end
 end
 
@@ -49,6 +46,8 @@ function Radio:activate(player, setting)
     elseif setting == false then Frequency:remove(self.freq, player)
     end
     self.power = setting
+  elseif type(setting) == 'string' then
+
   end
 end
 
