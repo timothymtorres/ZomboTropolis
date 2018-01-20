@@ -1,14 +1,17 @@
-local drag_prey, groan, gesture, armor, ransack, mark_prey, track, hide, acid = unpack(require('code.player.zombie.ability.generic'))
+local groan, gesture, hivemind = unpack(require('code.player.zombie.ability.general'))
+local drag_prey, armor = unpack(require('code.player.zombie.ability.brute'))
+local ruin, acid = unpack(require('code.player.zombie.ability.hive'))
+local mark_prey, track, hide = unpack(require('code.player.zombie.ability.hunter'))
 
 local abilities = {
   -- GENERAL
-  groan, gesture,
+  groan, gesture, hivemind
   -- BRUTE
-  armor, drag_prey,
+  drag_prey, armor,
   -- HIVE
-  acid, ransack,
+  ruin, acid,
   -- HUNTER
-  track, mark_prey, hide,
+  mark_prey, track, hide,
 }
 
 for _, ability in ipairs(abilities) do
