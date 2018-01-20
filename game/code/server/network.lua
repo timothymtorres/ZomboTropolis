@@ -1,13 +1,11 @@
-local class = require('code.libs.middleclass')
+local ServerNetwork = {}
 
-local ServerNetwork = class('ServerNetwork')
+do 
+  ServerNetwork.zombie = {}
+  for channel=1, 16 do ServerNetwork.zombie[channel] = setmetatable({}, {__mode='k'}) end  -- zombies only have a limited # of channels
 
-function ServerNetwork:initialize() 
-  self.zombie = {}
-  for channel=1, 16 do self.zombie[channel] = setmetatable({}, {__mode='k'}) end  -- zombies only have a limited # of channels
-
-  self.human = {}
-  for channel=1, 1024 do self.human[channel] = setmetatable({}, {__mode='k'}) end
+  ServerNetwork.human = {}
+  for channel=1, 1024 do ServerNetwork.human[channel] = setmetatable({}, {__mode='k'}) end
 end
 
 local function getMob(listener)
@@ -18,12 +16,12 @@ end
 
 function ServerNetwork:insert(listener, channel)
 	local mob = getMob(listener)
-	self[mob][channel][listener] = true	
+	ServerNetwork[mob][channel][listener] = true	
 end
 
 function ServerNetwork:remove(listener, channel)
 	local mob = getMob(listener)
-	self[mob][channel][listener] = nil
+	ServerNetwork[mob][channel][listener] = nil
 end
 
 function ServerNetwork:transmit(speaker, channel, message)
@@ -31,7 +29,7 @@ function ServerNetwork:transmit(speaker, channel, message)
   local mob = getMob(speaker)
   local msg = tostring(speaker)..' ('..channel..'): '..message -- in UD the speaker is omitted from the broadcasted msg
 
-  for listener in pairs(self[mob][channel]) do 
+  for listener in pairs(ServerNetwork[mob][channel]) do 
   	-- tostring(listener) == 'building' is probably broken
   	if tostring(listener) == 'building' then listener:broadcastEvent(msg, event, settings)
   	elseif listener ~= speaker then listener.log:insert(msg, event)
