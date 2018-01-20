@@ -48,12 +48,12 @@ function ServerNetwork:update()
         local condition = player.inventory:updateDurability(radio)
 
         if condition == 0 then msg = 'The '..tostring(radio)..' has run out of batteries!'
-        elseif condition and radio:isConditionVisible(player) then msg = 'Your '..tostring(radio)..' degrades to a '..radio:getConditionState()..' state.')
+        elseif condition and radio:isConditionVisible(player) then msg = 'Your '..tostring(radio)..' degrades to a '..radio:getConditionState()..' state.'
         end
   
         local event = {'radio', listener}    
         player.log:insert(msg, event)        
-      elseif listener:isInstanceOf('Building') -- should it be listener:isInstanceOf('Transmitter')
+      elseif listener:isInstanceOf('Building') then -- should it be listener:isInstanceOf('Transmitter')
         -- building transmitter updateDurability
       end
     end
