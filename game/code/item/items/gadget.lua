@@ -37,11 +37,11 @@ function Radio:activate(player, setting)
   if type(setting) == 'number' then
     if self.power == true then
       player.network:remove(self.channel)
-      player.network:add(setting)
+      player.network:add(setting, self)
     end
     self.channel = setting
   elseif type(setting) == 'boolean' then
-    if setting == true then player.network:add(self.channel)
+    if setting == true then player.network:add(self.channel, self)
     elseif setting == false then player.network:remove(self.channel)
     end
     self.power = setting
