@@ -37,4 +37,28 @@ function ServerNetwork:transmit(speaker, channel, message)
   end
 end
 
+function ServerNetwork:update()
+  for channel=1, #ServerNetwork.human do
+    for listener in pairs(ServerNetwork.human[channel]) do
+
+
+      if tostring(listener) == 'player' then
+        local player = listener
+        local radio = player.network:getRadio(channel)
+        local condition = player.inventory:updateDurability(radio)
+
+        if condition == 0 then msg = 'The '..tostring(radio)..' has run out of batteries!'
+        elseif condition and radio:isConditionVisible(player) then msg = 'Your '..tostring(radio)..' degrades to a '..radio:getConditionState()..' state.')
+        end
+  
+        local event = {'radio', listener}    
+        player.log:insert(msg, event)        
+      else -- it's a building (via transmitter)
+        -- building transmitter updateDurability
+      end
+    end
+  end
+
+end
+
 return ServerNetwork
