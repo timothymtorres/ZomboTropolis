@@ -20,4 +20,6 @@ end
 
 function Network:check(channel) return self.channel[channel] end
 
+function Network:getRadio(channel) return self.channels[channel] end
+
 return Network
