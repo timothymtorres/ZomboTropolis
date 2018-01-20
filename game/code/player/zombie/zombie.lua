@@ -2,6 +2,7 @@ local class = require('code.libs.middleclass')
 local Skills = require('code.player.skills')
 local Hunger = require('code.player.zombie.hunger')
 local Claw, Bite = unpack(require('code.player.zombie.organic_weaponry'))
+local Network = require('code.player.zombie.network')
 local zombie_skill_list = require('code.player.zombie.skill_list')
 local zombie_action_list = require('code.player.zombie.action.actions')
 local Player = require('code.player.player')
@@ -13,6 +14,7 @@ Zombie.action_list = zombie_action_list
 function Zombie:initialize(...) --add account name
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
+  self.network = Network:new(self)
 
   Player.initialize(self, ...)  
 end
