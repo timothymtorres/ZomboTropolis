@@ -5,7 +5,7 @@ local mark_prey, track, hide = unpack(require('code.player.zombie.ability.hunter
 
 local abilities = {
   -- GENERAL
-  groan, gesture, hivemind
+  groan, gesture, hivemind,
   -- BRUTE
   drag_prey, armor,
   -- HIVE
