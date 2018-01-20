@@ -2,6 +2,8 @@ local class = require('code.libs.middleclass')
 
 local Inventory = class('Inventory')
 
+-- Inventory methods search, check, and lookup are all similiarly named.  Might want to be more speicfic or merge them into same method?
+
 function Inventory:initialize(player)
   self.player = player
   --self.radio_receivers = {}  
@@ -51,16 +53,5 @@ function Inventory:updateDurability(inv_ID, num)
 
   return condition
 end
-
---[[ This code is deprecated and needs to be rewritten
-
-function Inventory:updateRadio(player, mode, freq)  
-  local receivers = self.radio_receivers
-  
-  if mode == 'insert' then receivers[freq] = receivers[freq] + 1  
-  elseif mode == 'remove' then receivers[freq] = receivers[freq] - 1 end
-  channel[mode](channel, freq, player)
-end
---]]
 
 return Inventory
