@@ -3,6 +3,7 @@ local Skills = require('code.player.skills')
 local Inventory = require('code.player.human.inventory')
 local Fist = require('code.player.human.organic_weaponry')
 local Carcass = require('code.player.human.carcass')
+local Network = require('code.player.human.network')
 local human_skill_list = require('code.player.human.skill_list')
 local human_action_list = require('code.player.human.action.actions')
 local Player = require('code.player.player')
@@ -17,6 +18,7 @@ function Human:initialize(...) --add account name
   self.ip = default_IP
   self.inventory = Inventory:new(self)
   self.skills = Skills:new(human_skill_list)
+  self.network = Network:new(self)
   
   Player.initialize(self, ...)  
 end

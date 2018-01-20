@@ -1,24 +1,52 @@
 local class = require('code.libs.middleclass')
 local Item = require('code.item.item')
 
+-------------------------------------------------------------------
+
 local Radio = class('Radio', Item)
 
 Radio.FULL_NAME = 'portable radio'
 Radio.WEIGHT = 3
 Radio.DURABILITY = 100
 Radio.CATEGORY = 'research'
+Radio.ap = {cost = 1}
 
---function Radio.client_criteria(player) end --needs batteries/need light
-
--- this needs to be redone
-function Radio:server_criteria(player, freq) 
-  assert(freq > 0 and freq <= 1024, 'Radio frequency is out of range')  
+function Radio:initialize(condition_setting)
+  Item.initialize(self, condition_setting)
+  self.channel = math.random(1, 1024)
+  self.power = false
 end
 
--- this needs to be redone
-function Radio:activate(player, old_freq, new_freq)
-  player.inventory:updateRadio(player, 'remove', old_freq, self.condition)
-  player.inventory:updateRadio(player, 'insert', new_freq, self.condition)
+function Radio:server_criteria(player, setting)
+  assert(setting, 'Must have selected a radio setting')
+  if type(setting) == 'number' then 
+    assert(setting > 0 and setting <= 1024, 'Radio frequency is out of range')
+    assert(not player.network:check(setting), 'You already have a radio set to this channel')
+  elseif type(setting) == 'boolean' then
+    assert(self.power ~= setting, 'New radio power setting is identical to current state')
+    if setting == true then
+      assert(not player.network:check(self.channel), 'You already have a radio set to this channel')  
+    end
+  --elseif type(setting) == 'string' then  (handheld radios cannot transmit...)
+  else
+    assert(false, 'Radio setting type is incorrect')
+  end
+end
+
+function Radio:activate(player, setting)
+  if type(setting) == 'number' then
+    if self.power == true then
+      player.network:remove(self.channel)
+      player.network:add(setting, self)
+    end
+    self.channel = setting
+  elseif type(setting) == 'boolean' then
+    if setting == true then player.network:add(self.channel, self)
+    elseif setting == false then player.network:remove(self.channel)
+    end
+    self.power = setting
+  --elseif type(setting) == 'string' then (handheld radios cannot transmit....)
+  end
 end
 
 -------------------------------------------------------------------
