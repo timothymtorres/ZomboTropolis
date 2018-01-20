@@ -4,10 +4,10 @@ local ServerNetwork = class('ServerNetwork')
 
 function ServerNetwork:initialize() 
   self.zombie = {}
-  for channel=1, 16 do self.zombie[channel] = {} end  -- zombies only have a limited # of channels
+  for channel=1, 16 do self.zombie[channel] = setmetatable({}, {__mode='k'}) end  -- zombies only have a limited # of channels
 
   self.human = {}
-  for channel=1, 1024 do self.human[channel] = {} end
+  for channel=1, 1024 do self.human[channel] = setmetatable({}, {__mode='k'}) end
 end
 
 local function getMob(listener)
@@ -18,7 +18,7 @@ end
 
 function ServerNetwork:insert(listener, channel)
 	local mob = getMob(listener)
-	self[mob][channel][listener] = listener -- probably need to set this to a weak table	
+	self[mob][channel][listener] = true	
 end
 
 function ServerNetwork:remove(listener, channel)

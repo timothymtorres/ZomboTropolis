@@ -5,7 +5,7 @@ local Network = class('Network')
 
 function Network:initialize(player)
   self.player = player
-  self.channel = {}
+  self.channel = setmetatable({}, {__mode='v'})
 end
 
 function Network:add(channel, radio) 
