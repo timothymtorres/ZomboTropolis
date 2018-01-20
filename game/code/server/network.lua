@@ -42,7 +42,7 @@ function ServerNetwork:update()
     for listener in pairs(ServerNetwork.human[channel]) do
 
 
-      if tostring(listener) == 'player' then
+      if listener:isInstanceOf('Player') then
         local player = listener
         local radio = player.network:getRadio(channel)
         local condition = player.inventory:updateDurability(radio)
@@ -53,7 +53,7 @@ function ServerNetwork:update()
   
         local event = {'radio', listener}    
         player.log:insert(msg, event)        
-      else -- it's a building (via transmitter)
+      elseif listener:isInstanceOf('Building') -- should it be listener:isInstanceOf('Transmitter')
         -- building transmitter updateDurability
       end
     end
