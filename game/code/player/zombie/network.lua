@@ -14,7 +14,7 @@ function Network:update(channel)
   self.channel = channel 
 end
 
-function Network:check(channel) return ServerNetwork:check(self.player, channel) end
+function Network:check(channel) return self.channel == channel end
 
 function Network:transmit(msg) ServerNetwork:transmit(self.player, self.channel, msg) end
 
