@@ -26,11 +26,6 @@ function ServerNetwork:remove(listener, channel)
 	self[mob][channel][listener] = nil
 end
 
-function ServerNetwork:check(listener, channel) 
-	local mob = getMob(listener)
-	return self[mob][channel][listener] 
-end
-
 function ServerNetwork:transmit(speaker, channel, message)
   local event, settings = {'network', speaker, channel}, {stage='inside'}
   local mob = getMob(speaker)
