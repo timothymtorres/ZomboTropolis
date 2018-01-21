@@ -52,6 +52,12 @@ Additionally:
 
 To enable these things would be the trivial task of removing a few lines of code.  This may get added as a feature to a new map (such as Monroeville), or in game event (a dark fog), or a map subsection (sewers).  Don't expect it to be a normal occurrence in game though.
 
+### Q: Will there be a crafting system?  Or will it all the items need to be scavenged?
+
+There are no current plans to implement a crafting system at this time.  Initially at the start of the project I had considered making a component system to mod weapons, but ultimately deemed it unpractical.
+
+Humans will have a (limited) capacity to repair buildings and equipment.  Once the game is launched I will experiment with adding item repair to test balance issues.  In the meantime, it will either be omitted or have heavy restrictions and penalties.    
+
 ### Q: Will this be free?  What is the monetization plan?
 
 Free for freedom!  Yes, it will be free.  The monetization plan I have in mind is to have an occasional ad inserted into the game. (probably after AP is used)  Another source of funding is to have cosmetic items in game that can be unlocked via purchasing tokens or surviving for `x` amount of days.  

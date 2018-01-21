@@ -1,0 +1,10 @@
+-- ZOMBIE REVIVE WITH ANKLE GRAB --
+
+Min Revive - 4 AP = 20 HP 
+
+zombies spawn with minimum hp and every ap gives additional hp.  
+1 ap =  5 hp  (20 HP = [4-10] = 50 HP)
+1 ap = 10 hp  (20 HP = [2- 5] = 50 HP)
+
+Feed on a corpse results in 15hp gain?  Rejuv boosts that to +30?
+Bite attacks grant full damage to hp.  Or maybe half.  
