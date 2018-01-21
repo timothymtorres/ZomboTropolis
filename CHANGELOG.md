@@ -6,13 +6,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.9.0] - 01/21/2018
 ### Added
 - CHANGELOG.md
-- Maim ability for brute zombies that damages a humans potential hp.  There is also a possiblity to severe limbs if a human has low health. (this will result in permanent hp loss that is unhealable)
+- Zombie skill icons for: Rejuvenation, Smell Blood, Smell Blood Adv, Satiation Bonus, Resurrection, Armor, Armor Adv, Maim, Maim Adv, Power Claw, Hide, Hide Adv
+- Human skill icons for: Roof Travel, IP Bonus, Diagnosis, Pyrotech Adv, Gadgets, Scanner, Syringe, Terminal, Renovate, Tech, Tech Adv
+- `Maim` brute zombie skill damages a humans potential hp. (when using claws)  There is also a possibility to severe limbs if a human has low health.  This will result in permanent hp loss that is unhealable.
+- `Power Claw` brute zombie skill now has an increased chance to degrade armor that humans are wearing when attacking with claws
+-  `Leap` hunter zombie skill allows them to travel from ruined building to ruined building.  `Leap Adv` skill allows for travel from ruined building to unruined building.
+-  `Rejuvenation` general zombie skill replenishes hp from successful bite attacks.
+-  `Satiation Bonus` general zombie skill grants a bonus to max satiation a zombie can store.
+-  `Smell` general zombie skill displays the presence of zombies on a tile regardless if the player or zombies are inside/outside a building.  It also displays wounded humans nearby.
+-  `Smell Adv` hunter zombie skill displays wounded humans regardless of the player's position.  (So you can basically see wounded humans who are inside buildings from the outside, aka x-ray vision) 
+-  `Resurrection` general zombie skill grants a hp boost per ap spent to revive.
+-  Zombies now gain 15 HP gain when feeding on corpses. The `Rejuvenation` skill increases this amount by 15, resulting in a total of 30 HP gained.
+-  `Hivemind` general zombie skill now allows zombies to communicate via telepathy regardless of location.
+-  `Armor` brute zombie skill generates organic armor for a zombie by feeding on a corpse.  The armor is selected at random unless `Armor Adv` skill is purchased.  `Armor Adv` also boosts the armor condition when it is generated.
+-  Radios for humans can now toggle the power on/off and retune the channel frequency.  The durability code for handheld radios is only checked for radios that are turned on.  (so keeping backup radios that are turned off might be a good idea)
 
 ### Changed
 - Human and Zombie skill names, descriptions, and icons  
 - Combat accuracy has been increased for certain skills
+- Reviving as a zombie is no longer a fixed ap cost action.  A player can choose to spend `x` ap to regain lost hp.  The conversion rate is 5 hp per ap.  The `Resurrection` skill boosts the rate to 10 hp per ap.  The minimum hp needed to revive is 20, and the max hp to revive is 50.  (`Hp Bonus` skill automatically gives +10 HP when reviving) 
 
 ### Fixed
 - Organic armor code to spawn correctly
@@ -158,7 +174,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.0.0] - 05/24/2016
 - This is the starting point where I moved my code from Dropbox to Git.
 
-[Unreleased]: https://github.com/timothymtorres/zombotropolis/compare/v0.8.1...Develop
+[Unreleased]: https://github.com/timothymtorres/zombotropolis/compare/v0.9.0...Develop
+[0.9.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.9.0...v0.8.1
 [0.8.1]: https://github.com/timothymtorres/zombotropolis/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.6.0...v0.7.0
@@ -168,6 +185,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [0.4.1]: https://github.com/timothymtorres/zombotropolis/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.2.0...v0.3.0
-
 [0.2.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/timothymtorres/zombotropolis/compare/v0.0.0...v0.1.0
