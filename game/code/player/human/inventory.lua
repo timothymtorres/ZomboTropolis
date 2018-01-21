@@ -2,16 +2,11 @@ local class = require('code.libs.middleclass')
 
 local Inventory = class('Inventory')
 
--- Inventory methods search, check, and lookup are all similiarly named.  Might want to be more speicfic or merge them into same method?
-function Inventory:initialize(player)
-  self.player = player
-end
+function Inventory:initialize(player) self.player = player end
 
-function Inventory:getItem(obj)
-  local position = type(obj) == 'number' and obj or self[obj]
-  local item = type(obj) == 'table' and obj or self[position] 
-  return item, position
-end
+function Inventory:getItem(pos) return self[pos] end
+
+function Inventory:getPos(item) return self[item] end
 
 function Inventory:insert(item) 
   self[#self+1] = item 
@@ -19,7 +14,8 @@ function Inventory:insert(item)
 end
 
 function Inventory:remove(obj)
-  local item, position = self:getItem(obj)
+  local position = type(obj) == 'number' and obj or self:getPos(obj)
+  local item = type(obj) == 'table' and obj or self:getItem(obj) 
 
   -- put item:destroy() here?
   self[item] = nil 
@@ -29,13 +25,9 @@ function Inventory:remove(obj)
   for i, item_INST in ipairs(self) do self[item_INST] = i end
 end
 
-function Inventory:isPresent(obj) 
-  local item = self:getItem(obj)
-  return (self[item] and true) or false
-end
+function Inventory:isPresent(obj) return self[obj] end
 
 --[[  This is now getItem()
-
 function Inventory:lookup(inv_ID)  -- get itemClass_INST   this method should be renamed to getItem()
   if inv_ID == nil or self[inv_ID] == nil then return error('Inventory:lookup invalid') end  
   return self[inv_ID]
@@ -58,8 +50,8 @@ function Inventory:catalog()
 end
 
 function Inventory:updateDurability(obj, num)
-  local inv_ID = type(obj) == 'number' and obj or self[obj]
-  local item = type(obj) == 'table' and obj or self[inv_ID]
+  local position = type(obj) == 'number' and obj or self:getPos(obj)
+  local item = type(obj) == 'table' and obj or self:getItem(obj)
   local player = self.player
   local is_single_use = item:isSingleUse()
   local failed_durability_test = not is_single_use and item:failDurabilityCheck(player)
