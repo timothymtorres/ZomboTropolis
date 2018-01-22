@@ -1,4 +1,16 @@
-### Q: What is the difference between the ZomboTropolis remake and Urbandead/Quarantine2019?
+# FAQ
+
+* [What is the difference between the ZomboTropolis remake and it's predecessors?](#what-is-the-difference-between-the-zombotropolis-remake-and-its-predecessors)
+* [How will permadeath, dice, and roguelike mechanics work?](#how-will-permadeath-dice-and-roguelike-mechanics-work)
+* [What about Player Killing?](#what-about-player-killing)
+* [Will there be a crafting system?](#will-there-be-a-crafting-system)
+* [Will this be free?](#will-this-be-free)
+* [When will the game be playable](#when-will-the-game-be-playable)
+* [How long has this been in development?](#how-long-has-this-been-in-development)
+* [What about modding?](#what-about-modding)
+* [How can I help?](#how-can-i-help)
+
+## What is the difference between the ZomboTropolis remake and it's predecessors?
 
 *(Note - I will here forth refer to ZomboTropolis as ZT, Urbandead as UD, and Quarantine2019 as Q)*
 
@@ -35,13 +47,13 @@ A lot more features have been added to ZT than in Q and UD.  A quick list as fol
 
 While humans generally do not have restrictions to their actions, certain actions will greatly benefit from skills from one class.
 
-### Q: Roguelike?!  With permadeath, dice and stuff?
+## How will permadeath, dice, and roguelike mechanics work?
 
-Yes.  If you die (as a human) or starve (as a zombie) then it's game over.  Fortunately, respawning is easy and you won't be completely useless with a new character.  With ZT, your goal is to see how long you can survive, and if I have developed the game correctly, this should be hard for both sides.
+If you die (as a human) or starve (as a zombie) then it's game over.  Fortunately, respawning is easy and you won't be completely useless with a new character.  With ZT, your goal is to see how long you can survive, and if I have developed the game correctly, this should be hard for both sides.
   
 Regarding dice, I felt like both UD and Q suffered from using what I call 'basic' math.  Weapons and items always did `x` amount of effect.  That wasn't realistic and pretty boring for gameplay.  So by adding dice it would allow ZT to be more dynamic!  Weapons in better condition do more damage or have better accuracy.  Skills either boost accuracy or grant rerolls to weapon attacks that successfully land.  This is a powerful system that works well and allows for interesting possibilities. 
 
-### Q: What about Player Killing? (PK'ing)
+## What about player killing?
 
 Player killing is going to be disabled for both sides.  So a human cannot kill other humans, and vice-versa for zombies.  It would be too game breaking to have this feature enabled with permadeath functioning.  
 
@@ -52,31 +64,31 @@ Additionally:
 
 To enable these things would be the trivial task of removing a few lines of code.  This may get added as a feature to a new map (such as Monroeville), or in game event (a dark fog), or a map subsection (sewers).  Don't expect it to be a normal occurrence in game though.
 
-### Q: Will there be a crafting system?  Or will it all the items need to be scavenged?
+## Will there be a crafting system?
 
 There are no current plans to implement a crafting system at this time.  Initially at the start of the project I had considered making a component system to mod weapons, but ultimately deemed it unpractical.
 
 Humans will have a (limited) capacity to repair buildings and equipment.  Once the game is launched I will experiment with adding item repair to test balance issues.  In the meantime, it will either be omitted or have heavy restrictions and penalties.    
 
-### Q: Will this be free?  What is the monetization plan?
+## Will this be free?
 
 Free for freedom!  Yes, it will be free.  The monetization plan I have in mind is to have an occasional ad inserted into the game. (probably after AP is used)  Another source of funding is to have cosmetic items in game that can be unlocked via purchasing tokens or surviving for `x` amount of days.  
 
 Money will not give a person an in game advantage.  This will keep the game true to it's predecessors!  :)
 
-### Q: When will the game be playable/finished?
+## When will the game be playable?
 
 I'm aiming for development to be finished around Spring 2018.  The app should launch shortly after that time frame.
 
-### Q: How long has this been in development?
+## How long has this been in development?
 
 I have been developing ZT for a few years off and on in my free time.  This last year I have made tremendous progress, and the game is now close to being finished.  I have worked on other smaller projects, but this game has been my most ambitious yet.  
 
-### Q: What about modding?
+## What about modding?
 
 I will be looking at modding ZT to other themes since my API and source code is pretty robust.  It shouldn't be that hard to switch it to something like say, Ninjas vs Samurais, heh.
 
-### Q: How can I help?
+## How can I help?
 
 I need help with the following:
 
