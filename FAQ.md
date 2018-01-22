@@ -2,7 +2,7 @@
 
 * [What is the difference between the ZomboTropolis remake and it's predecessors?](#what-is-the-difference-between-the-zombotropolis-remake-and-its-predecessors)
 * [How will permadeath, dice, and roguelike mechanics work?](#how-will-permadeath-dice-and-roguelike-mechanics-work)
-* [What about Player Killing?](#what-about-player-killing)
+* [What about player killing?](#what-about-player-killing)
 * [Will there be a crafting system?](#will-there-be-a-crafting-system)
 * [Will this be free?](#will-this-be-free)
 * [When will the game be playable](#when-will-the-game-be-playable)
