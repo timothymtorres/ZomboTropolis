@@ -8,7 +8,7 @@ function Inventory:getItem(pos) return self[pos] end
 
 function Inventory:getPos(item) return self[item] end
 
-function Inventory:isPresent(obj) return self[obj] end  -- obj can be a position or item
+function Inventory:isPresent(obj) return self[obj] and true or false end  -- obj can be a position or item
 
 function Inventory:insert(item) 
   self[#self+1] = item
