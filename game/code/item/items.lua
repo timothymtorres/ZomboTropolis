@@ -14,13 +14,13 @@ local Items = {
   -- RANGED_WEAPONRY
   Pistol, Magnum, Shotgun, Rifle, Flare, Molotov, 
   -- MEDICAL
-  FAK, Bandage, Syringe, Vaccine, Antidote, 
+  FAK, Bandage, Syringe, Vaccine, Antidote, Scanner,
   -- MACHINERY
   Generator, Transmitter, Terminal,
   -- TOOLS
   Fuel, Barricade, Toolbox,
   -- GADGET
-  Radio, GPS, Flashlight, Sampler, --'cellphone', 'sampler'
+  Radio, GPS, Flashlight, --'cellphone', 'sampler'
   -- JUNK
   Book, Bottle, Newspaper,
   -- AMMO
