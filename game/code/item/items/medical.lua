@@ -142,31 +142,34 @@ function Syringe:server_criteria(player, target)
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
-local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe_adv = 'intact'}
+local antidote_skill_modifier = {none = 'ruined', gadget = 'ransacked', syringe = 'intact'}
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
 function Syringe:activate(player, target)
   local inject_chance = self.medical.ACCURACY
+  local syringe_hp_threshold = syringe_hp_ranges[self.condition]
 
-  if player.skills:check('syringe') then
+  if player.skills:check('gadget') then
     inject_chance = inject_chance + 0.15
-    if player.skills:check("syringe_adv") then
+    syringe_hp_threshold = syringe_hp_threshold + 3
+    if player.skills:check("syringe") then
       inject_chance = inject_chance + 0.20
+      syringe_hp_threshold = syringe_hp_threshold + 3
     end
   end
   
   local inject_success = inject_chance >= math.random()
-  local target_weak_enough = syringe_hp_ranges[self.condition] >= target.stats:get('hp') 
+  local target_weak_enough = syringe_hp_threshold >= target.stats:get('hp') 
   local syringe_salvage_successful
 
   if inject_success and target_weak_enough then  -- the syringe will create a antidote
     target:killed()
     
-    local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+    local skill_modifier = (player.skills:check('syringe') and antidote_skill_modifier.syringe_adv) or (player.skills:check('gadget') and antidote_skill_modifier.gadget) or antidote_skill_modifier.none
     local antidote = item.antidote:new(skill_modifier)
     player.inventory:insert(antidote)
   elseif inject_success then
-    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1  
+    syringe_salvage_successful = player.skills:check('syringe') and dice.roll(syringe_salvage_chance) == 1  
   else
     syringe_salvage_successful = true
   end
