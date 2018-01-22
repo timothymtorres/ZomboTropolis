@@ -299,6 +299,7 @@ Scanner.FULL_NAME = 'scanner'
 Scanner.WEIGHT = 5
 Scanner.DURABILITY = 100
 Scanner.CATEGORY = 'research'
+Scanner.MASTER_SKILL = 'scanner'
 Scanner.ap = {cost = 1}
 
 Scanner.medical = {ACCURACY = 0.10}
