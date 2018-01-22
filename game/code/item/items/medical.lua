@@ -209,7 +209,7 @@ end
 
 local Vaccine = class('Vaccine', Item)
 
-Vaccine.FULL_NAME = 'antibodies'
+Vaccine.FULL_NAME = 'vaccine'
 Vaccine.WEIGHT = 5
 Vaccine.DURABILITY = 0
 Vaccine.CATEGORY = 'research'
@@ -291,6 +291,67 @@ function Antidote:activate(player, target)
   target.log:insert(target_msg, event)   
 end
 
+-------------------------------------------------------------------
+
+local Scanner = class('Scanner', Item)
+
+Scanner.FULL_NAME = 'scanner'
+Scanner.WEIGHT = 5
+Scanner.DURABILITY = 100
+Scanner.CATEGORY = 'research'
+Scanner.ap = {cost = 1}
+
+Scanner.medical = {ACCURACY = 0.10}
+
+function Scanner:client_criteria(player)
+  local p_tile, setting = player:getTile(), player:getStage()
+  local zombie_n = p_tile:countPlayers('zombie', setting) 
+  assert(zombie_n > 0, 'No zombies are nearby')  
+end
+
+function Scanner:server_criteria(player, target)
+  assert(target:isStanding(), 'Target has been killed')
+  assert(player:isSameLocation(target), 'Target is out of range')
+  assert(target:isMobType('zombie'), 'Target must be a zombie')
+end
+
+function Scanner:activate(player, target)
+  local scan_chance = self.medical.ACCURACY
+  if player.skills:check('gadget') then scan_chance = scan_chance + 0.15 end
+  if player.skills:check("scanner") then scan_chance = scan_chance + 0.20 end
+  
+  local scan_success = scan_chance >= math.random()
+
+  if scan_success then
+    -- do something
+  end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg, target_msg   
+  
+  if scan_success then
+    self_msg =   'You scan {target} with your scanner.'
+    target_msg = '{player} scans you.'       
+  else 
+    self_msg =   'You attempt to scan {target} and fail.'
+    target_msg = '{player} attempted to scan you.'  
+  end
+  
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)    
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'scanner', player, target, scan_success}    
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
+end
+
 --[[
 medical.herb = {}
 medical.herb.full_name = 'herb'
@@ -299,4 +360,4 @@ medical.herb.dice = '1d2'
 medical.herb.durability = 0
 --]]
 
-return {FAK, Bandage, Syringe, Vaccine, Antidote}
+return {FAK, Bandage, Syringe, Vaccine, Antidote, Scanner}
