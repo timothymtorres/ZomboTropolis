@@ -101,7 +101,7 @@ function Player:getMobType() return string.lower(self.class.name) end
 function Player:getCost(stat, action_str, ID)  -- remove stat from this (it was to differenate between ap/ep a while back)
   local action_data
 
-  if action_str == 'item' then            action_data = self.inventory:lookup(ID)
+  if action_str == 'item' then            action_data = self.inventory:getItem(ID)
   elseif action_str == 'equipment' then --action_data =
   elseif action_str == 'ability' then   --action_data =
   else                                    action_data = self.class.action_list[action_str] 

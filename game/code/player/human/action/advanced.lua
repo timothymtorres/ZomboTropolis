@@ -7,17 +7,16 @@ local search = {name='search', ap={cost=1}}
 
 function search.activate(player)
   local p_tile = player:getTile()
-  local flashlight_was_used
+  local flashlight_was_used, flashlight_condition
   
-  local player_has_flashlight, inv_ID = player.inventory:search('flashlight')
+  local flashlight = player.inventory:searchForItem('Flashlight')
   local player_inside_unpowered_building = not p_tile:isPowered() and player:isStaged('inside')
   
-  local discovery = p_tile:search(player, player:getStage(), player_has_flashlight)
+  local discovery = p_tile:search(player, player:getStage(), flashlight)
 
-  if player_has_flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
+  if flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
     flashlight_was_used = true
-    local flashlight = player.inventory:lookup(inv_ID)
-    if flashlight:failDurabilityCheck(player) then flashlight:updateCondition(-1, player, inv_ID) end
+    flashlight_condition = player.inventory:updateDurability(flashlight) 
   end
 
   local item, hidden_player
@@ -50,6 +49,13 @@ function search.activate(player)
     public_msg = public_msg:replace(names)
     hidden_player_msg = hidden_player_msg:replace(names)
   end
+
+  if flashlight_condition == 0 then 
+    self_msg = self_msg..'Your '..tostring(flashlight)..' is destroyed!'
+  elseif flashlight_condition and GPS:isConditionVisible(player) then 
+    self_msg = self_msg..'Your '..tostring(flashlight)..' degrades to a '..flashlight:getConditionState()..' state.'
+  end  
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------     
@@ -74,9 +80,9 @@ end
 
 local discard = {name='discard', ap={cost=0}}
 
-function discard.activate(player, inv_ID)
-  local item = player.inventory:lookup(inv_ID)
-  player:remove(inv_ID)
+function discard.activate(player, inv_pos)
+  local item = player.inventory:getItem(inv_pos)
+  player.inventory:remove(item)
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
@@ -89,7 +95,7 @@ function discard.activate(player, inv_ID)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------   
   
-  local event = {'discard', player, inv_ID}    
+  local event = {'discard', player, item}    
   player.log:insert(msg, event)
 end
 
@@ -218,20 +224,20 @@ end
 
 local item = {name='item'}
 
-function item.server_criteria(player, inv_ID, ...)
-  assert(inv_ID, 'Missing inventory ID for item')
-  assert(player.inventory:check(inv_ID), 'Item not in inventory')  
+function item.server_criteria(player, inv_pos, ...)
+  assert(inv_pos, 'Missing inventory position for item')
+  assert(player.inventory:isPresent(inv_pos), 'Item not in inventory')  
   
-  local itemObj = player.inventory:lookup(inv_ID)
+  local itemObj = player.inventory:getItem(inv_pos)
   if itemObj.server_criteria then itemObj.server_criteria(player, ...) end
 end
 
-function item.activate(player, inv_ID, target)
-  local itemObj = player.inventory:lookup(inv_ID)
+function item.activate(player, inv_pos, target)
+  local itemObj = player.inventory:getItem(inv_pos)
   local is_durability_skipped = itemObj:activate(player, target)
 
   if not is_durability_skipped then 
-    local condition = player.inventory:updateDurability(inv_ID) 
+    local condition = player.inventory:updateDurability(itemObj) 
 
     if condition == 0 then 
       player.log:append('Your '..tostring(itemObj)..' is destroyed!')
