@@ -9,6 +9,7 @@ Radio.FULL_NAME = 'portable radio'
 Radio.WEIGHT = 3
 Radio.DURABILITY = 100
 Radio.CATEGORY = 'research'
+Radio.MASTER_SKILL = 'gadget'
 Radio.ap = {cost = 1}
 
 function Radio:initialize(condition_setting)
@@ -57,6 +58,8 @@ GPS.FULL_NAME = 'global position system'
 GPS.WEIGHT = 2
 GPS.DURABILITY = 50
 GPS.CATEGORY = 'research'
+GPS.MASTER_SKILL = 'gadget'
+
 
 ---------------------------------------------------------------------
 
@@ -66,6 +69,7 @@ Flashlight.FULL_NAME = 'flashlight'
 Flashlight.WEIGHT = 4
 Flashlight.DURABILITY = 100
 Flashlight.CATEGORY = 'research'
+Flashlight.MASTER_SKILL = 'gadget'
 
 ---------------------------------------------------------------------
 
