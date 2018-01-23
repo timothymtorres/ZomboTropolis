@@ -19,6 +19,12 @@ function Zombie:initialize(...) --add account name
   Player.initialize(self, ...)  
 end
 
+function Zombie:perform(action_str, ...) 
+  local AP_cost = Player.perform(self, action_str, ...)
+  self.hunger:elapse(AP_cost)
+  if self.status_effect:isActive('scanned') then self.status_effect:remove('scanned') end
+end
+
 function Zombie:killed() -- cause_of_death arg not needed yet?
   self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
   self.condition = condition:new(self)

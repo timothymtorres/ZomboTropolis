@@ -41,21 +41,20 @@ function Player:perform(action_str, ...)
   local ap_verification, ap_error_msg = pcall(basicCriteria, self, action_str, ...)
   local action = self.class.action_list[action_str]  
   local verification, error_msg = pcall(action.server_criteria, self, ...)
+  local AP_cost
 
   if ap_verification and verification then
-    local AP_cost = self:getCost('ap', action_str)
+    AP_cost = self:getCost('ap', action_str)
     action.activate(self, ...)
 
     self.status_effect:elapse(AP_cost)   
     self.stats:update('ap', -1*AP_cost)
     self.stats:update('xp', AP_cost)
-
-    if self:isMobType('zombie') then self.hunger:elapse(AP_cost) end -- bit of a hack to put this in here...
   else -- Houston, we have a problem!
     self.log:insert(ap_error_msg or error_msg)
   end
-  
   --self.stats:update('IP', 1)  -- IP connection hits?  Hmmmm?
+  return AP_cost  
 end
 
 function Player:permadeath() end -- run code to remove player instance from map
