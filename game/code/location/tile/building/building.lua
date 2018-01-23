@@ -85,7 +85,7 @@ end
 
 function Building:install(machine, condition) 
   local Machine = machine:sub(1,1):upper()..machine:sub(2)  -- capitalize machine
-  self[machine] = Machines[Machine]:new(condition) 
+  self[machine] = Machines[Machine]:new(self, condition) 
 end
 
 function Building:blackout()
