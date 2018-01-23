@@ -17,7 +17,10 @@ function StatusEffect:add(effect, ...)
   self[effect] = StatusEffect[mob_type][Effect]:new(self.player, ...)
 end
 
-function StatusEffect:remove(effect) self[effect] = nil end
+function StatusEffect:remove(effect) 
+	if self[effect].remove then self[effect]:remove() end
+  self[effect] = nil 
+end
 
 function StatusEffect:isActive(effect) return self[effect] end
 
