@@ -29,4 +29,20 @@ function TerminalNetwork:remove(zombie)
   self[y][x].total_xp_levels = self[y][x].total_xp_levels - zombie.skills:countFlags('skills')
 end
 
+function TerminalNetwork:access(human)
+  local zombies_num, zombies_levels, zombies_pos 
+
+  -- if ISP for suburb is powered then
+  zombies_num = 0 --{suburb_1 = 27, suburb_2 = 37, etc. etc.}
+
+  if human.skills:check('gadget') then 
+    zombies_levels = 0 -- {suburb_1 =27, etc. etc.}
+    if human.skills:check('terminal') then 
+      zombies_pos = {1, 2, 3, 4, 5}
+    end
+  end
+
+  return zombies_num, zombies_levels, zombies_pos
+end
+
 return TerminalNetwork
