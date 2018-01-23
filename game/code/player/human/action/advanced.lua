@@ -259,7 +259,7 @@ function equipment.client_criteria(name, player) -- operation)
 end
 
 function equipment.server_criteria(name, player, operation)
-  assert(operation, 'Missing equipment operation for action')
+  --assert(operation, 'Missing equipment operation for action')  The terminal requires no operation arg?
   
   local p_tile = player:getTile()  
   assert(p_tile:isBuilding(), 'No building near player to use equipment')
