@@ -314,6 +314,7 @@ function Scanner:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
   assert(player:isSameLocation(target), 'Target is out of range')
   assert(target:isMobType('zombie'), 'Target must be a zombie')
+  assert(not target.status_effect:isActive('scanned'), 'Target has already been scanned')
 end
 
 function Scanner:activate(player, target)
@@ -323,9 +324,7 @@ function Scanner:activate(player, target)
   
   local scan_success = scan_chance >= math.random()
 
-  if scan_success then
-    -- do something
-  end
+  if scan_success then target.status_effect:add('scanned', target) end
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
