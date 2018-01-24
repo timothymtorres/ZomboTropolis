@@ -6,6 +6,10 @@ local TerminalNetwork = class('TerminalNetwork')
 Instead of showing every zombie on the map, each tile should have a variable that is
 63 x 2 = 0-126 (6 bits)
 For every 1 value for the 6 bits = 2 zombies
+
+When mapping out the zombie positions, make an array of tiles that have zombies true/false.
+This should narrow down the data being sent as a lot of tiles won't have scanned zombies.
+Then send the zombie #'s.
 --]]
 
 function TerminalNetwork:initialize(size)
@@ -14,6 +18,8 @@ function TerminalNetwork:initialize(size)
     self[suburb] = {scanned_zombies = 0, total_xp_levels = 0}
   end
   --]]
+  self.scanned_zombies = 0
+  self.total_xp_levels = 0
 
   for y=1, size do
     self[y] = {}
@@ -25,14 +31,22 @@ end
 
 function TerminalNetwork:add(zombie)
   local y, x = zombie:getPos()
+  local xp_level = zombie.skills:countFlags('skills')
   self[y][x].scanned_zombies = self[y][x].scanned_zombies + 1
-  self[y][x].total_xp_levels = self[y][x].total_xp_levels + zombie.skills:countFlags('skills')
+  self[y][x].total_xp_levels = self[y][x].total_xp_levels + xp_level
+
+  self.scanned_zombies = self.scanned_zombies + 1
+  self.total_xp_levels = self.total_xp_levels + xp_level
 end
 
 function TerminalNetwork:remove(zombie)
   local y, x = zombie:getPos()
+  local xp_level = zombie.skills:countFlags('skills')
   self[y][x].scanned_zombies = self[y][x].scanned_zombies - 1
-  self[y][x].total_xp_levels = self[y][x].total_xp_levels - zombie.skills:countFlags('skills')
+  self[y][x].total_xp_levels = self[y][x].total_xp_levels - xp_level
+
+  self.scanned_zombies = self.scanned_zombies - 1
+  self.total_xp_levels = self.total_xp_levels - xp_level  
 end
 
 local GADGET_SKILL_REDUCTION = 0.25
@@ -45,14 +59,15 @@ function TerminalNetwork:access(terminal, human)
                           (human.skills:check('terminal') and TERMINAL_SKILL_REDUCTION or 0)
   local error_of_margin = terminal_condition_mod[terminal:getCondition()] 
   error_of_margin = error_of_margin - error_of_margin*skill_reduction
+  local margin = 1 + (math.random(-1*error_of_margin*100, error_of_margin*100)*0.01)
 
   -- if ISP for suburb is powered then
-  zombies_num = 0 --{suburb_1 = 27, suburb_2 = 37, etc. etc.}
+  zombies_num = math.floor(margin*self.scanned_zombies) --{suburb_1 = 27, suburb_2 = 37, etc. etc.}
 
   if human.skills:check('gadget') then 
-    zombies_levels = 0 -- {suburb_1 =27, etc. etc.}
+    zombies_levels = math.floor(margin*self.total_xp_levels)
     if human.skills:check('terminal') then 
-      zombies_pos = {1, 2, 3, 4, 5}
+      zombies_pos = {} -- should only send Suburb maps
     end
   end
 
