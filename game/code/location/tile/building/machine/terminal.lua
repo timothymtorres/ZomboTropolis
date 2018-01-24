@@ -34,8 +34,21 @@ print('Total zombies is: ', zombies_num)
 print('Total zombie experience levels are: ', zombies_levels)
 print('Zombie positions are the following: ', zombies_pos)
 
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg = 'You access the terminal.'
+  local msg =      '{player} accesses the terminal.'  
+  msg = msg:replace(player)
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'terminal', player, zombies_num, zombies_levels, zombies_pos}  
+  player:broadcastEvent(msg, self_msg, event)   
 	-- need to do something with data on player UI
-
 end
 
 return Terminal

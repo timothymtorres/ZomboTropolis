@@ -53,6 +53,13 @@ local GADGET_SKILL_REDUCTION = 0.25
 local TERMINAL_SKILL_REDUCTION = 0.50
 local terminal_condition_mod = {1.00, 0.80, 0.65, 0.50}
 
+--[[  Condition affects
+Pristine = error of margin 50% - 150%   (50%)
+Average =  error of margin 35% - 165%   (65%)
+Worn =     error of margin 20% - 180%   (80%)
+Ruined =   error of margin  0% - 200%  (100%)
+--]]
+
 function TerminalNetwork:access(terminal, human)
   local zombies_num, zombies_levels, zombies_pos 
   local skill_reduction = (human.skills:check('gadget') and GADGET_SKILL_REDUCTION or 0) +
