@@ -2,6 +2,12 @@ local class = require('code.libs.middleclass')
 
 local TerminalNetwork = class('TerminalNetwork')
 
+--[[
+Instead of showing every zombie on the map, each tile should have a variable that is
+63 x 2 = 0-126 (6 bits)
+For every 1 value for the 6 bits = 2 zombies
+--]]
+
 function TerminalNetwork:initialize(size)
   --[[  Do something like this for suburbs?
   for i=1, #suburbs do
@@ -29,9 +35,16 @@ function TerminalNetwork:remove(zombie)
   self[y][x].total_xp_levels = self[y][x].total_xp_levels - zombie.skills:countFlags('skills')
 end
 
+local GADGET_SKILL_REDUCTION = 0.25
+local TERMINAL_SKILL_REDUCTION = 0.50
+local terminal_condition_mod = {1.00, 0.80, 0.65, 0.50}
+
 function TerminalNetwork:access(terminal, human)
-  
   local zombies_num, zombies_levels, zombies_pos 
+  local skill_reduction = (human.skills:check('gadget') and GADGET_SKILL_REDUCTION or 0) +
+                          (human.skills:check('terminal') and TERMINAL_SKILL_REDUCTION or 0)
+  local error_of_margin = terminal_condition_mod[terminal:getCondition()] 
+  error_of_margin = error_of_margin - error_of_margin*skill_reduction
 
   -- if ISP for suburb is powered then
   zombies_num = 0 --{suburb_1 = 27, suburb_2 = 37, etc. etc.}
