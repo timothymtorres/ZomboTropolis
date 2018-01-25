@@ -99,13 +99,8 @@ function Toolbox:client_criteria(player)
   assert(p_building:isBuilding(), 'No building nearby to repair')
   assert(player:isStaged('inside'), 'Must be inside building to repair')  
 
-  -- integrity code
-  assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
-  if p_building.integrity:isState('ruined') then
-    local n_zombies = p_building:countPlayers('zombie', 'inside')    
-    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
-    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
-  end
+  local is_integrity_repairable = p_building.integrity:canRepair(player)
+  local is_machine_repairable = p_building:isPresent('damaged machines')
 
   --[[ Other targets to check (machines, doors, etc.)
   -- machine code
@@ -116,7 +111,7 @@ function Toolbox:client_criteria(player)
   --]]
 end
 
-function Toolbox.server_criteria(player) --, target)
+function Toolbox.server_criteria(player, target)
   local p_building = player:getTile()  
   assert(p_building:isBuilding(), 'No building nearby to repair')
   assert(player:isStaged('inside'), 'Must be inside building to repair')  
