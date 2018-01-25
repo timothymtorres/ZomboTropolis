@@ -18,6 +18,21 @@ function Radio:initialize(condition_setting)
   self.power = false
 end
 
+function Radio:togglePower(player, setting)
+  if setting == true then player.network:add(self.channel, self)
+  elseif setting == false then player.network:remove(self.channel)
+  end
+  self.power = setting
+end
+
+function Radio:retune(player, channel)
+  if self.power == true then
+    player.network:remove(self.channel)
+    player.network:add(channel, self)
+  end
+  self.channel = channel
+end
+
 function Radio:server_criteria(player, setting)
   assert(setting, 'Must have selected a radio setting')
   if type(setting) == 'number' then 
@@ -35,17 +50,8 @@ function Radio:server_criteria(player, setting)
 end
 
 function Radio:activate(player, setting)
-  if type(setting) == 'number' then
-    if self.power == true then
-      player.network:remove(self.channel)
-      player.network:add(setting, self)
-    end
-    self.channel = setting
-  elseif type(setting) == 'boolean' then
-    if setting == true then player.network:add(self.channel, self)
-    elseif setting == false then player.network:remove(self.channel)
-    end
-    self.power = setting
+  if type(setting) == 'number' then self:retune(player, setting)
+  elseif type(setting) == 'boolean' then self:togglePower(player, setting)
   --elseif type(setting) == 'string' then (handheld radios cannot transmit....)
   end
 end

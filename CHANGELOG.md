@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased Version
 ### Added
 - `Gadget` and `Syringe` research human skills grant a higher hp threshold when using a syringe on a zombie.
-- Scanner item that is used to scan zombies into a database for tracking.
-- The `Gadget` research human skill grants GPS, Flashlight, Scanner, and Radio items improved durability use. 
+- Scanner item that is used to scan zombies into a database for tracking.  By default a human can access a terminal to gain info about the total # of zombies in an area.  If the human has the `Gadget` research skill they get info on the total zombie xp lvls in an area.  If the human also has the `Terminal` research skill they get to see the position of scanned zombies on the map.  The condition of the terminal affects the accuracy of the data provided.
+- Scanned status effect for zombies that is gained from being scanned by a human.  Performing any action will result in this status effect being removed.
+- The `Gadget` research human skill grants GPS, Flashlight, Scanner, and Radio items improved durability usage. 
 
 ## v0.9.0 - 01/21/2018
 ### Added
