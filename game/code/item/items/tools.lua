@@ -101,14 +101,10 @@ function Toolbox:client_criteria(player)
 
   local is_integrity_repairable = p_building.integrity:canRepair(player)
   local is_machine_repairable = p_building:isPresent('damaged machines')
+  local is_door_repairable = p_building:isPresent('damaged door')
 
-  --[[ Other targets to check (machines, doors, etc.)
-  -- machine code
-  assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')
-
-  -- door code
-  assert(p_building.door:isDamaged(), 'No damaged door to repair')
-  --]]
+  local is_repair_available = is_integrity_repairable or is_machine_repairable or is_door_repairable
+  assert(is_repair_available, 'Nothing available to repair')
 end
 
 function Toolbox.server_criteria(player, target)
