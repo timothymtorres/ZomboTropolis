@@ -112,33 +112,37 @@ function Toolbox.server_criteria(player, target)
   assert(p_building:isBuilding(), 'No building nearby to repair')
   assert(player:isStaged('inside'), 'Must be inside building to repair')  
 
-  assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
-  if p_building.integrity:isState('ruined') then
-    local n_zombies = p_building:countPlayers('zombie', 'inside')    
-    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
-    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
-  end
---[[    Need a better system to identify targets
-  if target == 'building' then    
-  elseif target == 'door' then
-    assert(p_building.door:isDamaged(), 'No damaged door to repair')
-  else -- target is a machine
-    assert(p_building:isPresent('damaged machines'), 'No damaged machines are present to repair')    
+  if target:isInstanceOf('Building') then
+    --assert(p_building.integrity:canRepair(player), 'Unable to repair building')  Disabling this so we can narrow down the reason
+    assert(not p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
+    if p_building.integrity:isState('ruined') then
+      local n_zombies = p_building:countPlayers('zombie', 'inside')    
+      assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
+      assert(n_zombies == 0, 'Cannot repair building with zombies present')     
+    end    
+  elseif target:isInstanceOf('Door') then
+    assert(p_building:isPresent('damaged door'), 'No damaged door to repair')
+  elseif target:isInstanceOf('Machine') then
+    assert(target:isDamaged()), 'No damaged machines are present to repair')    
   end
 --]]
 end
 
 function Toolbox:activate(player, target)
   local building = player:getTile()
-  building.integrity:updateHP(1)
+
+  if target:isInstanceOf('Building') then building.integrity:updateHP(1) -- maybe instead of target = building_INST, make target = building.integrity instance?
+  elseif target:isInstanceOf('Door') then building.door:updateHP(2)
+  elseif target:isInstanceOf('Machine') then target:updateHP(2) -- pretty sure this won't work properly
+  end
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
   
-  local self_msg = 'You repair the building {is_finished}.'
-  local msg =      '{player} repairs the building {is_finished}.'
-  local names = {player=player, is_finished=building.integrity:isState('intact') and 'completely' or ''}
+  local self_msg = 'You repair the {target} {is_finished}.'
+  local msg =      '{player} repairs the {target} {is_finished}.'
+  local names = {player=player, target=target, is_finished=(target:isInstanceOf('Building') and building.integrity:isState('intact')) and 'completely' or ''}
   self_msg = self_msg:replace(names)
   msg =           msg:replace(names)   
   
@@ -146,7 +150,7 @@ function Toolbox:activate(player, target)
   ---------   B R O A D C A S T   ------------
   --------------------------------------------  
   
-  local event = {'toolbox'}    
+  local event = {'toolbox', target}    
   player:broadcastEvent(msg, self_msg, event)  
 end
 
