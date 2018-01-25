@@ -251,14 +251,15 @@ end
 
 local equipment = {name='equipment'}
 
-function equipment.client_criteria(name, player) -- operation)
+function equipment.client_criteria(player) --, machine, operation)
   local p_tile = player:getTile()  
   assert(p_tile:isBuilding(), 'No building near player')
   assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
   assert(p_tile:isPowered(), 'Building must be powered to use equipment')
+  assert(p_tile:isPresent('transmitter') or p_tile:isPresent('terminal'), 'There is no building equipment to use')
 end
 
-function equipment.server_criteria(name, player, operation)
+function equipment.server_criteria(player, machine, operation)
   --assert(operation, 'Missing equipment operation for action')  The terminal requires no operation arg?
   
   local p_tile = player:getTile()  
@@ -267,8 +268,11 @@ function equipment.server_criteria(name, player, operation)
   assert(p_tile:isPowered(), 'Building must be powered to use equipment')
 end
 
-function equipment.activate(name, player, operation, ...)  
+function equipment.activate(player, machine, operation, ...)  
   -- condition degrade code goes here
+  local building = player:getTile()
+  local machine = building:getMachine(machine)
+  machine:activate(operation, ...)
 end
 
 return {search, discard, speak, reinforce, item, equipment}
