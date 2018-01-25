@@ -123,7 +123,7 @@ function Toolbox.server_criteria(player, target)
   elseif target:isInstanceOf('Door') then
     assert(p_building:isPresent('damaged door'), 'No damaged door to repair')
   elseif target:isInstanceOf('Machine') then
-    assert(target:isDamaged()), 'No damaged machines are present to repair')    
+    assert(target:isDamaged(), 'No damaged machines are present to repair')    
   end
 --]]
 end
