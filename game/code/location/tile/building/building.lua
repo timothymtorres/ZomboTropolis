@@ -121,7 +121,11 @@ function Building:isPresent(setting)
       machine = string.lower(tostring(Machine))
       if self[machine] and self[machine]:isDamaged() then return true end
     end
-    return false 
+    return false
+  elseif setting == 'door' then
+    return self.door and true or false
+  elseif setting == 'damaged door' then
+    return (self.door and self.door:isDamaged()) or false
   else -- individual machine
     local machine = setting
     return self[machine]
