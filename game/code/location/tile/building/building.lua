@@ -103,6 +103,8 @@ function Building:getEquipment()
   return machines
 end
 
+function Building:getMachine(machine) return self[machine] end
+
 -- function Building:getPos() return (NO NEED?)
 
 function Building:isPresent(setting)
