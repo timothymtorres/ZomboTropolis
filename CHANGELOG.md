@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Unreleased Version
 ### Added
 - `Gadget` and `Syringe` research human skills grant a higher hp threshold when using a syringe on a zombie.
-- Scanner item that is used to scan zombies into a database for tracking.  The `Scanner` research human skill boosts the accuracy of the scans.  
-- Terminals able to be accessed for data.  By default a human can access a terminal to gain info about the total # of zombies in an area.  If the human has the `Gadget` research skill they get info on the total zombie xp lvls in an area.  If the human also has the `Terminal` research skill they get to see the position of scanned zombies on the map.  The condition of the terminal affects the accuracy of the data provided.
+- Scanner item that is used to scan zombies into a database for tracking.  The `Scanner` research human skill boosts the chance of a successful scan attempt.
+- Terminals able to be accessed for data.  By default a human can access a terminal to gain info about the total # of zombies in an area.  If the human has the `Gadget` research skill they get info on the total zombie xp levels in an area.  If the human also has the `Terminal` research skill they get to see the position of scanned zombies on the map.  The condition of the terminal affects the accuracy of the data provided.  The `Gadget` and `Terminal` skills boosts the accuracy of the data.
 - Scanned status effect for zombies that is gained from being scanned by a human.  Performing any action will result in this status effect being removed.
-- The `Gadget` research human skill grants GPS, Flashlight, Scanner, and Radio items improved durability usage. 
+- The `Gadget` research human skill grants GPS, Flashlight, Scanner, and Radio items improved durability usage.
+- `Repair` and `Repair Adv` engineering human skills decrease the ap cost for repairing building integrity, doors, or machines.
+- `Renovate` engineering human skill allows ruins to be repaired.
+- `Tech` and `Tech Adv` engineering human skills decrease the ap cost for installing machines into buildings.
 
 ## v0.9.0 - 01/21/2018
 ### Added
