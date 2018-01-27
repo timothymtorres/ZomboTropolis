@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased Version
+
+## v0.10.0 - 01/27/2018
 ### Added
 - `Gadget` and `Syringe` research human skills grant a higher hp threshold when using a syringe on a zombie.
 - Scanner item that is used to scan zombies into a database for tracking.  The `Scanner` research human skill boosts the chance of a successful scan attempt.
