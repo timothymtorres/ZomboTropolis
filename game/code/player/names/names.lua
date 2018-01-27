@@ -10,13 +10,13 @@ names.last = {}
 -- ZOMBIE NAMES --
 names.zombie = {}
 
-local zombie_names_file = assert(io.open("code.player.names.zombie"), 'No names/zombie.txt file')
-local first_male_names_file = assert(io.open("code.player.names.first_male"), 'No names/first_male.txt file')
-local first_female_names_file = assert(io.open("code.player.names.first_female"), 'No names/first_female.txt file')
-local last_names_file = assert(io.open("code.player.names.last"), 'No names/last.txt file')
+local zombie_names_file = assert(io.open(system.pathForFile("code/player/names/zombie.txt"), "r"))
+local first_male_names_file = assert(io.open(system.pathForFile("code/player/names/first_male.txt"), "r"))
+local first_female_names_file = assert(io.open(system.pathForFile("code/player/names/first_female.txt"), "r"))
+local last_names_file = assert(io.open(system.pathForFile("code/player/names/last.txt"), "r"))
 
 do  -- put our names into Lua tables
-	for name in zombie_name_file:lines() do names.zombie[#names.zombie + 1] = name end
+	for name in zombie_names_file:lines() do names.zombie[#names.zombie + 1] = name end
 	for name in first_male_names_file:lines() do names.first_male[#names.first_male + 1] = name end
 	for name in first_female_names_file:lines() do names.first_female[#names.first_female + 1] = name end
 	for name in last_names_file:lines() do names.last[#names.last + 1] = name end
