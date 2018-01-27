@@ -15,8 +15,7 @@ Player.chanceToHit = chanceToHit
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(username, map_zone, y, x) --add account name
-  self.username = username
+function Player:initialize(map_zone, y, x) --add account name
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.ID = self  

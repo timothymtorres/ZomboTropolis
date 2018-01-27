@@ -6,12 +6,14 @@ local Network = require('code.player.zombie.network')
 local zombie_skill_list = require('code.player.zombie.skill_list')
 local zombie_action_list = require('code.player.zombie.action.actions')
 local Player = require('code.player.player')
+local names = require('code.player.names.names')
 
 local Zombie = class('Zombie', Player)
 
 Zombie.action_list = zombie_action_list
 
-function Zombie:initialize(...) --add account name
+function Zombie:initialize(username, ...) --add account name
+  self.username = username or names:generateRandom('zombie')  
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
   self.network = Network:new(self)
