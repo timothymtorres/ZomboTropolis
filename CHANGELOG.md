@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Repair` and `Repair Adv` engineering human skills decrease the ap cost for repairing building integrity, doors, or machines.
 - `Renovate` engineering human skill allows ruins to be repaired.
 - `Tech` and `Tech Adv` engineering human skills decrease the ap cost for installing machines into buildings.
+- Random name generator for humans and zombies.  
+- Humans have traditional names: `Bruce McMullen`, `Sam Warren`, `Rocco Ward`, etc.
+- Zombies have hivelike names based on the Greek Alphabet and a number from 0-999:  `Alpha 371`, `Gamma 62`, `Delta 971`, etc.  This is to enforce the role-play that zombies should be without a solid identity.
 
 ## v0.9.0 - 01/21/2018
 ### Added
