@@ -142,31 +142,34 @@ function Syringe:server_criteria(player, target)
 end
 
 local syringe_hp_ranges = {3, 6, 9, 12}
-local antidote_skill_modifier = {none = 'ruined', syringe = 'ransacked', syringe_adv = 'intact'}
+local antidote_skill_modifier = {none = 'ruined', gadget = 'ransacked', syringe = 'intact'}
 local syringe_salvage_chance = 5  -- 1/5 chance of saving a syringe that failed to create an antidote on inject due to not weak enough target
 
 function Syringe:activate(player, target)
   local inject_chance = self.medical.ACCURACY
+  local syringe_hp_threshold = syringe_hp_ranges[self.condition]
 
-  if player.skills:check('syringe') then
+  if player.skills:check('gadget') then
     inject_chance = inject_chance + 0.15
-    if player.skills:check("syringe_adv") then
+    syringe_hp_threshold = syringe_hp_threshold + 3
+    if player.skills:check("syringe") then
       inject_chance = inject_chance + 0.20
+      syringe_hp_threshold = syringe_hp_threshold + 3
     end
   end
   
   local inject_success = inject_chance >= math.random()
-  local target_weak_enough = syringe_hp_ranges[self.condition] >= target.stats:get('hp') 
+  local target_weak_enough = syringe_hp_threshold >= target.stats:get('hp') 
   local syringe_salvage_successful
 
   if inject_success and target_weak_enough then  -- the syringe will create a antidote
     target:killed()
     
-    local skill_modifier = (player.skills:check('syringe_adv') and antidote_skill_modifier.syringe_adv) or (player.skills:check('syringe') and antidote_skill_modifier.syringe) or antidote_skill_modifier.none
+    local skill_modifier = (player.skills:check('syringe') and antidote_skill_modifier.syringe_adv) or (player.skills:check('gadget') and antidote_skill_modifier.gadget) or antidote_skill_modifier.none
     local antidote = item.antidote:new(skill_modifier)
     player.inventory:insert(antidote)
   elseif inject_success then
-    syringe_salvage_successful = player.skills:check('syringe_adv') and dice.roll(syringe_salvage_chance) == 1  
+    syringe_salvage_successful = player.skills:check('syringe') and dice.roll(syringe_salvage_chance) == 1  
   else
     syringe_salvage_successful = true
   end
@@ -206,7 +209,7 @@ end
 
 local Vaccine = class('Vaccine', Item)
 
-Vaccine.FULL_NAME = 'antibodies'
+Vaccine.FULL_NAME = 'vaccine'
 Vaccine.WEIGHT = 5
 Vaccine.DURABILITY = 0
 Vaccine.CATEGORY = 'research'
@@ -288,6 +291,67 @@ function Antidote:activate(player, target)
   target.log:insert(target_msg, event)   
 end
 
+-------------------------------------------------------------------
+
+local Scanner = class('Scanner', Item)
+
+Scanner.FULL_NAME = 'scanner'
+Scanner.WEIGHT = 5
+Scanner.DURABILITY = 100
+Scanner.CATEGORY = 'research'
+Scanner.MASTER_SKILL = 'scanner'
+Scanner.ap = {cost = 1}
+
+Scanner.medical = {ACCURACY = 0.10}
+
+function Scanner:client_criteria(player)
+  local p_tile, setting = player:getTile(), player:getStage()
+  local zombie_n = p_tile:countPlayers('zombie', setting) 
+  assert(zombie_n > 0, 'No zombies are nearby')  
+end
+
+function Scanner:server_criteria(player, target)
+  assert(target:isStanding(), 'Target has been killed')
+  assert(player:isSameLocation(target), 'Target is out of range')
+  assert(target:isMobType('zombie'), 'Target must be a zombie')
+  assert(not target.status_effect:isActive('scanned'), 'Target has already been scanned')
+end
+
+function Scanner:activate(player, target)
+  local scan_chance = self.medical.ACCURACY
+  if player.skills:check('gadget') then scan_chance = scan_chance + 0.15 end
+  if player.skills:check("scanner") then scan_chance = scan_chance + 0.20 end
+  
+  local scan_success = scan_chance >= math.random()
+
+  if scan_success then target.status_effect:add('scanned', target) end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg, target_msg   
+  
+  if scan_success then
+    self_msg =   'You scan {target} with your scanner.'
+    target_msg = '{player} scans you.'       
+  else 
+    self_msg =   'You attempt to scan {target} and fail.'
+    target_msg = '{player} attempted to scan you.'  
+  end
+  
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)    
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'scanner', player, target, scan_success}    
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event)  
+end
+
 --[[
 medical.herb = {}
 medical.herb.full_name = 'herb'
@@ -296,4 +360,4 @@ medical.herb.dice = '1d2'
 medical.herb.durability = 0
 --]]
 
-return {FAK, Bandage, Syringe, Vaccine, Antidote}
+return {FAK, Bandage, Syringe, Vaccine, Antidote, Scanner}

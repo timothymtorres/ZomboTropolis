@@ -15,8 +15,7 @@ Player.chanceToHit = chanceToHit
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(username, map_zone, y, x) --add account name
-  self.username = username
+function Player:initialize(map_zone, y, x) --add account name
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.ID = self  
@@ -41,21 +40,20 @@ function Player:perform(action_str, ...)
   local ap_verification, ap_error_msg = pcall(basicCriteria, self, action_str, ...)
   local action = self.class.action_list[action_str]  
   local verification, error_msg = pcall(action.server_criteria, self, ...)
+  local AP_cost
 
   if ap_verification and verification then
-    local AP_cost = self:getCost('ap', action_str)
+    AP_cost = self:getCost('ap', action_str)
     action.activate(self, ...)
 
     self.status_effect:elapse(AP_cost)   
     self.stats:update('ap', -1*AP_cost)
     self.stats:update('xp', AP_cost)
-
-    if self:isMobType('zombie') then self.hunger:elapse(AP_cost) end -- bit of a hack to put this in here...
   else -- Houston, we have a problem!
     self.log:insert(ap_error_msg or error_msg)
   end
-  
   --self.stats:update('IP', 1)  -- IP connection hits?  Hmmmm?
+  return AP_cost  
 end
 
 function Player:permadeath() end -- run code to remove player instance from map
@@ -101,7 +99,7 @@ function Player:getMobType() return string.lower(self.class.name) end
 function Player:getCost(stat, action_str, ID)  -- remove stat from this (it was to differenate between ap/ep a while back)
   local action_data
 
-  if action_str == 'item' then            action_data = self.inventory:lookup(ID)
+  if action_str == 'item' then            action_data = self.inventory:getItem(ID)
   elseif action_str == 'equipment' then --action_data =
   elseif action_str == 'ability' then   --action_data =
   else                                    action_data = self.class.action_list[action_str] 

@@ -9,12 +9,28 @@ Radio.FULL_NAME = 'portable radio'
 Radio.WEIGHT = 3
 Radio.DURABILITY = 100
 Radio.CATEGORY = 'research'
+Radio.MASTER_SKILL = 'gadget'
 Radio.ap = {cost = 1}
 
 function Radio:initialize(condition_setting)
   Item.initialize(self, condition_setting)
   self.channel = math.random(1, 1024)
   self.power = false
+end
+
+function Radio:togglePower(player, setting)
+  if setting == true then player.network:add(self.channel, self)
+  elseif setting == false then player.network:remove(self.channel)
+  end
+  self.power = setting
+end
+
+function Radio:retune(player, channel)
+  if self.power == true then
+    player.network:remove(self.channel)
+    player.network:add(channel, self)
+  end
+  self.channel = channel
 end
 
 function Radio:server_criteria(player, setting)
@@ -34,17 +50,8 @@ function Radio:server_criteria(player, setting)
 end
 
 function Radio:activate(player, setting)
-  if type(setting) == 'number' then
-    if self.power == true then
-      player.network:remove(self.channel)
-      player.network:add(setting, self)
-    end
-    self.channel = setting
-  elseif type(setting) == 'boolean' then
-    if setting == true then player.network:add(self.channel, self)
-    elseif setting == false then player.network:remove(self.channel)
-    end
-    self.power = setting
+  if type(setting) == 'number' then self:retune(player, setting)
+  elseif type(setting) == 'boolean' then self:togglePower(player, setting)
   --elseif type(setting) == 'string' then (handheld radios cannot transmit....)
   end
 end
@@ -57,6 +64,8 @@ GPS.FULL_NAME = 'global position system'
 GPS.WEIGHT = 2
 GPS.DURABILITY = 50
 GPS.CATEGORY = 'research'
+GPS.MASTER_SKILL = 'gadget'
+
 
 ---------------------------------------------------------------------
 
@@ -66,29 +75,9 @@ Flashlight.FULL_NAME = 'flashlight'
 Flashlight.WEIGHT = 4
 Flashlight.DURABILITY = 100
 Flashlight.CATEGORY = 'research'
+Flashlight.MASTER_SKILL = 'gadget'
 
 ---------------------------------------------------------------------
-
-local Sampler = class('Sampler', Item)
-
-Sampler.FULL_NAME = 'lab sampler'
-Sampler.WEIGHT = 4
-Sampler.DURABILITY = 20
-Sampler.CATEGORY = 'research'
-
-function Sampler:client_criteria(player)
-  local p_tile, setting = player:getTile(), player:getStage()
-  local zombie_n = p_tile:countPlayers('zombie', setting) 
-  assert(zombie_n > 0, 'No zombies are nearby') 
-end
-
-function Sampler:server_criteria(player, target)
-  assert(target:isStanding(), 'Target has been killed')  
-  assert(target:isZombie(), 'Target must be a zombie')
-  assert(player:isSameLocation(target), 'Target is out of range')  
-end
-
-function Sampler:activate(player, target) end
 
 --[[
 gadget.cellphone.full_name = 'cellphone'
@@ -124,4 +113,4 @@ end
 function check.cellphone(player) end -- check if phone towers functional/need light/need battery
 --]]
 
-return {Radio, GPS, Flashlight, Sampler}
+return {Radio, GPS, Flashlight}

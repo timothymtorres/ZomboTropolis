@@ -7,6 +7,7 @@ local Network = require('code.player.human.network')
 local human_skill_list = require('code.player.human.skill_list')
 local human_action_list = require('code.player.human.action.actions')
 local Player = require('code.player.player')
+local names = require('code.player.names.names')
 
 local Human = class('Human', Player)
 
@@ -14,7 +15,8 @@ Human.action_list = human_action_list
 
 local default_IP= 0
 
-function Human:initialize(...) --add account name
+function Human:initialize(username, ...) --add account name
+  self.username = username or names:generateRandom('zombie')
   self.ip = default_IP
   self.inventory = Inventory:new(self)
   self.skills = Skills:new(human_skill_list)

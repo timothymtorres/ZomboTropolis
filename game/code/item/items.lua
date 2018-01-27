@@ -1,6 +1,6 @@
 local Crowbar, Bat, Sledge, Knife, Katanna = unpack(require('code.item.items.melee_weaponry'))
 local Pistol, Magnum, Shotgun, Rifle, Flare, Molotov = unpack(require('code.item.items.ranged_weaponry'))
-local FAK, Bandage, Syringe, Vaccine, Antidote = unpack(require('code.item.items.medical'))
+local FAK, Bandage, Syringe, Vaccine, Antidote, Scanner = unpack(require('code.item.items.medical'))
 local Generator, Transmitter, Terminal = unpack(require('code.item.items.machinery'))
 local Fuel, Barricade, Toolbox = unpack(require('code.item.items.tools'))
 local Radio, GPS, Flashlight, Sampler = unpack(require('code.item.items.gadget'))
@@ -14,13 +14,13 @@ local Items = {
   -- RANGED_WEAPONRY
   Pistol, Magnum, Shotgun, Rifle, Flare, Molotov, 
   -- MEDICAL
-  FAK, Bandage, Syringe, Vaccine, Antidote, 
+  FAK, Bandage, Syringe, Vaccine, Antidote, Scanner,
   -- MACHINERY
   Generator, Transmitter, Terminal,
   -- TOOLS
   Fuel, Barricade, Toolbox,
   -- GADGET
-  Radio, GPS, Flashlight, Sampler, --'cellphone', 'sampler'
+  Radio, GPS, Flashlight, --'cellphone', 'sampler'
   -- JUNK
   Book, Bottle, Newspaper,
   -- AMMO

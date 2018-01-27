@@ -45,7 +45,7 @@ function move.activate(player, dir)
   local y, x = player:getPos() 
   local map = player:getMap()
   local dir_y, dir_x = getNewPos(y, x, dir)
-  local GPS, GPS_usage, condition
+  local GPS, GPS_usage, GPS_condition
 
   if player:isStaged('inside') then
     map[y][x]:remove(player, 'inside')
@@ -55,15 +55,14 @@ function move.activate(player, dir)
       map[dir_y][dir_x]:insert(player, 'outside')
     end
   else  -- player is outside
-    local inventory_has_GPS, inv_ID = player.inventory:search('GPS')
-    GPS = player.inventory:lookup(inv_ID)
-    if inventory_has_GPS then -- the GPS has a chance to avoid wasting ap on movement      
+    GPS = player.inventory:searchForItem('GPS')
+    if GPS then -- the GPS has a chance to avoid wasting ap on movement      
       local GPS_chance = (player.skils:check('gadgets') and GPS_advanced_chance) or GPS_basic_chance
       local GPS_usage = GPS_chance >= math.random()
       
       -- this is pretty much a hack (if a player's ap is 50 then they will NOT receive the ap)
       if GPS_usage then player.stats:update('ap', 1) end
-      condition = player.inventory:updateDurability(inv_ID) 
+      GPS_condition = player.inventory:updateDurability(GPS) 
     end
     
     map[y][x]:remove(player)
@@ -81,9 +80,9 @@ function move.activate(player, dir)
   local names = {dir=compass[dir], with_GPS=GPS_str}
   self_msg = self_msg:replace(names)
 
-  if condition == 0 then 
+  if GPS_condition == 0 then 
     self_msg = self_msg..'Your '..tostring(GPS)..' is destroyed!'
-  elseif condition and GPS:isConditionVisible(player) then 
+  elseif GPS_condition and GPS:isConditionVisible(player) then 
     self_msg = self_msg..'Your '..tostring(GPS)..' degrades to a '..GPS:getConditionState()..' state.'
   end  
   
@@ -112,17 +111,17 @@ function attack.client_criteria(player)
   assert(player_targets or building_targets, 'No available targets to attack')
 end
 
-function attack.server_criteria(player, target, weapon, inv_ID)
+function attack.server_criteria(player, target, weapon, inv_pos)
   local organic_weapon = weapon:isOrganic()
 
   if organic_weapon then 
     assert(organic_weapon == player:getMobType(), 'Cannot use this attack')
-    assert(not inv_ID, "Organic weapon shouldn't be in inventory")
+    assert(not inv_pos, "Organic weapon shouldn't be in inventory")
   else -- Weapon is NOT organic
-    assert(weapon and inv_ID, 'Weapon not selected properly')
-    assert(player.inventory:check(inv_ID), 'Weapon missing from inventory')    
+    assert(weapon and inv_pos, 'Weapon not selected properly')
+    assert(player.inventory:isPresent(inv_pos), 'Weapon missing from inventory')    
     
-    local inv_item = player.inventory:lookup(inv_ID) 
+    local inv_item = player.inventory:getItem(inv_pos) 
     assert(inv_item == weapon, "Inventory item doesn't match weapon")    
   end
 
@@ -170,9 +169,9 @@ function attack.activate(player, target, weapon, inv_ID)
       target.status_effect:add(effect, player)
     end     
     
-    if not weapon:isOrganic() then condition = player.inventory:updateDurability(inv_ID) end
+    if not weapon:isOrganic() then condition = player.inventory:updateDurability(weapon) end
   else -- attack missed
-    if weapon:getStyle() == 'ranged' then condition = player.inventory:updateDurability(inv_ID) end -- ranged weapons lose durability even when they miss
+    if weapon:getStyle() == 'ranged' then condition = player.inventory:updateDurability(weapon) end -- ranged weapons lose durability even when they miss
   end
   
   --------------------------------------------

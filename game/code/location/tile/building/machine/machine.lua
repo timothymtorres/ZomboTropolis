@@ -3,9 +3,10 @@ local class = require('code.libs.middleclass')
 local Machine = class('Machine')
 local MAX_HP = 8
 
-function Machine:initialize(building) 
+function Machine:initialize(building, condition) 
   self.hp = MAX_HP
   self.building = building
+  self.condition = condition
 end
 
 function Machine:destroy()
@@ -20,9 +21,22 @@ function Machine:updateHP(num)
   if self.hp == 0 then self:destroy() end  
 end
 
+function Machine:updateCondition(num)
+  self.condition = math.max(math.min(self.condition + num, 4), 0)
+  return self.condition
+end
+
 function Machine:getHP() return self.hp end
 
 function Machine:isDamaged() return self.hp ~= MAX_HP end
+
+function Machine:isConditionVisible(player) return player.skills:check(self.CLASS_CATEGORY) end
+
+function Machine:getCondition() return self.condition end
+
+local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine'}
+
+function Machine:getConditionStr() return condition_states[self.condition] end
 
 function Machine:__tostring() return self.name end
 

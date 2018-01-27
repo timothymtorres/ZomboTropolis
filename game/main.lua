@@ -34,8 +34,8 @@ lookupMedical = require('code.item.medical.search')
 dummy = {}
 print()
 city = Map:new(10)
-main_player = Zombie:new('Fran', city, 4, 4)
-alt_player = Human:new('Tim', city, 4, 4)
+main_player = Zombie:new(nil, city, 4, 4)
+alt_player = Human:new(nil, city, 4, 4)
 
 p_tile = alt_player:getTile()
 p_tile.barricade.potential_hp = 28 

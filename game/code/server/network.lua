@@ -1,11 +1,13 @@
 local ServerNetwork = {}
 
+local N_HUMAN_CHANNELS, N_ZOMBIE_CHANNELS = 1024, 16
+
 do 
   ServerNetwork.zombie = {}
-  for channel=1, 16 do ServerNetwork.zombie[channel] = setmetatable({}, {__mode='k'}) end  -- zombies only have a limited # of channels
+  for channel=1, N_ZOMBIE_CHANNELS do ServerNetwork.zombie[channel] = setmetatable({}, {__mode='k'}) end  -- zombies only have a limited # of channels
 
   ServerNetwork.human = {}
-  for channel=1, 1024 do ServerNetwork.human[channel] = setmetatable({}, {__mode='k'}) end
+  for channel=1, N_HUMAN_CHANNELS do ServerNetwork.human[channel] = setmetatable({}, {__mode='k'}) end
 end
 
 local function getMob(listener)

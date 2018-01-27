@@ -1,5 +1,6 @@
 local class = require('code.libs.middleclass')
 local Tiles = require('code.location.tile.tiles')
+local TerminalNetwork = require('code.location.terminal_network')
 -- local suburb = require('suburb')
 
 local Map = class('Map')
@@ -11,6 +12,7 @@ function Map:initialize(size)
   self.humans = 0
   self.zombies = 0
   self.dead = 0
+  self.terminal_network = TerminalNetwork:new(size)
 
   local size = size or 1
   

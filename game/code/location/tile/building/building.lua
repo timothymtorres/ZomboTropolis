@@ -85,7 +85,7 @@ end
 
 function Building:install(machine, condition) 
   local Machine = machine:sub(1,1):upper()..machine:sub(2)  -- capitalize machine
-  self[machine] = Machines[Machine]:new(condition) 
+  self[machine] = Machines[Machine]:new(self, condition) 
 end
 
 function Building:blackout()
@@ -103,6 +103,8 @@ function Building:getEquipment()
   return machines
 end
 
+function Building:getMachine(machine) return self[machine] end
+
 -- function Building:getPos() return (NO NEED?)
 
 function Building:isPresent(setting)
@@ -119,7 +121,11 @@ function Building:isPresent(setting)
       machine = string.lower(tostring(Machine))
       if self[machine] and self[machine]:isDamaged() then return true end
     end
-    return false 
+    return false
+  elseif setting == 'door' then
+    return self.door and true or false
+  elseif setting == 'damaged door' then
+    return (self.door and self.door:isDamaged()) or false
   else -- individual machine
     local machine = setting
     return self[machine]

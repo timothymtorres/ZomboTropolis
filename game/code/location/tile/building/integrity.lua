@@ -19,6 +19,16 @@ function Integrity:updateHP(num)
   end
 end
 
+function Integrity:canRepair(player)
+  if self:isState('ransacked') then return true
+  elseif self:isState('ruined') then
+    local p_building = player:getTile()  
+    local n_zombies = p_building:countPlayers('zombie', 'inside')    
+    if player.skills:check('renovate') and n_zombies == 0 then return true end
+  end
+  return false
+end
+
 function Integrity:canModify(player)  -- possibly move all or parts of this code to criteria.toolbox and critera.ransack?
   local n_humans = self.building:countPlayers('human', 'inside')
   local n_zombies = self.building:countPlayers('zombie', 'inside')
