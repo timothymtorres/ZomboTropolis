@@ -1,4 +1,4 @@
-local Street, Cemetary, Wasteland = unpack(require('code.location.tile.tiles.barren')) 
+local Land, Street, Cemetary, Wasteland = unpack(require('code.location.tile.tiles.barren')) 
 local Carpark, Junkyard = unpack(require('code.location.tile.tiles.scrap'))
 local Monument, Park, Stadium = unpack(require('code.location.tile.tiles.tourist'))
 local Apartment, Hotel = unpack(require('code.location.tile.building.buildings.residential'))
@@ -11,7 +11,7 @@ local Tile = {
 ---- OUTSIDE ----
 
   -- BARREN
-  Street, Cemetary, Wasteland,
+  Land, Street, Cemetary, Wasteland,
   -- SCRAP 
   Carpark, Junkyard,
   -- TOURIST

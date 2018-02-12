@@ -3,6 +3,13 @@ local Tile = require('code.location.tile.tile')
 
 -------------------------------------------------------------------
 
+local Land = class('Land', Tile)
+
+Street.FULL_NAME = 'land'
+
+
+-------------------------------------------------------------------
+
 local Street = class('Street', Tile)
 
 Street.FULL_NAME = 'street'
@@ -21,4 +28,4 @@ Wasteland.FULL_NAME = 'wasteland'
 
 -------------------------------------------------------------------
 
-return {Street, Cemetary, Wasteland}
+return {Land, Street, Cemetary, Wasteland}
