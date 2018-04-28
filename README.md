@@ -55,6 +55,11 @@ A lot of free source assets and libraries were used in the making of ZomboTroplo
 * [SS13 Sprites](https://github.com/tgstation/tgstation) used for mobs, items, and locations in game
 * [Berry](https://github.com/ldurniat/Berry) used to manipulate and display the rooms in game
 
+People that helped contribute to this project:
+
+* **TheBeanBurrito** for building the countryside region of the map and game design
+* **RedDustBowl** for help in game design and suggestions
+
 Other projects that provided inspiration and ideas for this game:
 
 * [Urbandead](http://www.urbandead.com/) and [Quarantine2019](http://www.quarantine2019.com/) browser based MMO's with the same theme and similiar gameplay.
