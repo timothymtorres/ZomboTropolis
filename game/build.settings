@@ -2,7 +2,7 @@ settings =
 {
 	orientation =
 	{
-		default = "portrait",
+		default = "landscape",
 	},
   plugins =
   {
