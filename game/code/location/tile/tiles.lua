@@ -1,34 +1,42 @@
-local Land, Street, Cemetary, Wasteland = unpack(require('code.location.tile.tiles.barren')) 
+local Land, Street, Cemetary, Wasteland, Runway, Forest = unpack(require('code.location.tile.tiles.barren')) 
 local Carpark, Junkyard = unpack(require('code.location.tile.tiles.scrap'))
 local Monument, Park, Stadium = unpack(require('code.location.tile.tiles.tourist'))
-local Apartment, Hotel = unpack(require('code.location.tile.building.buildings.residential'))
-local Library, School, College = unpack(require('code.location.tile.building.buildings.public'))
+local Apartment = unpack(require('code.location.tile.building.buildings.residential'))
+local Library, News = unpack(require('code.location.tile.building.buildings.public'))
 local Warehouse, Factory = unpack(require('code.location.tile.building.buildings.industrial'))
-local PD, FD, Hospital, Courthouse = unpack(require('code.location.tile.building.buildings.government'))
-local News, Sport, Bar, Mall = unpack(require('code.location.tile.building.buildings.commercial'))
+local PD, FD, Hospital, Lab = unpack(require('code.location.tile.building.buildings.government'))
+local Sport, Bar, Mall = unpack(require('code.location.tile.building.buildings.commercial'))
 
 local Tile = {
----- OUTSIDE ----
+  Land, Street, Cemetary, Wasteland,  
+  Runway, Forest, Carpark, Junkyard, 
+  Monument, Park, Stadium, Apartment,
+  Library, News, Warehouse, Factory, 
+  PD, FD, Hospital, Lab,
+  Sport, Bar, Mall,
 
-  -- BARREN
-  Land, Street, Cemetary, Wasteland,
-  -- SCRAP 
-  Carpark, Junkyard,
-  -- TOURIST
-  Monument, Park, Stadium,
+  --[[
+  do only 1 type (and then when they purchase naming rights have a list of subtypes names)
+  ie.  bar, pub, saloon, etc.
 
----- INSIDE ----
+  museum, pawn, 
+  power, lab, clinic, pharmacy,
+  restaurant, church, gym, shop,
+  control, gas, fort, field, 
 
-  -- RESIDENTIAL
-  Apartment, Hotel,
-  -- PUBLIC
-  Library, School, College,
-  -- INDUSTRIAL
-  Warehouse, Factory,
-  -- GOVERNMENT
-  PD, FD, Hospital, Courthouse,
-  -- COMMERCIAL
-  News, Sport, Bar, Mall,
+  bar, museum, church, shop, -- smaller resource buildings... blue and light blue?
+  sport, gas, pawn,
+
+  bar, church, sport, gas,
+  museum, pawn
+
+
+
+
+  power, control tower, ? yes (resource building relevant to a region)
+  gatehouse, infirmary/medbay, armory, supply, barracks, 
+
+  --]]
 }
 
 for _, Class in ipairs(Tile) do 
