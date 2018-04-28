@@ -5,7 +5,9 @@
 -----------------------------------------------------------------------------------------
 
 local composer = require( "composer" )
-local berry = require( 'pl.ldurniat.berry' )
+berry = require( 'code.libs.berry.berry' )
+local json = require( "json" )
+local room
 
 local scene = composer.newScene()
 
@@ -47,7 +49,12 @@ local widget = require('widget')
 function scene:create( event )
   local sceneGroup = self.view
 
-  
+  -- Load our map
+  local filename = "graphics/map/room/ZTRoom.json"
+  room = berry.loadMap( filename, "graphics/map/room" )
+  local visual = berry.createVisual( room )
+  berry.buildPhysical( room )
+
   return sceneGroup
 end
 
@@ -72,6 +79,7 @@ end
 function scene:hide( event )
 
     local sceneGroup = self.view
+
     local phase = event.phase
 
     if ( phase == "will" ) then
@@ -80,12 +88,15 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-    end
+        Runtime:removeEventListener( "enterFrame", enterFrame )        
+    end  
 end
 
 
 -- "scene:destroy()"
 function scene:destroy( event )
+
+    room:destroy()
 
     local sceneGroup = self.view
 
