@@ -58,6 +58,79 @@ function scene:create( event )
   return sceneGroup
 end
 
+--[[
+-- Function to scroll the map
+local function enterFrame( event )
+
+  local elapsed = event.time
+
+  -- Easy way to scroll a map based on a character
+  if hero and hero.x and hero.y and not hero.isDead then
+    local x, y = hero:localToContent( 0, 0 )
+    x, y = display.contentCenterX - x, display.contentCenterY - y  -- this centers hero on the screen always
+    --map.x, map.y = map.x + x, map.y + y
+    local visual = map:getVisual()
+    visual.x, visual.y = visual.x + x, visual.y + y
+  end
+end
+--]]
+
+local max, acceleration, dy, dx = 375, 5, 0, 0, 0, 0
+local lastEvent = {}
+local function key( event )
+  local phase = event.phase
+  local name = event.keyName
+  --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
+  if phase == "down" then
+    if "left" == name or "a" == name then dx = -acceleration end
+    if "right" == name or "d" == name then dx = acceleration end
+    if "up" == name or "w" == name then dy = -acceleration end
+    if "down" == name or "s" == name then dy= acceleration end
+
+    local visual = room:getVisual()
+
+    room:move (dx, dy)    
+    --visual.x = visual.x + dx
+    --visual.y = visual.y + dy
+
+    --dx, dy = 0, 0    
+  end
+  lastEvent = event
+end
+
+local function movePlatform(event)
+    local platformTouched = event.target
+    if (event.phase == "began") then
+        display.getCurrentStage():setFocus( platformTouched )
+
+        -- here the first position is stored in x and y         
+        platformTouched.startMoveX = platformTouched.x
+        platformTouched.startMoveY = platformTouched.y 
+    elseif (event.phase == "moved") then
+        -- here the distance is calculated between the start of the movement and its current position of the drag  
+        platformTouched.x = (event.x - event.xStart) + platformTouched.startMoveX
+        platformTouched.y = (event.y - event.yStart) + platformTouched.startMoveY
+    elseif event.phase == "ended" or event.phase == "cancelled"  then
+        -- here the focus is removed from the last position
+        display.getCurrentStage():setFocus( nil )
+    end
+    return true
+end
+ 
+
+
+local function enterFrame()
+  -- Do this every frame
+
+--[[
+  local visual = room:getVisual()
+  visual.x = visual.x + dx
+  visual.y = visual.y + dy
+
+  dx, dy = 0, 0
+  --]]
+end
+
 
 -- "scene:show()"
 function scene:show( event )
@@ -67,6 +140,9 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
+        Runtime:addEventListener( "enterFrame", enterFrame )      
+        Runtime:addEventListener("key", key)  
+        room.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -88,7 +164,8 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-        Runtime:removeEventListener( "enterFrame", enterFrame )        
+        Runtime:removeEventListener( "enterFrame", enterFrame )      
+        Runtime:removeEventListener( "key", key )          
     end  
 end
 
