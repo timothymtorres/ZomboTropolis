@@ -190,8 +190,13 @@ local function movePlatform(event)
         platformTouched.startMoveY = platformTouched.y 
     elseif (event.phase == "moved") then
         -- here the distance is calculated between the start of the movement and its current position of the drag  
-        platformTouched.x = (event.x - event.xStart) + platformTouched.startMoveX
-        platformTouched.y = (event.y - event.yStart) + platformTouched.startMoveY
+        local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
+        local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
+        local left_boundry, right_boundry = platformTouched.contentWidth * 0.25, display.actualContentWidth - platformTouched.contentWidth * 1.25
+        local top_boundry, bottom_boundry = platformTouched.contentHeight * 0.25, display.actualContentHeight - platformTouched.contentHeight * 1.25
+
+        platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
+        platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos 
     elseif event.phase == "ended" or event.phase == "cancelled"  then
         -- here the focus is removed from the last position
         display.getCurrentStage():setFocus( nil )
@@ -210,14 +215,6 @@ end
 
 local function enterFrame()
   -- Do this every frame  
-
---[[
-  local visual = room:getVisual()
-  visual.x = visual.x + dx
-  visual.y = visual.y + dy
-
-  dx, dy = 0, 0
-  --]]
 end
 
 
