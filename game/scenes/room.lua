@@ -7,7 +7,9 @@
 local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
-local room
+local room, mob
+
+local Object     = require 'code.libs.berry.Object'  -- using this to test fake mob/object spawn with room
 
 local scene = composer.newScene()
 
@@ -42,6 +44,7 @@ end
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
 
+local room
 -- -------------------------------------------------------------------------------
 
 
@@ -52,8 +55,85 @@ function scene:create( event )
   -- Load our map
   local filename = "graphics/map/room/ZTRoom.json"
   room = berry.loadMap( filename, "graphics/map/room" )
+
+  local Mob_layer = room:getObjectLayer('Mob')
+  local Name_layer = room:getObjectLayer('Mob Name')
+  local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
+
+  local text_str = 'Rocco W'
+
+ local fake_mob_json_data = {
+    gid = 1511, --1612, --gid = 1511,
+    height = 32,
+    --id = 10,
+    name = text_str,
+    rotation = 0,
+    type = "mob",
+    visible = true,
+    width = 32,
+    x = 100,
+    y = 150,
+    properties = {
+      isAnimated = true,
+    },
+  }
+
+  Mob_layer:addObject(Object:new(fake_mob_json_data, room, Mob_layer))
+
+  local border = 4
+  local font_size = 9
+  local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - 24 - border*2 - font_size
+
+  local name_data = {
+    --id = 3,
+    name = text_str,
+    rotation = 0,
+    type = "name",
+    visible = true,
+    x = above_mob_x,
+    y = above_mob_y,
+    properties = {stroked = true},
+
+    text = {
+      text = text_str,
+      fontfamily = "scene/game/font/GermaniaOne-Regular.ttf",
+      pixelsize = font_size,
+      halign = 'center',
+    },
+  }
+
+  local name = Object:new(name_data, room, Name_layer)
+  Name_layer:addObject(name)
+
+  -- this is a hack to measure the width of the text obj, then delete the text obj
+  local _ = display.newText(text_str, 0, 0, name_data.text.fontfamily, font_size )
+  local text_width = _.contentWidth
+  _:removeSelf()
+  _ = nil
+
+  local rect_data = {
+    height = font_size + border*2,
+    width = text_width + border*2,
+    name = text_str,
+    rotation = 0,
+    type = "rect",
+    visible = true,
+    x = above_mob_x,
+    y = above_mob_y,
+  }
+
+  local name_bkgr = Object:new(rect_data, room, Name_bkgr_layer)
+  Name_bkgr_layer:addObject(name_bkgr)  
+
   local visual = berry.createVisual( room )
   berry.buildPhysical( room )
+
+  -- the sprite must be loaded first via berry.createVisual before we can extend the objects
+  room.extensions = "scenes.objects."
+  room:extendObjects( "mob" )  -- animations, movement, death?, etc.
+
+  --mob = room:getObjectWithName( "Rocco W" ):getVisual()
+  --mob.filename = filename  
 
   return sceneGroup
 end
@@ -82,18 +162,20 @@ local function key( event )
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
   if phase == "down" then
-    if "left" == name or "a" == name then dx = -acceleration end
-    if "right" == name or "d" == name then dx = acceleration end
-    if "up" == name or "w" == name then dy = -acceleration end
-    if "down" == name or "s" == name then dy= acceleration end
+    local dir 
 
-    local visual = room:getVisual()
+    if "left" == name then dir = 2
+    elseif "right" == name then dir = 4
+    elseif "up" == name then dir = 3
+    elseif "down" == name then dir = 1
+    end
 
-    room:move (dx, dy)    
-    --visual.x = visual.x + dx
-    --visual.y = visual.y + dy
+print('key event has been triggered')
+    local mob_list = room:getObjectsWithType('mob')
+    for _, mob in ipairs(mob_list) do 
+      mob.sprite:travel(dir)
+    end
 
-    --dx, dy = 0, 0    
   end
   lastEvent = event
 end
@@ -117,10 +199,17 @@ local function movePlatform(event)
     return true
 end
  
+local function mobMovement()
+  local dir = math.random(1, 4)
 
+  local mob_list = room:getObjectsWithType('mob')
+  for _, mob in ipairs(mob_list) do 
+    mob.sprite:travel(dir)
+  end  
+end
 
 local function enterFrame()
-  -- Do this every frame
+  -- Do this every frame  
 
 --[[
   local visual = room:getVisual()
@@ -140,8 +229,13 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-        Runtime:addEventListener( "enterFrame", enterFrame )      
+
+        local delay = 500 -- 1 second?
+        timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
+
+        --Runtime:addEventListener( "enterFrame", enterFrame )      
         Runtime:addEventListener("key", key)  
+
         room.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
