@@ -1,7 +1,8 @@
 { "height":10,
+ "infinite":false,
  "layers":[
         {
-         "data":[901, 901, 1240, 1239, 901, 901, 901, 901, 901, 9, 9, 901, 901, 901, 901, 901, 1240, 1239, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         "data":[901, 901, 1240, 1239, 901, 901, 901, 901, 901, 9, 9, 901, 901, 901, 901, 901, 1240, 1239, 901, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901, 901],
          "height":10,
          "name":"Room",
          "opacity":1,
@@ -10,11 +11,96 @@
          "width":20,
          "x":0,
          "y":0
+        }, 
+        {
+         "color":"#000000",
+         "draworder":"topdown",
+         "name":"Equipment",
+         "objects":[
+                {
+                 "gid":1342,
+                 "height":32,
+                 "id":1,
+                 "name":"Door2",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":33
+                }, 
+                {
+                 "gid":1342,
+                 "height":32,
+                 "id":2,
+                 "name":"Door1",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":33
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Mob",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Mob Name Background",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Mob Name",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Mob Dialogue",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "name":"Mob Dialogue Bkgr",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":1,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.0.3",
+ "tiledversion":"1.1.5",
  "tileheight":32,
  "tilesets":[
         {
@@ -41,6 +127,97 @@
          "spacing":0,
          "tilecount":441,
          "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":13,
+         "firstgid":1342,
+         "image":"shuttle.png",
+         "imageheight":416,
+         "imagewidth":416,
+         "margin":0,
+         "name":"shuttle",
+         "spacing":0,
+         "tilecount":169,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":15,
+         "firstgid":1511,
+         "image":"human.png",
+         "imageheight":448,
+         "imagewidth":480,
+         "margin":0,
+         "name":"human",
+         "spacing":0,
+         "tilecount":210,
+         "tileheight":32,
+         "tileproperties":
+            {
+             "1":
+                {
+                 "name":"white-male"
+                },
+             "101":
+                {
+                 "name":"husk"
+                }
+            },
+         "tilepropertytypes":
+            {
+             "1":
+                {
+                 "name":"string"
+                },
+             "101":
+                {
+                 "name":"string"
+                }
+            },
+         "tiles":
+            {
+             "1":
+                {
+                 "animation":[
+                        {
+                         "duration":100,
+                         "tileid":2
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":3
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":1
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":4
+                        }]
+                },
+             "101":
+                {
+                 "animation":[
+                        {
+                         "duration":100,
+                         "tileid":102
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":103
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":101
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":104
+                        }]
+                }
+            },
          "tilewidth":32
         }],
  "tilewidth":32,
