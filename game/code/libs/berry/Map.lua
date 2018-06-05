@@ -898,8 +898,8 @@ function Map:create()
 	display.setDefault( 'background', utils:decodeTiledColor( self.data.backgroundcolor ) )
 
 	-- Center map on the screen
-	self.world.x =  display.contentCenterX - self.designedWidth * 0.5
-	self.world.y =  display.contentCenterY - self.designedHeight * 0.5
+	self.world.x = display.contentCenterX - self.designedWidth * 0.5
+	self.world.y = 0  --self.designedHeight * 0.5 --display.contentCenterY - self.designedHeight * 0.5
 
 	-- Show layers/objects in right order
 	self:sort()
