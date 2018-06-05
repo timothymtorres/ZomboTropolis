@@ -337,9 +337,9 @@ end
 -- @param displayObject The displayObject to add.
 -- @return The added displayObject.
 ------------------------------------------------------------------------------------------------
-function ObjectLayer:addObject( displayObject )
+function ObjectLayer:addObject( object )
 
-	return utils:addObjectToGroup( displayObject, self.group )
+  	self.objects[#self.objects + 1] = object
 
 end
 
@@ -389,9 +389,7 @@ function ObjectLayer:create()
 
 	-- Create objects
 	for j=1, #self.objects, 1 do
-
 		self.objects[j]:create()	
-
 	end
 
 	-- Apply base properties

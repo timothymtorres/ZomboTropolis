@@ -657,6 +657,40 @@ function Map:addObject( displayObject )
 end
 
 ------------------------------------------------------------------------------------------------
+--- Adds a blank Object layer to the world. 
+--
+-- @param displayObject The displayObject to add.
+-- @return The added Object layer.
+------------------------------------------------------------------------------------------------
+function Map:addObjectLayer( name )
+
+	local data = {
+		draworder = 'topdown',
+		name = name,
+		type = "objectgroup", -- this seems to be the default group used by Tiled?
+		objects = {},
+		opacity = 1,
+		visible = true,
+		x = 0,
+		y = 0,
+
+	}
+
+	-- Make sure we have a properties table
+	data.properties = data.properties or {}
+
+	local objectLayer = ObjectLayer(data, self)
+	self.objectLayers[#self.objectLayers + 1] = objectLayer
+	self.layers[#self.layers + 1] = objectLayer
+
+	if berry:isDebugModeEnabled() then
+		print( 'Added Object Layer - ' .. objectLayer.name )
+	end
+
+	return objectLayer
+end
+
+------------------------------------------------------------------------------------------------
 --- Adds an Object listener to the Map.
 --
 -- @param objectType The type of Object to listen for.

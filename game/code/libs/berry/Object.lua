@@ -272,12 +272,12 @@ function Object:create ()
 		data.properties = data.properties or {}
 
 		-- Set defaults
-	    local text = ( data.properties.label or '' ) .. ' ' .. ( data.text.text or '' )
+	    local text = ( data.properties.label or '' ) .. '' .. ( data.text.text or '' )
 	    local font = data.properties.font or data.text.fontfamily or native.systemFont
 	    local size = data.properties.size or  tonumber( data.text.pixelsize ) or 56
 	    local stroked =  data.properties.stroked 
 	    local sr,sg,sb,sa = utils:decodeTiledColor( data.properties.strokeColor or '000000CC' )
-	    local align = data.properties.align or data.text.halign or 'left'
+	    local align = 'center' --data.properties.align or data.text.halign or 'left'
 	    local color = data.text.color or 'FFFFFFFF'
 	    local params = { 
 	    	parent = group, x = data.x, y = data.y, 
@@ -287,12 +287,12 @@ function Object:create ()
 
 	    if stroked then
 			local newStrokeColor = {
-				highlight = { r=sr, g=sg, b=sb, a=sa },
-				shadow = { r=sr, g=sg, b=sb, a=sa }
+			    highlight = { r=0.1, g=0.1, b=0.1 }, --highlight = { r=sr, g=sg, b=sb, a=sa },
+			    shadow = { r=0.9, g=0.9, b=0.9 } --shadow = { r=sr, g=sg, b=sb, a=sa }
 			}
 
 			self.sprite = display.newEmbossedText( params )
-			self.sprite:setFillColor( utils:decodeTiledColor( color ) )
+			self.sprite:setFillColor( 0.1) --utils:decodeTiledColor( color ) )
 			self.sprite:setEmbossColor( newStrokeColor )
 
 	    else
@@ -303,7 +303,7 @@ function Object:create ()
 	    end 
 
 	    -- Default anchor point in Tiled
-	    self.sprite.anchorX, self.sprite.anchorY = 0, 0 
+	   -- self.sprite.anchorX, self.sprite.anchorY = 0, 0 	    -- I removed this because it wasn't centered....	
 
 	-- Polygon/Polyline Object
 	elseif data.polygon or data.polyline then 
@@ -343,10 +343,14 @@ function Object:create ()
 
 	else
 
-		self.sprite = display.newRect( group, 0, 0, data.width, data.height )
 
-		-- Apply base properties
-	    self.sprite.anchorX, self.sprite.anchorY = 0, 0
+		self.sprite = display.newRoundedRect( group, 0, 0, data.width, data.height, 5)
+		self.sprite.strokeWidth = 1
+		self.sprite:setFillColor( 0.7, 0.7)
+		self.sprite:setStrokeColor( 0.1, 0.1, 0.1)
+
+		-- Apply base properties	
+	    --self.sprite.anchorX, self.sprite.anchorY = 0, 0 	    -- I removed this because it wasn't centered....	
 	    self.sprite.x, self.sprite.y = data.x, data.y
 	
 	end	

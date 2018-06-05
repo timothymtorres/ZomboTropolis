@@ -24,7 +24,7 @@ local json        = require 'json'
 --                                  CLASS                                                     --												
 -- ------------------------------------------------------------------------------------------ --
 
-local Berry = class( 'Berry', { berryDebugModeEnabled = false } )
+local Berry = class( 'Berry', { berryDebugModeEnabled = true } )
 
 -- ------------------------------------------------------------------------------------------ --
 --                                  LOCALISED VARIABLES                                       --	
