@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
+## v0.11.0 - ???
+### Added
+- Empty room sprite that will serve as the template for all rooms temporarily.
+- Human/Zombie sprites that move around the room with their names displayed. 
+- Zoom feature for room and city.
+- Zooming in from the city sprite will display room.
+- Zooming out from the room sprite will display city.
+
+
 ## v0.10.0 - 01/27/2018
 ### Added
 - `Gadget` and `Syringe` research human skills grant a higher hp threshold when using a syringe on a zombie.
