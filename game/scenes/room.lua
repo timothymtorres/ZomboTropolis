@@ -126,7 +126,7 @@ function scene:create( event )
   Name_bkgr_layer:addObject(name_bkgr)  
 
   local visual = berry.createVisual( room )
-  berry.buildPhysical( room )
+  --berry.buildPhysical( room )
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   room.extensions = "scenes.objects."

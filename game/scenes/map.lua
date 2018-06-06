@@ -7,10 +7,6 @@
 local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
-local room, mob
-
-local Object     = require 'code.libs.berry.Object'  -- using this to test fake mob/object spawn with room
-
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -19,32 +15,9 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
---[[ ScrollView listener
-local function scrollListener( event )
-
-    local phase = event.phase
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
-
-    -- In the event a scroll limit is reached...
-    if (event.limitReached) then
-        if ( event.direction == "up" ) then print( "Reached top limit" )
-        elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-        elseif ( event.direction == "left" ) then print( "Reached left limit" )
-        elseif ( event.direction == "right" ) then print( "Reached right limit" )
-        end
-    end
-
-    return true
-end
---]]
-
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
-
-local room, room_timer
+local city
 -- -------------------------------------------------------------------------------
 
 
@@ -53,109 +26,14 @@ function scene:create( event )
   local sceneGroup = self.view
 
   -- Load our map
-  local filename = "graphics/map/room/ZTRoom.json"
-  room = berry.loadMap( filename, "graphics/map/room" )
+  local filename = "graphics/map/city_map.json"
+  city = berry.loadMap( filename, "graphics/map" )
 
-  local Mob_layer = room:getObjectLayer('Mob')
-  local Name_layer = room:getObjectLayer('Mob Name')
-  local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
-
-  local text_str = 'Rocco W'
-
- local fake_mob_json_data = {
-    gid = 1511, --1612, --gid = 1511,
-    height = 32,
-    --id = 10,
-    name = text_str,
-    rotation = 0,
-    type = "mob",
-    visible = true,
-    width = 32,
-    x = 100,
-    y = 150,
-    properties = {
-      isAnimated = true,
-    },
-  }
-
-  Mob_layer:addObject(Object:new(fake_mob_json_data, room, Mob_layer))
-
-  local border = 4
-  local font_size = 9
-  local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - 24 - border*2 - font_size
-
-  local name_data = {
-    --id = 3,
-    name = text_str,
-    rotation = 0,
-    type = "name",
-    visible = true,
-    x = above_mob_x,
-    y = above_mob_y,
-    properties = {stroked = true},
-
-    text = {
-      text = text_str,
-      fontfamily = "scene/game/font/GermaniaOne-Regular.ttf",
-      pixelsize = font_size,
-      halign = 'center',
-    },
-  }
-
-  local name = Object:new(name_data, room, Name_layer)
-  Name_layer:addObject(name)
-
-  -- this is a hack to measure the width of the text obj, then delete the text obj
-  local _ = display.newText(text_str, 0, 0, name_data.text.fontfamily, font_size )
-  local text_width = _.contentWidth
-  _:removeSelf()
-  _ = nil
-
-  local rect_data = {
-    height = font_size + border*2,
-    width = text_width + border*2,
-    name = text_str,
-    rotation = 0,
-    type = "rect",
-    visible = true,
-    x = above_mob_x,
-    y = above_mob_y,
-  }
-
-  local name_bkgr = Object:new(rect_data, room, Name_bkgr_layer)
-  Name_bkgr_layer:addObject(name_bkgr)  
-
-  local visual = berry.createVisual( room )
-  berry.buildPhysical( room )
-
-  -- the sprite must be loaded first via berry.createVisual before we can extend the objects
-  room.extensions = "scenes.objects."
-  room:extendObjects( "mob" )  -- animations, movement, death?, etc.
-
-  --mob = room:getObjectWithName( "Rocco W" ):getVisual()
-  --mob.filename = filename  
+  local visual = berry.createVisual( city )
 
   return sceneGroup
 end
 
---[[
--- Function to scroll the map
-local function enterFrame( event )
-
-  local elapsed = event.time
-
-  -- Easy way to scroll a map based on a character
-  if hero and hero.x and hero.y and not hero.isDead then
-    local x, y = hero:localToContent( 0, 0 )
-    x, y = display.contentCenterX - x, display.contentCenterY - y  -- this centers hero on the screen always
-    --map.x, map.y = map.x + x, map.y + y
-    local visual = map:getVisual()
-    visual.x, visual.y = visual.x + x, visual.y + y
-  end
-end
---]]
-
-local max, acceleration, dy, dx = 375, 5, 0, 0, 0, 0
 local lastEvent = {}
 local max_scale, min_scale = 1.25, 0.75  -- only applies to zoom in/out
 
@@ -164,19 +42,19 @@ local function key( event )
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
   if phase == "down" then
-    local scale = room:getScale()
+    local scale = city:getScale()
 
     if "up" == name and scale < max_scale then
-      room:scale(0.25)
+      city:scale(0.25)
     elseif "down" == name and scale > min_scale then
-      room:scale(-0.25)
-    elseif "up" == name then -- zoom into room if viewing map
-    elseif "down" == name then -- zoom into map if viewing room
+      city:scale(-0.25)
+    elseif "up" == name then -- zoom into city if viewing map
       local scene = composer.getSceneName('current')
       composer.removeScene(scene)      
 
       local options = {effect = "fade", time = 500,}   
-      composer.gotoScene('scenes.map', options)
+      composer.gotoScene('scenes.room', options)      
+    elseif "down" == name then -- zoom into map if viewing room
     end
   end
 
@@ -207,20 +85,6 @@ local function movePlatform(event)
     end
     return true
 end
- 
-local function mobMovement()
-  local dir = math.random(1, 4)
-
-  local mob_list = room:getObjectsWithType('mob')
-  for _, mob in ipairs(mob_list) do 
-    mob.sprite:travel(dir)
-  end  
-end
-
-local function enterFrame()
-  -- Do this every frame  
-end
-
 
 -- "scene:show()"
 function scene:show( event )
@@ -230,14 +94,9 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-
-        --local delay = 500 -- 1 second?
-        room_timer = timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
-
-        --Runtime:addEventListener( "enterFrame", enterFrame )      
+    
         Runtime:addEventListener("key", key)  
-
-        room.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
+        city.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -258,8 +117,7 @@ function scene:hide( event )
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-        Runtime:removeEventListener( "enterFrame", enterFrame )      
+        -- Called immediately after scene goes off screen.   
         Runtime:removeEventListener( "key", key )          
         timer.pause(room_timer)
     end  
@@ -269,11 +127,9 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-    room:destroy()
-    Runtime:removeEventListener("key", key)    
+    city:destroy()   
     Runtime:removeEventListener( "enterFrame", enterFrame )      
     Runtime:removeEventListener( "key", key )     
-    timer.cancel(room_timer) 
 
     local sceneGroup = self.view
 
