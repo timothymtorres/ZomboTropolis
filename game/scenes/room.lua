@@ -44,7 +44,7 @@ end
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
 
-local room
+local room, room_timer
 -- -------------------------------------------------------------------------------
 
 
@@ -172,7 +172,11 @@ local function key( event )
       room:scale(-0.25)
     elseif "up" == name then -- zoom into room if viewing map
     elseif "down" == name then -- zoom into map if viewing room
-      
+      local scene = composer.getSceneName('current')
+      composer.removeScene(scene)      
+
+      local options = {effect = "fade", time = 500,}   
+      composer.gotoScene('scenes.map', options)
     end
   end
 
@@ -228,7 +232,7 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 
         --local delay = 500 -- 1 second?
-        timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
+        room_timer = timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
 
         --Runtime:addEventListener( "enterFrame", enterFrame )      
         Runtime:addEventListener("key", key)  
@@ -257,6 +261,7 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.
         Runtime:removeEventListener( "enterFrame", enterFrame )      
         Runtime:removeEventListener( "key", key )          
+        timer.pause(room_timer)
     end  
 end
 
@@ -265,6 +270,10 @@ end
 function scene:destroy( event )
 
     room:destroy()
+    Runtime:removeEventListener("key", key)    
+    Runtime:removeEventListener( "enterFrame", enterFrame )      
+    Runtime:removeEventListener( "key", key )     
+    timer.cancel(room_timer) 
 
     local sceneGroup = self.view
 
