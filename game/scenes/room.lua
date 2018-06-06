@@ -157,26 +157,26 @@ end
 
 local max, acceleration, dy, dx = 375, 5, 0, 0, 0, 0
 local lastEvent = {}
+local max_scale, min_scale = 1.25, 0.75  -- only applies to zoom in/out
+
 local function key( event )
   local phase = event.phase
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
   if phase == "down" then
-    local dir 
+    local scale = room:getScale()
 
-    if "left" == name then dir = 2
-    elseif "right" == name then dir = 4
-    elseif "up" == name then dir = 3
-    elseif "down" == name then dir = 1
+    if "up" == name and scale < max_scale then
+      room:scale(0.25)
+    elseif "down" == name and scale > min_scale then
+      room:scale(-0.25)
+    elseif "up" == name then -- zoom into room if viewing map
+    elseif "down" == name then -- zoom into map if viewing room
+      
     end
-
-print('key event has been triggered')
-    local mob_list = room:getObjectsWithType('mob')
-    for _, mob in ipairs(mob_list) do 
-      mob.sprite:travel(dir)
-    end
-
   end
+
+
   lastEvent = event
 end
 
@@ -227,7 +227,7 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
 
-        local delay = 500 -- 1 second?
+        --local delay = 500 -- 1 second?
         timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
 
         --Runtime:addEventListener( "enterFrame", enterFrame )      
