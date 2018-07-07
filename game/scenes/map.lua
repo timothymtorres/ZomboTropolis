@@ -30,12 +30,21 @@ function scene:create( event )
   city = berry.loadMap( filename, "graphics/map" )
 
   local visual = berry.createVisual( city )
+  city:setScale(1)
+
+  local tile_w, tile_h = city.tilewidth, city.tileheight
+  local player_x, player_y = 1, 1 -- insert player coords here later
+
+  local x = (-1 * player_y * tile_w / 2) + (player_x * tile_w  / 2) 
+  local y = (player_x * tile_h / 2) - (-1 * player_y * tile_h / 2)
+
+  city:setPosition (x, y)
 
   return sceneGroup
 end
 
 local lastEvent = {}
-local max_scale, min_scale = 1.25, 0.75  -- only applies to zoom in/out
+local max_scale, min_scale = 2.00, 0.25  -- only applies to zoom in/out
 
 local function key( event )
   local phase = event.phase
