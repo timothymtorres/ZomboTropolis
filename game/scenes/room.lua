@@ -130,7 +130,7 @@ function scene:create( event )
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   room.extensions = "scenes.objects."
-  room:extendObjects( "mob" )  -- animations, movement, death?, etc.
+  room:extendObjects( "mob", "terminal", "apc", "generator", "transmitter")  -- animations, movement, death?, etc.
 
   --mob = room:getObjectWithName( "Rocco W" ):getVisual()
   --mob.filename = filename  
