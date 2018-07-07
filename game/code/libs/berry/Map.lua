@@ -70,6 +70,7 @@ function Map:init( filename, tileSetsDirectory )
     self.tilewidth = data.tilewidth
     self.tileheight = data.tileheight
     self.designedWidth, self.designedHeight = data.width * data.tilewidth, data.height * data.tileheight
+    self.orientation = data.orientation
 
 	local tileLayer, tileSet, objectLayer
 
@@ -898,8 +899,13 @@ function Map:create()
 	display.setDefault( 'background', utils:decodeTiledColor( self.data.backgroundcolor ) )
 
 	-- Center map on the screen
-	self.world.x = display.contentCenterX - self.designedWidth * 0.5
-	self.world.y = 0  --self.designedHeight * 0.5 --display.contentCenterY - self.designedHeight * 0.5
+    if self.orientation == 'isometric' then
+		self.world.x = 0--self.designedWidth * 0.25 -- display.contentCenterX 
+		self.world.y = 0--display.contentCenterY - self.designedHeight * 0.5
+	elseif self.orientation == 'orthogonal' then
+		self.world.x = display.contentCenterX - self.designedWidth * 0.5
+		self.world.y = 0  --self.designedHeight * 0.5 --display.contentCenterY - self.designedHeight * 0.5
+	end
 
 	-- Show layers/objects in right order
 	self:sort()

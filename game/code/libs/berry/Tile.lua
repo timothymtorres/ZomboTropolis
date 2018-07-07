@@ -206,16 +206,22 @@ function Tile:create( index )
     	end
 
 		-- Calculate and set the row position of this tile in the map
-		self.row = floor( ( index + self.tileLayer.width - 1 ) / self.tileLayer.width )
-		
+		self.row = floor( ( index + self.tileLayer.width - 1 ) / self.tileLayer.width )	
+
 		-- Calculate and set the column position of this tile in the map
 		self.column = index - ( self.row - 1 ) * self.tileLayer.width
 
 		-- Apply sprite properties
 		self.sprite.anchorX, self.sprite.anchorY = 0, 1
-		self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth, self.row * self.map.tileheight
 
-		utils:centerAnchor( self.sprite )
+		if self.map.orientation == 'isometric' then
+	        self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2)
+	        self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) 
+	    elseif self.map.orientation == 'orthogonal' then
+			self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth, self.row * self.map.tileheight
+		end
+
+		--utils:centerAnchor( self.sprite )
 
 		local physicalProperties = {
 		'bodyType',
