@@ -88,7 +88,7 @@ function Building:install(machine, condition)
   self[machine] = Machines[Machine]:new(self, condition) 
 end
 
-function Building:blackout()
+function Building:blackout()  -- change method name to setPower?
   -- 3x3 area do blackout event on tile(s)
 end
 

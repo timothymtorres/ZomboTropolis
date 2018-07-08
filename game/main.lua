@@ -183,5 +183,6 @@ tab_bar = widget.newTabBar
     buttons = tabButtons
 }
 
--- Use composer to go to our first game scene
-composer.gotoScene("scenes.status")
+-- Use composer to go to our first game scene 
+composer.gotoScene('scenes.room')
+--composer.gotoScene("scenes.status")
