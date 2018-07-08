@@ -6,7 +6,7 @@ local Library, News, Museum, Church = unpack(require('code.location.tile.buildin
 local Warehouse, Factory, Power, Control = unpack(require('code.location.tile.building.buildings.industrial'))
 local PD, FD, Hospital, Lab = unpack(require('code.location.tile.building.buildings.government'))
 local Gas, Shop, Mall = unpack(require('code.location.tile.building.buildings.commercial'))
-local Bar, Sport = unpack(require('code.location.tile.buillding.buildings.entertainment'))
+local Bar, Sport = unpack(require('code.location.tile.building.buildings.entertainment'))
 local Gatehouse, Infirmary, Armory, Supply, Barracks = unpack(require('code.location.tile.building.buildings.military'))
 
 local Tile = {
