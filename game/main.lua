@@ -23,14 +23,6 @@ Zombie = require('code.player.zombie.zombie')
 Human = require('code.player.human.human')
 table.inspect = require('code.libs.inspect')
 
---[[
-local building = require('code.location.building.class')
-lookupItem = require('code.item.search')
-lookupWeapon = require('code.item.weapon.search')
-lookupEquipment = require('code.location.building.equipment.search')
-lookupMedical = require('code.item.medical.search')
---]]
-
 dummy = {}
 print()
 city = Map:new(10)
