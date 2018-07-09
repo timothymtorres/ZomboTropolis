@@ -19,28 +19,6 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
---[[ ScrollView listener
-local function scrollListener( event )
-
-    local phase = event.phase
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
-
-    -- In the event a scroll limit is reached...
-    if (event.limitReached) then
-        if ( event.direction == "up" ) then print( "Reached top limit" )
-        elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-        elseif ( event.direction == "left" ) then print( "Reached left limit" )
-        elseif ( event.direction == "right" ) then print( "Reached right limit" )
-        end
-    end
-
-    return true
-end
---]]
-
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
 
@@ -51,8 +29,14 @@ local room, room_timer
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
+  local map, y, x = main_player:getMap(), main_player:getPos()
+  local location = map[y][x]
 
-  -- Load our map
+--if map[y][x]:isBuilding() and main_player:isStaged('inside') then 
+--else main_player:isStaged('outside') then
+
+  -- Load our room
+  -- we need to have a atlas for different rooms on the map to load the specific room we are in  
   local filename = "graphics/map/room/ZTRoom.json"
   room = berry.loadMap( filename, "graphics/map/room" )
 
@@ -60,73 +44,86 @@ function scene:create( event )
   local Name_layer = room:getObjectLayer('Mob Name')
   local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
 
-  local text_str = 'Rocco W'
+  local mobs = location:getPlayers(main_player:getStage()) 
 
- local fake_mob_json_data = {
-    gid = 1511, --1612, --gid = 1511,
-    height = 32,
-    --id = 10,
-    name = text_str,
-    rotation = 0,
-    type = "mob",
-    visible = true,
-    width = 32,
-    x = 100,
-    y = 150,
-    properties = {
-      isAnimated = true,
-    },
-  }
+  local human_tileset = room:getTileSet('human') -- this should be called mob tileset, NOT human
+  local sequences_data = human_tileset:getSequencesData()
+  local first_gid = human_tileset.firstgid
 
-  Mob_layer:addObject(Object:new(fake_mob_json_data, room, Mob_layer))
+  local sequence_names = {}  -- going to store our name and corresponding GID in this table
+  for _, sequence in pairs(sequences_data) do sequence_names[sequence.name] = sequence.frames[1] + first_gid end
 
-  local border = 4
-  local font_size = 9
-  local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - 24 - border*2 - font_size
+  for player in pairs(mobs) do
+    local text_str = player:getUsername()
+    local gid = player:isMobType('zombie') and sequence_names['husk'] or sequence_names['white-male']
+print('the gid is', gid)
 
-  local name_data = {
-    --id = 3,
-    name = text_str,
-    rotation = 0,
-    type = "name",
-    visible = true,
-    x = above_mob_x,
-    y = above_mob_y,
-    properties = {stroked = true},
+    local fake_mob_json_data = {
+      gid = gid,
+      height = 32,
+      --id = 10,
+      name = text_str,
+      rotation = 0,
+      type = "mob",
+      visible = true,
+      width = 32,
+      x = math.random(40, 600),
+      y = math.random(40, 300),
+      properties = {
+        isAnimated = true,
+      },
+    }
 
-    text = {
-      text = text_str,
-      fontfamily = "scene/game/font/GermaniaOne-Regular.ttf",
-      pixelsize = font_size,
-      halign = 'center',
-    },
-  }
+    Mob_layer:addObject(Object:new(fake_mob_json_data, room, Mob_layer))
 
-  local name = Object:new(name_data, room, Name_layer)
-  Name_layer:addObject(name)
+    local border = 4
+    local font_size = 9
+    local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - 24 - border*2 - font_size
 
-  -- this is a hack to measure the width of the text obj, then delete the text obj
-  local _ = display.newText(text_str, 0, 0, name_data.text.fontfamily, font_size )
-  local text_width = _.contentWidth
-  _:removeSelf()
-  _ = nil
+    local name_data = {
+      --id = 3,
+      name = text_str,
+      rotation = 0,
+      type = "name",
+      visible = true,
+      x = above_mob_x,
+      y = above_mob_y,
+      properties = {stroked = true},
 
-  local rect_data = {
-    height = font_size + border*2,
-    width = text_width + border*2,
-    name = text_str,
-    rotation = 0,
-    type = "rect",
-    visible = true,
-    x = above_mob_x,
-    y = above_mob_y,
-  }
+      text = {
+        text = text_str,
+        fontfamily = "scene/game/font/GermaniaOne-Regular.ttf",
+        pixelsize = font_size,
+        halign = 'center',
+      },
+    }
 
-  local name_bkgr = Object:new(rect_data, room, Name_bkgr_layer)
-  Name_bkgr_layer:addObject(name_bkgr)  
+    local name = Object:new(name_data, room, Name_layer)
+    Name_layer:addObject(name)
+
+    -- this is a hack to measure the width of the text obj, then delete the text obj
+    local _ = display.newText(text_str, 0, 0, name_data.text.fontfamily, font_size )
+    local text_width = _.contentWidth
+    _:removeSelf()
+    _ = nil
+
+    local rect_data = {
+      height = font_size + border*2,
+      width = text_width + border*2,
+      name = text_str,
+      rotation = 0,
+      type = "rect",
+      visible = true,
+      x = above_mob_x,
+      y = above_mob_y,
+    }
+
+    local name_bkgr = Object:new(rect_data, room, Name_bkgr_layer)
+    Name_bkgr_layer:addObject(name_bkgr)  
+  end
 
   local visual = berry.createVisual( room )
-  --berry.buildPhysical( room )
+  --berry.buildPhysical( room )  This is used for physics... no need 
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   room.extensions = "scenes.objects."
