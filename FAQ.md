@@ -78,7 +78,7 @@ Money will not give a person an in game advantage.  This will keep the game true
 
 ## When will the game be playable?
 
-I'm aiming for development to be finished around Spring 2018.  The app should launch shortly after that time frame.
+I'm aiming for development to be finished sometime during 2018.  The app should launch shortly after that time frame.
 
 ## How long has this been in development?
 
