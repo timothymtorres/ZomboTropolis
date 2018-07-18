@@ -51,12 +51,14 @@ function scene:create( event )
   local first_gid = human_tileset.firstgid
 
   local sequence_names = {}  -- going to store our name and corresponding GID in this table
-  for _, sequence in pairs(sequences_data) do sequence_names[sequence.name] = sequence.frames[1] + first_gid end
+  for _, sequence in pairs(sequences_data) do 
+    sequence_names[sequence.name] = first_gid + sequence.frames[3] - 1 -- frames[3] is north (for mobs only) and we need to subtract by one  
+  end
 
   for player in pairs(mobs) do
     local text_str = player:getUsername()
-    local gid = player:isMobType('zombie') and sequence_names['husk'] or sequence_names['white-male']
-print('the gid is', gid)
+    local sprite_name = player:isMobType('zombie') and 'husk' or 'white-male'
+    local gid = sequence_names[sprite_name]
 
     local fake_mob_json_data = {
       gid = gid,
