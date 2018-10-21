@@ -56,30 +56,10 @@
                     },
                  "rotation":0,
                  "type":"transmitter",
-                 "visible":true,
+                 "visible":false,
                  "width":32,
                  "x":448,
                  "y":192
-                }, 
-                {
-                 "gid":1730,
-                 "height":32,
-                 "id":41,
-                 "name":"generator",
-                 "properties":
-                    {
-                     "isAnimated":true
-                    },
-                 "propertytypes":
-                    {
-                     "isAnimated":"bool"
-                    },
-                 "rotation":0,
-                 "type":"generator",
-                 "visible":true,
-                 "width":32,
-                 "x":160.666666666667,
-                 "y":65.3333333333333
                 }, 
                 {
                  "gid":1784,
@@ -116,10 +96,30 @@
                     },
                  "rotation":0,
                  "type":"terminal",
-                 "visible":true,
+                 "visible":false,
                  "width":32,
                  "x":160,
                  "y":194
+                }, 
+                {
+                 "gid":1730,
+                 "height":32,
+                 "id":48,
+                 "name":"generator",
+                 "properties":
+                    {
+                     "isAnimated":true
+                    },
+                 "propertytypes":
+                    {
+                     "isAnimated":"bool"
+                    },
+                 "rotation":0,
+                 "type":"generator",
+                 "visible":false,
+                 "width":32,
+                 "x":159,
+                 "y":60
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -177,7 +177,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":44,
+ "nextobjectid":51,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.5",
