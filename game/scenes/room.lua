@@ -7,9 +7,8 @@
 local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
-local room, mob
-
-local Object     = require 'code.libs.berry.Object'  -- using this to test fake mob/object spawn with room
+local room, room_timer, mob
+local Object = require('code.libs.berry.Object')
 
 local scene = composer.newScene()
 
@@ -22,7 +21,6 @@ local scene = composer.newScene()
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
 
-local room, room_timer
 -- -------------------------------------------------------------------------------
 
 
@@ -44,8 +42,6 @@ function scene:create( event )
   local Name_layer = room:getObjectLayer('Mob Name')
   local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
 
-  local mobs = location:getPlayers(main_player:getStage()) 
-
   local human_tileset = room:getTileSet('human') -- this should be called mob tileset, NOT human
   local sequences_data = human_tileset:getSequencesData()
   local first_gid = human_tileset.firstgid
@@ -54,6 +50,8 @@ function scene:create( event )
   for _, sequence in pairs(sequences_data) do 
     sequence_names[sequence.name] = first_gid + sequence.frames[3] - 1 -- frames[3] is north (for mobs only) and we need to subtract by one  
   end
+
+  local mobs = location:getPlayers(main_player:getStage()) 
 
   for player in pairs(mobs) do
     local text_str = player:getUsername()
@@ -130,6 +128,21 @@ function scene:create( event )
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   room.extensions = "scenes.objects."
   room:extendObjects( "mob", "terminal", "apc", "generator", "transmitter")  -- animations, movement, death?, etc.
+
+  -- preparing to spawn our building equipment/sprites
+  local map, y, x = main_player:getMap(), main_player:getPos() 
+  local building = map[y][x]:isBuilding() and main_player:isStaged('inside') and map[y][x]
+
+  if building then
+    local building_has_power = building:isPowered()
+    local machines = building:getEquipment()
+
+    for machine_name, _ in pairs(machines) do
+      local machine = room:getObjectWithName(machine_name).sprite
+      machine:install()
+      if building_has_power then machine:setPower('on') end
+    end
+  end
 
   --mob = room:getObjectWithName( "Rocco W" ):getVisual()
   --mob.filename = filename  
