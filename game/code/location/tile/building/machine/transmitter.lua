@@ -11,13 +11,9 @@ Transmitter.CATEGORY = 'engineering'
 Transmitter.ap = {cost = 3, modifier = {tech = -1, radio_tech = -1}} -- this might not be the correct way to do this (need seperate ap costs for actions? retune, transmit, etc.?)
 
 function Transmitter:initialize(buiilding) 
-  Machine.initialize(self, building)
-  self.freq = 0
-end
-
-function Transmitter:install() 
   self.hp = MAX_HP 
   self.freq = math.random(1, 1024)
+  Machine.initialize(self, building)  
 end
 
 function Transmitter:broadcast(player, message, condition) channel:transmit(self.freq, player, message, condition) end

@@ -9,8 +9,8 @@ Generator.DURABILITY = 100
 Generator.CATEGORY = 'engineering'
 
 function Generator:initialize(building) 
-  Machine.initialize(self, building)
   self.fuel = 0 
+  Machine.initialize(self, building)
 end
 
 function Generator:refuel() self.fuel = MAX_FUEL end
