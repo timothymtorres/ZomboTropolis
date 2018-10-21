@@ -13,12 +13,12 @@ function M.new( object )
 
 	function terminal:install()
 		self:setSequence('terminal-off')
-		self:show()		
+		object:show()		
 	end
 
 	function terminal:destroy()
 		self:setSequence('terminal-off')
-		self:hide()
+		object:hide()
 	end
 
 	function terminal:setPower(setting)

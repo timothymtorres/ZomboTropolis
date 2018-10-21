@@ -14,12 +14,12 @@ function M.new( object )
 
 	function transmitter:install()
 		self:setSequence('transmitter-off')
-		self:show()		
+		object:show()		
 	end
 
 	function transmitter:destroy()
 		self:setSequence('transmitter-off')
-		self:hide()
+		object:hide()
 	end
 
 	function transmitter:setPower(setting)

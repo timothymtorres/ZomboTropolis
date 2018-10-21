@@ -14,18 +14,18 @@ function M.new( object )
 
 	function generator:install()
 		self:setSequence('generator-off')
-		self:show()		
+		object:show()		
 	end
 
 	function generator:destroy()
 		self:setSequence('generator-off')
-		self:hide()
+		object:hide()
 	end
 
 	function generator:setPower(setting)
 		self:setSequence('generator-'..setting)
 		self:play()
-		room:setPower(setting) -- I think this is right
+		--room:setPower(setting) -- I think this is right
 	end
 
 	return generator
