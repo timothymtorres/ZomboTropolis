@@ -30,6 +30,14 @@ function M.new( object )
 	local room_sprite = room:getVisual()
 	local room_width, room_height = room_sprite.contentWidth, room_sprite.contentHeight
 
+  -- gets the section of room the player is staged in
+	local player_stage = main_player:getStage()
+  stage_layer = room:getTileLayer(player_stage)
+
+  -- sets the boundry for the section of the room
+  local stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
+  local stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
+
 	function visual:travel(dir)
 		visual:setFrame(dir)  -- changes direction		
 
@@ -43,8 +51,10 @@ function M.new( object )
 		elseif dir == 4 then new_x = -1*distance
 		end
 
-		local x_movement = (new_x == 0 or visual.x + new_x > room_width - 48 or visual.x + new_x < 48) and 0 or new_x
-		local y_movement = (new_y == 0 or visual.y + new_y > room_height - 48 or visual.y + new_y < 48) and 0 or new_y
+		local wall_offset = 4
+
+		local x_movement = (new_x == 0 or visual.x + new_x > stage_boundry_x_right - wall_offset or visual.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
+		local y_movement = (new_y == 0 or visual.y + new_y > stage_boundry_y_bottom - wall_offset or visual.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
 
 		transition.to( visual, { time=time_delay, x=visual.x + x_movement, y=visual.y + y_movement, iterations = 1} )
 
