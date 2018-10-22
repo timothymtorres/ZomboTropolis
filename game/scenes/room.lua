@@ -18,11 +18,18 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
-local width, height = display.contentWidth, display.contentHeight -- 320x480
+local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
 
--- -------------------------------------------------------------------------------
+local player_stage = main_player:getStage()
 
+local stage_boundry_x_left, stage_boundry_x_right
+local stage_boundry_y_top, stage_boundry_y_bottom
+local stage_width, stage_height 
+local hardcoded_offset = 32 * 0.75
+
+local room_width, room_height
+-- -------------------------------------------------------------------------------
 
 -- "scene:create()"
 function scene:create( event )
@@ -38,6 +45,19 @@ function scene:create( event )
   local filename = "graphics/map/room/ZTRoom.json"
   room = berry.loadMap( filename, "graphics/map/room" )
 
+  -- gets the section of room the player is staged in
+  stage_layer = room:getTileLayer(player_stage)
+
+  -- sets the boundry for the section of the room
+  stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
+  stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
+  stage_width, stage_height = stage_layer:getPropertyValue('section_width'), stage_layer:getPropertyValue('section_height')
+
+  -- okay so for whatever reason the y position of our room is offset by 3/4ths of a tile on the top?  Not sure why or how but for now
+  -- just going to ignore it and offset it thru hardcoding 
+  stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
+  stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset  
+
   local Mob_layer = room:getObjectLayer('Mob')
   local Name_layer = room:getObjectLayer('Mob Name')
   local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
@@ -52,6 +72,7 @@ function scene:create( event )
   end
 
   local mobs = location:getPlayers(main_player:getStage()) 
+  local spawn_offset = 32
 
   for player in pairs(mobs) do
     local text_str = player:getUsername()
@@ -67,8 +88,8 @@ function scene:create( event )
       type = "mob",
       visible = true,
       width = 32,
-      x = math.random(40, 600),
-      y = math.random(40, 300),
+      x = math.random(stage_boundry_x_left, stage_boundry_x_right - spawn_offset),  -- for whatever reason the left_boundry doesn't need a spawn offset
+      y = math.random(stage_boundry_y_top + spawn_offset, stage_boundry_y_bottom - spawn_offset),
       properties = {
         isAnimated = true,
       },
@@ -123,6 +144,8 @@ function scene:create( event )
   end
 
   local visual = berry.createVisual( room )
+  room_height, room_width = visual.contentHeight, visual.contentWidth
+
   --berry.buildPhysical( room )  This is used for physics... no need 
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
@@ -180,8 +203,18 @@ local function key( event )
 
     if "up" == name and scale < max_scale then
       room:scale(0.25)
+
+      -- this is a super hacky way to fix our hardcoded offset to use scale properly
+      hardcoded_offset = hardcoded_offset * (1 - scale)
+      stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
+      stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset        
     elseif "down" == name and scale > min_scale then
       room:scale(-0.25)
+
+      -- this is a super hacky way to fix our hardcoded offset to use scale properly
+      hardcoded_offset = hardcoded_offset * (1 + scale)
+      stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
+      stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset 
     elseif "up" == name then -- zoom into room if viewing map
     elseif "down" == name then -- zoom into map if viewing room
       local scene = composer.getSceneName('current')
@@ -208,11 +241,17 @@ local function movePlatform(event)
         -- here the distance is calculated between the start of the movement and its current position of the drag  
         local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
         local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
-        local left_boundry, right_boundry = platformTouched.contentWidth * 0.25, display.actualContentWidth - platformTouched.contentWidth * 1.25
-        local top_boundry, bottom_boundry = platformTouched.contentHeight * 0.25, display.actualContentHeight - platformTouched.contentHeight * 1.25
+        local scale_x, scale_y = room:getScale()
+
+        local left_boundry, right_boundry = -1 * 0, (-1 * room_width * scale_x) + phone_screen_width
+        local top_boundry, bottom_boundry = -1 * 0, (-1 * room_height * scale_y ) + phone_screen_height
+
+        -- this is the correct boundry for the room_section for inside
+        --local left_boundry, right_boundry = -1 * stage_boundry_x_left * scale_x, (-1 * stage_boundry_x_right * scale_x) + phone_screen_width
+        --local top_boundry, bottom_boundry = -1 * stage_boundry_y_top * scale_y, (-1 * stage_boundry_y_bottom * scale_y) + phone_screen_height
 
         platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
-        platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos 
+        platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos
     elseif event.phase == "ended" or event.phase == "cancelled"  then
         -- here the focus is removed from the last position
         display.getCurrentStage():setFocus( nil )
@@ -221,10 +260,9 @@ local function movePlatform(event)
 end
  
 local function mobMovement()
-  local dir = math.random(1, 4)
-
   local mob_list = room:getObjectsWithType('mob')
-  for _, mob in ipairs(mob_list) do 
+  for _, mob in ipairs(mob_list) do
+    local dir = math.random(1, 4)   
     mob.sprite:travel(dir)
   end  
 end
@@ -243,8 +281,8 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
 
-        --local delay = 500 -- 1 second?
-        room_timer = timer.performWithDelay( math.random(2500, 5000), mobMovement, -1)    
+        local delay = math.random(2500, 5000)
+        room_timer = timer.performWithDelay( delay, mobMovement, -1)    
 
         --Runtime:addEventListener( "enterFrame", enterFrame )      
         Runtime:addEventListener("key", key)  
