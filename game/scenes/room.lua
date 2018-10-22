@@ -8,7 +8,6 @@ local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
 local Object = require('code.libs.berry.Object')
-local rooms = require('graphics.map.room.rooms')
 
 local room, room_timer, mob
 
