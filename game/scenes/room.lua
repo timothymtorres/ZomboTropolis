@@ -7,8 +7,10 @@
 local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
-local room, room_timer, mob
 local Object = require('code.libs.berry.Object')
+local rooms = require('graphics.map.room.rooms')
+
+local room, room_timer, mob
 
 local scene = composer.newScene()
 
@@ -37,12 +39,21 @@ function scene:create( event )
   local map, y, x = main_player:getMap(), main_player:getPos()
   local location = map[y][x]
 
---if map[y][x]:isBuilding() and main_player:isStaged('inside') then 
---else main_player:isStaged('outside') then
+
+  -- We need to load our map, get the room template data, convert player position to tile_pos, subtract the gid
+  -- it's a big clusterfuck but meh.
+  local filename = "graphics/map/city_map.json"
+  local city = berry.loadMap( filename, "graphics/map" )
+
+  local template_layer = city:getTileLayer('Room Template Data')
+  local city_width = template_layer.data.width
+  local tile_pos = x + (y-1) * city_width  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
+  local tile_gid = template_layer.data.data[tile_pos]
+  local template_name = city:getTilePropertyValueForGID (tile_gid, 'template')
 
   -- Load our room
   -- we need to have a atlas for different rooms on the map to load the specific room we are in  
-  local filename = "graphics/map/room/ZTRoom.json"
+  local filename = "graphics/map/room/rooms/".. "default".. ".json"
   room = berry.loadMap( filename, "graphics/map/room" )
 
   -- gets the section of room the player is staged in
