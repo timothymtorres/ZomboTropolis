@@ -8,7 +8,7 @@ local MIN_POTENTIAL_HP = 15
 local MAX_HP = 63
 
 local fortification_status = {
-  {desc = 'secured',            range =  0},  --   0
+--{desc = 'secured',            range =  0},  --   0
   {desc = 'loose',              range =  6},  --   1-06 [6]
   {desc = 'light',              range = 13},  --   7-13 [7]
   {desc = 'regular',            range = 21},  --  14-21 [8]
@@ -30,19 +30,37 @@ function Barricade:initialize()
   self.hp = DEFAULT_HP
   self.potential_hp = DEFAULT_POTENTIAL_HP
   
-  self.hp_desc = fortification_status[1].desc
-  self.potential_hp_desc = room_available[4].desc
+  self.hp_state = 0
+  self.potential_hp_state = 4
 end  
 
 Barricade.max_hp = MAX_HP
 
-function Barricade:getDesc() return self.hp_desc, self.potential_hp_desc end
+function Barricade:getState() return self.hp_state, self.potential_hp_state end
 
 function Barricade:updateHP(num) 
   self.hp = math.min( math.max(self.hp+num, 0), self.potential_hp) 
-  -- if damage done to barricade, need to subtract it from potential_hp as well (default_potential_hp is the lowest it can go)
+
+  -- if damage done to barricade, need to subtract it from potential_hp as well
   if num < 0 then self.potential_hp = math.max(self.potential_hp - num, MIN_POTENTIAL_HP) end 
-  self:updateDesc()
+
+  -- update our hp state
+  for i, fort in ipairs(fortification_status) do
+    if fort.range > self.hp then 
+      self.hp_state = i
+      break
+    end
+  end    
+  
+  -- update our potential_hp_state next
+  local hp_gap = self.potential_hp - self.hp
+
+  for i, room in ipairs(room_available) do
+    if room.range >= hp_gap then
+      self.potential_hp_state = i
+      break
+    end
+  end
 end
 
 function Barricade:roomForFortification() return self.potential_hp > self.hp end
@@ -114,22 +132,12 @@ end
 
 function Barricade:reinforce(potential_hp)
   self.potential_hp = math.min(self.potential_hp + potential_hp, MAX_HP) 
-  self:updateDesc()
-end
 
-function Barricade:updateDesc()
-  for _, fort in ipairs(fortification_status) do
-    if fort.range >= self.hp then
-      self.hp_desc = fort.desc
-      break
-    end
-  end    
-  
   local hp_gap = self.potential_hp - self.hp
-  
-  for _, room in ipairs(room_available) do
+
+  for i, room in ipairs(room_available) do
     if room.range >= hp_gap then
-      self.potential_hp_desc = room.desc
+      self.potential_hp_state = i
       break
     end
   end
