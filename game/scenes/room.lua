@@ -160,13 +160,14 @@ function scene:create( event )
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   room.extensions = "scenes.objects."
-  room:extendObjects( "mob", "terminal", "apc", "generator", "transmitter")  -- animations, movement, death?, etc.
+  room:extendObjects( "mob", "terminal", "apc", "generator", "transmitter", "door", "barricade", "search_area")  -- animations, movement, death?, etc.
 
   -- preparing to spawn our building equipment/sprites
   local map, y, x = main_player:getMap(), main_player:getPos() 
   local building = map[y][x]:isBuilding() and main_player:isStaged('inside') and map[y][x]
 
   if building then
+    -- display our machines
     local building_has_power = building:isPowered()
     local machines = building:getEquipment()
 
@@ -176,7 +177,27 @@ function scene:create( event )
       if building_has_power then machine:setPower('on') end
     end
 
-    if building:
+    -- display our door
+    local door_list = room:getObjectsWithName('door')  
+    local is_door_present = building:isPresent('door')
+    for _, door_obj in ipairs(door_list) do
+      door = door_obj.sprite
+      door:setVisual(is_door_present)
+
+      -- right now there are no door damaged sprite states
+      -- also make sure to set isAnimated for sprite object to true
+      --if is_door_present then door:setSprite(hp_state) end
+    end
+
+    -- display our barricades
+    local barricade_list = room:getObjectsWithName('barricade')
+    local is_cade_present = building:isPresent('barricade')
+    for _, barricade_obj in ipairs(barricade_list) do
+      barricade = barricade_obj.sprite
+      barricade:setVisual(is_cade_present)
+      if is_cade_present then barricade:setSprite(building.barricade:getState()) end
+    end
+
   end
 
   --mob = room:getObjectWithName( "Rocco W" ):getVisual()
