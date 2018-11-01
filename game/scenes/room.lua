@@ -175,6 +175,8 @@ function scene:create( event )
       machine:install()
       if building_has_power then machine:setPower('on') end
     end
+
+    if building:
   end
 
   --mob = room:getObjectWithName( "Rocco W" ):getVisual()
