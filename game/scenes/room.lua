@@ -52,8 +52,8 @@ function scene:create( event )
 
   -- Load our room
   -- we need to have a atlas for different rooms on the map to load the specific room we are in  
-  local filename = "graphics/map/room/rooms/".. "default".. ".json"
-  room = berry.loadMap( filename, "graphics/map/room" )
+  local filename = "graphics/rooms/".. "default".. ".json"
+  room = berry.loadMap( filename, "graphics/ss13" )
 
   -- gets the section of room the player is staged in
   stage_layer = room:getTileLayer(player_stage)
