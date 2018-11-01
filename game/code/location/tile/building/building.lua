@@ -105,9 +105,11 @@ function Building:isPresent(setting)
   if setting == 'machines' then
     if next(self.equipment) then return true else return false end    
   elseif setting == 'door' then
-    return self.door and true or false
-  elseif setting == 'damaged door' then
+    return self.door and self.door:isPresent() or false
+  elseif setting == 'damaged door' then -- pretty sure this is redundant
     return (self.door and self.door:isDamaged()) or false
+  elseif setting == 'barricade' then
+    return self.barricade and self.barricade:isPresent() or false
   else -- individual machine
     local machine = setting
     return self.equipment[machine] and true or false
