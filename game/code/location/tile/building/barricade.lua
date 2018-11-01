@@ -45,8 +45,6 @@ function Barricade:updateHP(num)
   self:updateDesc()
 end
 
-function Barricade:isDestroyed() return self.hp == 0 end
-
 function Barricade:roomForFortification() return self.potential_hp > self.hp end
 
 local reinforce_potential_params = {

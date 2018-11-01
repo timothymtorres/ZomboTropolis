@@ -16,4 +16,6 @@ function Barrier:updateHP(num)
   self:updateDesc()
 end
 
+function Barrier:isPresent() return self.hp > 0 end
+
 return Barrier
