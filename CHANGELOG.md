@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Zoom feature for room and city.
 - Zooming in from the city sprite will display room.
 - Zooming out from the room sprite will display city.
+- Equipment sprites and animations to room if present.
+- Barricade and door sprites set based on health if present in room.
+- Inside/Outside building sprite locations and boundaries.
+- Different room templates for city tiles
+- [unfinished] City tile map
 
 
 ## v0.10.0 - 01/27/2018
