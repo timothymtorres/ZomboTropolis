@@ -52,7 +52,7 @@ function scene:create( event )
 
   -- Load our room
   -- we need to have a atlas for different rooms on the map to load the specific room we are in  
-  local filename = "graphics/rooms/".. "default".. ".json"
+  local filename = "graphics/rooms/"..template_name.. ".json"
   room = berry.loadMap( filename, "graphics/ss13" )
 
   -- gets the section of room the player is staged in
