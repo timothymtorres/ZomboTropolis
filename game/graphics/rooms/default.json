@@ -16,18 +16,7 @@
          "color":"#000000",
          "draworder":"topdown",
          "name":"Shading (unused ATM)",
-         "objects":[
-                {
-                 "height":902,
-                 "id":62,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":896,
-                 "x":32,
-                 "y":32
-                }],
+         "objects":[],
          "opacity":0.12,
          "type":"objectgroup",
          "visible":true,
