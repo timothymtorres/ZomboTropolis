@@ -16,10 +16,6 @@ function M.new( object )
 	end
 
 	function barricade:setSprite(hp_state)
-print(hp_state)
-print(table.inspect(barricade, {depth=2}))
-print(table.inspect(self, {depth=2}))
-
 		barricade:setFrame(hp_state)
 		self:setFrame(hp_state)
 	end
