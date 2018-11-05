@@ -44,9 +44,15 @@ function scene:create( event )
   local filename = "graphics/map/city_map.json"
   local city = berry.loadMap( filename, "graphics/map" )
 
+  local tile_offset = city:getPropertyValue('background_tile_offset') -- this is how many tiles surround the city in all directions
   local template_layer = city:getTileLayer('Room Template Data')
   local city_width = template_layer.data.width
-  local tile_pos = x + (y-1) * city_width  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
+
+  -- we have to overwrite x/y because the background tiles offset our coords and we need to account for it
+  x = x + tile_offset
+  y = (y - 1 + tile_offset) * city_width
+
+  local tile_pos = x + y  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
   local tile_gid = template_layer.data.data[tile_pos]
   local template_name = city:getTilePropertyValueForGID (tile_gid, 'template')
 

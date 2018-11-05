@@ -38,7 +38,7 @@ function scene:create( event )
   local x = (-1 * player_y * tile_w / 2) + (player_x * tile_w  / 2) 
   local y = (player_x * tile_h / 2) - (-1 * player_y * tile_h / 2)
 
-  city:setPosition (x, y)
+  city:setPosition(x, y)
 
   return sceneGroup
 end
