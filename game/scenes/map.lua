@@ -33,10 +33,20 @@ function scene:create( event )
   city:setScale(1)
 
   local tile_w, tile_h = city.tilewidth, city.tileheight
-  local player_x, player_y = 1, 1 -- insert player coords here later
+  local tile_offset = city:getPropertyValue('background_tile_offset') - 1 -- (note - Lua counts from 1 instead of zero, so we need a -1 applied to offset)
+  local player_y, player_x = main_player:getPos()
+  player_x, player_y = tile_offset + player_y, tile_offset + player_x -- insert player coords here later
 
-  local x = (-1 * player_y * tile_w / 2) + (player_x * tile_w  / 2) 
-  local y = (player_x * tile_h / 2) - (-1 * player_y * tile_h / 2)
+  local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight 
+
+  -- we have to add these extra offsets to X/Y pos because when we set our map's pixel position to 0,0 it's not in the exact
+  -- top-left corner like it should be... GRRRRRRR! (note - this happens to the room scenes too! double WTF?!)
+  -- this may have something to do with the background layer x/y position being offset weirdly
+  local extra_offset_y, extra_offset_x = 1.30*tile_h, -0.5*tile_w 
+
+  local x = (-1 * player_x * tile_w  / 2) + (player_y * tile_w / 2)  + extra_offset_x + phone_screen_width*0.5
+  -- our phone_screen_height would not split in half correctly?  Again IDK why, but adding a hacky *0.85 fixed it
+  local y = (-1 * player_x * tile_h / 2) - (player_y * tile_h / 2) + extra_offset_y + (phone_screen_height*0.5)*0.85
 
   city:setPosition(x, y)
 
