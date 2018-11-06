@@ -183,7 +183,7 @@ end
 function Tile:create( index )
 
 	self.index = index
-	
+
 	if self.tileSet then 
 
 		if self.tileSet.imageSheet then 
@@ -211,14 +211,17 @@ function Tile:create( index )
 		-- Calculate and set the column position of this tile in the map
 		self.column = index - ( self.row - 1 ) * self.tileLayer.width
 
+		-- Get offsets if they exist (note - not every tileLayer has an offset)
+		local offsetX, offsetY = self.tileLayer.data.offsetx or 0, self.tileLayer.data.offsety or 0
+
 		-- Apply sprite properties
 		self.sprite.anchorX, self.sprite.anchorY = 0, 1
 
 		if self.map.orientation == 'isometric' then
-	        self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2)
-	        self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) 
+	        self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2) + offsetX
+	        self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) + offsetY
 	    elseif self.map.orientation == 'orthogonal' then
-			self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth, self.row * self.map.tileheight
+			self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth + offsetX, self.row * self.map.tileheight + offsetY
 		end
 
 		--utils:centerAnchor( self.sprite )
