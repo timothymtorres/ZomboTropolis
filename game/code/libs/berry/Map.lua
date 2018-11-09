@@ -513,6 +513,23 @@ function Map:getPosition()
 end
 
 ------------------------------------------------------------------------------------------------
+--- Gets a tile on the Map at specified position.
+--
+-- @return A Tile instance.
+------------------------------------------------------------------------------------------------
+function Map:getTileFromPosition( x, y )
+	local tile_offset = self:getPropertyValue('background_tile_offset')
+
+	-- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
+	local tile_pos = (x + tile_offset) + ((y - 1 + tile_offset) * self.data.width)
+
+	-- need to figure out CORRECT tile layer to select
+
+	local tile = self.tileLayers[1].tiles[tile_pos]
+	return tile
+end
+
+------------------------------------------------------------------------------------------------
 --- Gets a list of Tiles across all TileLayers that have a specified property. 
 --
 -- @param name The name of the Property to look for.
@@ -909,6 +926,9 @@ function Map:create()
 
 	-- Show layers/objects in right order
 	self:sort()
+
+	print(self.world.anchorX, self.world.anchorY)
+	print(self.world.anchorChildren)
 
 	return self.world
 
