@@ -28,45 +28,41 @@ function scene:create( event )
   -- Load our map
   local filename = "graphics/map/city_map.json"
   city = berry.loadMap( filename, "graphics/map" )
-
   local visual = berry.createVisual( city )
-  city:setScale(1)
 
-  local tile_w, tile_h = city.tilewidth, city.tileheight
-  local tile_offset = city:getPropertyValue('background_tile_offset') - 1 -- (note - Lua counts from 1 instead of zero, so we need a -1 applied to offset)
+  city:setScale(2.5)
+
   local player_y, player_x = main_player:getPos()
-  player_x, player_y = tile_offset + player_y, tile_offset + player_x -- insert player coords here later
-
+  tile = city:getTileFromPosition(player_x, player_y )
+  -- not sure why we need this offset but the y axis won't stay centered without it
+  -- even with the offset it's still a few pixels off when changing scale
+  -- but it's close enough to rock and roll!
+  local offset_y = -1 * tile.sprite.height
+  local x, y = tile.sprite:localToContent( 0, offset_y)
   local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight 
-
-  -- we have to add these extra offsets to X/Y pos because when we set our map's pixel position to 0,0 it's not in the exact
-  -- top-left corner like it should be... GRRRRRRR! (note - this happens to the room scenes too! double WTF?!)
-  -- this may have something to do with the background layer x/y position being offset weirdly
-  local extra_offset_y, extra_offset_x = 1.30*tile_h, -0.5*tile_w 
-
-  local x = (-1 * player_x * tile_w  / 2) + (player_y * tile_w / 2)  + extra_offset_x + phone_screen_width*0.5
-  -- our phone_screen_height would not split in half correctly?  Again IDK why, but adding a hacky *0.85 fixed it
-  local y = (-1 * player_x * tile_h / 2) - (player_y * tile_h / 2) + extra_offset_y + (phone_screen_height*0.5)*0.85
+  x = -1 * x + phone_screen_width*0.5
+  y = -1 * y + phone_screen_height*0.5
 
   city:setPosition(x, y)
-
   return sceneGroup
 end
 
 local lastEvent = {}
-local max_scale, min_scale = 2.00, 0.25  -- only applies to zoom in/out
+local max_scale, min_scale = 3.00, 1.00  -- only applies to zoom in/out
 
 local function key( event )
   local phase = event.phase
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
-  if phase == "down" then
-    local scale = city:getScale()
 
+  local scale = city:getScale()
+  local scale_amt = 0.50
+
+  if phase == "down" then
     if "up" == name and scale < max_scale then
-      city:scale(0.25)
+      city:scale(scale_amt)
     elseif "down" == name and scale > min_scale then
-      city:scale(-0.25)
+      city:scale(-1*scale_amt)
     elseif "up" == name then -- zoom into city if viewing map
       local scene = composer.getSceneName('current')
       composer.removeScene(scene)      
@@ -75,6 +71,7 @@ local function key( event )
       composer.gotoScene('scenes.room', options)      
     elseif "down" == name then -- zoom into map if viewing room
     end
+
   end
 
 
