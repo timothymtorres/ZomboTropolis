@@ -9,16 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## v0.11.0 - ???
 ### Added
-- Empty room sprite that will serve as the template for all rooms temporarily.
-- Human/Zombie sprites that move around the room with their names displayed. 
-- Zoom feature for room and city.
-- Zooming in from the city sprite will display room.
-- Zooming out from the room sprite will display city.
-- Equipment sprites and animations to room if present.
-- Barricade and door sprites set based on health if present in room.
-- Inside/Outside building sprite locations and boundaries.
-- Different room templates for city tiles
-- [unfinished] City tile map
+- Isometric city world map.
+- Orthogonal room layout that changes depending on player location.
+- Rooms have equipment sprites and animations displayed (if powered) for terminal, generator, and transmitters if present.
+- Rooms have barricade and door sprites set based on health.
+- Rooms display mobs inside or outside with their names overhead.  Mobs wander around aimlessly. 
+- Dead humans or killed zombies become corpses.  The mob sprite does a 90 degree horizontal rotation to make it appear they are lying down. The sprite also remains motionless.
+- Both city and room images can be panned and zoomed within set boundaries.
+- Zooming in far enough from the city map will switch to the current room player is in.
+- Zooming out far enough from the room will switch to the city world map.
 
 
 ## v0.10.0 - 01/27/2018
