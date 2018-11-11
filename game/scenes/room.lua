@@ -94,13 +94,14 @@ function scene:create( event )
     local text_str = player:getUsername()
     local sprite_name = player:isMobType('zombie') and 'husk' or 'white-male'
     local gid = sequence_names[sprite_name]
+    local is_player_standing = player:isStanding()
 
     local fake_mob_json_data = {
       gid = gid,
       height = 32,
       --id = 10,
       name = text_str,
-      rotation = 0,
+      rotation = is_player_standing and 0 or 90,
       type = "mob",
       visible = true,
       width = 32,
@@ -111,18 +112,21 @@ function scene:create( event )
       },
     }
 
-    Mob_layer:addObject(Object:new(fake_mob_json_data, room, Mob_layer))
+    local mob = Object:new(fake_mob_json_data, room, Mob_layer)
+    mob.player = player -- this attaches our player code methods and vars to our sprite object for mob
+
+    Mob_layer:addObject(mob)
 
     local border = 4
     local font_size = 9
-    local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - 24 - border*2 - font_size
+    local above_mob_x, above_mob_y = fake_mob_json_data.x + 16, fake_mob_json_data.y - (is_player_standing and 24 or -12) - border*2 - font_size
 
     local name_data = {
       --id = 3,
       name = text_str,
       rotation = 0,
       type = "name",
-      visible = true,
+      visible = is_player_standing,
       x = above_mob_x,
       y = above_mob_y,
       properties = {stroked = true},
@@ -150,7 +154,7 @@ function scene:create( event )
       name = text_str,
       rotation = 0,
       type = "rect",
-      visible = true,
+      visible = is_player_standing,
       x = above_mob_x,
       y = above_mob_y,
     }
@@ -301,8 +305,10 @@ end
 local function mobMovement()
   local mob_list = room:getObjectsWithType('mob')
   for _, mob in ipairs(mob_list) do
-    local dir = math.random(1, 4)   
-    mob.sprite:travel(dir)
+    if mob.player:isStanding() then
+      local dir = math.random(1, 4)   
+      mob.sprite:travel(dir)
+    end
   end  
 end
 
