@@ -9,7 +9,7 @@ berry = require( 'code.libs.berry.berry' )
 local json = require( "json" )
 local Object = require('code.libs.berry.Object')
 
-local room, room_timer, mob
+local location, location_timer, mob
 
 local scene = composer.newScene()
 
@@ -29,16 +29,16 @@ local stage_boundry_y_top, stage_boundry_y_bottom
 local stage_width, stage_height 
 local hardcoded_offset = 32 * 0.75
 
-local room_width, room_height
+local location_width, location_height
 -- -------------------------------------------------------------------------------
 
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
   local map, y, x = main_player:getMap(), main_player:getPos()
-  local location = map[y][x]
+  local player_turf = map[y][x]
 
-  -- We need to load our map, get the room template data, convert player position to tile_pos, subtract the gid
+  -- We need to load our map, get the location template data, convert player position to tile_pos, subtract the gid
   -- it's a big clusterfuck but meh.
   local filename = "graphics/map/world.json"
   local world = berry.loadMap( filename, "graphics/map" )
@@ -55,29 +55,29 @@ function scene:create( event )
   local tile_gid = template_layer.data.data[tile_pos]
   local template_name = world:getTilePropertyValueForGID (tile_gid, 'template')
 
-  -- Load our room
-  -- we need to have a atlas for different rooms on the map to load the specific room we are in  
-  local filename = "graphics/rooms/"..template_name.. ".json"
-  room = berry.loadMap( filename, "graphics/ss13" )
+  -- Load our location
+  -- we need to have a atlas for different locations on the map to load the specific location we are in  
+  local filename = "graphics/locations/"..template_name.. ".json"
+  location = berry.loadMap( filename, "graphics/ss13" )
 
-  -- gets the section of room the player is staged in
-  stage_layer = room:getTileLayer(player_stage)
+  -- gets the section of the location the player is staged in
+  stage_layer = location:getTileLayer(player_stage)
 
-  -- sets the boundry for the section of the room
+  -- sets the boundry for the section of the location
   stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
   stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
   stage_width, stage_height = stage_layer:getPropertyValue('section_width'), stage_layer:getPropertyValue('section_height')
 
-  -- okay so for whatever reason the y position of our room is offset by 3/4ths of a tile on the top?  Not sure why or how but for now
+  -- okay so for whatever reason the y position of our location is offset by 3/4ths of a tile on the top?  Not sure why or how but for now
   -- just going to ignore it and offset it thru hardcoding 
   stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
   stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset  
 
-  local Mob_layer = room:getObjectLayer('Mob')
-  local Name_layer = room:getObjectLayer('Mob Name')
-  local Name_bkgr_layer = room:getObjectLayer('Mob Name Background')
+  local Mob_layer = location:getObjectLayer('Mob')
+  local Name_layer = location:getObjectLayer('Mob Name')
+  local Name_bkgr_layer = location:getObjectLayer('Mob Name Background')
 
-  local human_tileset = room:getTileSet('human') -- this should be called mob tileset, NOT human
+  local human_tileset = location:getTileSet('human') -- this should be called mob tileset, NOT human
   local sequences_data = human_tileset:getSequencesData()
   local first_gid = human_tileset.firstgid
 
@@ -86,7 +86,7 @@ function scene:create( event )
     sequence_names[sequence.name] = first_gid + sequence.frames[3] - 1 -- frames[3] is north (for mobs only) and we need to subtract by one  
   end
 
-  local mobs = location:getPlayers(main_player:getStage()) 
+  local mobs = player_turf:getPlayers(main_player:getStage()) 
   local spawn_offset = 32
 
   for player in pairs(mobs) do
@@ -111,7 +111,7 @@ function scene:create( event )
       },
     }
 
-    local mob = Object:new(fake_mob_json_data, room, Mob_layer)
+    local mob = Object:new(fake_mob_json_data, location, Mob_layer)
     mob.player = player -- this attaches our player code methods and vars to our sprite object for mob
 
     Mob_layer:addObject(mob)
@@ -138,7 +138,7 @@ function scene:create( event )
       },
     }
 
-    local name = Object:new(name_data, room, Name_layer)
+    local name = Object:new(name_data, location, Name_layer)
     Name_layer:addObject(name)
 
     -- this is a hack to measure the width of the text obj, then delete the text obj
@@ -158,18 +158,18 @@ function scene:create( event )
       y = above_mob_y,
     }
 
-    local name_bkgr = Object:new(rect_data, room, Name_bkgr_layer)
+    local name_bkgr = Object:new(rect_data, location, Name_bkgr_layer)
     Name_bkgr_layer:addObject(name_bkgr)  
   end
 
-  local visual = berry.createVisual( room )
-  room_height, room_width = visual.contentHeight, visual.contentWidth
+  local visual = berry.createVisual( location )
+  location_height, location_width = visual.contentHeight, visual.contentWidth
 
-  --berry.buildPhysical( room )  This is used for physics... no need 
+  --berry.buildPhysical( location )  This is used for physics... no need 
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
-  room.extensions = "scenes.objects."
-  room:extendObjects( "mob", "terminal", "apc", "generator", "transmitter", "door", "barricade", "search_area")  -- animations, movement, death?, etc.
+  location.extensions = "scenes.objects."
+  location:extendObjects( "mob", "terminal", "apc", "generator", "transmitter", "door", "barricade", "search_area")  -- animations, movement, death?, etc.
 
   -- preparing to spawn our building equipment/sprites
   local map, y, x = main_player:getMap(), main_player:getPos() 
@@ -181,13 +181,13 @@ function scene:create( event )
     local machines = building:getEquipment()
 
     for machine_name, _ in pairs(machines) do
-      local machine = room:getObjectWithName(machine_name).sprite
+      local machine = location:getObjectWithName(machine_name).sprite
       machine:install()
       if building_has_power then machine:setPower('on') end
     end
 
     -- display our door
-    local door_list = room:getObjectsWithName('door')  
+    local door_list = location:getObjectsWithName('door')  
     local is_door_present = building:isPresent('door')
     for _, door_obj in ipairs(door_list) do
       door = door_obj.sprite
@@ -199,7 +199,7 @@ function scene:create( event )
     end
 
     -- display our barricades
-    local barricade_list = room:getObjectsWithName('barricade')
+    local barricade_list = location:getObjectsWithName('barricade')
     local is_cade_present = building:isPresent('barricade')
     for _, barricade_obj in ipairs(barricade_list) do
       barricade = barricade_obj.sprite
@@ -209,7 +209,7 @@ function scene:create( event )
 
   end
 
-  --mob = room:getObjectWithName( "Rocco W" ):getVisual()
+  --mob = location:getObjectWithName( "Rocco W" ):getVisual()
   --mob.filename = filename  
 
   return sceneGroup
@@ -241,24 +241,24 @@ local function key( event )
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
   if phase == "down" then
-    local scale = room:getScale()
+    local scale = location:getScale()
 
     if "up" == name and scale < max_scale then
-      room:scale(0.25)
+      location:scale(0.25)
 
       -- this is a super hacky way to fix our hardcoded offset to use scale properly
       hardcoded_offset = hardcoded_offset * (1 - scale)
       stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
       stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset        
     elseif "down" == name and scale > min_scale then
-      room:scale(-0.25)
+      location:scale(-0.25)
 
       -- this is a super hacky way to fix our hardcoded offset to use scale properly
       hardcoded_offset = hardcoded_offset * (1 + scale)
       stage_boundry_y_top = stage_boundry_y_top - hardcoded_offset
       stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset 
-    elseif "up" == name then -- zoom into room if viewing map
-    elseif "down" == name then -- zoom into map if viewing room
+    elseif "up" == name then -- zoom into location if viewing map
+    elseif "down" == name then -- zoom into map if viewing location
       local scene = composer.getSceneName('current')
       composer.removeScene(scene)      
 
@@ -283,12 +283,12 @@ local function movePlatform(event)
         -- here the distance is calculated between the start of the movement and its current position of the drag  
         local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
         local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
-        local scale_x, scale_y = room:getScale()
+        local scale_x, scale_y = location:getScale()
 
-        local left_boundry, right_boundry = -1 * 0, (-1 * room_width * scale_x) + phone_screen_width
-        local top_boundry, bottom_boundry = -1 * 0, (-1 * room_height * scale_y ) + phone_screen_height
+        local left_boundry, right_boundry = -1 * 0, (-1 * location_width * scale_x) + phone_screen_width
+        local top_boundry, bottom_boundry = -1 * 0, (-1 * location_height * scale_y ) + phone_screen_height
 
-        -- this is the correct boundry for the room_section for inside
+        -- this is the correct boundry for the location_section for inside
         --local left_boundry, right_boundry = -1 * stage_boundry_x_left * scale_x, (-1 * stage_boundry_x_right * scale_x) + phone_screen_width
         --local top_boundry, bottom_boundry = -1 * stage_boundry_y_top * scale_y, (-1 * stage_boundry_y_bottom * scale_y) + phone_screen_height
 
@@ -302,7 +302,7 @@ local function movePlatform(event)
 end
  
 local function mobMovement()
-  local mob_list = room:getObjectsWithType('mob')
+  local mob_list = location:getObjectsWithType('mob')
   for _, mob in ipairs(mob_list) do
     if mob.player:isStanding() then
       local dir = math.random(1, 4)   
@@ -326,12 +326,12 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
 
         local delay = math.random(2500, 5000)
-        room_timer = timer.performWithDelay( delay, mobMovement, -1)    
+        location_timer = timer.performWithDelay( delay, mobMovement, -1)    
 
         --Runtime:addEventListener( "enterFrame", enterFrame )      
         Runtime:addEventListener("key", key)  
 
-        room.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
+        location.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -355,7 +355,7 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.
         Runtime:removeEventListener( "enterFrame", enterFrame )      
         Runtime:removeEventListener( "key", key )          
-        timer.pause(room_timer)
+        timer.pause(location_timer)
     end  
 end
 
@@ -363,11 +363,11 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-    room:destroy()
+    location:destroy()
     Runtime:removeEventListener("key", key)    
     Runtime:removeEventListener( "enterFrame", enterFrame )      
     Runtime:removeEventListener( "key", key )     
-    timer.cancel(room_timer) 
+    timer.cancel(location_timer) 
 
     local sceneGroup = self.view
 
