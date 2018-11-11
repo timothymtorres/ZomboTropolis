@@ -38,23 +38,22 @@ function scene:create( event )
   local map, y, x = main_player:getMap(), main_player:getPos()
   local location = map[y][x]
 
-
   -- We need to load our map, get the room template data, convert player position to tile_pos, subtract the gid
   -- it's a big clusterfuck but meh.
-  local filename = "graphics/map/city_map.json"
-  local city = berry.loadMap( filename, "graphics/map" )
+  local filename = "graphics/map/world.json"
+  local world = berry.loadMap( filename, "graphics/map" )
 
-  local tile_offset = city:getPropertyValue('background_tile_offset') -- this is how many tiles surround the city in all directions
-  local template_layer = city:getTileLayer('Room Template Data')
-  local city_width = template_layer.data.width
+  local tile_offset = world:getPropertyValue('background_tile_offset') -- this is how many tiles surround the world in all directions
+  local template_layer = world:getTileLayer('Location Template ID')
+  local world_width = template_layer.data.width
 
   -- we have to overwrite x/y because the background tiles offset our coords and we need to account for it
   x = x + tile_offset
-  y = (y - 1 + tile_offset) * city_width
+  y = (y - 1 + tile_offset) * world_width
 
   local tile_pos = x + y  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
   local tile_gid = template_layer.data.data[tile_pos]
-  local template_name = city:getTilePropertyValueForGID (tile_gid, 'template')
+  local template_name = world:getTilePropertyValueForGID (tile_gid, 'template')
 
   -- Load our room
   -- we need to have a atlas for different rooms on the map to load the specific room we are in  

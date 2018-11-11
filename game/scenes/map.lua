@@ -17,7 +17,7 @@ local scene = composer.newScene()
 
 local width, height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
-local city
+local world
 -- -------------------------------------------------------------------------------
 
 
@@ -26,14 +26,14 @@ function scene:create( event )
   local sceneGroup = self.view
 
   -- Load our map
-  local filename = "graphics/map/city_map.json"
-  city = berry.loadMap( filename, "graphics/map" )
-  local visual = berry.createVisual( city )
+  local filename = "graphics/map/world.json"
+  world = berry.loadMap( filename, "graphics/map" )
+  local visual = berry.createVisual( world )
 
-  city:setScale(2.5)
+  world:setScale(2.5)
 
   local player_y, player_x = main_player:getPos()
-  tile = city:getTileFromPosition(player_x, player_y )
+  tile = world:getTileFromPosition(player_x, player_y )
   -- not sure why we need this offset but the y axis won't stay centered without it
   -- even with the offset it's still a few pixels off when changing scale
   -- but it's close enough to rock and roll!
@@ -43,7 +43,7 @@ function scene:create( event )
   x = -1 * x + phone_screen_width*0.5
   y = -1 * y + phone_screen_height*0.5
 
-  city:setPosition(x, y)
+  world:setPosition(x, y)
   return sceneGroup
 end
 
@@ -55,15 +55,15 @@ local function key( event )
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
 
-  local scale = city:getScale()
+  local scale = world:getScale()
   local scale_amt = 0.50
 
   if phase == "down" then
     if "up" == name and scale < max_scale then
-      city:scale(scale_amt)
+      world:scale(scale_amt)
     elseif "down" == name and scale > min_scale then
-      city:scale(-1*scale_amt)
-    elseif "up" == name then -- zoom into city if viewing map
+      world:scale(-1*scale_amt)
+    elseif "up" == name then -- zoom into world if viewing map
       local scene = composer.getSceneName('current')
       composer.removeScene(scene)      
 
@@ -112,7 +112,7 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
     
         Runtime:addEventListener("key", key)  
-        city.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
+        world.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -143,7 +143,7 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-    city:destroy()   
+    world:destroy()   
     Runtime:removeEventListener( "enterFrame", enterFrame )      
     Runtime:removeEventListener( "key", key )     
 
