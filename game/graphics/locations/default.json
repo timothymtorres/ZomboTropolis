@@ -364,6 +364,16 @@
         }, 
         {
          "draworder":"topdown",
+         "name":"Corpse",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "name":"Mob",
          "objects":[],
          "opacity":1,

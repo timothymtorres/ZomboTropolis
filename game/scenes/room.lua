@@ -74,6 +74,7 @@ function scene:create( event )
   stage_boundry_y_bottom = stage_boundry_y_bottom + hardcoded_offset  
 
   local Mob_layer = location:getObjectLayer('Mob')
+  local Corpse_layer = location:getObjectLayer('Corpse')
   local Name_layer = location:getObjectLayer('Mob Name')
   local Name_bkgr_layer = location:getObjectLayer('Mob Name Background')
 
@@ -111,10 +112,10 @@ function scene:create( event )
       },
     }
 
-    local mob = Object:new(fake_mob_json_data, location, Mob_layer)
+    local Player_layer = is_player_standing and Mob_layer or Corpse_layer
+    local mob = Object:new(fake_mob_json_data, location, Player_layer)
     mob.player = player -- this attaches our player code methods and vars to our sprite object for mob
-
-    Mob_layer:addObject(mob)
+    Player_layer:addObject(mob)
 
     local border = 4
     local font_size = 9
