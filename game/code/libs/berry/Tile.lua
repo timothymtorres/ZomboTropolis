@@ -211,6 +211,9 @@ function Tile:create( index )
 		-- Calculate and set the column position of this tile in the map
 		self.column = index - ( self.row - 1 ) * self.tileLayer.width
 
+		-- this is for my sanity, lol, I keep getting column and rows mixed up 
+		local x, y = self.column, self.row 
+
 		-- Get offsets if they exist (note - not every tileLayer has an offset)
 		local offsetX, offsetY = self.tileLayer.data.offsetx or 0, self.tileLayer.data.offsety or 0
 
@@ -220,6 +223,60 @@ function Tile:create( index )
 		if self.map.orientation == 'isometric' then
 	        self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2) + offsetX
 	        self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) + offsetY
+	    elseif self.map.orientation == 'staggered' then
+
+
+	    	local stagger_axis = self.map.data.staggeraxis -- 'y' or 'x'
+	    	local stagger_index = self.map.data.staggerindex -- 'odd' or 'even'
+
+	    	local staggered_offset_y, staggered_offset_x = (self.map.tileheight/2), (self.map.tilewidth/2)
+
+print(stagger_axis, stagger_index)
+
+	    	if stagger_axis == 'y' then
+	    		if stagger_index == 'odd' then
+	    			if y % 2 == 0 then
+	    				self.sprite.x = (x * self.map.tilewidth) + staggered_offset_x + offsetX
+	    			else
+	    				self.sprite.x = (x * self.map.tilewidth) + offsetX
+	    			end
+	    		else
+	    			if y % 2 == 0  then
+	    				self.sprite.x = (x * self.map.tilewidth) + offsetX
+					else
+	    				self.sprite.x = (x * self.map.tilewidth) + staggered_offset_x + offsetX
+					end
+	    		end
+	    		self.sprite.y = (y * (self.map.tileheight - self.map.tileheight/2)) + offsetY
+	    	else
+	    		if stagger_index == 'odd' then
+	    			if x % 2 == 0  then
+	    				self.sprite.y = (y * self.map.tileheight) + staggered_offset_y + offsetY
+	    			else
+	    				self.sprite.y = (y * self.map.tileheight) + offsetY
+	    			end
+	    		else
+	    			if x % 2 == 0  then
+	    				self.sprite.y = (y * self.map.tileheight) + offsetY
+					else
+	    				self.sprite.y = (y * self.map.tileheight) + staggered_offset_y + offsetY
+					end
+	    		end
+	    		self.sprite.x = (x * (self.map.tilewidth - self.map.tilewidth/2)) + offsetX
+	    	end
+
+
+--[[
+	    	local staggered_offset_x = self.column % 2 * (self.map.tilewidth/2)
+	    	local staggered_offset_y = self.row % 2 * (self.map.tileheight/2)
+	        self.sprite.x = self.row*self.map.tilewidth + staggered_offset_x 
+	        self.sprite.y = 1*self.column*(self.map.tileheight/2) + staggered_offset_y
+--]]
+	        --self.sprite.x = (-1 * self.row * self.map.tilewidth)  + staggered_offset + offsetX
+	        --self.sprite.y = (1 * self.column * self.map.tileheight / 2) + offsetY
+
+
+
 	    elseif self.map.orientation == 'orthogonal' then
 			self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth + offsetX, self.row * self.map.tileheight + offsetY
 		end
