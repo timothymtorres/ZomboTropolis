@@ -212,7 +212,7 @@ function Tile:create( index )
 		self.column = index - ( self.row - 1 ) * self.tileLayer.width
 
 		-- this is for my sanity, lol, I keep getting column and rows mixed up 
-		local x, y = self.column, self.row 
+		local x, y = self.column, self.row
 
 		-- Get offsets if they exist (note - not every tileLayer has an offset)
 		local offsetX, offsetY = self.tileLayer.data.offsetx or 0, self.tileLayer.data.offsety or 0
@@ -225,13 +225,17 @@ function Tile:create( index )
 	        self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) + offsetY
 	    elseif self.map.orientation == 'staggered' then
 
+	    	--[[
+				Fuckkety fuckety fuck.  Playing around with isometric graphics has been a PIA.  I wish there was some kind of
+				debugger with coordinates and lines drawn so I could see where the hell these tiles are offsetting too.  Right
+				now I know they are offset by a certain amount, but I can't pinpoint by how much without SEEING!!!
+	    	]]--
+
 
 	    	local stagger_axis = self.map.data.staggeraxis -- 'y' or 'x'
 	    	local stagger_index = self.map.data.staggerindex -- 'odd' or 'even'
 
 	    	local staggered_offset_y, staggered_offset_x = (self.map.tileheight/2), (self.map.tilewidth/2)
-
-print(stagger_axis, stagger_index)
 
 	    	if stagger_axis == 'y' then
 	    		if stagger_index == 'odd' then
@@ -264,19 +268,6 @@ print(stagger_axis, stagger_index)
 	    		end
 	    		self.sprite.x = (x * (self.map.tilewidth - self.map.tilewidth/2)) + offsetX
 	    	end
-
-
---[[
-	    	local staggered_offset_x = self.column % 2 * (self.map.tilewidth/2)
-	    	local staggered_offset_y = self.row % 2 * (self.map.tileheight/2)
-	        self.sprite.x = self.row*self.map.tilewidth + staggered_offset_x 
-	        self.sprite.y = 1*self.column*(self.map.tileheight/2) + staggered_offset_y
---]]
-	        --self.sprite.x = (-1 * self.row * self.map.tilewidth)  + staggered_offset + offsetX
-	        --self.sprite.y = (1 * self.column * self.map.tileheight / 2) + offsetY
-
-
-
 	    elseif self.map.orientation == 'orthogonal' then
 			self.sprite.x, self.sprite.y = ( self.column - 1 ) * self.map.tilewidth + offsetX, self.row * self.map.tileheight + offsetY
 		end

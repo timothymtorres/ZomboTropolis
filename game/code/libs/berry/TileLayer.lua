@@ -171,6 +171,20 @@ function TileLayer:getTilesWithProperty( name )
 end
 
 ------------------------------------------------------------------------------------------------
+--- Gets a tile on the Map at specified position.
+--
+-- @return A Tile instance.
+------------------------------------------------------------------------------------------------
+function TileLayer:getTileFromPosition( x, y )
+	local tile_offset = self.map:getPropertyValue('background_tile_offset') or 0
+	-- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
+	local tile_pos = (x + tile_offset) + ((y - 1 + tile_offset) * self.data.width)
+
+	local tile = self.tiles[tile_pos]
+	return tile
+end
+
+------------------------------------------------------------------------------------------------
 -- Adds a display object to the layer. 
 --
 -- @param displayObject The display object to add.
