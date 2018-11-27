@@ -11,8 +11,7 @@ end
 
 function Machine:destroy()
   local building = self.building
-  local machine = string.lower(self.class.name)
-  building[machine] = nil
+  building.equipment[tostring(self)] = nil
   -- update building stuff... (ie. power out if generator, player notification event, broadcast event, etc.)
 end
 
@@ -38,7 +37,7 @@ local condition_states = {[1]='ruined', [2]='worn', [3]='average', [4]='pristine
 
 function Machine:getConditionStr() return condition_states[self.condition] end
 
-function Machine:__tostring() return self.name end
+function Machine:__tostring() return string.lower(self.class.name) end
 
 --[[
   self.generator = 0        -- 1 bit {exist}, 3 bit {08hp}, 4 bit {fuel} 

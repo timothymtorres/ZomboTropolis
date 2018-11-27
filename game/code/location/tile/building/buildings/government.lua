@@ -82,19 +82,26 @@ Hospital.item_chance = {
 
 -------------------------------------------------------------------
 
-local Courthouse = class('Courthouse', Building)
+local Lab = class('Lab', Building)
 
-Courthouse.FULL_NAME = 'courthouse'
-Courthouse.BUILDING_TYPE = 'government'
-Courthouse.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
-Courthouse.item_chance = {
+Lab.FULL_NAME = 'lab'
+Lab.BUILDING_TYPE = 'government'
+Lab.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.50}
+Lab.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
-    -- MEDICAL
-      Bandage = .10,
-    
-    Newspaper = .90,
+   -- MEDICAL =  75%
+    --      FAK = .25,
+    --  Bandage = .50, 
+      Vaccine = .01,
+      Syringe = .89,
+
+   -- WEAPONS =  10%
+    --    Knife = .90,
+
+      -- MISC =  10%
+    Newspaper = .10, 
   }
 }
 
-return {PD, FD, Hospital, Courthouse}
+return {PD, FD, Hospital, Lab}

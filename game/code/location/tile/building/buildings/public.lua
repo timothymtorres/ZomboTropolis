@@ -5,31 +5,13 @@ local Building = require('code.location.tile.building.building')
 
 local Library = class('Library', Building)
 
-Library.FULL_NAME = 'public library'
+Library.FULL_NAME = 'library'
 Library.BUILDING_TYPE = 'public'
+Library.titles = {'library', 'school', 'college'}
 Library.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.20}
 Library.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
-      -- MISC =  95%
-    Newspaper = .20,
-         Book = .75,
-    
-      -- GEAR =  05%
-        Phone = .05,
-  }
-}
-
--------------------------------------------------------------------
-
-local School = class('School', Building)
-
-School.FULL_NAME = 'school'
-School.BUILDING_TYPE = 'public'
-School.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.20}
-School.item_chance = {
-  outside = Building.item_chance.outside,
-  inside = {
    -- WEAPONS =  02%
           Bat = .02,  
     
@@ -44,24 +26,48 @@ School.item_chance = {
 
 -------------------------------------------------------------------
 
-local College = class('College', Building)
+local News = class('News', Building)
 
-College.FULL_NAME = 'college'
-College.BUILDING_TYPE = 'public'
-College.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.20}
-College.item_chance = {
+News.FULL_NAME = 'news'
+News.BUILDING_TYPE = 'public'
+News.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+News.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
-   -- WEAPONS =  02%
-          Bat = .02,  
-    
-      -- MISC =  90%
-    Newspaper = .20,
-         Book = .70,
-    
-      -- GEAR =  08%
-        Phone = .08,  
+    Newspaper = 1.00,
   }
 }
 
-return {Library, School, College}
+-------------------------------------------------------------------
+
+local Museum = class('Museum', Building)
+
+Museum.FULL_NAME = 'museum'
+Museum.BUILDING_TYPE = 'misc'
+Museum.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Museum.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+    Newspaper = 1.00,
+  }
+}
+
+-------------------------------------------------------------------
+
+local Church = class('Church', Building)
+
+Church.FULL_NAME = 'church'
+Church.BUILDING_TYPE = 'misc'
+Church.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Church.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+    Newspaper = 1.00,
+  }
+}
+
+
+-------------------------------------------------------------------
+
+
+return {Library, News, Museum, Church}

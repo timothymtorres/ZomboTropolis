@@ -5,7 +5,8 @@
 -----------------------------------------------------------------------------------------
 
 local composer = require( "composer" )
-
+berry = require( 'code.libs.berry.berry' )
+local json = require( "json" )
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------------------------------------
@@ -14,454 +15,205 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
---[[ ScrollView listener
-local function scrollListener( event )
-
-    local phase = event.phase
-    if ( phase == "began" ) then print( "Scroll view was touched" )
-    elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-    elseif ( phase == "ended" ) then print( "Scroll view was released" )
-    end
-
-    -- In the event a scroll limit is reached...
-    if (event.limitReached) then
-        if ( event.direction == "up" ) then print( "Reached top limit" )
-        elseif ( event.direction == "down" ) then print( "Reached bottom limit" )
-        elseif ( event.direction == "left" ) then print( "Reached left limit" )
-        elseif ( event.direction == "right" ) then print( "Reached right limit" )
-        end
-    end
-
-    return true
-end
---]]
-
-local width, height = display.contentWidth, display.contentHeight -- 320x480
+local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight -- 320x480
 local widget = require('widget')
+local world
+local world_height, world_width
+local world_background_offset 
 
-local offset, thickness = 45, 3 
-local pop_font_size = 10
+local x1, x2, y1, y2
 -- -------------------------------------------------------------------------------
-
 
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
-  local grid_3x3_map, player_bar, location_group
-  local drawLocation, updateLocation
-  local drawPlayerBar, updatePlayerBar
-  local drawMap, updateMap
-  
-    -- Initialize the scene here.
-    -- Example: add display objects to "sceneGroup", add touch listeners, etc.   
-    
-  -- Player Bar  (Name/HP/IP/AP data)
-  local player_bar_h, player_bar_w = 12, height/3 + offset
-  
-  function drawPlayerBar()
-    player_bar = display.newGroup()
-    local background_bar = display.newRect(player_bar_w-offset, player_bar_h*0.5 + thickness, player_bar_w, player_bar_h)
-    background_bar.strokeWidth = thickness
-    background_bar:setFillColor( 0.5 )
-    background_bar:setStrokeColor( 1, 0, 0 )
-    player_bar:insert(background_bar)
 
-    local username, mob_type = main_player:getUsername(), main_player:getMobType()
-    local hp, max_hp = main_player.stats:get('hp'), main_player.stats:get('hp', 'max')
-    local ap, max_ap = main_player.stats:get('ap'), main_player.stats:get('ap', 'max')
-    local xp, max_xp = main_player.stats:get('xp'), main_player.stats:get('xp', 'max')
-    --local ip, max_ip = main_player:getIP(), main_player:getMaxIP()
+  -- Load our map
+  local filename = "graphics/map/world.json"
+  world = berry.loadMap( filename, "graphics/map" )
+  local visual = berry.createVisual( world )
+  world_height, world_width = visual.contentHeight, visual.contentWidth
+  world_background_offset = world:getPropertyValue('background_tile_offset')
 
-    local player_text = display.newText( username..' - AP ['..ap..'/'..max_ap..'] HP ['..hp..'/'..max_hp..'] - XP ['..xp..'/'..max_xp..']', player_bar_w-offset, player_bar_h*0.5 + thickness, native.systemFontBold, 10 )
-    player_text:setFillColor( 0, 0, 0 )
-    player_bar:insert(player_text)
-    
-    sceneGroup:insert(player_bar)
-  end
+  world:setScale(2.5)
 
-  function updatePlayerBar()
-    player_bar:removeSelf()
-    player_bar = nil
-    drawPlayerBar()
-  end
+  local player_y, player_x = main_player:getPos()
+  local region_layer = world:getTileLayer('Regions') -- we could pick any layer, I picked Regions randomly
+  local tile = region_layer:getTileFromPosition(player_x, player_y)
+  -- not sure why we need this offset but the y axis won't stay centered without it
+  -- even with the offset it's still a few pixels off when changing scale
+  -- but it's close enough to rock and roll!
+  local offset_y = -1 * tile.sprite.height
+  local x, y = tile.sprite:localToContent( 0, offset_y)
 
+  x = -1 * x + phone_screen_width*0.5
+  y = -1 * y + phone_screen_height*0.5
 
-  local total_h = player_bar_h + thickness*2
+  world:setPosition(x, y)
 
-  -- Tile Grid   (N/NE/E/SE/S/SW/W/NW, buttons, sprites) 
-  local tile_grid_h, tile_grid_w = height/3 + offset, player_bar_w
-  local tile_grid_x, tile_grid_y = tile_grid_w-offset, tile_grid_h*0.5 + thickness + total_h
-  local grid_square = tile_grid_w/3
-  local coord_offset_x, coord_offset_y = 0, -1*(grid_square*0.40)
-  local population_text_offset_x, population_text_offset_y = 0, grid_square*0.40
-  
-  -- delete this when images are inserted
-  local tile_colors = {
-    hospital = {1, 0, 0},
-    street = {0, 0, 0},
-  }
- 
-  local gridButtonEvent = function(event)
-    if ("ended" == event.phase ) then
-      local dir = event.target.id
-      main_player:perform('move', dir)
-      updateMap()
-      updatePlayerBar()
-      updateLocation()
-      print('Button was pressed and released')
-    end
-  end
-  
-  local centerButtonEvent = function(event)
-    if ("ended" == event.phase ) then
-      -- event.target.id is one of the following - enter/exit
-      main_player:perform(event.target.id)
-      updateMap()
-      updatePlayerBar()
-      updateLocation()
-      print('Button was pressed and released')
-    end
-  end 
-  
-  local function countPlayerMobs(location_tile, setting, player_mob_type)
-    local zombies = location_tile:countPlayers('zombie', setting)
-    local humans = location_tile:countPlayers('human', setting)
-    local corpses = location_tile:countCorpses(setting)
-    -- We need to remove our main player from our count
-    if player_mob_type == 'zombie' then zombies = zombies - 1 
-    elseif player_mob_type == 'human' then humans = humans - 1
-    end
-    return zombies, humans, corpses
-  end
-  
-  local function getPopulationStr(location_tile, setting, player_mob_type)
-    local str
-    local zombie_n, human_n, corpse_n = countPlayerMobs(location_tile, setting, player_mob_type)
-    local zombies, humans, corpses = zombie_n > 0, human_n > 0, corpse_n > 0
-    if zombies or humans or corpses then
-      str = (zombies and 'Zx'..zombie_n or '')
-      str = str..(zombies and humans and ' ' or '')..(humans and 'Hx'..human_n or '')
-      str = str..(humans and corpses and ' ' or '')..(corpses and 'Cx'..corpse_n or '')
-    else str = ''  
-    end
-    return str
-  end  
- 
-  function drawMap()
-    grid_3x3_map = display.newGroup()    
-    local map, y, x = main_player:getMap(), main_player:getPos()   
-    local coordinate
-    local pop_text, population_str
-    local player_staged = main_player:getStage()
-    
-    if map[y][x]:isBuilding() then
-      local label, id 
-      
-      -- also this might need to be updated for barricade levels?   
-      if main_player:isStaged('inside') then 
-        label = 'Exit'
-        id = 'exit'
-      elseif main_player:isStaged('outside') then 
-        label = 'Enter'
-        id = 'enter'
-      end
-    
-      local center_grid_button = widget.newButton
-      {
-          x = tile_grid_x,
-          y = tile_grid_y,
-          id = id,
-          label = label,
-          onEvent = centerButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }    
-      grid_3x3_map:insert(center_grid_button) 
-      coordinate = '[' .. x .. ', ' .. y .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + coord_offset_x, tile_grid_y + coord_offset_y, native.systemFontBold, 8)   
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y][x], player_staged, main_player:getMobType())
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + population_text_offset_x, tile_grid_y + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)  
-      elseif player_staged == 'inside' then
-        population_str = getPopulationStr(map[y][x], player_staged, main_player:getMobType())
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + population_text_offset_x, tile_grid_y + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)          
-      end
-    end 
-    
-  --  local N_image = display.newRect(grid_3x3_map, tile_grid_x, tile_grid_y-grid_square, grid_square, grid_square)
-  --  N_image:setFillColor(unpack(tile_colors[current_map[y-1][x]:getClassName()]))
-    if map[y-1] and map[y-1][x] then
-      local N_grid_button = widget.newButton
-      {
-          x = tile_grid_x,
-          y = tile_grid_y-grid_square,
-          id = 1,
-          label = "N",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }    
-      grid_3x3_map:insert(N_grid_button)  
-      coordinate = '[' .. x .. ', ' .. y-1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + coord_offset_x, tile_grid_y-grid_square + coord_offset_y, native.systemFontBold, 8)   
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y-1][x], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + population_text_offset_x, tile_grid_y-grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)
-      end
-    end
-    
-    if map[y-1] and map[y-1][x+1] then
-      local NE_grid_button = widget.newButton
-      {
-          x = tile_grid_x+grid_square,
-          y = tile_grid_y-grid_square,
-          id = 2,
-          label = "NE",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }     
-      grid_3x3_map:insert(NE_grid_button)    
-      coordinate = '['.. x+1 .. ', ' .. y-1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + grid_square + coord_offset_x, tile_grid_y - grid_square + coord_offset_y, native.systemFontBold, 8) 
-      
-      if player_staged == 'outside' then  
-        population_str = getPopulationStr(map[y-1][x+1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + grid_square + population_text_offset_x, tile_grid_y-grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)
-      end
-    end
-    
-    if map[y] and map[y][x+1] then
-      local E_grid_button = widget.newButton
-      {
-          x = tile_grid_x+grid_square,
-          y = tile_grid_y,
-          id = 3,
-          label = "E",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }      
-      grid_3x3_map:insert(E_grid_button)     
-      coordinate = '['.. x+1 .. ', ' .. y .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + grid_square + coord_offset_x, tile_grid_y + coord_offset_y, native.systemFontBold, 8)    
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y][x+1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + grid_square + population_text_offset_x, tile_grid_y + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)  
-      end
-    end
-    
-    if map[y+1] and map[y+1][x+1] then
-      local SE_grid_button = widget.newButton
-      {
-          x = tile_grid_x+grid_square,
-          y = tile_grid_y+grid_square,
-          id = 4,
-          label = "SE",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }  
-      grid_3x3_map:insert(SE_grid_button)    
-      coordinate = '['.. x+1 .. ', ' .. y+1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + grid_square + coord_offset_x, tile_grid_y + grid_square + coord_offset_y, native.systemFontBold, 8)
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y+1][x+1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + grid_square + population_text_offset_x, tile_grid_y + grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)    
-      end
-    end
-    
-    if map[y+1] and map[y+1][x] then
-      local S_grid_button = widget.newButton
-      {
-          x = tile_grid_x,
-          y = tile_grid_y+grid_square,
-          id = 5,
-          label = "S",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }
-      grid_3x3_map:insert(S_grid_button)      
-      coordinate = '['.. x .. ', ' .. y+1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x + coord_offset_x, tile_grid_y + grid_square + coord_offset_y, native.systemFontBold, 8)  
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y+1][x], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x + population_text_offset_x, tile_grid_y + grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1) 
-      end
-    end
-    
-    if map[y+1] and map[y+1][x-1] then
-      local SW_grid_button = widget.newButton
-      {
-          x = tile_grid_x-grid_square,
-          y = tile_grid_y+grid_square,
-          id = 6,
-          label = "SW",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }      
-      grid_3x3_map:insert(SW_grid_button)
-      coordinate = '['.. x-1 .. ', ' .. y+1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x - grid_square + coord_offset_x, tile_grid_y + grid_square + coord_offset_y, native.systemFontBold, 8)  
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y+1][x-1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x - grid_square + population_text_offset_x, tile_grid_y +grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)  
-      end
-    end
-    
-    if map[y] and map[y][x-1] then
-      local W_grid_button = widget.newButton
-      {
-          x = tile_grid_x-grid_square,
-          y = tile_grid_y,
-          id = 7,
-          label = "W",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }      
-      grid_3x3_map:insert(W_grid_button)
-      coordinate = '['.. x-1 .. ', ' .. y .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x - grid_square + coord_offset_x, tile_grid_y + coord_offset_y, native.systemFontBold, 8) 
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y][x-1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x - grid_square + population_text_offset_x, tile_grid_y + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)  
-      end
-    end
-    
-    if map[y-1] and map[y-1][x-1] then
-      local NW_grid_button = widget.newButton
-      {
-          x = tile_grid_x-grid_square,
-          y = tile_grid_y-grid_square,
-          id = 8,
-          label = "NW",
-          onEvent = gridButtonEvent,
-          shape = 'rect',
-          width = grid_square,
-          height = grid_square,
-          fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-          strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-          strokeWidth = 4      
-      }     
-      grid_3x3_map:insert(NW_grid_button)                
-      coordinate = '['.. x-1 .. ', ' .. y-1 .. ']'
-      display.newText(grid_3x3_map, coordinate, tile_grid_x - grid_square + coord_offset_x, tile_grid_y - grid_square + coord_offset_y, native.systemFontBold, 8) 
-      
-      if player_staged == 'outside' then
-        population_str = getPopulationStr(map[y-1][x-1], 'outside')
-        pop_text = display.newText(grid_3x3_map, population_str, tile_grid_x - grid_square + population_text_offset_x, tile_grid_y-grid_square + population_text_offset_y, native.systemFont, pop_font_size)
-        pop_text:setFillColor(0, 1, 0, 1)   
-      end
-    end
-    
-    -- add our map to the scene
-    sceneGroup:insert(grid_3x3_map)  
-  end
+--[[
+  local hidden_layer = world:getTileLayer('Hidden')
+  local tile_NW = hidden_layer:getTileFromPosition(-3, 5)
+  local tile_SE = hidden_layer:getTileFromPosition(45, 35)
+  -- not sure why we need this offset but the y axis won't stay centered without it
+  -- even with the offset it's still a few pixels off when changing scale
+  -- but it's close enough to rock and roll!
+  local offset_y = -1 * tile_NW.sprite.height
+  x1, y1 = tile_NW.sprite:localToContent( 0, offset_y)
+  x2, y2 = tile_SE.sprite:localToContent( 0, offset_y)
 
-  function updateMap()
-    grid_3x3_map:removeSelf()
-    grid_3x3_map = nil
-    drawMap()
-  end
-  
-  
-  total_h = total_h + tile_grid_h + thickness*2 
-  
-  function drawLocation()
-    location_group = display.newGroup()
-        
-    -- Location Bar  (Building info?  Suburb?  Town?)
-    local location_bar_h, location_bar_w = 12, player_bar_w
-    local location_bar = display.newRect(location_group, location_bar_w-offset, location_bar_h*0.5 + thickness + total_h, location_bar_w, location_bar_h)
-    location_bar.strokeWidth = thickness
-    location_bar:setFillColor(0.5)
-    location_bar:setStrokeColor(0, 1, 0)  
-    location_group:insert(location_bar)
-    
-    local location_msg = (not main_player:isStanding() and 'You are DEAD.') or 'You are a '..main_player:getMobType()..'.'
-    local location_text = display.newText(location_group, location_msg, location_bar_w-offset, total_h +  location_bar_h*0.5 + thickness, native.systemFontBold, 10 )
-    location_text:setFillColor( 0, 0, 0 )  
-  --sceneGroup:insert(location_text)
-    
-    local total_h = total_h + location_bar_h + thickness*2
-    
-    sceneGroup:insert(location_group)
-  end
-  
-  
-
-  
-  function updateLocation()
-    location_group:removeSelf()
-    location_group = nil
-    drawLocation()
-  end  
-  
-  -- DRAWS OUR PLAYER BAR
-  drawPlayerBar()
-  -- DRAWS OUR PLAYER BAR  
-
-  -- DRAWS OUR COORDS ON MAP
-  drawMap()
-  -- DRAWS OUR COORDS ON MAP
-  
-  -- DRAWS OUR LOCATION DESC AND LOCATION BAR
-  drawLocation()
-  -- DRAWS OUR LOCATION DESC AND LOCATION BAR
-  
+  x1, x2 = -1*x1 - phone_screen_width*0.5, -1*x2 + phone_screen_width*0.5
+  y1, y2 = -1*y1 + phone_screen_height*0.5, -1*y2 + phone_screen_height*0.5
+--]]
   return sceneGroup
 end
 
+local lastEvent = {}
+local max_scale, min_scale = 3.00, 1.00  -- only applies to zoom in/out
+
+local function key( event )
+  local phase = event.phase
+  local name = event.keyName
+  --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
+
+  local scale = world:getScale()
+  local scale_amt = 0.50
+
+  if phase == "down" then
+    if "up" == name and scale < max_scale then
+      world:scale(scale_amt)
+    elseif "down" == name and scale > min_scale then
+      world:scale(-1*scale_amt)
+    elseif "up" == name then -- zoom into world if viewing map
+      local scene = composer.getSceneName('current')
+      composer.removeScene(scene)      
+
+      local options = {effect = "fade", time = 500,}   
+      composer.gotoScene('scenes.room', options)      
+    elseif "down" == name then -- zoom into map if viewing room
+    end
+
+--[[
+    local hidden_layer = world:getTileLayer('Hidden')
+    local tile_NW = hidden_layer:getTileFromPosition(-3, 5)
+    local tile_SE = hidden_layer:getTileFromPosition(45, 35)
+    -- not sure why we need this offset but the y axis won't stay centered without it
+    -- even with the offset it's still a few pixels off when changing scale
+    -- but it's close enough to rock and roll!
+    local offset_y = -1 * tile_NW.sprite.height
+    x1, y1 = tile_NW.sprite:localToContent( 0, offset_y)
+    x2, y2 = tile_SE.sprite:localToContent( 0, offset_y)
+
+    x1, x2 = -1*x1 - phone_screen_width*0.5, -1*x2 + phone_screen_width*0.5
+    y1, y2 = -1*y1 + phone_screen_height*0.5, -1*y2 + phone_screen_height*0.5
+--]]
+  end
+
+  lastEvent = event
+end
+
+local function movePlatform(event)
+    local platformTouched = event.target
+    if (event.phase == "began") then
+        display.getCurrentStage():setFocus( platformTouched )
+
+        -- here the first position is stored in x and y         
+        platformTouched.startMoveX = platformTouched.x
+        platformTouched.startMoveY = platformTouched.y 
+    elseif (event.phase == "moved") then
+        -- here the distance is calculated between the start of the movement and its current position of the drag  
+        local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
+        local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
+        local scale_x, scale_y = world:getScale()
+
+        platformTouched.x = x_pos 
+        platformTouched.y = y_pos
+
+--[[
+        print(x1, x2, y1, y2)
+
+  --x = -1 * x + phone_screen_width*0.5
+  --y = -1 * y + phone_screen_height*0.5
+
+        local offset_top = scale_y * world.tileheight*0.5*3
+        local offset_bottom = scale_y * world.tileheight*0.5*3
+
+        local offset_left = scale_x * world.tilewidth*3
+        local offset_right = scale_x * world.tilewidth*3
+
+        local left_boundry = 0 - offset_left       --x1 -- -1 * (world_background_offset*world.tilewidth) * scale_x
+        local right_boundry = -1 * world_width + phone_screen_width + offset_right --x2-- -1 * world_width --((world_width - world_background_offset*world.tilewidth) * scale_x) + phone_screen_width
+
+        local top_boundry = 0 - offset_top --y1 ---1 * (world_background_offset*world.tileheight *0.5) * scale_y
+        local bottom_boundry = -1* world_height - phone_screen_height + offset_bottom --y2 -- -1 * world_height --((world_height - world_background_offset*world.tileheight) * scale_y ) + phone_screen_height
+
+        platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
+        platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos
+
+        print(x_pos, y_pos)
+--]]
+
+--[[
+        local boundry_offset_left = 0.5*world.tilewidth 
+        local boundry_offset_right = -30*world.tilewidth - phone_screen_width
+        local left_boundry = (-2.0 * (y_pos/world.tileheight) * (world.tilewidth/2) ) + boundry_offset_left -- 5000
+        local right_boundry = (-2.0 * (y_pos/world.tileheight)*(world.tilewidth/2) ) + (world.data.height/world.tileheight * world.tilewidth/2) + boundry_offset_right
+
+        local boundry_offset_top = -7* world.tileheight
+        local boundry_offset_bottom = -30* world.tileheight - phone_screen_height
+        local top_boundry = (2 * (x_pos/world.tilewidth) * (world.tileheight/2)) + boundry_offset_top  -- 5000
+        local bottom_boundry = (2 * (x_pos/world.tilewidth) * (world.tileheight/2)) - (world.data.width/world.tilewidth * world.tileheight/2) + boundry_offset_bottom -- -5000
+
+        --  self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2) + offsetX
+        --  self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) + offsetY
+
+print('---NEW INFO---')
+print('x_pos > left_boundry', 'y_pos > top_boundry')
+print('('..x_pos..' > '..left_boundry..')', '('..y_pos..' > '..top_boundry..')')
+print(x_pos > left_boundry, x_pos < right_boundry, y_pos > top_boundry, y_pos < bottom_boundry)
+print(math.min(x_pos, left_boundry), math.min(y_pos, top_boundry))
+print(platformTouched.x, platformTouched.y)
+
+        local NW_boundry = (x_pos > left_boundry) and (y_pos > top_boundry)
+        local NE_boundry = (x_pos < right_boundry) and (y_pos < bottom_boundry)
+        local SW_boundry = (x_pos > left_boundry) and (y_pos < bottom_boundry)
+        local SE_boundry = (x_pos < right_boundry) and (y_pos < bottom_boundry)
+
+        if NW_boundry or NE_boundry or SW_boundry or SE_boundry then
+          -- the x/y pos are hitting a corner boundry  (ie.  NW, NE, SW, SE) and we aren't going to update the x/y
+    
+        elseif x_pos > left_boundry then
+          platformTouched.x = math.min(x_pos, left_boundry)
+          platformTouched.y = y_pos
+        elseif x_pos < right_boundry then
+          platformTouched.x = math.max(x_pos, right_boundry)
+          platformTouched.y = y_pos
+        elseif y_pos > top_boundry then
+          platformTouched.x = x_pos
+          platformTouched.y = math.min(y_pos, top_boundry)
+        elseif y_pos < bottom_boundry then
+          platformTouched.x = x_pos
+          platformTouched.y = math.max(y_pos, bottom_boundry)          
+        elseif x_pos < left_boundry and x_pos > right_boundry and y_pos < top_boundry and y_pos > bottom_boundry then -- not bypassing any boundry 
+          platformTouched.x = x_pos
+          platformTouched.y = y_pos
+        end
+        --platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
+        --platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos 
+print(platformTouched.x, platformTouched.y)
+
+        elseif y_pos < bottom_boundry then
+          platformTouched.y = math.max(y_pos, bottom_boundry)
+        else 
+          platformTouched.y = y_pos
+        end
+--]]
+    elseif event.phase == "ended" or event.phase == "cancelled"  then
+        -- here the focus is removed from the last position
+        display.getCurrentStage():setFocus( nil )
+    end
+    return true
+end
 
 -- "scene:show()"
 function scene:show( event )
@@ -471,6 +223,9 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
+    
+        Runtime:addEventListener("key", key)  
+        world.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -483,6 +238,7 @@ end
 function scene:hide( event )
 
     local sceneGroup = self.view
+
     local phase = event.phase
 
     if ( phase == "will" ) then
@@ -490,13 +246,19 @@ function scene:hide( event )
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-    end
+        -- Called immediately after scene goes off screen.   
+        Runtime:removeEventListener( "key", key )          
+        timer.pause(room_timer)
+    end  
 end
 
 
 -- "scene:destroy()"
 function scene:destroy( event )
+
+    world:destroy()   
+    Runtime:removeEventListener( "enterFrame", enterFrame )      
+    Runtime:removeEventListener( "key", key )     
 
     local sceneGroup = self.view
 

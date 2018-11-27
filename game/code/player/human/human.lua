@@ -16,7 +16,7 @@ Human.action_list = human_action_list
 local default_IP= 0
 
 function Human:initialize(username, ...) --add account name
-  self.username = username or names:generateRandom('zombie')
+  self.username = username or names:generateRandom('male')
   self.ip = default_IP
   self.inventory = Inventory:new(self)
   self.skills = Skills:new(human_skill_list)

@@ -1,12 +1,17 @@
 local class = require('code.libs.middleclass')
 local Tiles = require('code.location.tile.tiles')
 local TerminalNetwork = require('code.location.terminal_network')
+berry = require( 'code.libs.berry.berry' )
 -- local suburb = require('suburb')
 
 local Map = class('Map')
 
--- make sure to set this up properly!
-local tile_type = 'Hospital'
+local filename = "graphics/map/world.json"
+local world = berry.loadMap( filename, "graphics/map" )
+local tile_offset = world:getPropertyValue('background_tile_offset') -- this is how many tiles surround the world in all directions (background)
+local world_width = world.data.width
+local tile_layer = world:getTileLayer("Location ID")
+local tileset_gid = world:getTileSet('Tile ID').firstgid
 
 function Map:initialize(size)
   self.humans = 0
@@ -19,8 +24,20 @@ function Map:initialize(size)
   for y=1, size do
     self[y] = {}
     for x=1, size do
-            
-      self[y][x] = Tiles[tile_type]:new(self, y, x, '[insert name]')
+      local tile_pos = x + tile_offset + ((y - 1 + tile_offset) * world_width)
+      local tile_gid = tile_layer.data.data[tile_pos] + 1  -- need to add a + 1 to count from 1 instead of zero
+      local tile_not_exist = tile_gid == 1 
+      local tile_id
+
+      if tile_not_exist then 
+        tile_id = 1  -- default to first id (which is land right now)
+      else 
+        tile_id = tile_gid - tileset_gid 
+      end
+
+--print(tile_layer.data.data[tile_pos], tileset_gid, tile_id)
+
+      self[y][x] = Tiles[tile_id]:new(self, y, x, '[insert name]')
     end
   end
 end

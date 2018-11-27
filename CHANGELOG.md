@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
+## v0.11.0 - 11/26/2018
+### Added
+- Isometric staggered world map.
+- Orthogonal location layout that changes depending on player position in world map.
+- Buildings have equipment sprites and animations displayed (if powered) for terminal, generator, and transmitters if present.
+- Buildings have barricade and door sprites set based on health.
+- Locations display mobs inside or outside with their names overhead.  Mobs wander around aimlessly. 
+- Dead humans or killed zombies become corpses.  The mob sprite does a 90 degree horizontal rotation to make it appear they are lying down. The sprite also remains motionless.
+- Both city and location images can be panned and zoomed within set boundaries.
+- Zooming in far enough from the city map will switch to the current room player is in.
+- Zooming out far enough from the room will switch to the city world map.
+
+### Changed
+- Map tile types to be set based on `Location Tile ID` layer in the `world.tmx` file.  Previously every map tile was set to be a `hospital` type as default, which was used to temporarily get stuff working.  
+
+
 ## v0.10.0 - 01/27/2018
 ### Added
 - `Gadget` and `Syringe` research human skills grant a higher hp threshold when using a syringe on a zombie.

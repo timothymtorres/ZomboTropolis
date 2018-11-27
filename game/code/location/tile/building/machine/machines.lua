@@ -5,7 +5,8 @@ local Terminal = require('code.location.tile.building.machine.terminal')
 local Machines = {Generator, Transmitter, Terminal,}
 
 for _, Class in ipairs(Machines) do
-  Machines[Class.name] = Class
+  local machine = string.lower(tostring(Class.name))	
+  Machines[machine] = Class
 end
 
 return Machines
