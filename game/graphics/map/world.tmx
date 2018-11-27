@@ -24,7 +24,7 @@
  <tileset firstgid="124" name="Street" tilewidth="32" tileheight="20" tilecount="12" columns="4">
   <image source="top/street.png" width="128" height="60"/>
  </tileset>
- <tileset firstgid="136" name="Location ID" tilewidth="32" tileheight="16" tilecount="48" columns="4">
+ <tileset firstgid="136" name="Tile ID" tilewidth="32" tileheight="16" tilecount="48" columns="4">
   <image source="location_ids.png" width="128" height="192"/>
  </tileset>
  <tileset firstgid="184" name="Water" tilewidth="32" tileheight="16" tilecount="8" columns="4">
@@ -39,10 +39,15 @@
  <tileset firstgid="205" name="Bridges" tilewidth="32" tileheight="20" tilecount="4" columns="2">
   <image source="bottom/bridges.png" width="64" height="40"/>
  </tileset>
- <tileset firstgid="209" name="Location Template ID" tilewidth="32" tileheight="16" tilecount="184" columns="8">
+ <tileset firstgid="209" name="Tile Template ID" tilewidth="32" tileheight="16" tilecount="184" columns="8">
   <image source="location_templates.png" width="256" height="368"/>
+  <tile id="48">
+   <properties>
+    <property name="template" value="default"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Regions" width="70" height="70" visible="0">
+ <layer name="Regions" width="70" height="70">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -412,7 +417,7 @@
 64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64
 </data>
  </layer>
- <layer name="Location Tile ID" width="70" height="70" visible="0" offsetx="0" offsety="-4">
+ <layer name="Location ID" width="70" height="70" visible="0" offsetx="0" offsety="-4">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

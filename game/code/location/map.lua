@@ -10,7 +10,7 @@ local filename = "graphics/map/world.json"
 local world = berry.loadMap( filename, "graphics/map" )
 local tile_offset = world:getPropertyValue('background_tile_offset') -- this is how many tiles surround the world in all directions (background)
 local world_width = world.data.width
-local tile_layer = world:getTileLayer("Location Tile ID")
+local tile_layer = world:getTileLayer("Location ID")
 local tileset_gid = world:getTileSet('Tile ID').firstgid
 
 function Map:initialize(size)
