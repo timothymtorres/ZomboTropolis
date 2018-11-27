@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
-## v0.11.0 - ???
+## v0.11.0 - 11/26/2018
 ### Added
-- Isometric city world map.
+- Isometric staggered world map.
 - Orthogonal location layout that changes depending on player position in world map.
 - Buildings have equipment sprites and animations displayed (if powered) for terminal, generator, and transmitters if present.
 - Buildings have barricade and door sprites set based on health.
