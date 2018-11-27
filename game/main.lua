@@ -24,18 +24,21 @@ Human = require('code.player.human.human')
 table.inspect = require('code.libs.inspect')
 
 dummy = {}
-print()
-city = Map:new(10)
-main_player = Zombie:new(nil, city, 4, 4)
-alt_player = Human:new(nil, city, 4, 4)
+city = Map:new(40)
+local y, x = 20, 5   --19,34
 
---[[
+main_player = Zombie:new(nil, city, y, x)
+alt_player = Human:new(nil, city, y, x)
+
 for i=1, 100 do
-  dummy[i] = Zombie:new(nil, city, 4, 4)
+  dummy[i] = Zombie:new(nil, city, y, x)
+  dummy[i].stats:update('hp', -100)
 end
---]]
+
 
 p_tile = alt_player:getTile()
+
+print(table.inspect(p_tile, {depth=1}))
 
 p_tile.barricade.potential_hp = 28 
 p_tile.barricade.hp = 20
@@ -55,6 +58,7 @@ for i=1, 10 do
 end
 --]]
 
+--[[
 main_player.stats:update('hp', -49)
 
 local toolbox = Items.Toolbox:new(4)
@@ -64,6 +68,7 @@ for i=1, 2 do
   local barricade = Items.Barricade:new('intact')
   alt_player.inventory:insert(barricade)
 end
+--]]
 
 --[[
 local firesuit_INST = Item.firesuit:new('ruined')
@@ -102,12 +107,14 @@ end
 
 --]]
 
+--[[
 main_player.stats:update('xp', 1000)
 alt_player.stats:update('xp', 1000)
+--]]
+
 --main_player.skills:buy(main_player, 'melee')
 --main_player.condition.poison:add(7, 63)
 --main_player.condition.burn:add('1d1+60', true)
-
 
 -- Function to handle button events
 local function handleTabBarEvent( event )
@@ -127,14 +134,14 @@ local function swapPlayers()
     
   local scene = composer.getSceneName('current')
   local options = {effect = "fade", time = 500} 
-  --[[
-  local button_index = {
-    ['scene.map']   = 1,
-    ['scene.action'] = 2,
-    ['scene.skills'] = 3,
-    ['scene.player'] = 4,
-  }  
-  --]]
+  --
+  --local button_index = {
+  --  ['scene.map']   = 1,
+  --  ['scene.action'] = 2,
+  --  ['scene.skills'] = 3,
+  --  ['scene.player'] = 4,
+  --}  
+  --
   composer.removeScene(scene)
   composer.removeHidden()  
   composer.gotoScene(scene, options)
