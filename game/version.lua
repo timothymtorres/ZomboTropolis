@@ -1,6 +1,6 @@
 local version = {
 	major = 0,
-	minor = 10,
+	minor = 11,
 	patch = 0,
 }
 
