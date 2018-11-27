@@ -49,4 +49,52 @@ Factory.item_chance = {
   }
 }
 
-return {Warehouse, Factory}
+-------------------------------------------------------------------
+
+local Power = class('Power', Building)
+
+Power.FULL_NAME = 'power plant'
+Power.BUILDING_TYPE = 'industrial'
+Power.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Power.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+   -- WEAPONS =  70%
+      Crowbar = .20,
+       Sledge = .10,
+      Toolbox = .40,
+
+      -- MISC =  10%
+    Newspaper = .10,
+
+     -- EQUIP =  20%
+    Generator = .05,
+         Fuel = .15, 
+  }
+}
+
+-------------------------------------------------------------------
+
+local Control = class('Control', Building)
+
+Control.FULL_NAME = 'control tower'
+Control.BUILDING_TYPE = 'industrial'
+Control.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Control.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+   -- WEAPONS =  70%
+      Crowbar = .20,
+       Sledge = .10,
+      Toolbox = .40,
+
+      -- MISC =  10%
+    Newspaper = .10,
+
+     -- EQUIP =  20%
+    Generator = .05,
+         Fuel = .15, 
+  }
+}
+
+return {Warehouse, Factory, Power, Control}

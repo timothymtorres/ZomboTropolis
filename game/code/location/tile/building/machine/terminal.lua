@@ -11,11 +11,8 @@ Terminal.CATEGORY = 'engineering'
 Terminal.ap = {cost = 3, modifier = {gadget = -1, terminal = -1}}
 
 function Terminal:initialize(building) 
-  Machine.initialize(self, building)
-end
-
-function Terminal:install() 
   self.hp = MAX_HP
+  Machine.initialize(self, building)
 end
 
 ------------------------------------------------------

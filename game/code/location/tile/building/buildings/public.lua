@@ -29,7 +29,7 @@ Library.item_chance = {
 local News = class('News', Building)
 
 News.FULL_NAME = 'news'
-News.BUILDING_TYPE = 'commercial'
+News.BUILDING_TYPE = 'public'
 News.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
 News.item_chance = {
   outside = Building.item_chance.outside,
@@ -40,4 +40,34 @@ News.item_chance = {
 
 -------------------------------------------------------------------
 
-return {Library, News}
+local Museum = class('Museum', Building)
+
+Museum.FULL_NAME = 'museum'
+Museum.BUILDING_TYPE = 'misc'
+Museum.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Museum.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+    Newspaper = 1.00,
+  }
+}
+
+-------------------------------------------------------------------
+
+local Church = class('Church', Building)
+
+Church.FULL_NAME = 'church'
+Church.BUILDING_TYPE = 'misc'
+Church.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Church.item_chance = {
+  outside = Building.item_chance.outside,
+  inside = {
+    Newspaper = 1.00,
+  }
+}
+
+
+-------------------------------------------------------------------
+
+
+return {Library, News, Museum, Church}

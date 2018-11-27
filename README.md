@@ -53,6 +53,12 @@ A lot of free source assets and libraries were used in the making of ZomboTroplo
 * [Game-Icons.net](http://game-icons.net/) used for skill icons 
 * [CoronaSDK](https://coronalabs.com/) used to render the code onto multiple platforms (phone, tablet, etc.)
 * [SS13 Sprites](https://github.com/tgstation/tgstation) used for mobs, items, and locations in game
+* [Berry](https://github.com/ldurniat/Berry) used to manipulate and display the rooms in game
+
+People that helped contribute to this project:
+
+* **TheBeanBurrito** for building the countryside region of the map and game design
+* **RedDustBowl** for help in game design and suggestions
 
 Other projects that provided inspiration and ideas for this game:
 

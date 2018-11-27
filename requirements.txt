@@ -1,0 +1,4 @@
+rl-dice==3.3.0
+coronaSDK==2017.3814
+inspect.lua==2.0.0
+middleclass==4.1.0

@@ -24,7 +24,7 @@ function Player:initialize(map_zone, y, x) --add account name
   self.status_effect = StatusEffect:new(self)
   self.equipment = Equipment:new(self)
 
-  map_zone[y][x]:insert(self)
+  map_zone[y][x]:insert(self,'inside')  -- remove 'inside' argument later (for testing purposes)
 end
 
 local function basicCriteria(player, action_str, ...)

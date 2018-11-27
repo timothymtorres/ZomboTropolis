@@ -40,4 +40,10 @@ Forest.FULL_NAME = 'forest'
 
 -------------------------------------------------------------------
 
-return {Land, Street, Cemetary, Wasteland, Runway, Forest}
+local Obstical = class('Obstical', Tile)
+
+Obstical.FULL_NAME = 'obstical'
+
+-------------------------------------------------------------------
+
+return {Land, Street, Cemetary, Wasteland, Runway, Forest, Obstical}
