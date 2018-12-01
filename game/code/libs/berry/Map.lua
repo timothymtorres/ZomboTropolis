@@ -910,9 +910,6 @@ function Map:create()
 	-- Show layers/objects in right order
 	self:sort()
 
-	print(self.world.anchorX, self.world.anchorY)
-	print(self.world.anchorChildren)
-
 	return self.world
 
 end	
