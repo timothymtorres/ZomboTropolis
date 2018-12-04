@@ -27,24 +27,41 @@ function Player:initialize(map_zone, y, x) --add account name
   map_zone[y][x]:insert(self,'inside')  -- remove 'inside' argument later (for testing purposes)
 end
 
-local function basicCriteria(player, action_str, ...)
-  assert(player.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later   
-  local ap = player.stats:get('ap')
-  local AP_cost = player:getCost('ap', action_str, ...)
+function Player:basicCriteria(action_str, ...)
+  assert(self.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later   
+  local ap = self.stats:get('ap')
+  local AP_cost = self:getCost('ap', action_str, ...)
   assert(AP_cost, 'action has no ap_cost?')  -- remove this assertion once all actions have been added (will be unneccsary)
   assert(ap >= AP_cost, 'not enough ap for action')
-  assert(player:isStanding() or (action_str == 'respawn' and player:isMobType('zombie')), 'Must be standing for action')
+  assert(self:isStanding() or (action_str == 'respawn' and self:isMobType('zombie')), 'Must be standing for action')
+end
+
+function Player:canPerform(action_str, ...)
+  local ap_verification, ap_error_msg = pcall(self.basicCriteria, self, action_str, ...)
+  local action = self.class.action_list[action_str]  
+  local verification, error_msg
+
+  if action.client_criteria then verification, error_msg = pcall(action.client_criteria, self, ...)
+  else verification = true
+  end
+
+  return (ap_verification and verification)
 end
 
 function Player:perform(action_str, ...) 
-  local ap_verification, ap_error_msg = pcall(basicCriteria, self, action_str, ...)
-  local action = self.class.action_list[action_str]  
-  local verification, error_msg = pcall(action.server_criteria, self, ...)
-  local AP_cost
+  local ap_verification, ap_error_msg = pcall(self.basicCriteria, self, action_str, ...)
+  local action = self.class.action_list[action_str]
+  local verification, error_msg
+
+  if action.server_criteria then verification, error_msg = pcall(action.server_criteria, self, ...)
+  else verification = true
+  end
+
+  local AP_cost, event
 
   if ap_verification and verification then
     AP_cost = self:getCost('ap', action_str)
-    action.activate(self, ...)
+    event = action.activate(self, ...)
 
     self.status_effect:elapse(AP_cost)   
     self.stats:update('ap', -1*AP_cost)
@@ -53,7 +70,9 @@ function Player:perform(action_str, ...)
     self.log:insert(ap_error_msg or error_msg)
   end
   --self.stats:update('IP', 1)  -- IP connection hits?  Hmmmm?
-  return AP_cost  
+
+  -- why were we returning AP_cost?!?  Hmm.... no idea...
+  return event --AP_cost  
 end
 
 function Player:permadeath() end -- run code to remove player instance from map
