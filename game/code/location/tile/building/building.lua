@@ -28,7 +28,8 @@ home = 10%
 local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .50, .15
 
 Building.BUILDING_TYPE = 'generic'
-Building.search_odds = {OUTSIDE = OUTSIDE_SEARCH_ODDS, INSIDE = INSIDE_SEARCH_ODDS}
+Building.MAX_INTEGRITY = 5 -- this needs to be set based on type of building (resource == more, and size of building)
+Building.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = INSIDE_SEARCH_ODDS}
 Building.item_chance = {
   outside = {
     -- WEAPONS =  00.1%
