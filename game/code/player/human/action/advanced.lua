@@ -21,7 +21,8 @@ function search.activate(player)
 
   local item, hidden_player
 
-  if discovery and discovery.class.name == 'Item' then item = discovery
+  -- we may want to add methods to items/location/mobs like mob:isItem(),  item:isLocation(), etc. to tell them apart.
+  if discovery and discovery.class.super.name == 'Item' then item = discovery
   elseif discovery then hidden_player = discovery
   end
 
@@ -74,6 +75,8 @@ function search.activate(player)
   else 
     player.log:insert(self_msg, event)
   end
+
+  return event 
 end
 
 -------------------------------------------------------------------
