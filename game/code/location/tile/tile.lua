@@ -6,7 +6,7 @@ local Tile = class('Tile')
 
 local OUTSIDE_SEARCH_ODDS = .50
 
-Tile.search_chance = {OUTSIDE=OUTSIDE_SEARCH_ODDS}
+Tile.search_chance = {outside=OUTSIDE_SEARCH_ODDS}
 Tile.item_chance = {}
 Tile.item_chance.outside = {
   -- WEAPONS =  00.1%
@@ -138,6 +138,11 @@ local modifier = {
 }
 
 function Tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
+print(self)
+print(table.inspect(self, {depth=2}))
+print('-----------')
+print(table.inspect(self.search_odds))
+
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
   
   local condition_bonus = modifier.building_condition[integrity_status]
