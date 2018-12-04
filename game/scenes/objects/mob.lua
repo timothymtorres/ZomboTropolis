@@ -15,9 +15,9 @@ function M.new( object )
 	--visual:setSequence('husk')  
 
 	-- gets our name/bkgr stuff and attaches it to mob sprite
-	local room = object.map
-	local name_layer = room:getObjectLayer('Mob Name')
-	local name_bkgr_layer = room:getObjectLayer('Mob Name Background')
+	local location = object.map
+	local name_layer = location:getObjectLayer('Mob Name')
+	local name_bkgr_layer = location:getObjectLayer('Mob Name Background')
 
 	local name_obj = name_layer:getObject(object.name)
 	local name_bkgr_obj = name_bkgr_layer:getObject(object.name)
@@ -27,14 +27,14 @@ function M.new( object )
 
 	visual.name_sprites = {name_visual, name_bkgr_visual}
 
-	local room_sprite = room:getVisual()
-	local room_width, room_height = room_sprite.contentWidth, room_sprite.contentHeight
+	local location_sprite = location:getVisual()
+	local location_width, location_height = location_sprite.contentWidth, location_sprite.contentHeight
 
-  -- gets the section of room the player is staged in
+  -- gets the section of location the player is staged in
 	local player_stage = main_player:getStage()
-  stage_layer = room:getTileLayer(player_stage)
+  stage_layer = location:getTileLayer(player_stage)
 
-  -- sets the boundry for the section of the room
+  -- sets the boundry for the section of the location
   local stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
   local stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
 
