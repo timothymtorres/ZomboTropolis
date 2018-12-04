@@ -7,7 +7,7 @@ local PD = class('PD', Building)
 
 PD.FULL_NAME = 'police department'
 PD.BUILDING_TYPE = 'government'
-PD.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.50}
+PD.search_odds = {outside = Building.search_odds.outside, inside = 0.50}
 PD.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -34,7 +34,7 @@ local FD = class('FD', Building)
 
 FD.FULL_NAME = 'fire department'
 FD.BUILDING_TYPE = 'government'
-FD.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.50}
+FD.search_odds = {outside = Building.search_odds.outside, inside = 0.50}
 FD.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -62,7 +62,7 @@ local Hospital = class('Hospital', Building)
 
 Hospital.FULL_NAME = 'hospital'
 Hospital.BUILDING_TYPE = 'government'
-Hospital.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.50}
+Hospital.search_odds = {outside = Building.search_odds.outside, inside = 0.50}
 Hospital.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -86,7 +86,7 @@ local Lab = class('Lab', Building)
 
 Lab.FULL_NAME = 'lab'
 Lab.BUILDING_TYPE = 'government'
-Lab.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.50}
+Lab.search_odds = {outside = Building.search_odds.outside, inside = 0.50}
 Lab.item_chance = {
   outside = Building.item_chance.outside,
   inside = {

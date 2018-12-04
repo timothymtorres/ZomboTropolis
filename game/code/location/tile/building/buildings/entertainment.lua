@@ -7,7 +7,7 @@ local Sport = class('Sport', Building)
 
 Sport.FULL_NAME = 'sporting goods'
 Sport.BUILDING_TYPE = 'commercial'
-Sport.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Sport.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Sport.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -32,7 +32,7 @@ local Bar = class('Bar', Building)
 
 Bar.FULL_NAME = 'bar'
 Bar.BUILDING_TYPE = 'commercial'
-Bar.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.20}
+Bar.search_odds = {outside = Building.search_odds.outside, inside = 0.20}
 Bar.item_chance = {
   outside = Building.item_chance.outside,
   inside = {

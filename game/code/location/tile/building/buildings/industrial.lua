@@ -7,7 +7,7 @@ local Warehouse = class('Warehouse', Building)
 
 Warehouse.FULL_NAME = 'warehouse'
 Warehouse.BUILDING_TYPE = 'industrial'
-Warehouse.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Warehouse.search_odds = {outside = Building.search_odds.outside, inside = 0.40}
 Warehouse.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -31,7 +31,7 @@ local Factory = class('Factory', Building)
 
 Factory.FULL_NAME = 'factory'
 Factory.BUILDING_TYPE = 'industrial'
-Factory.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Factory.search_odds = {outside = Building.search_odds.outside, inside = 0.40}
 Factory.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -55,7 +55,7 @@ local Power = class('Power', Building)
 
 Power.FULL_NAME = 'power plant'
 Power.BUILDING_TYPE = 'industrial'
-Power.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Power.search_odds = {outside = Building.search_odds.outside, inside = 0.40}
 Power.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -79,7 +79,7 @@ local Control = class('Control', Building)
 
 Control.FULL_NAME = 'control tower'
 Control.BUILDING_TYPE = 'industrial'
-Control.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.40}
+Control.search_odds = {outside = Building.search_odds.outside, inside = 0.40}
 Control.item_chance = {
   outside = Building.item_chance.outside,
   inside = {

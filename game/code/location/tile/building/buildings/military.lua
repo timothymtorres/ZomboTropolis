@@ -7,7 +7,7 @@ local Gatehouse = class('Gatehouse', Building)
 
 Gatehouse.FULL_NAME = 'gatehouse'
 Gatehouse.BUILDING_TYPE = 'military'
-Gatehouse.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Gatehouse.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Gatehouse.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -21,7 +21,7 @@ local Infirmary = class('Infirmary', Building)
 
 Infirmary.FULL_NAME = 'infirmary'
 Infirmary.BUILDING_TYPE = 'military'
-Infirmary.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Infirmary.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Infirmary.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -35,7 +35,7 @@ local Armory = class('Armory', Building)
 
 Armory.FULL_NAME = 'armory'
 Armory.BUILDING_TYPE = 'military'
-Armory.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Armory.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Armory.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -49,7 +49,7 @@ local Supply = class('Supply', Building)
 
 Supply.FULL_NAME = 'supply'
 Supply.BUILDING_TYPE = 'military'
-Supply.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Supply.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Supply.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -63,7 +63,7 @@ local Barracks = class('Barracks', Building)
 
 Barracks.FULL_NAME = 'barracks'
 Barracks.BUILDING_TYPE = 'military'
-Barracks.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Barracks.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Barracks.item_chance = {
   outside = Building.item_chance.outside,
   inside = {

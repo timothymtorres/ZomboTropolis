@@ -7,7 +7,7 @@ local Gas = class('Gas', Building)
 
 Gas.FULL_NAME = 'gas station'
 Gas.BUILDING_TYPE = 'misc'
-Gas.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Gas.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Gas.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -21,7 +21,7 @@ local Shop = class('Shop', Building)
 
 Shop.FULL_NAME = 'shop'
 Shop.BUILDING_TYPE = 'misc'
-Shop.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.30}
+Shop.search_odds = {outside = Building.search_odds.outside, inside = 0.30}
 Shop.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
@@ -36,7 +36,7 @@ local Mall = class('Mall', Building)
 
 Mall.FULL_NAME = 'shopping mall'
 Mall.BUILDING_TYPE = 'commercial'
-Mall.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.60}
+Mall.search_odds = {outside = Building.search_odds.outside, inside = 0.60}
 Mall.item_chance = {
   outside = Building.item_chance.outside,
   inside = {

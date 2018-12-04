@@ -8,7 +8,7 @@ local Apartment = class('Apartment', Building)
 Apartment.FULL_NAME = 'apartment'
 Apartment.BUILDING_TYPE = 'residential'
 Apartment.titles = {'apartment', 'hotel'}
-Apartment.search_odds = {OUTSIDE = Building.search_odds.OUTSIDE, INSIDE = 0.10}
+Apartment.search_odds = {outside = Building.search_odds.outside, inside = 0.10}
 Apartment.item_chance = {
   outside = Building.item_chance.outside,
   inside =  {
