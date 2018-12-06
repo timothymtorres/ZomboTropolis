@@ -63,6 +63,34 @@ function M.new( object )
 		end
 	end
 
+	function visual:move(x, y, time_delay)	
+		local new_x, new_y = x - visual.x, y - visual.y
+
+		local wall_offset = 4
+
+		local x_movement = (new_x == 0 or visual.x + new_x > stage_boundry_x_right - wall_offset or visual.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
+		local y_movement = (new_y == 0 or visual.y + new_y > stage_boundry_y_bottom - wall_offset or visual.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
+
+		local dir 
+		if math.abs(x_movement) >= math.abs(y_movement) then
+			if x_movement >= 0 then dir = 2 -- face east
+			elseif x_movement < 0 then dir = 4 -- face west
+			end
+		elseif math.abs(x_movement) < math.abs(y_movement) then
+			if y_movement >= 0 then dir = 3 -- face south
+			elseif y_movement < 0 then dir = 1 -- face north
+			end
+		end
+
+		visual:setFrame(dir)  -- changes direction	
+
+		transition.to( visual, { time=time_delay, x=visual.x + x_movement, y=visual.y + y_movement, iterations = 1} )
+
+		for _, name_visual in ipairs(visual.name_sprites) do
+			transition.to( name_visual, { time=time_delay, x=name_visual.x + x_movement, y=name_visual.y + y_movement, iterations = 1} )
+		end
+	end
+
 	return visual
 end
 
