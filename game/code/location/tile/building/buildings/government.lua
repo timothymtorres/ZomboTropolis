@@ -43,7 +43,7 @@ FD.item_chance = {
       Bandage = .20,
 
    -- WEAPONS =  40%
-          Axe = .10,
+        Knife = .10,
         Flare = .20, 
       Crowbar = .10,
 

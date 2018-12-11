@@ -41,11 +41,10 @@ Mall.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
    -- WEAPONS =  60%
-      Machate = .10,
           Bat = .20,
           Bow = .10,
      Crossbow = .10,
-        Knife = .10,
+        Knife = .20,
 
       -- AMMO =  30%
        Quiver = .30,

@@ -12,11 +12,10 @@ Sport.item_chance = {
   outside = Building.item_chance.outside,
   inside = {
    -- WEAPONS =  60%
-      Machate = .10,
           Bat = .30,
           Bow = .10,
      Crossbow = .10,
-        Knife = .10,
+        Knife = .20,
 
       -- AMMO =  30%
        Quiver = .30,
@@ -47,7 +46,7 @@ Bar.item_chance = {
         -- MISC =  45%
       Newspaper = .10,
          Bottle = .30,
-          Phone = .05,
+     Flashlight = .05,
   }
 }
 

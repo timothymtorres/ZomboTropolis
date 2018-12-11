@@ -20,7 +20,7 @@ Library.item_chance = {
          Book = .70,
     
       -- GEAR =  08%
-        Phone = .08,  
+   Flashlight = .08,  
   }
 }
 
