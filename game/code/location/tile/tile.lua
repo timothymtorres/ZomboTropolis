@@ -137,12 +137,7 @@ local modifier = {
   looting_skill = 0.05,
 }
 
-function Tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used) 
-print(self)
-print(table.inspect(self, {depth=2}))
-print('-----------')
-print(table.inspect(self.search_odds))
-
+function Tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used)
   local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
   
   local condition_bonus = modifier.building_condition[integrity_status]
