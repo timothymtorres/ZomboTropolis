@@ -51,7 +51,7 @@ function Tile:countPlayers(mob_type, setting, filter)
   local count = 0
   for player in pairs(players) do
     if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() and not player.status_effect:isActive('hide') then 
-      if filter and filter == 'wounded' then 
+      if filter and filter == 'wounded' then -- this filter is for scent_blood to see wounded survivors in buildings from outside
         if player.stats:get('vitality') ~= 4 then count = count + 1 end
       else     
         count = count + 1
@@ -86,13 +86,13 @@ function Tile:getIntegrity()
 end
 
 function Tile:getPlayers(setting, filter) 
-  local players
+  local players = {}
+
   if setting == 'inside' then 
-    players = self.inside_players
+    for player in pairs(self.inside_players) do players[player] = true end
   elseif setting == 'outside' then
-    players = self.outside_players
+    for player in pairs(self.outside_players) do players[player] = true end
   elseif not setting then -- get all players
-    players = {}
     if self.inside_players then 
       for player in pairs(self.inside_players) do players[player] = true end
     end
