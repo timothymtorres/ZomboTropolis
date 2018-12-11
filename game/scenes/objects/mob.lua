@@ -10,6 +10,7 @@ local composer = require( "composer" )
 function M.new( object )	
 	if not object then error( "ERROR: Expected display visual" ) end
 	local mob = object:getVisual()
+	mob.is_stationary = false
 
 	-- to change sprite to other mobs/races	
 	--mob:setSequence('husk')  
@@ -37,6 +38,11 @@ function M.new( object )
 	-- sets the boundry for the section of the location
 	local stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
 	local stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
+
+	function mob:isStationary() return self.is_stationary end
+
+	-- if setting true, mob sprite is not allowed to move, if false it can move
+	function mob:setStationary(setting) self.is_stationary = setting end
 
 	function mob:travel(dir)
 		mob:setFrame(dir)  -- changes direction		
