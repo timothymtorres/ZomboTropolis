@@ -305,7 +305,7 @@ end
 local function mobMovement()
   local mob_list = location:getObjectsWithType('mob')
   for _, mob in ipairs(mob_list) do
-    if mob.player:isStanding() then
+    if mob.player:isStanding() and not mob.sprite:isStationary() then
       local dir = math.random(1, 4)   
       mob.sprite:travel(dir)
     end
