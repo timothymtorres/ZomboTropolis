@@ -9,10 +9,10 @@ local composer = require( "composer" )
 
 function M.new( object )	
 	if not object then error( "ERROR: Expected display visual" ) end
-	local visual = object:getVisual()
+	local mob = object:getVisual()
 
 	-- to change sprite to other mobs/races	
-	--visual:setSequence('husk')  
+	--mob:setSequence('husk')  
 
 	-- gets our name/bkgr stuff and attaches it to mob sprite
 	local location = object.map
@@ -22,24 +22,24 @@ function M.new( object )
 	local name_obj = name_layer:getObject(object.name)
 	local name_bkgr_obj = name_bkgr_layer:getObject(object.name)
 
-	local name_visual = name_obj:getVisual()
-	local name_bkgr_visual = name_bkgr_obj:getVisual()
+	local name = name_obj:getVisual()
+	local name_bkgr = name_bkgr_obj:getVisual()
 
-	visual.name_sprites = {name_visual, name_bkgr_visual}
+	mob.name_sprites = {name, name_bkgr}
 
 	local location_sprite = location:getVisual()
 	local location_width, location_height = location_sprite.contentWidth, location_sprite.contentHeight
 
-  -- gets the section of location the player is staged in
+  	-- gets the section of location the player is staged in
 	local player_stage = main_player:getStage()
-  stage_layer = location:getTileLayer(player_stage)
+	stage_layer = location:getTileLayer(player_stage)
 
-  -- sets the boundry for the section of the location
-  local stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
-  local stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
+	-- sets the boundry for the section of the location
+	local stage_boundry_x_left, stage_boundry_x_right = stage_layer:getPropertyValue('boundry_left'), stage_layer:getPropertyValue('boundry_right')
+	local stage_boundry_y_top, stage_boundry_y_bottom = stage_layer:getPropertyValue('boundry_top'), stage_layer:getPropertyValue('boundry_bottom')
 
-	function visual:travel(dir)
-		visual:setFrame(dir)  -- changes direction		
+	function mob:travel(dir)
+		mob:setFrame(dir)  -- changes direction		
 
 		local new_x, new_y = 0, 0
 		local distance = math.random(20, 40)
@@ -53,23 +53,23 @@ function M.new( object )
 
 		local wall_offset = 4
 
-		local x_movement = (new_x == 0 or visual.x + new_x > stage_boundry_x_right - wall_offset or visual.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
-		local y_movement = (new_y == 0 or visual.y + new_y > stage_boundry_y_bottom - wall_offset or visual.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
+		local x_movement = (new_x == 0 or mob.x + new_x > stage_boundry_x_right - wall_offset or mob.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
+		local y_movement = (new_y == 0 or mob.y + new_y > stage_boundry_y_bottom - wall_offset or mob.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
 
-		transition.to( visual, { time=time_delay, x=visual.x + x_movement, y=visual.y + y_movement, iterations = 1} )
+		transition.to( mob, { time=time_delay, x=mob.x + x_movement, y=mob.y + y_movement, iterations = 1} )
 
-		for _, name_visual in ipairs(visual.name_sprites) do
-			transition.to( name_visual, { time=time_delay, x=name_visual.x + x_movement, y=name_visual.y + y_movement, iterations = 1} )
+		for _, name in ipairs(mob.name_sprites) do
+			transition.to( name, { time=time_delay, x=name.x + x_movement, y=name.y + y_movement, iterations = 1} )
 		end
 	end
 
-	function visual:move(x, y, time_delay)	
-		local new_x, new_y = x - visual.x, y - visual.y
+	function mob:move(x, y, time_delay)	
+		local new_x, new_y = x - mob.x, y - mob.y
 
 		local wall_offset = 4
 
-		local x_movement = (new_x == 0 or visual.x + new_x > stage_boundry_x_right - wall_offset or visual.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
-		local y_movement = (new_y == 0 or visual.y + new_y > stage_boundry_y_bottom - wall_offset or visual.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
+		local x_movement = (new_x == 0 or mob.x + new_x > stage_boundry_x_right - wall_offset or mob.x + new_x < stage_boundry_x_left + wall_offset) and 0 or new_x
+		local y_movement = (new_y == 0 or mob.y + new_y > stage_boundry_y_bottom - wall_offset or mob.y + new_y < stage_boundry_y_top + wall_offset) and 0 or new_y
 
 		local dir 
 		if math.abs(x_movement) >= math.abs(y_movement) then
@@ -82,16 +82,16 @@ function M.new( object )
 			end
 		end
 
-		visual:setFrame(dir)  -- changes direction	
+		mob:setFrame(dir)  -- changes direction	
 
-		transition.to( visual, { time=time_delay, x=visual.x + x_movement, y=visual.y + y_movement, iterations = 1} )
+		transition.to( mob, { time=time_delay, x=mob.x + x_movement, y=mob.y + y_movement, iterations = 1} )
 
-		for _, name_visual in ipairs(visual.name_sprites) do
-			transition.to( name_visual, { time=time_delay, x=name_visual.x + x_movement, y=name_visual.y + y_movement, iterations = 1} )
+		for _, name in ipairs(mob.name_sprites) do
+			transition.to( name, { time=time_delay, x=name.x + x_movement, y=name.y + y_movement, iterations = 1} )
 		end
 	end
 
-	return visual
+	return mob
 end
 
 return M
