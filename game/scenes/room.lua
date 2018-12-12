@@ -6,7 +6,6 @@
 
 local composer = require( "composer" )
 berry = require( 'code.libs.berry.berry' )
-local json = require( "json" )
 local Object = require('code.libs.berry.Object')
 
 local location, location_timer, mob
