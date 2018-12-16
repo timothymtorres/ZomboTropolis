@@ -1,0 +1,50 @@
+--- Clothing Cosmetic Items ---
+
+So cosmetic clothing items in the game can be obtained in the following manner:
+
+- Unlocking a badge (ie. stay alive x amount of days, play as a class, repair x buildings, eat x humans, etc.)
+- Purchasing the item (maybe restrict these items into their own tier)
+- Visiting a location 
+
+Things to consider, do we want to have exclusive items in each categories?  For example, any items you unlock with a badge, cannot be purchased.  Any items you purchase cannot be obtained any other way.  This could be problematic if some of the badges are restricted to landmark events or timeline stuff.  (ie.  1 year anniversary of the game or something)  We could get around this by making those items rare events.  (ie. 1 item per anniversary)
+
+--- Clothing Categories ---
+
+- Helmet
+- Mask
+- Uniform
+- Exosuit
+- Feet
+- Hands
+- Capes (this should be reserved for badges or rare events)
+
+--- Clothing Actions in Game ---
+
+A mob must be inside a building and then they can switch clothing for 1 ap per action.  
+If the mob is HUMAN the building must be unruined.
+If the mob is ZOMBIE the building must be ruined.
+
+New players spawning start with a random outfit.  (tempted to make this a grey jumpsuit)
+If a human dies and becomes a zombie the human's clothes are reset and the zombie is naked.  
+
+--- Clothing Sets (or only cloaks) Unlockables for Classes ---
+
+Engineer - CE 
+Scientist - CMO
+Solider - HoS
+
+Brute - QM 
+Hunter - RD
+Hive - HoP
+
+All classes - Captain
+
+--- Badges ---
+
+Setup later...
+
+--- Clothing Exclusives ---
+
+Zombies should have clothing that only they can use.
+Humans should have clothing that only they can use.
+Should we have overlapping clothing that both mobs can use?  Maybe...
