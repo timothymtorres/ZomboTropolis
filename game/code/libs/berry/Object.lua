@@ -233,7 +233,6 @@ function Object:create ()
 
 				-- Is this object animated?
 				if self.isAnimated then
-
 					-- Create an animated Tile
 					self.sprite = display.newSprite( group, self.tileSet.imageSheet, self.tileSet:getSequencesData() )
 					self.sprite:setSequence( self.map:getTilePropertyValueForGID( self.gid, 'name' ) )
@@ -340,7 +339,13 @@ function Object:create ()
 			self.sprite:translate( originX, originY )
 
 	    end
+	elseif data.image then
+		local imageSheet = graphics.newImageSheet(data.image, data.imageSheetInfo:getSheet())
+		self.sprite = display.newImage(group, imageSheet, data.imageSheetInfo:getFrameIndex(data.name))
 
+		-- Apply base properties
+		--self.sprite.anchorX, self.sprite.anchorY = 0, 1
+		self.sprite.x, self.sprite.y = data.x, data.y
 	else
 
 
