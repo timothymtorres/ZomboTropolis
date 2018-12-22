@@ -7,10 +7,10 @@ local dummy = {}
 city = Map:new(40)
 local y, x = 20, 5   --19,34
 
-main_player = Zombie:new(nil, city, y, x)
-alt_player = Human:new(nil, city, y, x)
+main_player = Human:new(nil, city, y, x)
+alt_player = Zombie:new(nil, city, y, x)
 
-for i=1, 100 do
+for i=1, 5 do
   dummy[i] = Zombie:new(nil, city, y, x)
   dummy[i].stats:update('hp', -100)
 end
