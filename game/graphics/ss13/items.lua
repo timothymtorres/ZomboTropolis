@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:6e14761b2b97805b07a7d70dec45dba4:84d88906459e97cc50ae1bd9ece0f5d5:827986299f8dab878187d862e00e271a$
+-- $TexturePacker:SmartUpdate:3a389d8c634a2d6dfcdf0e68de61c55b:06e124b12fa7eea474227b858b5c2a1f:827986299f8dab878187d862e00e271a$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- beer
+            -- book
             x=70,
             y=2,
             width=32,
@@ -71,7 +71,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- book
+            -- bottle
             x=70,
             y=36,
             width=32,
@@ -381,8 +381,8 @@ SheetInfo.frameIndex =
     ["bandage"] = 4,
     ["barricade"] = 5,
     ["bat"] = 6,
-    ["beer"] = 7,
-    ["book"] = 8,
+    ["book"] = 7,
+    ["bottle"] = 8,
     ["bow"] = 9,
     ["clip"] = 10,
     ["crowbar"] = 11,

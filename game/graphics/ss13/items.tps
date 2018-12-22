@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.4.0</string>
         <key>fileName</key>
-        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/ss13/items/items.tps</string>
+        <string>C:/Users/Tim/Documents/GitHub/ZomboTropolis/game/graphics/ss13/items.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -179,7 +179,7 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>./</filename>
+            <filename>items</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
