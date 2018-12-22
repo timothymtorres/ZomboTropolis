@@ -6,10 +6,11 @@
 -- Define module
 local M = {}
 local composer = require( "composer" )
+local item_effect = require('scenes.objects.item_effect')
 
 local MAX_MOVEMENT_DELAY = 20 * 100
 local MIN_MOVEMENT_DELAY = 10 * 100
-local ANIMATION_DELAY = 0
+local ANIMATION_DELAY = 1500
 
 function M.new( object )	
 	if not object then error( "ERROR: Expected display visual" ) end
@@ -37,6 +38,25 @@ function M.new( object )
 			mob_sprite:setStationary(true)
 
 			local result = main_player:perform('search')
+			local item = result[3]
+
+			if result[3] then
+print('WE FOUND '..tostring(result[3]))
+				local scale = 0.10
+
+				timer.performWithDelay(ANIMATION_DELAY, function()
+					item_sprite = item_effect.new(object.map, item, search_area.x, search_area.y)				
+					transition.to( item_sprite, { time=ANIMATION_DELAY, transition=easing.inExpo, x=mob_sprite.x, y=mob_sprite.y, xScale=scale, yScale=scale} )
+					transition.to( item_sprite.bkgr, { time=ANIMATION_DELAY, transition=easing.inExpo, x=mob_sprite.x, y=mob_sprite.y, xScale=scale, yScale=scale} )
+
+					item_sprite.bkgr:delete()
+					item_sprite:delete()	
+				end)			
+				-- delete sprite
+
+			else
+print('NOTHING FOUND')
+			end
 		else
 			-- make error sound
 		end
@@ -49,14 +69,14 @@ function M.new( object )
 
 	    if ( event.phase == "began" ) then
 	        display.getCurrentStage():setFocus( event.target )  --'event.target' is the touched object
-	        search_area.timer_ID = timer.performWithDelay(300, search_area, 0)
+	        search_area.timer_ID = timer.performWithDelay(ANIMATION_DELAY, search_area, 0)
 	    elseif (event.phase == "moved") then
 	    	timer.cancel(search_area.timer_ID)
-	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite, 1)
+	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite)
 	    elseif ( event.phase == "ended" or event.phase == "cancelled" ) then
 	        display.getCurrentStage():setFocus( nil )  --setting focus to 'nil' removes the focus
 	        timer.cancel(search_area.timer_ID)
-	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite, 1)
+	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite)
 	    end
 		return true
 	end
@@ -65,7 +85,7 @@ function M.new( object )
 		local mob_sprite = getMobSprite(main_player)
 	    if ( event.numTaps == 2 ) then 
 	    	search_area.search(event) 
-	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite, 1)
+	    	timer.performWithDelay(MAX_MOVEMENT_DELAY + ANIMATION_DELAY, unfreezeMobSprite)
 	    end
 	end
 
