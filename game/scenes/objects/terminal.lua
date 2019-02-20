@@ -1,24 +1,14 @@
-
--- Module/class for platfomer hero
-
--- Use this as a template to build an in-game mob
-
--- Define module
-local M = {}
-local composer = require( "composer" )
-
-function M.new( object )	
-	if not object then error( "ERROR: Expected display visual" ) end
-	local terminal = object:getVisual() 
+function Plugin(terminal)	
+	if not terminal then error( "ERROR: Expected display visual" ) end
 
 	function terminal:install()
 		self:setSequence('terminal-off')
-		object:show()		
+		self.alpha = 1		
 	end
 
 	function terminal:destroy()
 		self:setSequence('terminal-off')
-		object:hide()
+		self.alpha = 0
 	end
 
 	function terminal:setPower(setting)
@@ -29,4 +19,4 @@ function M.new( object )
 	return terminal
 end
 
-return M
+return Plugin

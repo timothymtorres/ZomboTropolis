@@ -1,15 +1,5 @@
-
--- Module/class for platfomer hero
-
--- Use this as a template to build an in-game mob
-
--- Define module
-local M = {}
-local composer = require( "composer" )
-
-function M.new( object )	
-	if not object then error( "ERROR: Expected display visual" ) end
-	local apc = object:getVisual() 
+local function Plugin(apc)	
+	if not apc then error( "ERROR: Expected display visual" ) end
 
 	function apc:setPower(setting)
 		self:setSequence('apc-'..setting)
@@ -19,4 +9,4 @@ function M.new( object )
 	return apc
 end
 
-return M
+return Plugin

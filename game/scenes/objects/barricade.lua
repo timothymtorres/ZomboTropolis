@@ -1,28 +1,11 @@
+local function Plugin(barricade)	
+	if not barricade then error( "ERROR: Expected display visual" ) end 
 
--- Module/class for platfomer hero
+	function barricade:setAlpha(visible) self.alpha = (visible and 1) or 0  end
 
--- Use this as a template to build an in-game mob
-
--- Define module
-local M = {}
-local composer = require( "composer" )
-
-function M.new( object )	
-	if not object then error( "ERROR: Expected display visual" ) end
-	local barricade = object:getVisual() 
-
-	function barricade:setVisual(setting) 
-		if setting == true then object:show() else object:hide() end 
-	end
-
-	function barricade:setSprite(hp_state)
-		barricade:setFrame(hp_state)
-		self:setFrame(hp_state)
-	end
-
-	-- maybe have a destroy method?  idk
+	function barricade:setHealth(hp_state) self:setFrame(hp_state) end
 
 	return barricade
 end
 
-return M
+return Plugin

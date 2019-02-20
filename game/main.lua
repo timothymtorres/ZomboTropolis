@@ -18,6 +18,6 @@ composer.myVolume = 100
 setupEnvironment('basic')
 
 -- Use composer to go to our first game scene 
-composer.gotoScene('scenes.map')
---composer.gotoScene('scenes.room')
+--composer.gotoScene('scenes.map')
+composer.gotoScene('scenes.location')
 --composer.gotoScene("scenes.status")

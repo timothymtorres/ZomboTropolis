@@ -1,34 +1,22 @@
-
--- Module/class for platfomer hero
-
--- Use this as a template to build an in-game mob
-
--- Define module
-local M = {}
-local composer = require( "composer" )
-
-function M.new( object )	
-	if not object then error( "ERROR: Expected display visual" ) end
-	local generator = object:getVisual() 
-	local room = object.map
+function Plugin(generator)	
+	if not generator then error( "ERROR: Expected display visual" ) end
 
 	function generator:install()
 		self:setSequence('generator-off')
-		object:show()		
+		self.alpha = 1
 	end
 
 	function generator:destroy()
 		self:setSequence('generator-off')
-		object:hide()
+		self.alpha = 0
 	end
 
 	function generator:setPower(setting)
 		self:setSequence('generator-'..setting)
 		self:play()
-		--room:setPower(setting) -- I think this is right
 	end
 
 	return generator
 end
 
-return M
+return Plugin

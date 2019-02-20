@@ -5,8 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 local composer = require( "composer" )
-berry = require( 'code.libs.berry.berry' )
-local Object = require('code.libs.berry.Object')
+local berry = require( 'code.libs.berry' )
 
 local location, location_timer, mob
 
@@ -40,15 +39,11 @@ function scene:create( event )
   -- We need to load our map, get the location template data, convert player position to tile_pos, subtract the gid
   -- it's a big clusterfuck but meh.
   local filename = "graphics/map/world.json"
-  local world = berry.loadMap( filename, "graphics/map" )
+  local world = berry:new( filename, "graphics/map" )
 
   local tile_offset = world:getPropertyValue('background_tile_offset') -- this is how many tiles surround the world in all directions
-  local template_layer = world:getTileLayer('Location Template ID')
-  local world_width = template_layer.data.width
-
-  -- we have to overwrite x/y because the background tiles offset our coords and we need to account for it
-  x = x + tile_offset
-  y = (y - 1 + tile_offset) * world_width
+  local template_layer = world:getLayer('Location Template ID')
+  local world_width = template_layer.width
 
   local tile_pos = x + y  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
   local tile_gid = template_layer.data.data[tile_pos]
@@ -57,7 +52,7 @@ function scene:create( event )
   -- Load our location
   -- we need to have a atlas for different locations on the map to load the specific location we are in  
   local filename = "graphics/locations/"..template_name.. ".json"
-  location = berry.loadMap( filename, "graphics/ss13" )
+  location = berry:new( filename, "graphics/ss13" )
 
   -- gets the section of the location the player is staged in
   stage_layer = location:getTileLayer(player_stage)
@@ -165,8 +160,6 @@ function scene:create( event )
   local visual = berry.createVisual( location )
   location_height, location_width = visual.contentHeight, visual.contentWidth
 
-  --berry.buildPhysical( location )  This is used for physics... no need 
-
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   location.extensions = "scenes.objects."
   location:extendObjects( "mob", "terminal", "apc", "generator", "transmitter", "door", "barricade", "search_area")  -- animations, movement, death?, etc.
@@ -209,8 +202,6 @@ function scene:create( event )
 
   end
 
-  --mob = location:getObjectWithName( "Rocco W" ):getVisual()
-  --mob.filename = filename  
 
   return sceneGroup
 end

@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 local composer = require( "composer" )
-berry = require( 'code.libs.berry.berry' )
+berry = require( 'code.libs.berry' )
 local json = require( "json" )
 local scene = composer.newScene()
 

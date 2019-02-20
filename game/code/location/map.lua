@@ -1,17 +1,19 @@
 local class = require('code.libs.middleclass')
 local Tiles = require('code.location.tile.tiles')
 local TerminalNetwork = require('code.location.terminal_network')
-berry = require( 'code.libs.berry.berry' )
+local berry = require( 'code.libs.berry' )
 -- local suburb = require('suburb')
 
 local Map = class('Map')
 
+-- we sure we ONLY CREATE map once and make it a global and pass it around from file to file
 local filename = "graphics/map/world.json"
-local world = berry.loadMap( filename, "graphics/map" )
-local tile_offset = world:getPropertyValue('background_tile_offset') -- this is how many tiles surround the world in all directions (background)
-local world_width = world.data.width
-local tile_layer = world:getTileLayer("Location ID")
-local tileset_gid = world:getTileSet('Tile ID').firstgid
+local world = berry:new( filename, "graphics/map" )
+
+local tile_offset = world.background_tile_offset -- this is how many tiles surround the world in all directions (background)
+local world_width = world.dim.width
+local layer = world:getLayer("Location ID")
+local tileset_gid = world.tilesets["Tile ID"].firstgid
 
 function Map:initialize(size)
   self.humans = 0
@@ -24,8 +26,8 @@ function Map:initialize(size)
   for y=1, size do
     self[y] = {}
     for x=1, size do
-      local tile_pos = x + tile_offset + ((y - 1 + tile_offset) * world_width)
-      local tile_gid = tile_layer.data.data[tile_pos] + 1  -- need to add a + 1 to count from 1 instead of zero
+      local tile_pos = x + ((y - 1) * world_width)
+      local tile_gid = layer.data[tile_pos] + 1  -- need to add a + 1 to count from 1 instead of zero
       local tile_not_exist = tile_gid == 1 
       local tile_id
 

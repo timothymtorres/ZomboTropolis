@@ -1,25 +1,14 @@
-
--- Module/class for platfomer hero
-
--- Use this as a template to build an in-game mob
-
--- Define module
-local M = {}
-local composer = require( "composer" )
-
-function M.new( object )	
-	if not object then error( "ERROR: Expected display visual" ) end
-
-	local transmitter = object:getVisual() 
+function Plugin(transmitter)	
+	if not transmitter then error( "ERROR: Expected display visual" ) end
 
 	function transmitter:install()
 		self:setSequence('transmitter-off')
-		object:show()		
+		self.alpha = 1		
 	end
 
 	function transmitter:destroy()
 		self:setSequence('transmitter-off')
-		object:hide()
+		self.alpha = 0
 	end
 
 	function transmitter:setPower(setting)
@@ -30,4 +19,4 @@ function M.new( object )
 	return transmitter
 end
 
-return M
+return Plugin
