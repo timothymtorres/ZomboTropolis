@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
+## v0.12.0 - ???
+### Added
+- Tap events for objects.
+- Sprites for all in game items.
+- Humans interacting with: 
+  - Search areas in locations by `Double Tap` results in a single search | `Tap & Hold` results in repeating searches until released
+  - Entrances in building locations by `Single Tap` results in barricade menu popup with stats | `Double Tap` results in a single fortifcation (if barriacdes in inventory) | `Tap & Hold` results in repeating fortifications until released
+- Zombies interacting with:
+  - Entrances in building locations by `Single Tap` results in barricade menu popup with stats | `Double Tap` results in a single claw attack | `Tap & Hold` results in repeating claw attacks until released
+- Players sprites moving towards the location of the actions they are performing.
+- Animations for search.
+
+### Fixed
+- Searching causing players to be deleted from location.
+
+### Removed
+- Axe, machate, and phone items from search chance since the code classes have not been setup.
+
 ## v0.11.0 - 11/26/2018
 ### Added
 - Isometric staggered world map.
