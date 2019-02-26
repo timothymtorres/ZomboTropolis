@@ -50,13 +50,8 @@ function scene:create( event )
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   location.extensions = "scenes.objects."
-  --location:extend("door", "barricade")  -- entrance
-  location:extend("apc")--, "terminal", "generator", "transmitter") -- equipment
-
-print('----------------')
-  local apc_obj = location:getObjects({name='apc'})
-  for k,v in pairs(apc_obj) do print(k,v) end
-print('----------------')
+  location:extend("door", "barricade")  -- entrance
+  location:extend("apc", "terminal", "generator", "transmitter") -- equipment
 
   -- preparing to spawn our building equipment/sprites
   local map, y, x = main_player:getMap(), main_player:getPos() 
@@ -67,34 +62,26 @@ print('----------------')
     local building_has_power = building:isPowered()
     local machines = building:getEquipment()
 
-    for machine_name, _ in pairs(machines) do
-      local machine = location:getObjects({name=machine_name})
-
-for k,v in pairs(machine) do print(k,v) end
-
+    for machine_type, _ in pairs(machines) do
+      local machine = location:getObjects( {type=machine_type} )
       machine:install()
       if building_has_power then machine:setPower('on') end
     end
 
     -- display our door
-    local door_list = location:getObjectsWithName('door')  
+    local doors = { location:getObjects( {type='door'} ) }
     local is_door_present = building:isPresent('door')
-    for _, door_obj in ipairs(door_list) do
-      door = door_obj.sprite
-      door:setVisual(is_door_present)
-
-      -- right now there are no door damaged sprite states
-      -- also make sure to set isAnimated for sprite object to true
-      --if is_door_present then door:setSprite(hp_state) end
+    for _, door in ipairs(doors) do
+      door:setAlpha(is_door_present)
+      door:setHealth( building.door.getHP() )
     end
 
     -- display our barricades
-    local barricade_list = location:getObjectsWithName('barricade')
+    local barricades = { location:getObjects('barricade') }
     local is_cade_present = building:isPresent('barricade')
-    for _, barricade_obj in ipairs(barricade_list) do
-      barricade = barricade_obj.sprite
-      barricade:setVisual(is_cade_present)
-      if is_cade_present then barricade:setSprite(building.barricade:getState()) end
+    for _, barricade in ipairs(barricades) do
+      barricade:setAlpha(is_cade_present)
+      barricade:setHealth( building.barricade:getState() )
     end
 
   end
