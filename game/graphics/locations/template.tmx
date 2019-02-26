@@ -40,6 +40,7 @@
   <image source="../equipment.png" width="96" height="128"/>
   <tile id="0">
    <properties>
+    <property name="isAnimated" type="bool" value="true"/>
     <property name="name" value="apc-off"/>
     <property name="time" type="int" value="1000"/>
    </properties>
@@ -242,11 +243,7 @@
   <object id="9" name="barricade" type="barricade" gid="41" x="512" y="480" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="6" name="Equipment">
-  <object id="1" name="apc" type="apc" gid="49" x="288" y="192" width="32" height="32">
-   <properties>
-    <property name="isAnimated" type="bool" value="true"/>
-   </properties>
-  </object>
+  <object id="1" name="apc" type="apc" gid="49" x="288" y="192" width="32" height="32"/>
   <object id="2" name="generator" type="generator" gid="52" x="288" y="288" width="32" height="32"/>
   <object id="3" name="terminal" type="terminal" gid="55" x="192" y="288" width="32" height="32"/>
   <object id="4" name="transmitter" type="transmitter" gid="58" x="384" y="288" width="32" height="32"/>

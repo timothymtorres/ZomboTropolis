@@ -151,12 +151,6 @@
                  "height":32,
                  "id":1,
                  "name":"apc",
-                 "properties":[
-                        {
-                         "name":"isAnimated",
-                         "type":"bool",
-                         "value":true
-                        }],
                  "rotation":0,
                  "type":"apc",
                  "visible":true,
@@ -359,6 +353,11 @@
                         }],
                  "id":0,
                  "properties":[
+                        {
+                         "name":"isAnimated",
+                         "type":"bool",
+                         "value":true
+                        }, 
                         {
                          "name":"name",
                          "type":"string",
