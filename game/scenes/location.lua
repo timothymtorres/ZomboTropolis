@@ -49,7 +49,7 @@ function scene:create( event )
 ----------- WE SHOULD JUST USE JSON DATA FROM THIS ------------------
 
   -- the sprite must be loaded first via berry.createVisual before we can extend the objects
-  location.extensions = "scenes.objects."
+  location:setExtension("scenes.objects.")
   location:extend("door", "barricade")  -- entrance
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment
 

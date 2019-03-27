@@ -1448,6 +1448,13 @@ function Map:extend( ... )
 end 
 
 --------------------------------------------------------------------------------
+--- Sets the default extension location
+--
+-- @param extension The extension location directory
+--------------------------------------------------------------------------------
+function Map:setExtension( extension ) self.default_extensions = extension end
+
+--------------------------------------------------------------------------------
 --- Add an object layer by name.
 --
 -- @param name The name of layer to add.
