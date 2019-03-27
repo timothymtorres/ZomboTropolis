@@ -40,7 +40,7 @@ function scene:create( event )
   local tile_pos = x + ((y-1)*world_width)  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
   local tile_gid = template_layer.data[tile_pos]
 
-  local template_name = world.image_cache[tile_gid].template
+  local template_name = world.cache.properties[tile_gid].template
 
   -- Load our location
   -- we need to have a atlas for different locations on the map to load the specific location we are in  
