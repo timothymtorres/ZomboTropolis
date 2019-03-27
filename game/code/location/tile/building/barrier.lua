@@ -16,6 +16,10 @@ function Barrier:updateHP(num)
   self:updateDesc()
 end
 
+function Barrier:setHealth(num)
+  self.hp = math.min( math.max(num, 0), self.max_hp)
+end
+
 function Barrier:isPresent() return self.hp > 0 end
 
 return Barrier
