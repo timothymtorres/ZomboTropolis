@@ -73,7 +73,7 @@ function scene:create( event )
     local is_door_present = building:isPresent('door')
     for _, door in ipairs(doors) do
       door:setAlpha(is_door_present)
-      door:setHealth( building.door.getHP() )
+      door:setHealth( building.door:getHP() )
     end
 
     -- display our barricades
