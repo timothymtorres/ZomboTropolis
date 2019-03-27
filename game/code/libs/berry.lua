@@ -1169,6 +1169,13 @@ end
 --                                  PUBLIC METHODS                            --	
 -- -------------------------------------------------------------------------- --
 
+
+local function addTilesetHashes( tilesets )
+	for _, tileset in ipairs(tilesets) do 
+		tilesets[tileset.name] = tileset 
+	end
+end
+
 --------------------------------------------------------------------------------
 -- Create a new map object.
 --
@@ -1228,6 +1235,7 @@ function Map:new( filename, tilesets_dir, texturepacker_dir )
     do  -- Create and cache all the image sheets
 	    loadTilesets( map.cache, map.tilesets )
 		loadTexturePacker( map.cache, texturepacker_dir )
+		addTilesetHashes( map.tilesets )
 	end
 	
 	for _, info in ipairs( data.layers ) do
@@ -1237,6 +1245,7 @@ function Map:new( filename, tilesets_dir, texturepacker_dir )
 		-- Apply properties from info
 	    layer.name       = info.name
 	    layer.type       = info.type
+	    layer.data       = info.data
 	    layer.alpha      = info.opacity
 	    layer.isVisible  = info.visible
 		layer.x          = info.offsetx or 0
