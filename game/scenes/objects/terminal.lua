@@ -1,5 +1,6 @@
 function Plugin(terminal)	
 	if not terminal then error( "ERROR: Expected display visual" ) end
+	terminal.alpha = 0 -- Is invisible by default unless installed
 
 	function terminal:install()
 		self:setSequence('terminal-off')

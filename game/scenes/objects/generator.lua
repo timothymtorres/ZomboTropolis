@@ -1,5 +1,6 @@
 function Plugin(generator)	
 	if not generator then error( "ERROR: Expected display visual" ) end
+	generator.alpha = 0 -- Is invisible by default unless installed
 
 	function generator:install()
 		self:setSequence('generator-off')
