@@ -50,6 +50,67 @@
         }, 
         {
          "draworder":"topdown",
+         "id":12,
+         "name":"Physics Zone",
+         "objects":[
+                {
+                 "height":320,
+                 "id":11,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":160,
+                 "y":160
+                }, 
+                {
+                 "height":32,
+                 "id":12,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":640,
+                 "x":160,
+                 "y":448
+                }, 
+                {
+                 "height":320,
+                 "id":13,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":768,
+                 "y":160
+                }, 
+                {
+                 "height":32,
+                 "id":14,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":640,
+                 "x":160,
+                 "y":160
+                }],
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"hasBody",
+                 "type":"bool",
+                 "value":true
+                }],
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":5,
          "name":"Tap Overlays",
          "objects":[
@@ -211,9 +272,15 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":12,
- "nextobjectid":11,
+ "nextlayerid":13,
+ "nextobjectid":15,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"isAnimated",
+         "type":"bool",
+         "value":true
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.2.2",
  "tileheight":32,
@@ -323,7 +390,7 @@
                         {
                          "name":"name",
                          "type":"string",
-                         "value":"door"
+                         "value":"barricade"
                         }, 
                         {
                          "name":"time",
