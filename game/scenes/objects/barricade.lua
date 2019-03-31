@@ -3,8 +3,6 @@ local function Plugin(barricade)
 
 	function barricade:setAlpha(visible) self.alpha = (visible and 1) or 0  end
 
-	function barricade:setHealth(hp_state) self:setFrame(hp_state) end
-
 	return barricade
 end
 
