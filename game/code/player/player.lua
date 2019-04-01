@@ -113,6 +113,8 @@ function Player:getPos()  return self.y, self.x end
 
 function Player:getMap() return self.map_zone end
 
+function Player:getLocation() return self.map_zone[self.y][self.x] end
+
 function Player:getMobType() return string.lower(self.class.name) end
 
 function Player:getCost(stat, action_str, ID)  -- remove stat from this (it was to differenate between ap/ep a while back)
