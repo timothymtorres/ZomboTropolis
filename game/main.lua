@@ -7,6 +7,7 @@
 local composer = require("composer")
 local widget = require("widget")
 local setupEnvironment = require('environment.setup')
+local berry = require('code.libs.berry')
 table.inspect = require('code.libs.inspect')
 display.setStatusBar (display.HiddenStatusBar)
 
@@ -16,6 +17,9 @@ composer.myVolume = 100
 
 -- spawns test objects into the game
 setupEnvironment('basic')
+
+-- load world as a global
+world = berry:new( "graphics/map/world.json", "graphics/map" )
 
 -- Use composer to go to our first game scene 
 --composer.gotoScene('scenes.map')
