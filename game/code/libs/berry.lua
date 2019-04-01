@@ -1561,4 +1561,23 @@ function Map:getObjects( options )
 
 end  
 
+--------------------------------------------------------------------------------
+--- Gets the GID for a tile in a tile layer
+--
+-- @param layer The name of the layer to search
+-- @param y The vertical index position to search
+-- @param x The horziontal index position to search
+-- @return The gid that is used 
+--------------------------------------------------------------------------------
+function Map:getGID( layer, y, x )
+
+	local selected_layer = self:getLayer( layer )
+	local map_width = selected_layer.size
+	local tile_pos = x + ((y-1)*map_width)
+	local tile_gid = selected_layer.data[tile_pos]
+
+	return tile_gid
+
+end
+
 return Map
