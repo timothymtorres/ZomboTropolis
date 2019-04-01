@@ -25,43 +25,25 @@ local player_stage = main_player:getStage()
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
-  local map, y, x = main_player:getMap(), main_player:getPos()
-  local player_turf = map[y][x]
-
------------ WE SHOULD JUST USE JSON DATA FROM THIS ------------------
--- or just load world into another scene and use it as a global
-  local filename = "graphics/map/world.json"
-  local world = berry:new( filename, "graphics/map" )
-
-  local tile_offset = world.background_tile_offset -- this is how many tiles surround the world in all directions
-  local template_layer = world:getLayer('Location Template ID')
-  local world_width = template_layer.size
-
-  local tile_pos = x + ((y-1)*world_width)  -- the positioning for layers uses a single array instead of a double array ie.  map[j] vs map[y][x]
-  local tile_gid = template_layer.data[tile_pos]
-
-  local template_name = world.cache.properties[tile_gid].template
 
   -- Load our location
-  -- we need to have a atlas for different locations on the map to load the specific location we are in  
+  local y, x = main_player:getPos()
+  local tile_gid = world:getGID('Location Template ID', y, x)
+  local template_name = world.cache.properties[tile_gid].template
   local filename = "graphics/locations/"..template_name.. ".json"
   location = berry:new( filename, "graphics/ss13" )
------------ WE SHOULD JUST USE JSON DATA FROM THIS ------------------
 
-  -- the sprite must be loaded first via berry.createVisual before we can extend the objects
   location:setExtension("scenes.objects.")
   location:extend("door", "barricade")  -- entrance
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment
 
-  -- preparing to spawn our building equipment/sprites
-  local map, y, x = main_player:getMap(), main_player:getPos() 
-  local building = map[y][x]:isBuilding() and main_player:isStaged('inside') and map[y][x]
+  local player_location = main_player:getLocation()
+  local is_player_inside_building = player_location:isBuilding() and main_player:isStaged('inside')
 
-  if building then
+  if is_player_inside_building then
     -- display our machines
-    local building_has_power = building:isPowered()
-    local machines = building:getEquipment()
-
+    local building_has_power = player_location:isPowered()
+    local machines = player_location:getEquipment()
     for machine_type, _ in pairs(machines) do
       local machine = location:getObjects( {type=machine_type} )
       machine:install()
@@ -70,18 +52,18 @@ function scene:create( event )
 
     -- display our door
     local doors = { location:getObjects( {type='door'} ) }
-    local is_door_present = building:isPresent('door')
+    local is_door_present = player_location:isPresent('door')
     for _, door in ipairs(doors) do
       door:setAlpha(is_door_present)
-      door:setFrame( building.door:getHP() + 1 )
+      door:setFrame( player_location.door:getHP() + 1 )
     end
 
     -- display our barricades
     local barricades = { location:getObjects( {type='barricade'} ) }
-    local is_cade_present = building:isPresent('barricade')
+    local is_cade_present = player_location:isPresent('barricade')
     for _, barricade in ipairs(barricades) do
       barricade:setAlpha(is_cade_present)
-      barricade:setFrame( building.barricade:getState() )
+      barricade:setFrame( player_location.barricade:getState() )
     end
 
   end
