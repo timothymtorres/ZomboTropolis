@@ -1310,6 +1310,27 @@ function Map:new( filename, tilesets_dir, texturepacker_dir )
 end
 
 --------------------------------------------------------------------------------
+--- Add a object to a layer in the map after it has been loaded
+-- @param layer The map layer the object will be placed in
+-- @param animation_name The name of the animation associated with the object
+-- @param x The x position to put object at
+-- @param y The y position to put object at
+-- @return A created display object
+--------------------------------------------------------------------------------
+function Map:addObject( layer, animation_name, x, y )
+
+	layer = map:getLayer( layer )
+
+	local object = {
+		x = x,
+		y = y 
+	}
+
+	return createObject( self, object, layer )
+
+end
+
+--------------------------------------------------------------------------------
 --- Add texturepacker sprite to a layer in the map
 -- @param layer The map layer sprite will be placed in
 -- @param image_name The name of image that will be used
