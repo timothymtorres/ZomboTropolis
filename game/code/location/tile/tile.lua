@@ -186,6 +186,12 @@ function Tile:search(player, setting, was_flashlight_used)
   end
 end
 
+function Tile:isContested(setting)
+  local is_zombies_present = self:countPlayers('zombie', setting) > 0
+  local is_humans_present = self:countPlayers('human', setting) > 0
+  return is_zombies_present and is_humans_present 
+end
+
 function Tile:__tostring() return self.name..' '..self.class.name end
 
 return Tile
