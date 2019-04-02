@@ -38,7 +38,19 @@ function scene:create( event )
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment
 
   local player_location = main_player:getLocation()
-  local is_player_inside_building = player_location:isBuilding() and main_player:isStaged('inside')
+
+  -- setup spawn locations
+  local defender_spawns, attacker_spawns, location_spawns
+  if player_location:isContested(player_stage) then -- restrict the spawns
+    defender_spawns = { location:getObjects( {name='spawn', type='defender'} ) }
+    attacker_spawns = { location:getObjects( {name='spawn', type='attacker'} ) }
+  else -- can spawn anywhere in the location
+    location_spawns = { location:getObjects( {name='spawn'} ) }
+  end
+  
+
+  local is_player_inside_building = player_location:isBuilding() and 
+                                    main_player:isStaged('inside')
 
   if is_player_inside_building then
     -- display our machines
@@ -65,7 +77,6 @@ function scene:create( event )
       barricade:setAlpha(is_cade_present)
       barricade:setFrame( player_location.barricade:getState() )
     end
-
   end
 
   return sceneGroup
