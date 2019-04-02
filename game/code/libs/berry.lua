@@ -346,7 +346,12 @@ local function buildSequences( animations, tileset )
 
 	        -- attach gid to sequence name in the animation cache
 	        local gid = tileset.firstgid + tile.id
-	        if name then animations[gid] = name end
+	        if name then 
+	        	animations[gid] = name
+
+	        	assert(not animations[name], 'Tile animation has duplicate name')
+	        	animations[name] = gid
+	        end
 	        
 	    end 
 
@@ -359,7 +364,7 @@ end
 --------------------------------------------------------------------------------
 -- Returns the properties table for a tile's gid if it exists
 --
--- @param cache The map image cache to store animation GIDs
+-- @param properties The map image cache that holds the properties
 -- @param id The GID of the tile to look for
 -- @return The properties table or nil
 --------------------------------------------------------------------------------  
