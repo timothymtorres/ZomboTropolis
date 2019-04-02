@@ -1973,7 +1973,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -2514,6 +2514,72 @@
          "spacing":0,
          "tilecount":270,
          "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":4,
+         "firstgid":333,
+         "image":"..\/mob.png",
+         "imageheight":64,
+         "imagewidth":128,
+         "margin":0,
+         "name":"mob",
+         "spacing":0,
+         "tilecount":8,
+         "tileheight":32,
+         "tiles":[
+                {
+                 "animation":[
+                        {
+                         "duration":100,
+                         "tileid":0
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":1
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":2
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":3
+                        }],
+                 "id":0,
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"zombie"
+                        }]
+                }, 
+                {
+                 "animation":[
+                        {
+                         "duration":100,
+                         "tileid":4
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":5
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":6
+                        }, 
+                        {
+                         "duration":100,
+                         "tileid":7
+                        }],
+                 "id":4,
+                 "properties":[
+                        {
+                         "name":"name",
+                         "type":"string",
+                         "value":"human"
+                        }]
+                }],
          "tilewidth":32
         }],
  "tilewidth":32,
