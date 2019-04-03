@@ -1322,15 +1322,9 @@ end
 -- @param y The y position to put object at
 -- @return A created display object
 --------------------------------------------------------------------------------
-function Map:addObject( layer, animation_name, x, y )
+function Map:addObject( layer, object )
 
-	layer = map:getLayer( layer )
-
-	local object = {
-		x = x,
-		y = y 
-	}
-
+	layer = self:getLayer( layer )
 	return createObject( self, object, layer )
 
 end
@@ -1604,6 +1598,17 @@ function Map:getGID( layer, y, x )
 
 	return tile_gid
 
+end
+
+--------------------------------------------------------------------------------
+--- Gets the GID based on a animation name
+--
+-- @param animation The name of the animation
+-- @return The gid associated with the animation
+--------------------------------------------------------------------------------
+function Map:getAnimationGID( animation )
+	local gid = self.cache.animations[animation]
+	return gid
 end
 
 return Map
