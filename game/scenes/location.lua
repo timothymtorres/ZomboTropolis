@@ -41,13 +41,58 @@ function scene:create( event )
 
   -- setup spawn locations
   local defender_spawns, attacker_spawns, location_spawns
-  if player_location:isContested(player_stage) then -- restrict the spawns
+  local is_spawn_restricted = player_location:isContested(player_stage) and
+                              main_player:isStaged('inside')
+
+--[[
+  if is_spawn_restricted then -- only inside buildings (for now)
     defender_spawns = { location:getObjects( {name='spawn', type='defender'} ) }
     attacker_spawns = { location:getObjects( {name='spawn', type='attacker'} ) }
   else -- can spawn anywhere in the location
     location_spawns = { location:getObjects( {name='spawn'} ) }
   end
-  
+--]]
+  location_spawns = { location:getObjects( {name='spawn'} ) }
+
+  local mobs = player_location:getPlayers(player_stage) 
+  for player in pairs(mobs) do
+    local username = player:getUsername()
+    local animation = player:getMobType()
+    local is_player_standing = player:isStanding()
+    local spawn = location_spawns[math.random(#location_spawns)]
+
+    local mob_data = {
+      gid = location:getAnimationGID(animation),
+      height = 32,
+      width = 32,
+      name = username,
+      type = "mob",
+      x = spawn.x,
+      y = spawn.y,
+      rotation = (is_player_standing and 0) or 90,
+      isAnimated = true,
+    }
+
+    -- seperate corpses into own layer?
+    --local Player_layer = is_player_standing and Mob_layer or Corpse_layer
+
+    local mob = location:addObject( "Mob", mob_data)
+    mob:setSequence(3)
+    mob.player = player
+
+    -- remove this when we add actual graphics
+    if not is_player_standing then mob:setFillColor(1, 0, 0) end
+  end
+
+  -- spawn players at spawn locations
+  -- spawn inside/outside building  (make spawn points named outside/inside)
+    -- if spawn_restricted 
+      -- determine is building ruined? intact?
+      -- spawn zombies/humans at attacker/defender locations
+    -- else spawn at any location_spawns
+
+  --if player_stage
+
 
   local is_player_inside_building = player_location:isBuilding() and 
                                     main_player:isStaged('inside')
