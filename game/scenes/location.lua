@@ -77,7 +77,8 @@ function scene:create( event )
     --local Player_layer = is_player_standing and Mob_layer or Corpse_layer
 
     local mob = location:addObject( "Mob", mob_data)
-    mob:setSequence(math.random(4))
+    mob:pause()
+    mob:setFrame(math.random(4))
     mob.player = player
 
     -- remove this when we add actual graphics
