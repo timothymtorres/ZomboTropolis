@@ -41,25 +41,35 @@ function scene:create( event )
 
   -- setup spawn locations
   local defender_spawns, attacker_spawns, location_spawns
-  local is_spawn_restricted = player_location:isContested(player_stage) and
-                              main_player:isStaged('inside')
+  local is_spawn_restricted = player_location:isContested(player_stage)
 
---[[
   if is_spawn_restricted then -- only inside buildings (for now)
     defender_spawns = { location:getObjects( {name='spawn', type='defender'} ) }
     attacker_spawns = { location:getObjects( {name='spawn', type='attacker'} ) }
-  else -- can spawn anywhere in the location
-    location_spawns = { location:getObjects( {name='spawn'} ) }
-  end
---]]
+  end 
+  -- can spawn anywhere in the location
   location_spawns = { location:getObjects( {name='spawn'} ) }
+
+  local attacker, defender = player_location:getDominion(player_stage)
 
   local mobs = player_location:getPlayers(player_stage) 
   for player in pairs(mobs) do
     local username = player:getUsername()
-    local animation = player:getMobType()
+    local animation = player:getMobType() -- swap this out with sprite_name later
     local is_player_standing = player:isStanding()
-    local spawn = location_spawns[math.random(#location_spawns)]
+    local spawn
+
+    if is_spawn_restricted then
+      if not is_player_standing then
+        spawn = location_spawns[math.random(#location_spawns)]          
+      elseif player:isMobType(attacker) then 
+        spawn = attacker_spawns[math.random(#attacker_spawns)]  
+      elseif player:isMobType(defender) then 
+        spawn = defender_spawns[math.random(#defender_spawns)]  
+      end
+    else
+      spawn = location_spawns[math.random(#location_spawns)]      
+    end
 
     local mob_data = {
       gid = location:getAnimationGID(animation),
