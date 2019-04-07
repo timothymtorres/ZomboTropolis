@@ -195,7 +195,7 @@ end
 function Tile:getDominion(setting)
   local attacker, defender
   if self:isBuilding() and setting == 'inside' then
-    if self.building.integrity:isState('ruined') then -- zombies in control
+    if self.integrity:isState('ruined') then -- zombies in control
       attacker, defender = 'human', 'zombie'
     else -- humans in control
       attacker, defender = 'zombie', 'human'
