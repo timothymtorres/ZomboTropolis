@@ -42,13 +42,18 @@ function scene:create( event )
   -- setup spawn locations
   local defender_spawns, attacker_spawns, location_spawns
   local is_spawn_restricted = player_location:isContested(player_stage)
+  local spawn_stage = 'spawn_'..player_stage
 
   if is_spawn_restricted then -- only inside buildings (for now)
-    defender_spawns = { location:getObjects( {name='spawn', type='defender'} ) }
-    attacker_spawns = { location:getObjects( {name='spawn', type='attacker'} ) }
+    defender_spawns = { 
+      location:getObjects( {name=spawn_stage, type='defender'} ) 
+    }
+    attacker_spawns = { 
+      location:getObjects( {name=spawn_stage, type='attacker'} ) 
+    }
   end 
   -- can spawn anywhere in the location
-  location_spawns = { location:getObjects( {name='spawn'} ) }
+  location_spawns = { location:getObjects( {name=spawn_stage} ) }
 
   local attacker, defender = player_location:getDominion(player_stage)
 
