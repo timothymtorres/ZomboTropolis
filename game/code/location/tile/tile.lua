@@ -192,6 +192,20 @@ function Tile:isContested(setting)
   return is_zombies_present and is_humans_present 
 end
 
+function Tile:getDominion(setting)
+  local attacker, defender
+  if self:isBuilding() and setting == 'inside' then
+    if self.building.integrity:isState('ruined') then -- zombies in control
+      attacker, defender = 'human', 'zombie'
+    else -- humans in control
+      attacker, defender = 'zombie', 'human'
+    end
+  else -- outside the zombies are always in control
+    attacker, defender = 'human', 'zombie' 
+  end
+  return attacker, defender
+end
+
 function Tile:__tostring() return self.name..' '..self.class.name end
 
 return Tile
