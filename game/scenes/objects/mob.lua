@@ -3,7 +3,7 @@ local function Plugin(mob)
 
 	mob:pause()
 	mob:setFrame(math.random(4))
-	local physics_properties = {bounce = 1}
+	local physics_properties = {bounce = 1, filter={groupIndex = -1}}
 	physics.addBody(mob, physics_properties )
   mob.isFixedRotation = true
 	mob:setLinearVelocity(32, 0)
