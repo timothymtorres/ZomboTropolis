@@ -30,10 +30,6 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
-  function mob:timer()
-    mob:setLinearVelocity(0, 0)
-  end
-
   function mob:move()
     if not mob.player:isStanding() then return end
 
@@ -41,12 +37,11 @@ local function Plugin(mob)
 
     if direction == 1 then mob:setLinearVelocity(0, -1*speed)
     elseif direction == 2 then mob:setLinearVelocity(speed, 0)
-    elseif direction == 2 then mob:setLinearVelocity(0, speed)
-    elseif direction == 2 then mob:setLinearVelocity(-1*speed, 0)
+    elseif direction == 3 then mob:setLinearVelocity(0, speed)
+    elseif direction == 4 then mob:setLinearVelocity(-1*speed, 0)
     end
 
     mob:setFrame(direction)
-    timer.performWithDelay(1000, mob)
   end
 
 	return mob
