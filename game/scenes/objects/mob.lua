@@ -4,34 +4,30 @@ local function Plugin(mob)
   mob:pause()
   mob:setFrame(math.random(4))
 
-  -- remove this when we add actual graphics
-  if not mob.player:isStanding() then 
-    mob:setFillColor(1, 0, 0) 
-  else -- only apply physics to standing mobs
+  if mob.player:isStanding() then
+    -- only apply physics to standing mobs
   	local physics_properties = {bounce = 1, filter={groupIndex = -1}}
   	physics.addBody(mob, physics_properties )
     mob.isFixedRotation = true
-  	mob:setLinearVelocity(32, 0)
-  end
 
-  local function onLocalCollision( self, event )
-    if ( event.phase == "ended" ) then
-      local vx, vy = self:getLinearVelocity()
-      local direction 
-      
-      if vy < 0 then direction = 1
-      elseif vx > 0 then direction = 2
-      elseif vy > 0 then direction = 3
-      elseif vx < 0 then direction = 4
+    mob.collision = function( self, event )
+      if ( event.phase == "ended" ) then
+        local vx, vy = self:getLinearVelocity()
+        local direction 
+
+        if vy < 0 then direction = 1
+        elseif vx > 0 then direction = 2
+        elseif vy > 0 then direction = 3
+        elseif vx < 0 then direction = 4
+        end
+
+        self:setFrame(direction) 
       end
-
-      self:setFrame(direction) 
     end
-  end
 
-  if mob.player:isStanding() then
-    mob.collision = onLocalCollision
     mob:addEventListener( "collision", mob )
+  elseif not mob.player:isStanding() then 
+    mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
   function mob:timer()
