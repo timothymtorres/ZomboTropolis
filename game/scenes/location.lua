@@ -91,9 +91,6 @@ function scene:create( event )
       y = spawn.y,
       rotation = (is_player_standing and 0) or 90,
       isAnimated = true,
-      hasBody = true,
-      bounce = 1.0,
-
     }
 
     -- seperate corpses into own layer?
