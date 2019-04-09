@@ -14,6 +14,26 @@ local function Plugin(mob)
   	mob:setLinearVelocity(32, 0)
   end
 
+  local function onLocalCollision( self, event )
+    if ( event.phase == "ended" ) then
+      local vx, vy = self:getLinearVelocity()
+      local direction 
+      
+      if vy < 0 then direction = 1
+      elseif vx > 0 then direction = 2
+      elseif vy > 0 then direction = 3
+      elseif vx < 0 then direction = 4
+      end
+
+      self:setFrame(direction) 
+    end
+  end
+
+  if mob.player:isStanding() then
+    mob.collision = onLocalCollision
+    mob:addEventListener( "collision", mob )
+  end
+
   function mob:timer()
     mob:setLinearVelocity(0, 0)
   end

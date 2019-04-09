@@ -29,7 +29,7 @@ function scene:create( event )
   -- start physics
   physics.start() 
   physics.setGravity(0, 0)
-  physics.setDrawMode("debug")
+  physics.setDrawMode("hybrid")
 
   -- Load our location
   local y, x = main_player:getPos()
