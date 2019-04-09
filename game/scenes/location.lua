@@ -26,6 +26,11 @@ local player_stage = main_player:getStage()
 function scene:create( event )
   local sceneGroup = self.view
 
+  -- start physics
+  physics.start() 
+  physics.setGravity(0, 0)
+  physics.setDrawMode("debug")
+
   -- Load our location
   local y, x = main_player:getPos()
   local tile_gid = world:getGID('Location Template ID', y, x)
@@ -86,29 +91,22 @@ function scene:create( event )
       y = spawn.y,
       rotation = (is_player_standing and 0) or 90,
       isAnimated = true,
+      hasBody = true,
+      bounce = 1.0,
+
     }
 
     -- seperate corpses into own layer?
     --local Player_layer = is_player_standing and Mob_layer or Corpse_layer
 
     local mob = location:addObject( "Mob", mob_data)
-    mob:pause()
-    mob:setFrame(math.random(4))
     mob.player = player
 
     -- remove this when we add actual graphics
     if not is_player_standing then mob:setFillColor(1, 0, 0) end
   end
 
-  -- spawn players at spawn locations
-  -- spawn inside/outside building  (make spawn points named outside/inside)
-    -- if spawn_restricted 
-      -- determine is building ruined? intact?
-      -- spawn zombies/humans at attacker/defender locations
-    -- else spawn at any location_spawns
-
-  --if player_stage
-
+  location:extend("mob")
 
   local is_player_inside_building = player_location:isBuilding() and 
                                     main_player:isStaged('inside')

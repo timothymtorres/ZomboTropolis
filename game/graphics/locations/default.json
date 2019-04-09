@@ -54,20 +54,32 @@
          "name":"Physics Zone",
          "objects":[
                 {
-                 "height":320,
+                 "height":256,
                  "id":11,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":32,
                  "x":160,
-                 "y":160
+                 "y":192
                 }, 
                 {
                  "height":32,
                  "id":12,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -76,20 +88,32 @@
                  "y":448
                 }, 
                 {
-                 "height":320,
+                 "height":256,
                  "id":13,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":32,
                  "x":768,
-                 "y":160
+                 "y":192
                 }, 
                 {
                  "height":32,
                  "id":14,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -101,6 +125,12 @@
                  "height":128,
                  "id":20,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -112,6 +142,12 @@
                  "height":32,
                  "id":21,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -123,6 +159,12 @@
                  "height":128,
                  "id":22,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -134,6 +176,12 @@
                  "height":128,
                  "id":349,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -145,6 +193,12 @@
                  "height":128,
                  "id":350,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -156,6 +210,12 @@
                  "height":32,
                  "id":351,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -164,9 +224,15 @@
                  "y":576
                 }, 
                 {
-                 "height":320,
+                 "height":288,
                  "id":352,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -175,9 +241,15 @@
                  "y":480
                 }, 
                 {
-                 "height":320,
+                 "height":288,
                  "id":353,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -189,6 +261,12 @@
                  "height":32,
                  "id":354,
                  "name":"",
+                 "properties":[
+                        {
+                         "name":"bodyType",
+                         "type":"string",
+                         "value":"static"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -3983,7 +4061,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
