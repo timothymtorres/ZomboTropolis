@@ -185,13 +185,6 @@ local function movePlatform(event)
     return true
 end
 
-local function mobMovement()
-  local mobs = { location:getObjects( {type='mob'} ) }
-  for _, mob in ipairs(mobs) do 
-    mob:move()
-  end
-end
-
 -- "scene:show()"
 function scene:show( event )
 
@@ -207,9 +200,11 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-
-        local delay = math.random(2500, 5000)
-        location_timer = timer.performWithDelay( delay, mobMovement, -1)
+      local mobs = { location:getObjects( {type='mob'} ) }
+      for _, mob in ipairs(mobs) do 
+        local total_time = math.random(1250, 1700)
+        location_timer = timer.performWithDelay( total_time, mob, -1)
+      end
     end
 end
 

@@ -11,6 +11,7 @@ local function Plugin(mob)
     mob.isFixedRotation = true
 
     mob.collision = function( self, event )
+print('COLLISION DETECTED')
       if ( event.phase == "ended" ) then
         local vx, vy = self:getLinearVelocity()
         local direction 
@@ -30,6 +31,11 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
+  function mob:stand() --timer() 
+    if not mob.player:isStanding() then return end
+    mob:setLinearVelocity(0, 0) 
+  end
+
   function mob:move()
     if not mob.player:isStanding() then return end
 
@@ -42,6 +48,12 @@ local function Plugin(mob)
     end
 
     mob:setFrame(direction)
+  end
+
+  function mob:timer()
+    if math.random() > 0.65 then self:move()
+    else self:stand()
+    end
   end
 
 	return mob
