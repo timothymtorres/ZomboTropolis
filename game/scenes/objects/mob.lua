@@ -11,7 +11,6 @@ local function Plugin(mob)
     mob.isFixedRotation = true
 
     mob.collision = function( self, event )
-print('COLLISION DETECTED')
       if ( event.phase == "ended" ) then
         local vx, vy = self:getLinearVelocity()
         local direction 
