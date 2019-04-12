@@ -38,7 +38,7 @@ local function Plugin(mob)
   function mob:move()
     if not mob.player:isStanding() then return end
 
-    local speed, direction = 32, math.random(4)
+    local speed, direction = math.random(28, 40), math.random(4)
 
     if direction == 1 then mob:setLinearVelocity(0, -1*speed)
     elseif direction == 2 then mob:setLinearVelocity(speed, 0)
