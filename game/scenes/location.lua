@@ -87,16 +87,15 @@ function scene:create( event )
       width = 32,
       name = username,
       type = "mob",
-      x = spawn.x,
-      y = spawn.y,
-      rotation = (is_player_standing and 0) or 90,
+      x = spawn.x - 16,
+      y = spawn.y + 16,
       isAnimated = true,
     }
 
+    local mob = location:addObject( "Mob", mob_data)
     -- seperate corpses into own layer?
     --local Player_layer = is_player_standing and Mob_layer or Corpse_layer
-
-    local mob = location:addObject( "Mob", mob_data)
+    mob:rotate( (is_player_standing and 0) or 90)
     mob.player = player
   end
 
@@ -203,6 +202,7 @@ function scene:show( event )
       local mobs = { location:getObjects( {type='mob'} ) }
       for _, mob in ipairs(mobs) do 
         local total_time = math.random(1250, 1700)
+        mob:timer()
         location_timer = timer.performWithDelay( total_time, mob, -1)
       end
     end
