@@ -42,6 +42,7 @@ function scene:create( event )
   location:setExtension("scenes.objects.")
   location:extend("door", "barricade")  -- entrance
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment
+  location:extend("seperator") -- physics dividers to keep humans/zombies apart
 
   local player_location = main_player:getLocation()
 
@@ -57,8 +58,17 @@ function scene:create( event )
   local location_spawns = lume.merge(defender_spawns, attacker_spawns)
 
   local attacker, defender = player_location:getDominion(player_stage)
-  local is_spawn_restricted = player_location:isContested(player_stage)
+  local is_location_contested = player_location:isContested(player_stage)
 
+  -- enable/disable physics walls that seperates attacker/defenders 
+  local dividers = {
+      location:getObjects( {name=player_stage, type='seperator'} )
+  }
+  for _, divider in ipairs(dividers) do
+    divider:toggle(is_location_contested)
+  end
+
+  -- spawn mobs onto map
   local mobs = player_location:getPlayers(player_stage) 
   for player in pairs(mobs) do
     local username = player:getUsername()
@@ -66,7 +76,7 @@ function scene:create( event )
     local is_player_standing = player:isStanding()
     local spawn
 
-    if is_spawn_restricted then          
+    if is_location_contested then          
       if player:isMobType(attacker) then 
         spawn = lume.randomchoice(attacker_spawns)  
       elseif player:isMobType(defender) then 
