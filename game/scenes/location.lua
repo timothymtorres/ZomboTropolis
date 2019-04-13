@@ -7,6 +7,7 @@
 local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
 local widget = require('widget')
+local lume = require('code.libs.lume')
 
 local location
 
@@ -45,22 +46,18 @@ function scene:create( event )
   local player_location = main_player:getLocation()
 
   -- setup spawn locations
-  local defender_spawns, attacker_spawns, location_spawns
-  local is_spawn_restricted = player_location:isContested(player_stage)
-  local spawn_stage = 'spawn_'..player_stage
+  local defender_spawns = { 
+      location:getObjects( {name=player_stage, type='defender'} ) 
+    }
+  local attacker_spawns = { 
+      location:getObjects( {name=player_stage, type='attacker'} ) 
+    }
 
-  if is_spawn_restricted then -- only inside buildings (for now)
-    defender_spawns = { 
-      location:getObjects( {name=spawn_stage, type='defender'} ) 
-    }
-    attacker_spawns = { 
-      location:getObjects( {name=spawn_stage, type='attacker'} ) 
-    }
-  end 
-  -- can spawn anywhere in the location
-  location_spawns = { location:getObjects( {name=spawn_stage} ) }
+  -- both attacker/defender spawns combined
+  local location_spawns = lume.merge(defender_spawns, attacker_spawns)
 
   local attacker, defender = player_location:getDominion(player_stage)
+  local is_spawn_restricted = player_location:isContested(player_stage)
 
   local mobs = player_location:getPlayers(player_stage) 
   for player in pairs(mobs) do
@@ -69,16 +66,14 @@ function scene:create( event )
     local is_player_standing = player:isStanding()
     local spawn
 
-    if is_spawn_restricted then
-      if not is_player_standing then
-        spawn = location_spawns[math.random(#location_spawns)]          
-      elseif player:isMobType(attacker) then 
-        spawn = attacker_spawns[math.random(#attacker_spawns)]  
+    if is_spawn_restricted then          
+      if player:isMobType(attacker) then 
+        spawn = lume.randomchoice(attacker_spawns)  
       elseif player:isMobType(defender) then 
-        spawn = defender_spawns[math.random(#defender_spawns)]  
+        spawn = lume.randomchoice(defender_spawns)  
       end
     else
-      spawn = location_spawns[math.random(#location_spawns)]      
+      spawn = lume.randomchoice(location_spawns)      
     end
 
     local mob_data = {
@@ -92,9 +87,8 @@ function scene:create( event )
       isAnimated = true,
     }
 
-    local mob = location:addObject( "Mob", mob_data)
-    -- seperate corpses into own layer?
-    --local Player_layer = is_player_standing and Mob_layer or Corpse_layer
+    local layer = is_player_standing and "Mob" or "Corpse"
+    local mob = location:addObject( layer, mob_data)
     mob:rotate( (is_player_standing and 0) or 90)
     mob.player = player
   end
