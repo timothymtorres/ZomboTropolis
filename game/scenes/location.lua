@@ -21,6 +21,7 @@ local scene = composer.newScene()
 
 local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight -- 320x480
 local player_stage = main_player:getStage()
+local location_timers = {}
 -- -------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -206,8 +207,8 @@ function scene:show( event )
       local mobs = { location:getObjects( {type='mob'} ) }
       for _, mob in ipairs(mobs) do 
         local total_time = math.random(1250, 1700)
-        mob:timer()
-        location_timer = timer.performWithDelay( total_time, mob, -1)
+        local username = mob.player:getUsername()
+        location_timers[username] = timer.performWithDelay( total_time, mob, -1)
       end
     end
 end
@@ -224,6 +225,11 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+        local mobs = { location:getObjects( {type='mob'} ) }
+        for _, mob in ipairs(mobs) do 
+          local username = mob.player:getUsername()
+          timer.pause(location_timers[username]) 
+        end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.     
         Runtime:removeEventListener( "key", zooming )
@@ -242,6 +248,13 @@ function scene:destroy( event )
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
+
+    -- Do we really need to cancel timers on scene:destroy?
+    local mobs = { location:getObjects( {type='mob'} ) }
+    for _, mob in ipairs(mobs) do 
+      local username = mob.player:getUsername()
+      timer.cancel(location_timers[username]) 
+    end
 end
 
 
