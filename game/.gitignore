@@ -47,4 +47,4 @@ Temporary Items
 .apdisk
 
 # Test environment folder for game
-game/environment/
+game/environment/basic.lua
