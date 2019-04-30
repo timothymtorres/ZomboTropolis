@@ -672,6 +672,7 @@ end
 local function sortAnimatedPriority( map, layer, tile, object )
 
 	local object = object or {}  -- createTile method doesn't use objects
+	local layer = layer or {}
 
 	if     ( object.isAnimated ~= nil ) then return object.isAnimated
 	elseif (   tile.isAnimated ~= nil ) then return tile.isAnimated
@@ -736,18 +737,16 @@ local function createTile( map, position, gid, layer )
 	if tileset then
 
 		local image 
-		local width, height  = tileset.tilewidth, tileset.tileheight 
+		local sheet, f = getImageSheet( map.cache.image_sheets, gid ) 
 
-		local image_sheet, frame = getImageSheet( map.cache.image_sheets, gid ) 
-
-		if image_sheet then
+		if sheet then
 
 			local animation = getAnimationSequence( map.cache.animations, gid )
 
 			if animation then
 
 				image = display.newSprite( layer, 
-										   image_sheet, 
+										   sheet, 
 										   tileset.sequence_data )
 
 				image:setSequence( animation )
@@ -757,17 +756,17 @@ local function createTile( map, position, gid, layer )
 
 			else
 
-				image = display.newImageRect( layer, image_sheet, 
-											  frame, width, height )
+				local w, h  = tileset.tilewidth, tileset.tileheight 
+				image = display.newImageRect( layer, sheet, f, w, h )
 
 			end
 
 		else 
           	
-          	local image_w, image_h = getImageSize( map.cache.images, gid )
+          	local w, h = getImageSize( map.cache.images, gid )
           	local path = getImagePath( map.cache.images, gid )
 
-          	image = display.newImageRect( layer, path, image_w, image_h )
+          	image = display.newImageRect( layer, path, w, h )
 
 		end	
 
@@ -918,22 +917,22 @@ local function createObject( map, object, layer )
 
 		if tileset then
 
-			local firstgid           = tileset.firstgid
-			local tile_id 		     = object.gid - tileset.firstgid
-			local width,      height = object.width, object.height
-			local image_sheet, frame = getImageSheet( map.cache.image_sheets, 
-													  object.gid ) 
+			local firstgid = tileset.firstgid
+			local tile_id  = object.gid - tileset.firstgid
+			local w, h     = object.width, object.height
 
-			if image_sheet then
+			-- f is frame
+			local sheet, f = getImageSheet( map.cache.image_sheets, object.gid )
+			local sequence = tileset.sequence_data  
+
+			if sheet then
 
 				local animation = getAnimationSequence( map.cache.animations, 
 														object.gid )
 
 				if animation then
 
-					image = display.newSprite( layer, 
-											   image_sheet, 
-											   tileset.sequence_data )
+					image = display.newSprite(sheet, sequence)
 
 					image:setSequence( animation )
 					local tile = getTileProperties( map.cache.properties, 
@@ -944,16 +943,14 @@ local function createObject( map, object, layer )
 
 				else
 
-					image = display.newImageRect( layer, image_sheet, 
-												  frame, width, height )
+					image = display.newImageRect( sheet, f, w, h )
 
 				end
 					
 			else 
 
           		local path = getImagePath( map.cache.images, object.gid )
-				image = display.newImageRect( layer, path, width, height ) 
-
+				image = display.newImageRect( path, w, h )
 			end
 
 			local points, x, y, rotation  = retrieveShapeData( tile_id, tileset )
@@ -1026,9 +1023,7 @@ local function createObject( map, object, layer )
 				end	
 
 				local centerX, centerY = findCenter( points )
-				image = display.newPolygon( 
-					layer, 0, 0, unpackPoints( points ) 
-				)	
+				image = display.newPolygon( 0, 0, unpackPoints( points ) )	
 				image.x, image.y = isoToScreen( 
 					object.y / map.tile_height, 
 					object.x / map.tile_height, 
@@ -1040,9 +1035,7 @@ local function createObject( map, object, layer )
 			elseif map.orientation == 'orthogonal' then
 
 				local centerX, centerY = findCenter( points ) 
-				image = display.newPolygon( 
-					layer, 0, 0, unpackPoints( points ) 
-				)	
+				image = display.newPolygon( 0, 0, unpackPoints( points ) )	
 				image.x, image.y = object.x, object.y
 				image:translate( centerX, centerY )
 
@@ -1064,9 +1057,7 @@ local function createObject( map, object, layer )
 				end	
 
 				local centerX, centerY = findCenter( points ) 
-				image = display.newLine( 
-					layer, unpack( unpackPoints( points ) ) 
-				)
+				image = display.newLine( unpack( unpackPoints( points ) ) )
 				image.anchorSegments = true
 				image.x, image.y = isoToScreen( 
 					object.y / map.tile_height, 
@@ -1078,9 +1069,7 @@ local function createObject( map, object, layer )
 			elseif map.orientation == 'orthogonal' then 
 
 				local centerX, centerY = findCenter( points ) 
-				image = display.newLine( 
-					layer, unpack( unpackPoints( points ) ) 
-				)
+				image = display.newLine( unpack( unpackPoints( points ) ) )
 				image.anchorSegments = true
 				image.x, image.y     = object.x, object.y
 				image:translate( centerX, centerY )
@@ -1091,13 +1080,13 @@ local function createObject( map, object, layer )
 
 	elseif object.texture then
 
-		local image_sheet, frame = getImageSheet( map.cache.texture_packs, 
+		local sheet, f = getImageSheet( map.cache.texture_packs, 
 												  object.texture )
 
-		local width, height = getImageSize( map.cache.texture_packs, 
+		local w, h = getImageSize( map.cache.texture_packs, 
 											object.texture )
 
-		image = display.newImageRect( layer, image_sheet, frame, width, height )
+		image = display.newImageRect( sheet, f, w, h )
 		image.x, image.y = object.x, object.y
 
 	elseif object.text then
@@ -1139,7 +1128,17 @@ local function createObject( map, object, layer )
 
 	else
 
-		image = display.newRect( layer, 0, 0, object.width, object.height )
+		local w, h = object.width, object.height 
+
+		if object.corner then
+
+			image = display.newRoundedRect( 0, 0, w, h, object.corner)
+
+		else
+
+			image = display.newRect( 0, 0, w, h)
+			
+		end
 
 		-- Apply base properties
 	    image.anchorX, image.anchorY = 0,        0
@@ -1174,8 +1173,13 @@ local function createObject( map, object, layer )
 											       object.gid )
 		inherit( image, object.properties )
 		inherit( image, tile_properties )
-		inherit( image, layer.properties )
 
+		if layer then
+
+			inherit( image, layer.properties )
+			layer:insert(image)
+
+		end
 
 		if image.hasBody then 
 
@@ -1359,7 +1363,7 @@ end
 -- @param y The y position to put object at
 -- @return A created display object
 --------------------------------------------------------------------------------
-function Map:addObject( layer, object )
+function Map:addObject( object, layer )
 
 	layer = self:getLayer( layer )
 	return createObject( self, object, layer )
