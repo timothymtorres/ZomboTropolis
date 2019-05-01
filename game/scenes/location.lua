@@ -75,8 +75,8 @@ function scene:create( event )
     local username = player:getUsername()
     local animation = player:getMobType() -- swap this out with sprite_name later
     local is_player_standing = player:isStanding()
-    local spawn
 
+    local spawn 
     if is_location_contested then          
       if player:isMobType(attacker) then 
         spawn = lume.randomchoice(attacker_spawns)  
@@ -93,18 +93,31 @@ function scene:create( event )
       width = 32,
       name = username,
       type = "mob",
-      x = spawn.x - 16,
-      y = spawn.y + 16,
       isAnimated = true,
     }
 
     local layer = is_player_standing and "Mob" or "Corpse"
-    local mob = location:addObject( layer, mob_data)
+    local mob = location:addObject(mob_data)
     mob:rotate( (is_player_standing and 0) or 90)
-    mob.player = player
+    mob.x, mob.y = 0, 0
+
+    local snap_w = 96 --name_background.contentWidth or 32
+    local snap_h = 96 --name_background.contentHeight + 32
+
+    local layer_group = location:getLayer("Mob")
+    local snap = display.newSnapshot(layer_group, snap_w, snap_h)
+
+    -- used by berry to extend our snapshot
+    snap.name, snap.type = username, 'mob'
+    snap.player = player
+    snap.x, snap.y =  spawn.x, spawn.y
+
+    snap.group:insert( mob )
+
   end
 
   location:extend("mob")
+
 
   local is_player_inside_building = player_location:isBuilding() and 
                                     main_player:isStaged('inside')

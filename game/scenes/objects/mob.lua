@@ -1,12 +1,51 @@
 local function Plugin(mob)	
+  -- mob is a snapshot
+  -- mob.group[1] & mob.group[2] are the name/name_background
 	if not mob then error( "ERROR: Expected display visual" ) end
 
-  mob:pause()
+  function mob:setFrame(direction)
+    self:invalidate()
+    for i=3, self.group.numChildren do
+      self.group[i]:setFrame(direction)
+    end
+  end
+
+  -- create our name/background displays on top of mob
+  local border = 3
+  local standing_offset = is_player_standing and 28 or 22
+  local font_size = 9
+
+  local name_options = {
+    text = mob.name,
+    font = native.systemFont,
+    fontSize = font_size,
+    align = 'center',
+    x = 0,
+    y = 0 - standing_offset,
+  }
+
+  local name = display.newText(name_options)
+
+  local x, y = name.x, name.y
+  local w, h = name.contentWidth + border, font_size + border*2 
+  local corner = h/4
+
+  local name_background = display.newRoundedRect(x, y, w, h, corner)
+  name_background:setFillColor(0.15, 0.15, 0.15, 0.65)
+
+  mob.group:insert( 1, name_background )
+  mob.group:insert( 2, name )
+
   mob:setFrame(math.random(4))
 
   if mob.player:isStanding() then
+    local name = mob.player:getUsername()
+    local font_size = 9
+
     -- only apply physics to standing mobs
-  	local physics_properties = {bounce = 1, filter={groupIndex = -1}}
+    local mobFilter = { categoryBits=2, maskBits=1 } 
+    local rectShape = { -16,-16, -16,16, 16,16, 16,-16  }
+  	local physics_properties = {shape= rectShape, bounce = 1, filter=mobFilter}
   	physics.addBody(mob, physics_properties )
     mob.isFixedRotation = true
 
@@ -21,32 +60,38 @@ local function Plugin(mob)
         elseif vx < 0 then direction = 4
         end
 
-        self:setFrame(direction) 
+        if direction then
+          self:setFrame(direction) 
+        end
       end
     end
 
     mob:addEventListener( "collision", mob )
+
   elseif not mob.player:isStanding() then 
+    --consider removing the mob name/background 
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
   function mob:stand() --timer() 
     if not mob.player:isStanding() then return end
-    mob:setLinearVelocity(0, 0) 
+    mob:setLinearVelocity(0, 0)
   end
 
   function mob:move()
     if not mob.player:isStanding() then return end
 
     local speed, direction = math.random(28, 40), math.random(4)
+    local vx, vy = 0, 0
 
-    if direction == 1 then mob:setLinearVelocity(0, -1*speed)
-    elseif direction == 2 then mob:setLinearVelocity(speed, 0)
-    elseif direction == 3 then mob:setLinearVelocity(0, speed)
-    elseif direction == 4 then mob:setLinearVelocity(-1*speed, 0)
+    if     direction == 1 then vy = -1*speed
+    elseif direction == 2 then vx = speed
+    elseif direction == 3 then vy = speed
+    elseif direction == 4 then vx = -1*speed
     end
 
-    mob:setFrame(direction)
+    mob:setLinearVelocity(vx, vy)
+    self:setFrame(direction) 
   end
 
   function mob:timer()
