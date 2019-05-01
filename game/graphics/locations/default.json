@@ -266,9 +266,19 @@
          "opacity":1,
          "properties":[
                 {
+                 "name":"categoryBits",
+                 "type":"int",
+                 "value":1
+                }, 
+                {
                  "name":"hasBody",
                  "type":"bool",
                  "value":true
+                }, 
+                {
+                 "name":"maskBits",
+                 "type":"int",
+                 "value":3
                 }],
          "type":"objectgroup",
          "visible":false,
@@ -3748,7 +3758,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":15,
+ "nextlayerid":17,
  "nextobjectid":873,
  "orientation":"orthogonal",
  "properties":[
