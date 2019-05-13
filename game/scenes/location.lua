@@ -136,7 +136,7 @@ function scene:create( event )
     local doors = { location:getObjects( {type='door'} ) }
     local is_door_present = player_location:isPresent('door')
     for _, door in ipairs(doors) do
-      door:setAlpha(is_door_present)
+      door.isVisible = is_door_present
       door:setFrame( player_location.door:getHP() + 1 )
     end
 
@@ -144,7 +144,7 @@ function scene:create( event )
     local barricades = { location:getObjects( {type='barricade'} ) }
     local is_cade_present = player_location:isPresent('barricade')
     for _, barricade in ipairs(barricades) do
-      barricade:setAlpha(is_cade_present)
+      barricade.isVisible = is_cade_present
       barricade:setFrame( player_location.barricade:getState() )
     end
   end
