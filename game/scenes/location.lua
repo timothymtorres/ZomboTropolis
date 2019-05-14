@@ -76,16 +76,15 @@ function scene:create( event )
     local animation = player:getMobType() -- swap this out with sprite_name later
     local is_player_standing = player:isStanding()
 
-    local spawn 
+    local spawns 
     if is_location_contested then          
-      if player:isMobType(attacker) then 
-        spawn = lume.randomchoice(attacker_spawns)  
-      elseif player:isMobType(defender) then 
-        spawn = lume.randomchoice(defender_spawns)  
+      if player:isMobType(attacker) then spawns = attacker_spawns  
+      elseif player:isMobType(defender) then spawns = defender_spawns
       end
-    else
-      spawn = lume.randomchoice(location_spawns)      
+    else spawns = location_spawns -- both attacker/defender spawns
     end
+
+    local spawn = lume.randomchoice(spawns)
 
     local mob_data = {
       gid = location:getAnimationGID(animation),
@@ -118,11 +117,7 @@ function scene:create( event )
 
   location:extend("mob")
 
-
-  local is_player_inside_building = player_location:isBuilding() and 
-                                    main_player:isStaged('inside')
-
-  if is_player_inside_building then
+  if main_player:isStaged('inside') then
     -- display our machines
     local building_has_power = player_location:isPowered()
     local machines = player_location:getEquipment()
