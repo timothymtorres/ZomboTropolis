@@ -9,3 +9,5 @@ Only roof travel from powered buildings?  Does this apply to the building jumpin
 Military class humans function as a blocker when hunter zombies try to leap into the occupied building.  (similiar to how the brute zombies block humans from barricading)
 
 Make item repairs work by players giving person item, and the person repairing the item in their inventory.
+
+For the events log, make it so that the time passed is displayed on the top for the events happening.  (ie. zombies attacking the door @ 1 day ago, vs zombies killing a human @ 1 hour ago, etc.)
