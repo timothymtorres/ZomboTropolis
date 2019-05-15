@@ -74,12 +74,19 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
-  function mob:stand() --timer() 
+  function mob:stand()
+    -- dead bodies aren't physics objects
     if not self.player:isStanding() then return end
     mob:setLinearVelocity(0, 0)
   end
 
-  function mob:move()
+  function mob:setStationary(is_stationary)
+    self.isIdle = is_stationary
+    if not self.player:isStanding() then return end
+    if is_stationary then self:setLinearVelocity(0, 0) end
+  end
+
+  function mob:roam()
     if not self.player:isStanding() or not self.isIdle then return end
 
     local speed, direction = math.random(28, 40), math.random(4)
@@ -96,7 +103,7 @@ local function Plugin(mob)
   end
 
   function mob:timer()
-    if math.random() > 0.65 then self:move()
+    if math.random() > 0.65 then self:roam()
     else self:stand()
     end
   end
