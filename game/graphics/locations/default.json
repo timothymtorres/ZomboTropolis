@@ -3821,7 +3821,7 @@
         {
          "columns":6,
          "firstgid":1,
-         "image":"..\/floor.png",
+         "image":"tilesets\/floor.png",
          "imageheight":192,
          "imagewidth":192,
          "margin":0,
@@ -3834,7 +3834,7 @@
         {
          "columns":4,
          "firstgid":37,
-         "image":"..\/entrance.png",
+         "image":"tilesets\/entrance.png",
          "imageheight":96,
          "imagewidth":128,
          "margin":0,
@@ -3936,7 +3936,7 @@
         {
          "columns":3,
          "firstgid":49,
-         "image":"..\/equipment.png",
+         "image":"tilesets\/equipment.png",
          "imageheight":128,
          "imagewidth":96,
          "margin":0,
@@ -4158,7 +4158,7 @@
         {
          "columns":3,
          "firstgid":61,
-         "image":"..\/overlay.png",
+         "image":"tilesets\/overlay.png",
          "imageheight":64,
          "imagewidth":96,
          "margin":0,
@@ -4169,22 +4169,9 @@
          "tilewidth":32
         }, 
         {
-         "columns":27,
-         "firstgid":67,
-         "image":"..\/ss13\/mob\/animal.png",
-         "imageheight":320,
-         "imagewidth":864,
-         "margin":0,
-         "name":"animal",
-         "spacing":0,
-         "tilecount":270,
-         "tileheight":32,
-         "tilewidth":32
-        }, 
-        {
          "columns":4,
-         "firstgid":337,
-         "image":"..\/mob.png",
+         "firstgid":67,
+         "image":"tilesets\/mob.png",
          "imageheight":64,
          "imagewidth":128,
          "margin":0,

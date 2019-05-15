@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="11">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="11">
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32" tilecount="36" columns="6">
-  <image source="../floor.png" width="192" height="192"/>
+  <image source="Tilesets/floor.png" width="192" height="192"/>
  </tileset>
  <tileset firstgid="37" name="entrance" tilewidth="32" tileheight="32" tilecount="12" columns="4">
-  <image source="../entrance.png" width="128" height="96"/>
+  <image source="Tilesets/entrance.png" width="128" height="96"/>
   <tile id="0">
    <properties>
     <property name="isAnimated" type="bool" value="true"/>
@@ -37,7 +37,7 @@
   </tile>
  </tileset>
  <tileset firstgid="49" name="equipment" tilewidth="32" tileheight="32" tilecount="12" columns="3">
-  <image source="../equipment.png" width="96" height="128"/>
+  <image source="Tilesets/equipment.png" width="96" height="128"/>
   <tile id="0">
    <properties>
     <property name="isAnimated" type="bool" value="true"/>
@@ -123,11 +123,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="61" name="overlay" tilewidth="32" tileheight="32" tilecount="2" columns="2">
-  <image source="../overlay.png" width="64" height="32"/>
- </tileset>
- <tileset firstgid="63" name="animal" tilewidth="32" tileheight="32" tilecount="270" columns="27">
-  <image source="../ss13/mob/animal.png" width="864" height="320"/>
+ <tileset firstgid="61" name="overlay" tilewidth="32" tileheight="32" tilecount="6" columns="3">
+  <image source="Tilesets/overlay.png" width="96" height="64"/>
  </tileset>
  <layer id="2" name="Background" width="30" height="30">
   <data encoding="csv">
@@ -231,7 +228,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Corpse" visible="0"/>
+ <objectgroup id="4" name="Corpse"/>
  <objectgroup id="5" name="Tap Overlays">
   <object id="6" name="inside" type="search_area" gid="61" x="480" y="288" width="64" height="64"/>
   <object id="7" name="outside" type="search_area" gid="61" x="480" y="736" width="64" height="64"/>
@@ -248,5 +245,5 @@
   <object id="3" name="terminal" type="terminal" gid="55" x="192" y="288" width="32" height="32"/>
   <object id="4" name="transmitter" type="transmitter" gid="58" x="384" y="288" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="3" name="Mob" visible="0"/>
+ <objectgroup id="3" name="Mob"/>
 </map>
