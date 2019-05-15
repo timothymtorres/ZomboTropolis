@@ -6,7 +6,6 @@
 
 local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
-local widget = require('widget')
 local lume = require('code.libs.lume')
 
 local location
@@ -18,8 +17,6 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------------------------------------
 
 -- local forward references should go here
-
-local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight -- 320x480
 local player_stage = main_player:getStage()
 local location_timers = {}
 -- -------------------------------------------------------------------------------
@@ -44,6 +41,7 @@ function scene:create( event )
   location:extend("door", "barricade")  -- entrance
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment
   location:extend("seperator") -- physics dividers to keep humans/zombies apart
+  location:extend("search_area")
 
   local player_location = main_player:getLocation()
 
