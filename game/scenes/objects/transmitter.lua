@@ -1,5 +1,4 @@
 function Plugin(transmitter)	
-	if not transmitter then error( "ERROR: Expected display visual" ) end
 	transmitter.isVisible = false -- Is invisible by default unless installed
 
 	function transmitter:install()

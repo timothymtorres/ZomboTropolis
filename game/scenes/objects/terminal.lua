@@ -1,5 +1,4 @@
 function Plugin(terminal)	
-	if not terminal then error( "ERROR: Expected display visual" ) end
 	terminal.isVisible = false -- Is invisible by default unless installed
 
 	function terminal:install()

@@ -1,7 +1,6 @@
 local function Plugin(mob)	
   -- mob is a snapshot
   -- mob.group[1] & mob.group[2] are the name/name_background
-	if not mob then error( "ERROR: Expected display visual" ) end
   mob.isIdle = true  -- use this when performing actions
 
   function mob:setFrame(direction)
