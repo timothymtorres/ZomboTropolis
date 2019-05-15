@@ -95,7 +95,6 @@ function scene:create( event )
       isAnimated = true,
     }
 
-    local layer = is_player_standing and "Mob" or "Corpse"
     local mob = location:addObject(mob_data)
     mob:rotate( (is_player_standing and 0) or 90)
     mob.x, mob.y = 0, 0
@@ -103,8 +102,8 @@ function scene:create( event )
     local snap_w = 96 --name_background.contentWidth or 32
     local snap_h = 96 --name_background.contentHeight + 32
 
-    local layer_group = location:getLayer("Mob")
-    local snap = display.newSnapshot(layer_group, snap_w, snap_h)
+    local layer = location:getLayer(is_player_standing and "Mob" or "Corpse")
+    local snap = display.newSnapshot(layer, snap_w, snap_h)
 
     -- used by berry to extend our snapshot
     snap.name, snap.type = username, 'mob'
