@@ -3602,18 +3602,6 @@
                  "y":288
                 }, 
                 {
-                 "gid":61,
-                 "height":64,
-                 "id":7,
-                 "name":"outside",
-                 "rotation":0,
-                 "type":"search_area",
-                 "visible":true,
-                 "width":64,
-                 "x":480,
-                 "y":736
-                }, 
-                {
                  "gid":62,
                  "height":32,
                  "id":10,
@@ -3636,6 +3624,65 @@
          "id":11,
          "name":"Entrance Bottom",
          "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":17,
+         "name":"Search Area",
+         "objects":[
+                {
+                 "gid":61,
+                 "height":32,
+                 "id":877,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":480,
+                 "y":256
+                }, 
+                {
+                 "gid":61,
+                 "height":32,
+                 "id":878,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":512,
+                 "y":256
+                }, 
+                {
+                 "gid":61,
+                 "height":32,
+                 "id":879,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":512,
+                 "y":288
+                }, 
+                {
+                 "gid":61,
+                 "height":32,
+                 "id":880,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":480,
+                 "y":288
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -3758,8 +3805,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":17,
- "nextobjectid":873,
+ "nextlayerid":18,
+ "nextobjectid":881,
  "orientation":"orthogonal",
  "properties":[
         {
