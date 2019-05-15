@@ -1500,7 +1500,8 @@ function Map:extend( ... )
 		for _, object in ipairs( display_objects ) do 
 
 			-- Extend the object with its own custom code
-			object = plugin( object ) 
+			object = plugin( object )
+			object.map = self
 
 		end
 
