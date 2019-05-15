@@ -2,6 +2,7 @@ local function Plugin(mob)
   -- mob is a snapshot
   -- mob.group[1] & mob.group[2] are the name/name_background
 	if not mob then error( "ERROR: Expected display visual" ) end
+  mob.isIdle = true  -- use this when performing actions
 
   function mob:setFrame(direction)
     self:invalidate()
@@ -74,12 +75,12 @@ local function Plugin(mob)
   end
 
   function mob:stand() --timer() 
-    if not mob.player:isStanding() then return end
+    if not self.player:isStanding() then return end
     mob:setLinearVelocity(0, 0)
   end
 
   function mob:move()
-    if not mob.player:isStanding() then return end
+    if not self.player:isStanding() or not self.isIdle then return end
 
     local speed, direction = math.random(28, 40), math.random(4)
     local vx, vy = 0, 0
