@@ -1,7 +1,7 @@
 local function Plugin(mob)	
   -- mob is a snapshot
   -- mob.group[1] & mob.group[2] are the name/name_background
-  mob.isIdle = true  -- use this when performing actions
+  mob.is_idle = true  -- use this when performing actions
 
   function mob:setFrame(direction)
     self:invalidate()
@@ -73,21 +73,16 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
-  function mob:wait()
-    -- dead bodies aren't physics objects
+  function mob:setIdle(is_available)
+    self.is_idle = is_available
     if not self.player:isStanding() then return end
-    mob:setLinearVelocity(0, 0)
+    -- freeze the mob's velocity 
+    if not is_available then self:setLinearVelocity(0, 0) end
   end
 
-  function mob:setStationary(is_stationary)
-    self.isIdle = is_stationary
-    if not self.player:isStanding() then return end
-    if is_stationary then self:setLinearVelocity(0, 0) end
-  end
+  function mob:wait() self:setLinearVelocity(0, 0) end
 
   function mob:roam()
-    if not self.player:isStanding() or not self.isIdle then return end
-
     local speed, direction = math.random(28, 40), math.random(4)
     local vx, vy = 0, 0
 
@@ -97,11 +92,14 @@ local function Plugin(mob)
     elseif direction == 4 then vx = -1*speed
     end
 
-    mob:setLinearVelocity(vx, vy)
+    self:setLinearVelocity(vx, vy)
     self:setFrame(direction) 
   end
 
   function mob:timer()
+    -- dead bodies don't have physics and mob must be idle
+    if not self.player:isStanding() or not self.is_idle then return end
+
     if math.random() > 0.65 then self:roam()
     else self:wait()
     end
