@@ -10,9 +10,9 @@ local Leather, Firesuit = unpack(require('code.item.items.armor'))
 
 local Items = {
   -- MELEE_WEAPONRY
-  Crowbar, Bat, Sledge, Knife, Katanna, 
+  Crowbar, Bat, Sledge, Knife, Katanna,
   -- RANGED_WEAPONRY
-  Pistol, Magnum, Shotgun, Rifle, Flare, Molotov, 
+  Pistol, Magnum, Shotgun, Rifle, Flare, Molotov,
   -- MEDICAL
   FAK, Bandage, Syringe, Vaccine, Antidote, Scanner,
   -- MACHINERY
