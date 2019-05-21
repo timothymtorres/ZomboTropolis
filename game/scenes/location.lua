@@ -38,6 +38,11 @@ function scene:create( event )
   location = berry:new( filename, "graphics/locations/")
   location:addTexturePack("graphics/items.png", "graphics.items.lua")
 
+  -- Create our extra layers for dynamic objects
+  location:addLayer("Corpse")
+  location:addLayer("Mob")
+  location:addLayer("Item")
+
   location:setExtension("scenes.objects.")
   location:extend("door", "barricade")  -- entrance
   location:extend("apc", "terminal", "generator", "transmitter") -- equipment

@@ -3782,30 +3782,8 @@
          "visible":true,
          "x":0,
          "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":14,
-         "name":"Corpse",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":3,
-         "name":"Mob",
-         "objects":[],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
         }],
- "nextlayerid":18,
+ "nextlayerid":19,
  "nextobjectid":881,
  "orientation":"orthogonal",
  "properties":[
