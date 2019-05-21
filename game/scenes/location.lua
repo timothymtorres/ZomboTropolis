@@ -35,7 +35,8 @@ function scene:create( event )
   local tile_gid = world:getGID('Location Template ID', y, x)
   local template_name = world.cache.properties[tile_gid].template
   local filename = "graphics/locations/"..template_name.. ".json"
-  location = berry:new( filename, "graphics/ss13" )
+  location = berry:new( filename, "graphics/locations/")
+  location:addTexturePack("graphics/items.png", "graphics.items.lua")
 
   location:setExtension("scenes.objects.")
   location:extend("door", "barricade")  -- entrance
