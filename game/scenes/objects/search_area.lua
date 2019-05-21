@@ -12,74 +12,44 @@ local function Plugin(search_area)
   search_area.isVisible = true
   search_area.timer_ID = nil
 
+  local function spawn_item(mob)
+    local result = main_player:perform('search')
+    local item = result[3]
+
+    if item then
+print('WE FOUND '..tostring(item))
+      local ITEM_SHRINK_SCALE = 0.30
+
+      local item_display = search_area.map:addSprite("Item", string.lower(tostring(item)), mob.x, mob.y)
+
+      local item_shrink_params = {
+        time=ANIMATION_DELAY, 
+        transition=easing.inExpo, 
+        x=mob.x, 
+        y=mob.y, 
+        xScale=ITEM_SHRINK_SCALE, 
+        yScale=ITEM_SHRINK_SCALE,
+        onComplete=item_display.removeSelf,
+      }
+      transition.to( item_display, item_shrink_params)
+    else
+print('NOTHING FOUND')
+    end
+  end
+
   function search_area.search(event)
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
-
-      local function spawn_item(event)
-        print('ITEM IS SPAWNING, REEEEE')
-        print(table.inspect(event, {depth=1}))
-
-      end
 
       local movement_params = {
         time=MOVEMENT_DELAY, 
         x=search_area.x, 
         y=search_area.y,
-        --onComplete=mob.removeSelf,
+        onComplete=spawn_item,
       }
       transition.to(mob, movement_params)
 
-      local result = main_player:perform('search')
-      local item = result[3]
-
-      if item then
-print('WE FOUND '..tostring(item))
-        local ITEM_SHRINK_SCALE = 0.30
-
-        local item_display = search_area.map:addSprite("Item", string.lower(tostring(item)), mob.x, mob.y)
-
-        local item_shrink_params = {
-          time=ANIMATION_DELAY, 
-          transition=easing.inExpo, 
-          x=mob.x, 
-          y=mob.y, 
-          xScale=ITEM_SHRINK_SCALE, 
-          yScale=ITEM_SHRINK_SCALE,
-          onComplete=item_display.removeSelf,
-        }
-        transition.to( item_display, item_shrink_params)
-          
---[[
-item_display.fill.effect = "generator.sunbeams"
-
-item_display.fill.effect.posX = 0.5
-item_display.fill.effect.posY = 0.5
-item_display.fill.effect.aspectRatio = ( item_display.width / item_display.height )
-item_display.fill.effect.seed = 0
-
--- Transition the filter to full intensity over the course of 3 seconds
-transition.to( item_display.fill.effect, { time=2000, intensity=1 } )
---]]
-
- --       if mob_sprite:isStationary() then movement_delay = 0 end
-
---[[
-        timer.performWithDelay(movement_delay, function()
-          local item_obj = item_effect.new(object.map, item, search_area.x, search_area.y)        
-          transition.to( item_obj:getVisual(), { time=ANIMATION_DELAY, transition=easing.inExpo, x=mob_sprite.x, y=mob_sprite.y, xScale=scale, yScale=scale} )
-          transition.to( item_obj.bkgr:getVisual(), { time=ANIMATION_DELAY, transition=easing.inExpo, x=mob_sprite.x, y=mob_sprite.y, xScale=scale, yScale=scale} )
-
-          timer.performWithDelay(ANIMATION_DELAY, function()
-            item_obj.bkgr:destroy()
-            item_obj:destroy()  
-          end)
-        end)      
---]]
-      else
-print('NOTHING FOUND')
-      end
---      mob_sprite:setStationary(true)
+      -- mob_sprite:setStationary(true)
     else
       -- make error sound
     end 
