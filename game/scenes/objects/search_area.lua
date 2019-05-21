@@ -3,7 +3,7 @@
 --local item_effect = require('scenes.objects.item_effect')
 
 local MOVEMENT_DELAY = 1000
-local ANIMATION_DELAY = 1000
+local ANIMATION_DELAY = 1500
 local FIRST_SEARCH_DELAY = 1500
 local SEARCH_DELAY = ANIMATION_DELAY
 
@@ -14,27 +14,31 @@ local function Plugin(search_area)
 
   local function spawn_item(mob)
     local result = main_player:perform('search')
-    local item = result[3]
+    local is_item_found = result[3]
+    local item = is_item_found and string.lower(tostring(result[3])) or 'junk'
 
-    if item then
-print('WE FOUND '..tostring(item))
-      local ITEM_SHRINK_SCALE = 0.30
+print('WE FOUND '..item)
 
-      local item_display = search_area.map:addSprite("Item", string.lower(tostring(item)), mob.x, mob.y)
+    item = search_area.map:addSprite("Item", item, mob.x, mob.y - 22)
 
-      local item_shrink_params = {
-        time=ANIMATION_DELAY, 
-        transition=easing.inExpo, 
-        x=mob.x, 
-        y=mob.y, 
-        xScale=ITEM_SHRINK_SCALE, 
-        yScale=ITEM_SHRINK_SCALE,
-        onComplete=item_display.removeSelf,
-      }
-      transition.to( item_display, item_shrink_params)
-    else
-print('NOTHING FOUND')
+    local SHRINK_SCALE = 0.30
+    local shrink_params = {
+      time=ANIMATION_DELAY,
+      transition=easing.inOutExpo,--easing.inExpo,
+      x=mob.x + 45,
+      y=mob.y - 35,
+      rotation = mob.rotation + 160,
+      xScale=SHRINK_SCALE,
+      yScale=SHRINK_SCALE,
+      onComplete=item.removeSelf,
+    }
+
+    if not is_item_found then -- the item is junk
+      shrink_params.x = mob.x + 45
+     -- shrink_params.transition = 
     end
+
+    transition.to( item, shrink_params)
   end
 
   function search_area.search(event)
