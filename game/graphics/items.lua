@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:12384fff934bc973c23fbb8584bf28cc:53e8fa724c7d602911d05db57846716d:1a07471fad41e84a5a5d6e89f55f3227$
+-- $TexturePacker:SmartUpdate:b824080f160054e1996efe54943a70a2:481deba154126350138c6b56e0a54409:1a07471fad41e84a5a5d6e89f55f3227$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -15,7 +15,7 @@ SheetInfo.sheet =
     frames = {
     
         {
-            -- FAK
+            -- antidote
             x=0,
             y=0,
             width=32,
@@ -23,7 +23,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- antidote
+            -- bandage
             x=32,
             y=0,
             width=32,
@@ -31,7 +31,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bandage
+            -- barricade
             x=64,
             y=0,
             width=32,
@@ -39,7 +39,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- barricade
+            -- bat
             x=96,
             y=0,
             width=32,
@@ -47,7 +47,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bat
+            -- book
             x=128,
             y=0,
             width=32,
@@ -55,7 +55,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- book
+            -- bottle
             x=160,
             y=0,
             width=32,
@@ -63,7 +63,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- bottle
+            -- clip
             x=192,
             y=0,
             width=32,
@@ -71,7 +71,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- clip
+            -- crowbar
             x=224,
             y=0,
             width=32,
@@ -79,7 +79,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- crowbar
+            -- fak
             x=256,
             y=0,
             width=32,
@@ -303,15 +303,15 @@ SheetInfo.sheet =
 SheetInfo.frameIndex =
 {
 
-    ["FAK"] = 1,
-    ["antidote"] = 2,
-    ["bandage"] = 3,
-    ["barricade"] = 4,
-    ["bat"] = 5,
-    ["book"] = 6,
-    ["bottle"] = 7,
-    ["clip"] = 8,
-    ["crowbar"] = 9,
+    ["antidote"] = 1,
+    ["bandage"] = 2,
+    ["barricade"] = 3,
+    ["bat"] = 4,
+    ["book"] = 5,
+    ["bottle"] = 6,
+    ["clip"] = 7,
+    ["crowbar"] = 8,
+    ["fak"] = 9,
     ["firesuit"] = 10,
     ["flare"] = 11,
     ["flashlight"] = 12,
