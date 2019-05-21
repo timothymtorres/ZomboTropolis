@@ -1,7 +1,7 @@
 --
 -- created with TexturePacker (http://www.codeandweb.com/texturepacker)
 --
--- $TexturePacker:SmartUpdate:b824080f160054e1996efe54943a70a2:481deba154126350138c6b56e0a54409:1a07471fad41e84a5a5d6e89f55f3227$
+-- $TexturePacker:SmartUpdate:ddeb8b655530c1155f4fe850b29e894f:feb8674aff1ff0a5e40ee9036891cc3b:1a07471fad41e84a5a5d6e89f55f3227$
 --
 -- local sheetInfo = require("mysheet")
 -- local myImageSheet = graphics.newImageSheet( "mysheet.png", sheetInfo:getSheet() )
@@ -135,7 +135,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- katana
+            -- junk
             x=480,
             y=0,
             width=32,
@@ -143,7 +143,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- knife
+            -- katana
             x=512,
             y=0,
             width=32,
@@ -151,7 +151,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- leather
+            -- knife
             x=544,
             y=0,
             width=32,
@@ -159,7 +159,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- magazine
+            -- leather
             x=576,
             y=0,
             width=32,
@@ -167,7 +167,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- magnum
+            -- magazine
             x=608,
             y=0,
             width=32,
@@ -175,7 +175,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- molotov
+            -- magnum
             x=640,
             y=0,
             width=32,
@@ -183,7 +183,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- newspaper
+            -- molotov
             x=672,
             y=0,
             width=32,
@@ -191,7 +191,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- pistol
+            -- newspaper
             x=704,
             y=0,
             width=32,
@@ -199,7 +199,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- quiver
+            -- pistol
             x=736,
             y=0,
             width=32,
@@ -207,7 +207,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- radio
+            -- quiver
             x=768,
             y=0,
             width=32,
@@ -215,7 +215,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- rifle
+            -- radio
             x=800,
             y=0,
             width=32,
@@ -223,7 +223,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- scanner
+            -- rifle
             x=832,
             y=0,
             width=32,
@@ -231,7 +231,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- shell
+            -- scanner
             x=864,
             y=0,
             width=32,
@@ -239,7 +239,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- shotgun
+            -- shell
             x=896,
             y=0,
             width=32,
@@ -247,7 +247,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- sledge
+            -- shotgun
             x=928,
             y=0,
             width=32,
@@ -255,7 +255,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- syringe
+            -- sledge
             x=960,
             y=0,
             width=32,
@@ -263,7 +263,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- terminal
+            -- syringe
             x=992,
             y=0,
             width=32,
@@ -271,7 +271,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- toolbox
+            -- terminal
             x=1024,
             y=0,
             width=32,
@@ -279,7 +279,7 @@ SheetInfo.sheet =
 
         },
         {
-            -- transmitter
+            -- toolbox
             x=1056,
             y=0,
             width=32,
@@ -287,8 +287,16 @@ SheetInfo.sheet =
 
         },
         {
-            -- vaccine
+            -- transmitter
             x=1088,
+            y=0,
+            width=32,
+            height=32,
+
+        },
+        {
+            -- vaccine
+            x=1120,
             y=0,
             width=32,
             height=32,
@@ -296,7 +304,7 @@ SheetInfo.sheet =
         },
     },
     
-    sheetContentWidth = 1120,
+    sheetContentWidth = 1152,
     sheetContentHeight = 32
 }
 
@@ -318,26 +326,27 @@ SheetInfo.frameIndex =
     ["fuel"] = 13,
     ["generator"] = 14,
     ["gps"] = 15,
-    ["katana"] = 16,
-    ["knife"] = 17,
-    ["leather"] = 18,
-    ["magazine"] = 19,
-    ["magnum"] = 20,
-    ["molotov"] = 21,
-    ["newspaper"] = 22,
-    ["pistol"] = 23,
-    ["quiver"] = 24,
-    ["radio"] = 25,
-    ["rifle"] = 26,
-    ["scanner"] = 27,
-    ["shell"] = 28,
-    ["shotgun"] = 29,
-    ["sledge"] = 30,
-    ["syringe"] = 31,
-    ["terminal"] = 32,
-    ["toolbox"] = 33,
-    ["transmitter"] = 34,
-    ["vaccine"] = 35,
+    ["junk"] = 16,
+    ["katana"] = 17,
+    ["knife"] = 18,
+    ["leather"] = 19,
+    ["magazine"] = 20,
+    ["magnum"] = 21,
+    ["molotov"] = 22,
+    ["newspaper"] = 23,
+    ["pistol"] = 24,
+    ["quiver"] = 25,
+    ["radio"] = 26,
+    ["rifle"] = 27,
+    ["scanner"] = 28,
+    ["shell"] = 29,
+    ["shotgun"] = 30,
+    ["sledge"] = 31,
+    ["syringe"] = 32,
+    ["terminal"] = 33,
+    ["toolbox"] = 34,
+    ["transmitter"] = 35,
+    ["vaccine"] = 36,
 }
 
 function SheetInfo:getSheet()
