@@ -16,19 +16,51 @@ local function Plugin(search_area)
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
 
+      local function spawn_item(event)
+        print('ITEM IS SPAWNING, REEEEE')
+        print(table.inspect(event, {depth=1}))
+
+      end
+
       local movement_params = {
         time=MOVEMENT_DELAY, 
         x=search_area.x, 
-        y=search_area.y
+        y=search_area.y,
+        --onComplete=mob.removeSelf,
       }
       transition.to(mob, movement_params)
 
       local result = main_player:perform('search')
       local item = result[3]
 
-      if result[3] then
-print('WE FOUND '..tostring(result[3]))
-        local scale = 0.30
+      if item then
+print('WE FOUND '..tostring(item))
+        local ITEM_SHRINK_SCALE = 0.30
+
+        local item_display = search_area.map:addSprite("Item", string.lower(tostring(item)), mob.x, mob.y)
+
+        local item_shrink_params = {
+          time=ANIMATION_DELAY, 
+          transition=easing.inExpo, 
+          x=mob.x, 
+          y=mob.y, 
+          xScale=ITEM_SHRINK_SCALE, 
+          yScale=ITEM_SHRINK_SCALE,
+          onComplete=item_display.removeSelf,
+        }
+        transition.to( item_display, item_shrink_params)
+          
+--[[
+item_display.fill.effect = "generator.sunbeams"
+
+item_display.fill.effect.posX = 0.5
+item_display.fill.effect.posY = 0.5
+item_display.fill.effect.aspectRatio = ( item_display.width / item_display.height )
+item_display.fill.effect.seed = 0
+
+-- Transition the filter to full intensity over the course of 3 seconds
+transition.to( item_display.fill.effect, { time=2000, intensity=1 } )
+--]]
 
  --       if mob_sprite:isStationary() then movement_delay = 0 end
 
