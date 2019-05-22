@@ -1,9 +1,6 @@
-
---local composer = require( "composer" )
---local item_effect = require('scenes.objects.item_effect')
 local lume = require('code.libs.lume')
 
-local MOVEMENT_DELAY = 1000
+local MOVEMENT_DELAY = 7
 local ANIMATION_DELAY = 1500
 local FIRST_SEARCH_DELAY = 1500
 local SEARCH_DELAY = ANIMATION_DELAY
@@ -30,7 +27,10 @@ print('WE FOUND '..item_name)
       rotation = mob.rotation + 160,
       xScale=SHRINK_SCALE,
       yScale=SHRINK_SCALE,
-      onComplete=item.removeSelf,
+      onComplete=function() 
+        item:removeSelf()
+        mob:setIdle(true)
+      end,
     }
 
     if item_name == 'junk' then
@@ -44,16 +44,16 @@ print('WE FOUND '..item_name)
   function search_area.search(event)
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
+      local distance = lume.distance(mob.x, mob.y, search_area.x, search_area.y)
+      mob:setIdle(false)
 
       local movement_params = {
-        time=MOVEMENT_DELAY, 
+        time=distance * MOVEMENT_DELAY, 
         x=search_area.x, 
         y=search_area.y,
         onComplete=spawn_item,
       }
       transition.to(mob, movement_params)
-
-      -- mob_sprite:setStationary(true)
     else
       -- make error sound
     end 
@@ -67,10 +67,9 @@ print('WE FOUND '..item_name)
 
       if ( event.phase == "began" ) then
           display.getCurrentStage():setFocus( event.target ) --'event.target' is the touched object
-print('touch event has began')
+print('Event.phase = began, search_area.timer_ID is about to be set')
 
           if not search_area.timer_ID then
-print('search_area.search_timer is about to be set')
 
         -- we need a way to continously search but before we do that
         -- we need to check if the player has moved to the search area
@@ -81,26 +80,15 @@ print('search_area.search_timer is about to be set')
             -- should we return true here?  maybe this avoids other event.phase from being triggered?
           end
       elseif (event.phase == "moved") then
-print('canceling search timer')
+print('Event.phase = "moved", canceling search timer, mob:setIdle(true)')
         timer.cancel(search_area.timer_ID)
-        mob:setIdle(false)
---[[
-        if not search_area.unfreeze_timer then
-          local time_delay = (mob_sprite:isStationary() and 0 or MAX_MOVEMENT_DELAY) + ANIMATION_DELAY
-          search_area.unfreeze_timer = timer.performWithDelay(time_delay, unfreezeMobSprite)
-        end
---]]
+
       elseif ( event.phase == "ended" or event.phase == "cancelled" ) then
           display.getCurrentStage():setFocus( nil )  --setting focus to 'nil' removes the focus
           timer.cancel(search_area.timer_ID)
           search_area.timer_ID = nil  -- is this neccessary?
+print('Event.phase = "ended/cancelled", canceling search timer, mob:setIdle(true)')
 
---[[
-          if not search_area.unfreeze_timer then
-            local time_delay = (mob_sprite:isStationary() and 0 or MAX_MOVEMENT_DELAY) + ANIMATION_DELAY
-          search_area.unfreeze_timer = timer.performWithDelay(time_delay, unfreezeMobSprite)
-        end
---]]
       end
     return true
   end
@@ -108,40 +96,18 @@ print('canceling search timer')
   function search_area.tap(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
     if ( event.numTaps == 2 ) then 
-      mob:setIdle(false)
-      search_area.search(event) 
+print('search_area.tap = 2, mob:setIdle(false)')
+      search_area.search(event)
 
---[[
-      if not search_area.unfreeze_timer then
-        local time_delay = (mob_sprite:isStationary() and 0 or MAX_MOVEMENT_DELAY) + ANIMATION_DELAY
-        search_area.unfreeze_timer = timer.performWithDelay(time_delay, unfreezeMobSprite)
-      end
---]]
     end
   end
 
   -- only let a human click on search areas that they are in
   if main_player:isStaged(search_area.name) and main_player:isMobType('human') then
+    search_area:addEventListener("tap", search_area.tap) 
     search_area:addEventListener("touch", search_area.touch)
-    search_area:addEventListener("tap", search_area.tap)    
   end
 
---[[
-
-  local function getMobSprite(player)
-    local location = search_area.map
-    local mob_layer = location:getObjectLayer('Mob')
-    local mob_obj = mob_layer:getObject(player:getUsername())
-    return mob_obj:getVisual()
-  end
-
-  local function unfreezeMobSprite()
-    local mob_sprite = getMobSprite(main_player)
-      mob_sprite:setStationary(false)
-    search_area.unfreeze_timer = nil
-  end
-
---]]
   return search_area
 end
 
