@@ -29,7 +29,8 @@ print('WE FOUND '..item_name)
       yScale=SHRINK_SCALE,
       onComplete=function() 
         item:removeSelf()
-        mob:setIdle(true)
+        -- this is to free our mob after tap&hold event 
+        if not search_area.timer_ID then mob:setIdle(true) end
       end,
     }
 
@@ -63,43 +64,31 @@ print('WE FOUND '..item_name)
 
   function search_area.touch(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
-    local time_delay
 
       if ( event.phase == "began" ) then
-          display.getCurrentStage():setFocus( event.target ) --'event.target' is the touched object
-print('Event.phase = began, search_area.timer_ID is about to be set')
+        display.getCurrentStage():setFocus(event.target)
 
-          if not search_area.timer_ID then
+        if not search_area.timer_ID then
+          search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
+        end
+      else
+        if event.phase ~= "moved" then 
+          display.getCurrentStage():setFocus(nil)  
+        end
 
-        -- we need a way to continously search but before we do that
-        -- we need to check if the player has moved to the search area
-        -- beforehand?  I'm stumped... gah.
-
-            search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
-          else
-            -- should we return true here?  maybe this avoids other event.phase from being triggered?
-          end
-      elseif (event.phase == "moved") then
-print('Event.phase = "moved", canceling search timer, mob:setIdle(true)')
-        timer.cancel(search_area.timer_ID)
-
-      elseif ( event.phase == "ended" or event.phase == "cancelled" ) then
-          display.getCurrentStage():setFocus( nil )  --setting focus to 'nil' removes the focus
+        if search_area.timer_ID then 
           timer.cancel(search_area.timer_ID)
-          search_area.timer_ID = nil  -- is this neccessary?
-print('Event.phase = "ended/cancelled", canceling search timer, mob:setIdle(true)')
+          search_area.timer_ID = nil
+        end
 
+        mob:setIdle(true)
       end
     return true
   end
 
   function search_area.tap(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
-    if ( event.numTaps == 2 ) then 
-print('search_area.tap = 2, mob:setIdle(false)')
-      search_area.search(event)
-
-    end
+    if ( event.numTaps == 2 ) then search_area.search(event) end
   end
 
   -- only let a human click on search areas that they are in
