@@ -14,12 +14,11 @@ local function Plugin(search_area)
 
   local function spawn_item(mob)
     local result = main_player:perform('search')
-    local is_item_found = result[3]
-    local item = is_item_found and string.lower(tostring(result[3])) or 'junk'
+    local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
 
-print('WE FOUND '..item)
+print('WE FOUND '..item_name)
 
-    item = search_area.map:addSprite("Item", item, mob.x, mob.y - 22)
+    local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
 
     local SHRINK_SCALE = 0.30
     local shrink_params = {
@@ -33,7 +32,7 @@ print('WE FOUND '..item)
       onComplete=item.removeSelf,
     }
 
-    if not is_item_found then -- the item is junk
+    if item_name == 'junk' then
       shrink_params.x = mob.x + 45
      -- shrink_params.transition = 
     end
