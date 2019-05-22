@@ -65,24 +65,19 @@ print('WE FOUND '..item_name)
   function search_area.touch(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
 
-      if ( event.phase == "began" ) then
-        display.getCurrentStage():setFocus(event.target)
+    if ( event.phase == "began" ) then
+      display.getCurrentStage():setFocus(event.target)
+      search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
+    else
+      if event.phase ~= "moved" then display.getCurrentStage():setFocus(nil) end
 
-        if not search_area.timer_ID then
-          search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
-        end
-      else
-        if event.phase ~= "moved" then 
-          display.getCurrentStage():setFocus(nil)  
-        end
-
-        if search_area.timer_ID then 
-          timer.cancel(search_area.timer_ID)
-          search_area.timer_ID = nil
-        end
-
-        mob:setIdle(true)
+      if search_area.timer_ID then 
+        timer.cancel(search_area.timer_ID)
+        search_area.timer_ID = nil
       end
+
+      mob:setIdle(true)
+    end
     return true
   end
 
