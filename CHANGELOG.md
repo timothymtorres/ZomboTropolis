@@ -22,8 +22,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Searching causing players to be deleted from location.
 
+### Changed
+- Equipment, location, item, and mob icons 
+
 ### Removed
 - Axe, machate, and phone items from search chance since the code classes have not been setup.
+- Zooming feature for location or world map.  (will be added at a later date)
 
 ## v0.11.0 - 11/26/2018
 ### Added
