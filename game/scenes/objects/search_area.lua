@@ -1,6 +1,7 @@
 
 --local composer = require( "composer" )
 --local item_effect = require('scenes.objects.item_effect')
+local lume = require('code.libs.lume')
 
 local MOVEMENT_DELAY = 1000
 local ANIMATION_DELAY = 1500
