@@ -30,7 +30,21 @@ print('WE FOUND '..item_name)
       onComplete=function() 
         item:removeSelf()
         -- this is to free our mob after tap&hold event 
-        if not search_area.timer_ID then mob:setIdle(true) end
+        if not search_area.timer_ID then 
+          mob:setIdle(true)
+          
+          if mob.player:isLocationContested() then 
+            --local x, y = mob:getLastPosition()
+            local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
+
+            local movement_params = {
+              time=distance * MOVEMENT_DELAY, 
+              x=mob.last_x, 
+              y=mob.last_y,
+            }
+            transition.to(mob, movement_params)
+          end
+        end
       end,
     }
 
@@ -68,6 +82,7 @@ print('WE FOUND '..item_name)
     if ( event.phase == "began" ) then
       display.getCurrentStage():setFocus(event.target)
       search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
+      if mob.player:isLocationContested() then mob:saveLastPosition() end
     else
       if event.phase ~= "moved" then display.getCurrentStage():setFocus(nil) end
 
@@ -83,7 +98,10 @@ print('WE FOUND '..item_name)
 
   function search_area.tap(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
-    if ( event.numTaps == 2 ) then search_area.search(event) end
+    if ( event.numTaps == 2 ) then
+      if mob.player:isLocationContested() then mob:saveLastPosition() end
+      search_area.search(event) 
+    end
   end
 
   -- only let a human click on search areas that they are in
