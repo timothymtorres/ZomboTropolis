@@ -104,6 +104,11 @@ end
 
 function Player:isHPVisible() return player.skills:check('smell_blood_adv') or player.skills:check('diagnosis_adv') end
 
+function Player:isLocationContested()
+  local stage = self:getStage()
+  local location = self:getLocation()
+  return location:isContested(stage)
+end
 
 --[[
 --  GET [X]
