@@ -192,18 +192,18 @@ function Tile:isContested(setting)
   return is_zombies_present and is_humans_present 
 end
 
-function Tile:getDominion(setting)
-  local attacker, defender
-  if self:isBuilding() and setting == 'inside' then
-    if self.integrity:isState('ruined') then -- zombies in control
-      attacker, defender = 'human', 'zombie'
-    else -- humans in control
-      attacker, defender = 'zombie', 'human'
-    end
-  else -- outside the zombies are always in control
-    attacker, defender = 'human', 'zombie' 
-  end
-  return attacker, defender
+-- humans are always attackers unless they are inside an unruined building
+function Tile:getAttacker(setting)
+  local is_inside_building = self:isBuilding() and setting == 'inside' 
+  local is_ruined = is_inside_building and self.integrity:isState('ruined') 
+  return (not is_ruined and 'zombie') or 'human' 
+end
+
+-- zombies are usually defending except for unruined buildings
+function Tile:getDefender(setting)
+  local is_inside_building = self:isBuilding() and setting == 'inside' 
+  local is_ruined = is_inside_building and self.integrity:isState('ruined') 
+  return (not is_ruined and 'human') or 'zombie'
 end
 
 function Tile:__tostring() return self.name..' '..self.class.name end

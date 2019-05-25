@@ -62,7 +62,8 @@ function scene:create( event )
   -- both attacker/defender spawns combined
   local location_spawns = lume.merge(defender_spawns, attacker_spawns)
 
-  local attacker, defender = player_location:getDominion(player_stage)
+  local attacker = player_location:getAttacker(player_stage)
+  local defender = player_location:getDefender(player_stage)
   local is_location_contested = player_location:isContested(player_stage)
 
   -- enable/disable physics walls that seperates attacker/defenders 
