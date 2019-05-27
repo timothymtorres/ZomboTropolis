@@ -74,12 +74,12 @@ local function Plugin(mob)
   end
 
   function mob:pauseMotion()
-    self.is_motion_paused = true
-    if self.player:isStanding() then self:setLinearVelocity(0, 0) end 
+    self:setLinearVelocity(0, 0) 
+    self.isBodyActive = false
   end
 
   function mob:resumeMotion()
-    self.is_motion_paused = false
+    self.isBodyActive = true
   end
 
   function mob:wait() self:setLinearVelocity(0, 0) end
@@ -99,8 +99,8 @@ local function Plugin(mob)
   end
 
   function mob:timer()
-    -- dead bodies don't have physics and mob must not be paused
-    if self.player:isStanding() and not self.is_motion_paused then
+    -- must be standing and physics active 
+    if self.player:isStanding() and self.isBodyActive then
       if math.random() > 0.65 then self:roam()
       else self:wait()
       end
