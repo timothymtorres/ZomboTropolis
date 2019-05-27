@@ -82,13 +82,6 @@ local function Plugin(mob)
     self.is_motion_paused = false
   end
 
-  function mob:setIdle(is_available)
-    self.is_idle = is_available
-    if not self.player:isStanding() then return end
-    -- freeze the mob's velocity 
-    if not is_available then self:setLinearVelocity(0, 0) end
-  end
-
   function mob:wait() self:setLinearVelocity(0, 0) end
 
   function mob:roam()
