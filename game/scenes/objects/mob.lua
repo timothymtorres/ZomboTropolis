@@ -73,6 +73,15 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
+  function mob:pauseMotion()
+    self.is_motion_paused = true
+    if self.player:isStanding() then self:setLinearVelocity(0, 0) end 
+  end
+
+  function mob:resumeMotion()
+    self.is_motion_paused = false
+  end
+
   function mob:setIdle(is_available)
     self.is_idle = is_available
     if not self.player:isStanding() then return end
@@ -97,11 +106,11 @@ local function Plugin(mob)
   end
 
   function mob:timer()
-    -- dead bodies don't have physics and mob must be idle
-    if not self.player:isStanding() or not self.is_idle then return end
-
-    if math.random() > 0.65 then self:roam()
-    else self:wait()
+    -- dead bodies don't have physics and mob must not be paused
+    if self.player:isStanding() and not self.is_motion_paused then
+      if math.random() > 0.65 then self:roam()
+      else self:wait()
+      end
     end
   end
 

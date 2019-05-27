@@ -31,8 +31,8 @@ print('WE FOUND '..item_name)
         item:removeSelf()
         -- this is to free our mob after tap&hold event 
         if not search_area.timer_ID then 
-          mob:setIdle(true)
-          
+          mob:resumeMotion()
+
           if mob.player:isLocationContested() then 
             --local x, y = mob:getLastPosition()
             local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
@@ -60,7 +60,7 @@ print('WE FOUND '..item_name)
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
       local distance = lume.distance(mob.x, mob.y, search_area.x, search_area.y)
-      mob:setIdle(false)
+      mob:pauseMotion()
 
       local movement_params = {
         time=distance * MOVEMENT_DELAY, 
@@ -91,7 +91,7 @@ print('WE FOUND '..item_name)
         search_area.timer_ID = nil
       end
 
-      mob:setIdle(true)
+      mob:resumeMotion()
     end
     return true
   end
