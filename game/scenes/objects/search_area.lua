@@ -34,6 +34,7 @@ print('WE FOUND '..item_name)
 
           if mob.player:isLocationContested() then 
             local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
+            mob:updateDirection(mob.last_x, mob.last_y)
             local last_location_params = {
               time=distance * MOVEMENT_DELAY, 
               x=mob.last_x, 
@@ -58,6 +59,7 @@ print('WE FOUND '..item_name)
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
       local distance = lume.distance(mob.x, mob.y, search_area.x, search_area.y)
+      mob:updateDirection(search_area.x, search_area.y)
       mob:pauseMotion()
 
       local movement_params = {
