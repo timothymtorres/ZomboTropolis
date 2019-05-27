@@ -73,6 +73,23 @@ local function Plugin(mob)
     mob:setFillColor(1, 0, 0) -- remove this when we add actual graphics
   end
 
+  function mob:updateDirection(x, y) 
+    local x_distance, y_distance = x - self.x, y - self.y
+    local dir 
+    
+    if math.abs(x_distance) >= math.abs(y_distance) then
+      if x_distance >= 0 then dir = 2 -- face east
+      elseif x_distance < 0 then dir = 4 -- face west
+      end
+    elseif math.abs(x_distance) < math.abs(y_distance) then
+      if y_distance >= 0 then dir = 3 -- face south
+      elseif y_distance < 0 then dir = 1 -- face north
+      end
+    end
+
+    mob:setFrame(dir)  -- changes direction 
+  end
+
   function mob:pauseMotion()
     self:setLinearVelocity(0, 0) 
     self.isBodyActive = false
