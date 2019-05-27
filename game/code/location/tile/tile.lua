@@ -192,7 +192,7 @@ function Tile:isContested(setting)
   return is_zombies_present and is_humans_present 
 end
 
--- humans are always attackers unless they are inside an unruined building
+-- humans are always attackers unless inside an unruined building
 function Tile:getAttacker(setting)
   local is_inside_building = self:isBuilding() and setting == 'inside' 
   local is_ruined = is_inside_building and self.integrity:isState('ruined') 
