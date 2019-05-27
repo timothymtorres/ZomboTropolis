@@ -22,9 +22,8 @@ print('WE FOUND '..item_name)
     local shrink_params = {
       time=ANIMATION_DELAY,
       transition=easing.inOutExpo,--easing.inExpo,
-      x=mob.x + 45,
-      y=mob.y - 35,
-      rotation = mob.rotation + 160,
+      x=mob.x,
+      y=mob.y,
       xScale=SHRINK_SCALE,
       yScale=SHRINK_SCALE,
       onComplete=function() 
@@ -34,15 +33,13 @@ print('WE FOUND '..item_name)
           mob:resumeMotion()
 
           if mob.player:isLocationContested() then 
-            --local x, y = mob:getLastPosition()
             local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
-
-            local movement_params = {
+            local last_location_params = {
               time=distance * MOVEMENT_DELAY, 
               x=mob.last_x, 
               y=mob.last_y,
             }
-            transition.to(mob, movement_params)
+            transition.to(mob, last_location_params)
           end
         end
       end,
@@ -50,7 +47,8 @@ print('WE FOUND '..item_name)
 
     if item_name == 'junk' then
       shrink_params.x = mob.x + 45
-     -- shrink_params.transition = 
+      shrink_params.y = mob.y - 35
+      shrink_params.rotation = mob.rotation + 160 
     end
 
     transition.to( item, shrink_params)
