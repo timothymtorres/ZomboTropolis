@@ -103,7 +103,9 @@ print('WE FOUND '..item_name)
   end
 
   -- only let a human click on search areas that they are in
-  if main_player:isStaged(search_area.name) and main_player:isMobType('human') then
+  if main_player:isStaged(search_area.name) and 
+  main_player:isMobType('human') and main_player:isStanding() then
+
     search_area:addEventListener("tap", search_area.tap) 
     search_area:addEventListener("touch", search_area.touch)
   end
