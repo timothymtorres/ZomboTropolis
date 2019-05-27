@@ -1,9 +1,7 @@
 local lume = require('code.libs.lume')
 
 local MOVEMENT_DELAY = 7
-local ANIMATION_DELAY = 1500
-local FIRST_SEARCH_DELAY = 1500
-local SEARCH_DELAY = ANIMATION_DELAY
+local SEARCH_DELAY = 1500
 
 local function Plugin(search_area)   
   search_area.alpha = 0.01 -- the minimal alpha for tap/touch events to register
@@ -20,7 +18,7 @@ print('WE FOUND '..item_name)
 
     local SHRINK_SCALE = 0.30
     local shrink_params = {
-      time=ANIMATION_DELAY,
+      time=SEARCH_DELAY,
       transition=easing.inOutExpo,--easing.inExpo,
       x=mob.x,
       y=mob.y,

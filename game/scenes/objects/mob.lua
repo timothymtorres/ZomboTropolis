@@ -1,7 +1,6 @@
 local function Plugin(mob)	
   -- mob is a snapshot
   -- mob.group[1] & mob.group[2] are the name/name_background
-  mob.is_idle = true  -- use this when performing actions
 
   function mob:setFrame(direction)
     self:invalidate()
@@ -76,7 +75,7 @@ local function Plugin(mob)
   function mob:updateDirection(x, y) 
     local x_distance, y_distance = x - self.x, y - self.y
     local dir 
-    
+
     if math.abs(x_distance) >= math.abs(y_distance) then
       if x_distance >= 0 then dir = 2 -- face east
       elseif x_distance < 0 then dir = 4 -- face west
