@@ -116,10 +116,6 @@ local function Plugin(mob)
 
   function mob:saveLastPosition() self.last_x, self.last_y = self.x, self.y end
 
-  function mob:getLastPosition() return self.last_x, self.last_y end
-
-  function mob:resetLastPosition() self.last_x, self.last_y = nil, nil end
-
 	return mob
 end
 
