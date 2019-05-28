@@ -9,6 +9,12 @@ local function Plugin(search_area)
   search_area.timer_ID = nil
 
   local function spawn_item(mob)
+
+  end
+
+  function search_area.search()
+    local mob = search_area.map:getObjects({name=tostring(main_player)})
+
     local result = main_player:perform('search')
     local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
 
@@ -27,19 +33,27 @@ print('WE FOUND '..item_name)
       onComplete=function() 
         item:removeSelf()
         -- this is to free our mob after tap&hold event 
+print('onComplete function()', search_area.timer_ID)
         if not search_area.timer_ID then 
-          mob:resumeMotion()
-
           if mob.player:isLocationContested() then 
             local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
             mob:updateDirection(mob.last_x, mob.last_y)
+
             local last_location_params = {
               time=distance * MOVEMENT_DELAY, 
               x=mob.last_x, 
               y=mob.last_y,
+              onComplete=function() 
+                mob:resumeMotion() 
+              end,
             }
             transition.to(mob, last_location_params)
+          else
+            --mob:resumeMotion()
           end
+        else
+print(table.inspect(search_area.timer_ID, {depth=2}))
+          search_area.timer_ID._delay = SEARCH_DELAY
         end
       end,
     }
@@ -53,9 +67,11 @@ print('WE FOUND '..item_name)
     transition.to( item, shrink_params)
   end
 
-  function search_area.search(event)
+  function search_area.travel_to(mob)
+    --local mob = search_area.map:getObjects({name=tostring(main_player)})
     if main_player:canPerform('search') then
       local mob = search_area.map:getObjects({name=tostring(main_player)})
+
       local distance = lume.distance(mob.x, mob.y, search_area.x, search_area.y)
       mob:updateDirection(search_area.x, search_area.y)
       mob:pauseMotion()
@@ -64,7 +80,7 @@ print('WE FOUND '..item_name)
         time=distance * MOVEMENT_DELAY, 
         x=search_area.x, 
         y=search_area.y,
-        onComplete=spawn_item,
+        onComplete=search_area.search,
       }
       transition.to(mob, movement_params)
     else
@@ -72,15 +88,43 @@ print('WE FOUND '..item_name)
     end 
   end
 
-  function search_area.timer(event) search_area.search(event) end
+  function search_area.timer(event)
+    -- pass mob to search
+    search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area.search, 0)
+    --search_area.travel_to()
+  end
 
   function search_area.touch(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
 
     if ( event.phase == "began" ) then
       display.getCurrentStage():setFocus(event.target)
-      search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY, search_area, 0)
       if mob.player:isLocationContested() then mob:saveLastPosition() end
+      --search_area.timer_ID = timer.performWithDelay(SEARCH_DELAY*2, search_area, 0)
+
+
+      if main_player:canPerform('search') then
+        local mob = search_area.map:getObjects({name=tostring(main_player)})
+
+        local distance = lume.distance(mob.x, mob.y, search_area.x, search_area.y)
+        mob:updateDirection(search_area.x, search_area.y)
+        mob:pauseMotion()
+
+        local movement_params = {
+          time=distance * MOVEMENT_DELAY,
+          delay=SEARCH_DELAY,
+          x=search_area.x, 
+          y=search_area.y,
+          onComplete=search_area.timer,
+        }
+        transition.to(mob, movement_params)
+      else
+        -- make error sound
+      end 
+
+
+
+
     else
       if event.phase ~= "moved" then display.getCurrentStage():setFocus(nil) end
 
@@ -89,16 +133,21 @@ print('WE FOUND '..item_name)
         search_area.timer_ID = nil
       end
 
-      mob:resumeMotion()
+      -- if transition.isActive() then
+      -- transition.cancel()
+      -- end
+
+      --mob:resumeMotion()
     end
     return true
   end
 
   function search_area.tap(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
-    if ( event.numTaps == 2 ) then
+print('tap event', mob.isBodyActive)
+    if ( event.numTaps == 2 ) and mob.isBodyActive then
       if mob.player:isLocationContested() then mob:saveLastPosition() end
-      search_area.search(event) 
+      search_area.travel_to(mob)
     end
   end
 
