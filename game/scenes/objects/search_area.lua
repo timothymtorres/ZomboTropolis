@@ -2,13 +2,13 @@ local lume = require('code.libs.lume')
 
 local MOVEMENT_DELAY = 7
 local SEARCH_DELAY = 1500
+local TOUCH_DELAY = 1000
 
 local function Plugin(search_area)   
   search_area.alpha = 0.01 -- the minimal alpha for tap/touch events to register
   search_area.isVisible = true
   search_area.timer_ID = nil
 
--------------
   local function search()
     local mob = search_area.map:getObjects({name=tostring(main_player)})
 
@@ -20,44 +20,27 @@ print('WE FOUND '..item_name)
     local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
 
     local SHRINK_SCALE = 0.30
-    local shrink_params = {
+    local shrink_options = {
       time=SEARCH_DELAY,
-      transition=easing.inOutExpo,--easing.inExpo,
+      transition=easing.inOutExpo,
       x=mob.x,
       y=mob.y,
       xScale=SHRINK_SCALE,
       yScale=SHRINK_SCALE,
       onComplete=function() 
         item:removeSelf()
-
-        -- if tap & hold still in effect for search we need to wait
-        if mob.timer_ID then return end
-
-        -- return to last location
-        if mob.player:isLocationContested() then 
-          local distance = lume.distance(mob.x, mob.y, mob.last_x, mob.last_y)
-          mob:updateDirection(mob.last_x, mob.last_y)
-
-          local last_location_params = {
-            time=distance * MOVEMENT_DELAY, 
-            x=mob.last_x, 
-            y=mob.last_y,
-            onComplete=function() mob:resumeMotion() end,
-          }
-          transition.to(mob, last_location_params)
-        end
+        if not mob:isActivity('searching') then mob:moveToLastPosition() end
       end,
     }
 
     if item_name == 'junk' then
-      shrink_params.x = mob.x + 45
-      shrink_params.y = mob.y - 35
-      shrink_params.rotation = mob.rotation + 160 
+      shrink_options.x = mob.x + 45
+      shrink_options.y = mob.y - 35
+      shrink_options.rotation = mob.rotation + 160 
     end
 
-    transition.to( item, shrink_params)
+    transition.to( item, shrink_options)
   end
-----------------
 
   function search_area.touch(event)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
@@ -66,16 +49,15 @@ print('WE FOUND '..item_name)
       display.getCurrentStage():setFocus(event.target)
 
       if mob.player:canPerform('search') then
-        local touch_movement_params = {
-          delay=SEARCH_DELAY/2,
+        local touch_options = {
+          delay=TOUCH_DELAY,
           onComplete=function()
+            search()
             mob.timer_ID = timer.performWithDelay(SEARCH_DELAY, search, 0)
           end,
         }
-        mob.transition_ID = mob:moveTo(search_area, touch_movement_params)
-
+        mob.transition_ID = mob:moveTo(search_area, touch_options)
         mob:setActivity('searching')
-
       else
         -- make error sound
       end
@@ -90,8 +72,6 @@ print('WE FOUND '..item_name)
       if mob.transition_ID then
         transition.cancel(mob.transition_ID)
         mob.transition_ID = nil
-        -- need to return back to last pos if spot is contested
-        mob:resumeMotion()
       end
 
       mob:resetActivity()
@@ -104,8 +84,8 @@ print('WE FOUND '..item_name)
 
     if ( event.numTaps == 2 ) and mob.isBodyActive then
       if mob.player:canPerform('search') then
-        local tap_movement_params = {onComplete=search}
-        mob:moveTo(search_area, tap_movement_params)
+        local tap_options = {onComplete=search}
+        mob:moveTo(search_area, tap_options)
       else
         -- make error sound
       end
