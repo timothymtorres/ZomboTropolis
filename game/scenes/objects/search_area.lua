@@ -62,8 +62,6 @@ print('WE FOUND '..item_name)
         -- make error sound
       end
     elseif mob:isActivity('searching') then
-      if event.phase ~= "moved" then display.getCurrentStage():setFocus(nil) end
-
       if mob.timer_ID then 
         timer.cancel(mob.timer_ID)
         mob.timer_ID = nil
@@ -76,6 +74,11 @@ print('WE FOUND '..item_name)
 
       mob:resetActivity()
     end
+
+    if event.phase == "ended" or event.phase == "cancelled" then 
+      display.getCurrentStage():setFocus(nil) 
+    end
+    
     return true
   end
 
