@@ -1,3 +1,7 @@
+local lume = require('code.libs.lume')
+
+local MOVEMENT_DELAY = 7
+
 local function Plugin(mob)	
   -- mob is a snapshot
   -- mob.group[1] & mob.group[2] are the name/name_background
@@ -121,6 +125,19 @@ local function Plugin(mob)
       else self:wait()
       end
     end
+  end
+
+  function mob:moveTo(target, options) 
+    if self.player:isLocationContested() then self:saveLastPosition() end
+
+    local distance = lume.distance(self.x, self.y, target.x, target.y)
+    options.time = distance*MOVEMENT_DELAY 
+    options.x = target.x 
+    options.y = target.y
+
+    self:updateDirection(self.x, self.y)
+    self:pauseMotion()
+    return transition.moveTo(self, options)
   end
 
   function mob:saveLastPosition() self.last_x, self.last_y = self.x, self.y end
