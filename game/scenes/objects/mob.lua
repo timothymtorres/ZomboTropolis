@@ -134,9 +134,24 @@ local function Plugin(mob)
     options.time = distance*MOVEMENT_DELAY 
     options.x = target.x 
     options.y = target.y
+    options.onCancel = self.moveToLastPosition
 
     self:updateDirection(self.x, self.y)
     self:pauseMotion()
+    return transition.moveTo(self, options)
+  end
+
+  function mob:moveToLastPosition()
+    if not self.player:isLocationContested() then return end
+
+    local distance = lume.distance(self.x, self.y, self.last_x, self.last_y)
+    options = {
+      time = distance*MOVEMENT_DELAY,
+      x = self.last_x,
+      y = self.last_y,
+      onComplete=self.resumeMotion, -- or mob:resumeMotion()
+    }
+    self:updateDirection(self.x, self.y)
     return transition.moveTo(self, options)
   end
 
