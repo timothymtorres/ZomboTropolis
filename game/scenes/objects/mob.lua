@@ -125,6 +125,12 @@ local function Plugin(mob)
 
   function mob:saveLastPosition() self.last_x, self.last_y = self.x, self.y end
 
+  function mob:isActivity(action) return self.current_activity == action end
+
+  function mob:setActivity(action) self.current_activity = action end
+
+  function mob:resetActivity() self.current_activity = nil end
+
 	return mob
 end
 
