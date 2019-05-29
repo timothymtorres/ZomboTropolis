@@ -98,9 +98,7 @@ local function Plugin(mob)
     self.isBodyActive = false
   end
 
-  function mob:resumeMotion()
-    self.isBodyActive = true
-  end
+  function mob:resumeMotion() self.isBodyActive = true end
 
   function mob:wait() self:setLinearVelocity(0, 0) end
 
@@ -128,34 +126,45 @@ local function Plugin(mob)
   end
 
   function mob:moveTo(target, options) 
-    if self.player:isLocationContested() then self:saveLastPosition() end
-
     local distance = lume.distance(self.x, self.y, target.x, target.y)
     options.time = distance*MOVEMENT_DELAY 
     options.x = target.x 
     options.y = target.y
     options.onCancel = self.moveToLastPosition
+    options.onStart = function()
+      if self.player:isLocationContested() then self:saveLastPosition() end
+      self:updateDirection(target.x, target.y)
+      self:pauseMotion()
+    end
 
-    self:updateDirection(self.x, self.y)
-    self:pauseMotion()
     return transition.moveTo(self, options)
   end
 
   function mob:moveToLastPosition()
-    if not self.player:isLocationContested() then return end
+    if not self:hasLastPosition() then return end
 
     local distance = lume.distance(self.x, self.y, self.last_x, self.last_y)
+
     options = {
       time = distance*MOVEMENT_DELAY,
       x = self.last_x,
       y = self.last_y,
-      onComplete=self.resumeMotion, -- or mob:resumeMotion()
+      onComplete=function()
+        self:resumeMotion()
+        self:resetLastPosition()
+      end,
     }
-    self:updateDirection(self.x, self.y)
+    self:updateDirection(self.last_x, self.last_y)
     return transition.moveTo(self, options)
   end
 
   function mob:saveLastPosition() self.last_x, self.last_y = self.x, self.y end
+
+  function mob:resetLastPosition() self.last_x, self.last_y = nil, nil end
+
+  function mob:hasLastPosition() 
+    return (self.last_x or self.last_y) and true or false 
+  end
 
   function mob:isActivity(action) return self.current_activity == action end
 
