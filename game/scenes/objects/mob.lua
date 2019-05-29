@@ -131,9 +131,9 @@ local function Plugin(mob)
     if self.player:isLocationContested() then self:saveLastPosition() end
 
     local distance = lume.distance(self.x, self.y, target.x, target.y)
-    options.time = distance*MOVEMENT_DELAY 
-    options.x = target.x 
-    options.y = target.y
+    options.time = options.time or distance*MOVEMENT_DELAY 
+    options.x = options.x or target.x 
+    options.y = options.y or target.y
 
     self:updateDirection(self.x, self.y)
     self:pauseMotion()
