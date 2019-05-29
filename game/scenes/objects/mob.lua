@@ -137,14 +137,13 @@ local function Plugin(mob)
       self:pauseMotion()
     end
 
-    return transition.moveTo(self, options)
+    self.transition_ID = transition.moveTo(self, options)
   end
 
   function mob:moveToLastPosition()
     if not self:hasLastPosition() then return end
 
     local distance = lume.distance(self.x, self.y, self.last_x, self.last_y)
-
     options = {
       time = distance*MOVEMENT_DELAY,
       x = self.last_x,
@@ -155,7 +154,7 @@ local function Plugin(mob)
       end,
     }
     self:updateDirection(self.last_x, self.last_y)
-    return transition.moveTo(self, options)
+    self.transition_ID = transition.moveTo(self, options)
   end
 
   function mob:saveLastPosition() self.last_x, self.last_y = self.x, self.y end
@@ -166,11 +165,17 @@ local function Plugin(mob)
     return (self.last_x or self.last_y) and true or false 
   end
 
-  function mob:isActivity(action) return self.current_activity == action end
+  function mob:isTouch(action) return self.current_action == action end
 
-  function mob:setActivity(action) self.current_activity = action end
+  function mob:setTouch(action) self.current_action = action end
 
-  function mob:resetActivity() self.current_activity = nil end
+  function mob:cancelAction()
+    if self.timer_ID then timer.cancel(self.timer_ID) end
+    if self.transition_ID then transition.cancel(self.transition_ID) end
+    self.transition_ID = nil
+    self.timer_ID = nil 
+    self.current_action = nil 
+  end
 
 	return mob
 end

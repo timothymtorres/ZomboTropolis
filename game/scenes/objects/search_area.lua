@@ -1,45 +1,44 @@
-local lume = require('code.libs.lume')
-
-local MOVEMENT_DELAY = 7
 local SEARCH_DELAY = 1500
 local TOUCH_DELAY = 1000
 
 local function Plugin(search_area)   
   search_area.alpha = 0.01 -- the minimal alpha for tap/touch events to register
   search_area.isVisible = true
-  search_area.timer_ID = nil
 
   local function search()
     local mob = search_area.map:getObjects({name=tostring(main_player)})
 
-    local result = main_player:perform('search')
-    local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
-
+    if mob.player:canPerform('search') then
+      local result = main_player:perform('search')
+      local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
 print('WE FOUND '..item_name)
+      local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
 
-    local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
+      local SHRINK_SCALE = 0.30
+      local shrink_options = {
+        time=SEARCH_DELAY,
+        transition=easing.inOutExpo,
+        x=mob.x,
+        y=mob.y,
+        xScale=SHRINK_SCALE,
+        yScale=SHRINK_SCALE,
+        onComplete=function() 
+          item:removeSelf()
+          if not mob:isTouch('searching') then mob:moveToLastPosition() end
+        end,
+      }
 
-    local SHRINK_SCALE = 0.30
-    local shrink_options = {
-      time=SEARCH_DELAY,
-      transition=easing.inOutExpo,
-      x=mob.x,
-      y=mob.y,
-      xScale=SHRINK_SCALE,
-      yScale=SHRINK_SCALE,
-      onComplete=function() 
-        item:removeSelf()
-        if not mob:isActivity('searching') then mob:moveToLastPosition() end
-      end,
-    }
+      if item_name == 'junk' then -- toss aside overhead
+        shrink_options.x = mob.x + 45
+        shrink_options.y = mob.y - 35
+        shrink_options.rotation = mob.rotation + 160 
+      end
 
-    if item_name == 'junk' then
-      shrink_options.x = mob.x + 45
-      shrink_options.y = mob.y - 35
-      shrink_options.rotation = mob.rotation + 160 
+      transition.to(item, shrink_options)
+    else
+      -- make error sound
+      mob:moveToLastPosition()       
     end
-
-    transition.to( item, shrink_options)
   end
 
   function search_area.touch(event)
@@ -47,38 +46,26 @@ print('WE FOUND '..item_name)
 
     if event.phase == "began" and mob.isBodyActive then
       display.getCurrentStage():setFocus(event.target)
-
-      if mob.player:canPerform('search') then
-        local touch_options = {
-          delay=TOUCH_DELAY,
-          onComplete=function()
-            search()
-            mob.timer_ID = timer.performWithDelay(SEARCH_DELAY, search, 0)
-          end,
-        }
-        mob.transition_ID = mob:moveTo(search_area, touch_options)
-        mob:setActivity('searching')
-      else
-        -- make error sound
+      local touch_options = {
+        delay=TOUCH_DELAY,
+        onComplete=function()
+          search()
+          mob.timer_ID = timer.performWithDelay(SEARCH_DELAY, search, 0)
+        end,
+      }
+      mob:setTouch('searching')
+      mob:moveTo(search_area, touch_options)
+    elseif mob:isTouch('searching') then 
+      if event.phase ~= "began" then 
+        mob:cancelAction() 
+        display.getCurrentStage():setFocus(nil) 
       end
-    elseif mob:isActivity('searching') then
-      if mob.timer_ID then 
-        timer.cancel(mob.timer_ID)
-        mob.timer_ID = nil
-      end
-
-      if mob.transition_ID then
-        transition.cancel(mob.transition_ID)
-        mob.transition_ID = nil
-      end
-
-      mob:resetActivity()
     end
 
     if event.phase == "ended" or event.phase == "cancelled" then 
-      display.getCurrentStage():setFocus(nil) 
+      --display.getCurrentStage():setFocus(nil) 
     end
-    
+
     return true
   end
 
@@ -86,12 +73,8 @@ print('WE FOUND '..item_name)
     local mob = search_area.map:getObjects({name=tostring(main_player)})
 
     if ( event.numTaps == 2 ) and mob.isBodyActive then
-      if mob.player:canPerform('search') then
-        local tap_options = {onComplete=search}
-        mob:moveTo(search_area, tap_options)
-      else
-        -- make error sound
-      end
+      local tap_options = {onComplete=search}
+      mob:moveTo(search_area, tap_options)
     end
   end
 
