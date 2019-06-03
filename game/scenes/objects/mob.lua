@@ -141,7 +141,11 @@ local function Plugin(mob)
   end
 
   function mob:moveToLastPosition()
-    if not self:hasLastPosition() then return end
+    if not self:hasLastPosition() then 
+      self:resumeMotion()
+      self:resetLastPosition()
+      return 
+    end
 
     local distance = lume.distance(self.x, self.y, self.last_x, self.last_y)
     options = {
@@ -169,12 +173,13 @@ local function Plugin(mob)
 
   function mob:setTouch(action) self.current_action = action end
 
-  function mob:cancelAction()
+  function mob:cancelAction() self.current_action = nil end
+
+  function mob:cancelTimers()
     if self.timer_ID then timer.cancel(self.timer_ID) end
     if self.transition_ID then transition.cancel(self.transition_ID) end
     self.transition_ID = nil
-    self.timer_ID = nil 
-    self.current_action = nil 
+    self.timer_ID = nil
   end
 
 	return mob
