@@ -80,14 +80,14 @@ local function Plugin(mob)
     local x_distance, y_distance = x - self.x, y - self.y
     local dir 
 
-    if math.abs(x_distance) >= math.abs(y_distance) then
-      if x_distance >= 0 then dir = 2 -- face east
-      elseif x_distance < 0 then dir = 4 -- face west
-      end
-    elseif math.abs(x_distance) < math.abs(y_distance) then
-      if y_distance >= 0 then dir = 3 -- face south
-      elseif y_distance < 0 then dir = 1 -- face north
-      end
+    if math.abs(x_distance) < math.abs(y_distance) and y_distance < 0 then 
+      dir = 1 -- face north
+    elseif math.abs(x_distance) >= math.abs(y_distance) and x_distance >= 0 then
+      dir = 2 -- face east
+    elseif math.abs(x_distance) < math.abs(y_distance) and y_distance >= 0 then
+      dir = 3 -- face south
+    elseif math.abs(x_distance) >= math.abs(y_distance) and x_distance < 0 then 
+      dir = 4 -- face west
     end
 
     mob:setFrame(dir)  -- changes direction 
