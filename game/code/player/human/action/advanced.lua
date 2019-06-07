@@ -53,7 +53,7 @@ function search.activate(player)
 
   if flashlight_condition == 0 then 
     self_msg = self_msg..'Your '..tostring(flashlight)..' is destroyed!'
-  elseif flashlight_condition and GPS:isConditionVisible(player) then 
+  elseif flashlight_condition and flashlight:isConditionVisible(player) then 
     self_msg = self_msg..'Your '..tostring(flashlight)..' degrades to a '..flashlight:getConditionState()..' state.'
   end  
 
