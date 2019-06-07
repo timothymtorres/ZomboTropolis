@@ -1,3 +1,5 @@
+local lume = require('code.libs.lume')
+
 local SEARCH_DELAY = 1500
 local TOUCH_DELAY = 1000
 
@@ -17,33 +19,48 @@ local function Plugin(search_area)
     end
 
     local result = main_player:perform('search')
-    local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
 
-print('WE FOUND '..item_name)
-
-    local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
-
-    local SHRINK_SCALE = 0.30
-    local shrink_options = {
-      time=SEARCH_DELAY,
-      transition=easing.inOutExpo,
-      x=mob.x,
-      y=mob.y,
-      xScale=SHRINK_SCALE,
-      yScale=SHRINK_SCALE,
-      onComplete=function() 
-        item:removeSelf()
-        if not mob:isTouch('searching') then mob:moveToLastPosition() end
-      end,
-    }
-
-    if item_name == 'junk' then -- toss aside overhead
-      shrink_options.x = mob.x + 45
-      shrink_options.y = mob.y - 35
-      shrink_options.rotation = mob.rotation + 160 
+    local is_item, is_player 
+    if result[3] and result[3].class.super.name == 'Item' then is_item = true
+    elseif result[3] then is_player = true
     end
 
-    transition.to(item, shrink_options)
+    -- do flashlight scene effects later?  Use shader layer in Tiled, combine
+    -- with dynamically generated circle and arc-lines with gradients applied
+    -- on top of a mask, will prolly be a PIA
+    local flashlight_state = result[4]
+
+    if is_item then
+      local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
+
+  print('WE FOUND '..item_name)
+
+      local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
+
+      local SHRINK_SCALE = 0.30
+      local shrink_options = {
+        time=SEARCH_DELAY,
+        transition=easing.inOutExpo,
+        x=mob.x,
+        y=mob.y,
+        xScale=SHRINK_SCALE,
+        yScale=SHRINK_SCALE,
+        onComplete=function() 
+          item:removeSelf()
+          if not mob:isTouch('searching') then mob:moveToLastPosition() end
+        end,
+      }
+
+      if item_name == 'junk' then -- toss aside overhead
+        shrink_options.x = mob.x + 45
+        shrink_options.y = mob.y - 35
+        shrink_options.rotation = mob.rotation + 160 
+      end
+
+      transition.to(item, shrink_options)
+    elseif is_player then
+
+    end
   end
 
   function search_area.touch(event)
@@ -70,8 +87,13 @@ print('WE FOUND '..item_name)
       display.getCurrentStage():setFocus(nil) 
     end
 
+    local TOUCH_CANCEL_DISTANCE = 5
+    local distance = lume.distance(event.x, event.y, event.xStart, event.yStart)
+
     -- touch move/end/cancel phases result in search being canceled
-    if event.phase ~= "began" and mob:isTouch('searching') then
+    if mob:isTouch('searching') and ((event.phase == "moved" and 
+    distance > TOUCH_CANCEL_DISTANCE) or event.phase == "ended" or 
+    event.phase == "cancelled") then
       mob:cancelTimers()
       mob:cancelAction()
     end
