@@ -19,23 +19,22 @@ local function Plugin(search_area)
     end
 
     local result = main_player:perform('search')
-
-    local is_item, is_player 
-    if result[3] and result[3].class.super.name == 'Item' then is_item = true
-    elseif result[3] then is_player = true
-    end
-
+    local discovery = result[3]
+    local flashlight_state = result[4]
     -- do flashlight scene effects later?  Use shader layer in Tiled, combine
     -- with dynamically generated circle and arc-lines with gradients applied
     -- on top of a mask, will prolly be a PIA
-    local flashlight_state = result[4]
 
-    if is_item then
-      local item_name = result[3] and string.lower(tostring(result[3])) or 'junk'
+    local item, hidden_player, junk
+    if discovery and discovery:isInstanceOf('Item') then item = discovery
+    elseif discovery and discovery:isInstanceOf('Player') then hidden_player = discovery
+    elseif not discovery then junk = true
+    end
 
-  print('WE FOUND '..item_name)
-
-      local item = search_area.map:addSprite("Item", item_name, mob.x, mob.y - 22)
+    if item or junk then
+      local name = item and string.lower(tostring(item)) or 'junk'
+print('WE FOUND '..name)    
+      local sprite = search_area.map:addSprite("Item", name, mob.x, mob.y - 22)
 
       local SHRINK_SCALE = 0.30
       local shrink_options = {
@@ -46,19 +45,19 @@ local function Plugin(search_area)
         xScale=SHRINK_SCALE,
         yScale=SHRINK_SCALE,
         onComplete=function() 
-          item:removeSelf()
+          sprite:removeSelf()
           if not mob:isTouch('searching') then mob:moveToLastPosition() end
         end,
       }
 
-      if item_name == 'junk' then -- toss aside overhead
+      if junk then -- toss aside overhead
         shrink_options.x = mob.x + 45
         shrink_options.y = mob.y - 35
         shrink_options.rotation = mob.rotation + 160 
       end
 
-      transition.to(item, shrink_options)
-    elseif is_player then
+      transition.to(sprite, shrink_options)
+    elseif hidden_player then
 
     end
   end
