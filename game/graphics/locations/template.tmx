@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="12" nextobjectid="11">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="15">
  <tileset firstgid="1" name="floor" tilewidth="32" tileheight="32" tilecount="36" columns="6">
   <image source="Tilesets/floor.png" width="192" height="192"/>
  </tileset>
@@ -123,8 +123,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="61" name="overlay" tilewidth="32" tileheight="32" tilecount="6" columns="3">
-  <image source="Tilesets/overlay.png" width="96" height="64"/>
+ <tileset firstgid="61" name="overlay" tilewidth="32" tileheight="32" tilecount="9" columns="3">
+  <image source="Tilesets/overlay.png" width="96" height="96"/>
  </tileset>
  <layer id="2" name="Background" width="30" height="30">
   <data encoding="csv">
@@ -228,6 +228,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="12" name="Shading" opacity="0.7">
+  <object id="13" gid="67" x="0" y="960" width="960" height="960" visible="0"/>
+ </objectgroup>
+ <objectgroup id="13" name="Lighting" opacity="0.27"/>
  <objectgroup id="4" name="Corpse"/>
  <objectgroup id="5" name="Tap Overlays">
   <object id="6" name="inside" type="search_area" gid="61" x="480" y="288" width="64" height="64"/>

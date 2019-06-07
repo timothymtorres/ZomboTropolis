@@ -39,6 +39,28 @@
         }, 
         {
          "draworder":"topdown",
+         "id":19,
+         "name":"Shading",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":20,
+         "name":"Lighting",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":12,
          "name":"Physics Zone",
          "objects":[
@@ -3783,7 +3805,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":19,
+ "nextlayerid":21,
  "nextobjectid":881,
  "orientation":"orthogonal",
  "properties":[
@@ -4137,18 +4159,18 @@
          "columns":3,
          "firstgid":61,
          "image":"tilesets\/overlay.png",
-         "imageheight":64,
+         "imageheight":96,
          "imagewidth":96,
          "margin":0,
          "name":"overlay",
          "spacing":0,
-         "tilecount":6,
+         "tilecount":9,
          "tileheight":32,
          "tilewidth":32
         }, 
         {
          "columns":4,
-         "firstgid":67,
+         "firstgid":70,
          "image":"tilesets\/mob.png",
          "imageheight":64,
          "imagewidth":128,
