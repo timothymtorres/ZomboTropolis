@@ -14,7 +14,10 @@ function search.activate(player)
   
   local discovery = p_tile:search(player, player:getStage(), flashlight)
 
+  local flashlight_state
+
   if flashlight and player_inside_unpowered_building then -- flashlight is only used when building has no power
+    flashlight_state = "FLASHLIGHT_PRESENT"
     flashlight_was_used = true
     flashlight_condition = player.inventory:updateDurability(flashlight) 
   end
@@ -53,15 +56,18 @@ function search.activate(player)
 
   if flashlight_condition == 0 then 
     self_msg = self_msg..'Your '..tostring(flashlight)..' is destroyed!'
+    flashlight_state = "FLASHLIGHT_DESTROYED"
   elseif flashlight_condition and flashlight:isConditionVisible(player) then 
     self_msg = self_msg..'Your '..tostring(flashlight)..' degrades to a '..flashlight:getConditionState()..' state.'
+    flashlight_state = "FLASHLIGHT_DEGRADED"
   end  
 
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------     
 
-  local event = {'search', player, discovery, flashlight_was_used}  
+  flashlight_state = flashlight_state or "FLASHLIGHT_NOT_PRESENT"
+  local event = {'search', player, discovery, flashlight_state}  
 
   if hidden_player then
     local settings = {stage=player:getStage(), exclude={}}
