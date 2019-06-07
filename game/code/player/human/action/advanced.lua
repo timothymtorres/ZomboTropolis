@@ -24,9 +24,8 @@ function search.activate(player)
 
   local item, hidden_player
 
-  -- we may want to add methods to items/location/mobs like mob:isItem(),  item:isLocation(), etc. to tell them apart.
-  if discovery and discovery.class.super.name == 'Item' then item = discovery
-  elseif discovery then hidden_player = discovery
+  if discovery and discovery:isInstanceOf('Item') then item = discovery
+  elseif discovery and discovery:isInstanceOf('Player') then hidden_player = discovery
   end
 
   if item then player.inventory:insert(item) end
