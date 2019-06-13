@@ -7,6 +7,7 @@
 local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
 local lume = require('code.libs.lume')
+local createMob = require('scenes.createMob')
 
 local location
 
@@ -77,10 +78,6 @@ function scene:create( event )
   -- spawn mobs onto map
   local mobs = player_location:getPlayers(player_stage) 
   for player in pairs(mobs) do
-    local username = player:getUsername()
-    local animation = player:getMobType() -- swap this out with sprite_name later
-    local is_player_standing = player:isStanding()
-
     local spawns 
     if is_location_contested then          
       if player:isMobType(attacker) then spawns = attacker_spawns  
@@ -91,35 +88,9 @@ function scene:create( event )
 
     local spawn = lume.randomchoice(spawns)
 
-    local mob_data = {
-      gid = location:getAnimationGID(animation),
-      height = 32,
-      width = 32,
-      name = username,
-      type = "mob",
-      isAnimated = true,
-    }
-
-    local mob = location:addObject(mob_data)
-    mob:rotate( (is_player_standing and 0) or 90)
-    mob.x, mob.y = 0, 0
-
-    local snap_w = 96 --name_background.contentWidth or 32
-    local snap_h = 96 --name_background.contentHeight + 32
-
-    local layer = location:getLayer(is_player_standing and "Mob" or "Corpse")
-    local snap = display.newSnapshot(layer, snap_w, snap_h)
-
-    -- used by berry to extend our snapshot
-    snap.name, snap.type = username, 'mob'
-    snap.player = player
-    snap.x, snap.y =  spawn.x, spawn.y
-
-    snap.group:insert( mob )
-
+    local mob = createMob(player, location)
+    mob.x, mob.y =  spawn.x, spawn.y
   end
-
-  location:extend("mob")
 
   if main_player:isStaged('inside') then
     -- display our machines

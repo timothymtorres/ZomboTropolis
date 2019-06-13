@@ -1499,9 +1499,12 @@ function Map:extend( ... )
 
 		for _, object in ipairs( display_objects ) do 
 
-			-- Extend the object with its own custom code
-			object = plugin( object )
-			object.map = self
+			if not object.plugin then 
+				-- Extend the object with its own custom code
+				object = plugin( object )
+				object.map = self
+				object.plugin = true
+			end
 
 		end
 
