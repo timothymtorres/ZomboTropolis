@@ -78,18 +78,20 @@ function scene:create( event )
   -- spawn mobs onto map
   local mobs = player_location:getPlayers(player_stage) 
   for player in pairs(mobs) do
-    local spawns 
-    if is_location_contested then          
-      if player:isMobType(attacker) then spawns = attacker_spawns  
-      elseif player:isMobType(defender) then spawns = defender_spawns
+    if not player.status_effect:isActive('hide') then
+      local spawns 
+      if is_location_contested then          
+        if player:isMobType(attacker) then spawns = attacker_spawns  
+        elseif player:isMobType(defender) then spawns = defender_spawns
+        end
+      else spawns = location_spawns -- both attacker/defender spawns
       end
-    else spawns = location_spawns -- both attacker/defender spawns
+
+      local spawn = lume.randomchoice(spawns)
+
+      local mob = createMob(player, location)
+      mob.x, mob.y =  spawn.x, spawn.y
     end
-
-    local spawn = lume.randomchoice(spawns)
-
-    local mob = createMob(player, location)
-    mob.x, mob.y =  spawn.x, spawn.y
   end
 
   if main_player:isStaged('inside') then
