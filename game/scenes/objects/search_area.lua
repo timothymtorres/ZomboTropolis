@@ -1,4 +1,5 @@
 local lume = require('code.libs.lume')
+local createMob = require('scenes.createMob')
 
 local SEARCH_DELAY = 1500
 local TOUCH_DELAY = 1000
@@ -58,7 +59,8 @@ print('WE FOUND '..name)
 
       transition.to(sprite, shrink_options)
     elseif hidden_player then
-
+      local mob = createMob(hidden_player, search_area.map)
+      mob.x, mob.y =  search_area.x, search_area.y
     end
   end
 
