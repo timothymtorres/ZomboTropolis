@@ -6,7 +6,7 @@ function broadcastEvent.player(player, msg, self_msg, event)  --this broadcasts 
   local stage = player:getStage()
   
   local players = tile:getPlayers(stage)
-  for _, player_INST in pairs(players) do
+  for player_INST in pairs(players) do
     if player_INST:isStanding() and player_INST ~= player then 
       -- plug in map[y][x] coords into msg with string.gsub()
       player_INST.log:insert(msg, event, date)
@@ -23,7 +23,7 @@ function broadcastEvent.tile(tile, msg, event, setting)
   
   if not exclude or not exclude[tile] then 
     local players = tile:getPlayers(stage)
-    for _, player_INST in pairs(players) do -- deliver msg to tile
+    for player_INST in pairs(players) do -- deliver msg to tile
       if (not mob_type or player_INST:isMobType(mob_type) ) and player_INST:isStanding() and (not exclude or not exclude[player_INST]) then 
         -- plug in map[y][x] coords into msg with string.gsub()
         player_INST.log:insert(msg, event, date)
