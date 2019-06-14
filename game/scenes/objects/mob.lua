@@ -3,8 +3,16 @@ local lume = require('code.libs.lume')
 local MOVEMENT_DELAY = 7
 
 local function Plugin(mob)	
-  -- mob is a snapshot
-  -- mob.group[1] & mob.group[2] are the name/name_background
+--[[
+  mob is a snapshot
+  mob.group[1] & mob.group[2] are the name/name_background
+
+  mob.movement_timer     -- used to roam around map under a recurring timer
+  mob.action_timer       -- used to repeat actions (tap&hold)
+  mob.transition_ID      -- used to track transitions involving mob
+  mob.current_action     -- string value of the current action
+  mob.last_x, mob.last_y -- saves last position before action taken
+--]]
 
   function mob:setFrame(direction)
     self:invalidate()
@@ -176,10 +184,10 @@ local function Plugin(mob)
   function mob:cancelAction() self.current_action = nil end
 
   function mob:cancelTimers()
-    if self.timer_ID then timer.cancel(self.timer_ID) end
+    if self.action_timer then timer.cancel(self.action_timer) end
     if self.transition_ID then transition.cancel(self.transition_ID) end
     self.transition_ID = nil
-    self.timer_ID = nil
+    self.action_timer = nil
   end
 
 	return mob
