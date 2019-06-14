@@ -7,7 +7,7 @@
 local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
 local lume = require('code.libs.lume')
-local createMob = require('scenes.createMob')
+local createMob = require('scenes.functions.createMob')
 
 local location
 
@@ -19,7 +19,6 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 local player_stage = main_player:getStage()
-local location_timers = {}
 -- -------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -189,12 +188,6 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-      local mobs = { location:getObjects( {type='mob'} ) }
-      for _, mob in ipairs(mobs) do 
-        local total_time = math.random(1250, 1700)
-        local username = mob.player:getUsername()
-        location_timers[username] = timer.performWithDelay( total_time, mob, -1)
-      end
     end
 end
 
@@ -212,8 +205,7 @@ function scene:hide( event )
         -- Example: stop timers, stop animation, stop audio, etc.
         local mobs = { location:getObjects( {type='mob'} ) }
         for _, mob in ipairs(mobs) do 
-          local username = mob.player:getUsername()
-          timer.pause(location_timers[username]) 
+          timer.pause(mob.movement_timer) 
         end
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.     
@@ -237,8 +229,7 @@ function scene:destroy( event )
     -- Do we really need to cancel timers on scene:destroy?
     local mobs = { location:getObjects( {type='mob'} ) }
     for _, mob in ipairs(mobs) do 
-      local username = mob.player:getUsername()
-      timer.cancel(location_timers[username]) 
+      timer.cancel(mob.movement_timer) 
     end
 end
 
