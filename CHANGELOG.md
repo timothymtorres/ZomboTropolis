@@ -7,23 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
-## v0.12.0 - ???
+## v0.12.0 - 06/14/2019
 ### Added
-- Tap events for objects.
-- Sprites for all in game items.
-- Humans interacting with: 
-  - Search areas in locations by `Double Tap` results in a single search | `Tap & Hold` results in repeating searches until released
-  - Entrances in building locations by `Single Tap` results in barricade menu popup with stats | `Double Tap` results in a single fortifcation (if barriacdes in inventory) | `Tap & Hold` results in repeating fortifications until released
-- Zombies interacting with:
-  - Entrances in building locations by `Single Tap` results in barricade menu popup with stats | `Double Tap` results in a single claw attack | `Tap & Hold` results in repeating claw attacks until released
+- Sprites for all in game items. (some are placeholders)
+- Humans interacting with search areas by `Double Tap` results in a single search | `Tap & Hold` results in repeating searches until released.
+	- Hidden zombies being revealed by a search.
+	- Different search animations for items, junk, and hidden zombies
 - Players sprites moving towards the location of the actions they are performing.
-- Animations for search.
+- Physics to location scene.  Mobs wander around a location bouncing off walls and physics boundaries.  These physics boundaries seperate attacker/defenders and it depends on which group is in control of the building.  
+
 
 ### Fixed
 - Searching causing players to be deleted from location.
+- Hidden zombies being displayed in a location.
 
 ### Changed
-- Equipment, location, item, and mob icons 
+- Equipment, location, item, and mob icons to be placeholder sprites
 
 ### Removed
 - Axe, machate, and phone items from search chance since the code classes have not been setup.
