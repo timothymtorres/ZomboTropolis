@@ -41,7 +41,7 @@ There is no gathering XP by kills, training, or healing in this game. The only m
 `1.0.0` Release Date
 ==================
 
-Development is dependent on my free time and level of boredom.  ETA until App Store launch is in 2018.  I will update this timeline with more specific season/month/week dates as I get closer and closer to the finish line.
+Development is dependent on my free time and level of boredom.  ETA until App Store launch is in 2019.  I will update this timeline with more specific season/month/week dates as I get closer and closer to the finish line.
 
 Credits
 =======
