@@ -26,8 +26,11 @@ local function createMob(player, location)
   snap.player = player
 
   snap.group:insert( mob )
-
   location:extend("mob")
+
+  local total_time = math.random(1250, 1700)
+  snap.movement_timer = timer.performWithDelay( total_time, snap, -1)
+
   return snap
 end
 
