@@ -1,5 +1,6 @@
 local lume = require('code.libs.lume')
-local createMob = require('scenes.createMob')
+local createMob = require('scenes.functions.createMob')
+local moveMobsToSpawns = require('scenes.functions.moveMobsToSpawns')
 
 local SEARCH_DELAY = 1500
 local TOUCH_DELAY = 1000
@@ -59,8 +60,26 @@ print('WE FOUND '..name)
 
       transition.to(sprite, shrink_options)
     elseif hidden_player then
-      local mob = createMob(hidden_player, search_area.map)
-      mob.x, mob.y =  search_area.x, search_area.y
+      local hidden_mob = createMob(hidden_player, search_area.map)
+      hidden_mob.x, hidden_mob.y =  search_area.x - 50, search_area.y
+
+      local reveal_options = {
+        time = SEARCH_DELAY,
+        threshold = 1,
+        transition=easing.inOutExpo,
+        onComplete=function()
+          -- make zombie sound
+          mob:cancelTimers()
+          mob:cancelAction()
+          hidden_mob:pauseMotion()
+          moveMobsToSpawns(search_area.map, main_player:getLocation(), main_player:getStage() )
+        end,
+      }
+
+      hidden_mob.fill.effect = "filter.dissolve"
+      hidden_mob.fill.effect.threshold = 0.25
+
+      transition.to(hidden_mob.fill.effect, reveal_options)
     end
   end
 
@@ -79,7 +98,7 @@ print('WE FOUND '..name)
         delay=TOUCH_DELAY,
         onComplete=function()
           search()
-          mob.timer_ID = timer.performWithDelay(SEARCH_DELAY, search, 0)
+          mob.action_timer = timer.performWithDelay(SEARCH_DELAY, search, 0)
         end,
       }
       mob:setTouch('searching')
