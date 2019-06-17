@@ -34,7 +34,10 @@ function moveMobsToSpawns(map, tile, stage)
       local spawn = lume.randomchoice(spawns)
       movement_options = {
         delay = MOVEMENT_DELAY,
-        onComplete = mob.resumeMotion,
+        onComplete = function() 
+          mob:resumeMotion()
+          mob:resetLastPosition()
+        end,
       }
 
       mob:moveTo(spawn, movement_options)
