@@ -30,6 +30,13 @@ local function Plugin(mob)
     end
   end
 
+  function mob:pause()
+    for i=3, self.numChildren do
+       self[i]:pause() 
+       self[i]:setFrame(1)
+    end
+  end
+
   function mob:updateDirection(x, y) 
     local x_distance, y_distance = x - self.x, y - self.y
     local dir 
@@ -54,7 +61,10 @@ local function Plugin(mob)
 
   function mob:resumeMotion() self.isBodyActive = true end
 
-  function mob:wait() self:setLinearVelocity(0, 0) end
+  function mob:wait() 
+    self:setLinearVelocity(0, 0) 
+    self:pause()
+  end
 
   function mob:roam()
     local speed, direction = math.random(28, 40), lume.randomchoice({'north', 'east', 'south', 'west'}) 
@@ -89,6 +99,7 @@ local function Plugin(mob)
     options.onStart = function()
       if self.player:isLocationContested() then self:saveLastPosition() end
       self:updateDirection(target.x, target.y)
+      self:play()
       self:pauseMotion()
     end
 
@@ -98,7 +109,7 @@ local function Plugin(mob)
   function mob:moveToLastPosition()
     if not self:hasLastPosition() then 
       self:resumeMotion()
-      self:resetLastPosition()
+      self:resetLastPosition() -- pretty sure this is redundant
       return 
     end
 
@@ -108,11 +119,13 @@ local function Plugin(mob)
       x = self.last_x,
       y = self.last_y,
       onComplete=function()
+        self:pause()
         self:resumeMotion()
         self:resetLastPosition()
       end,
     }
     self:updateDirection(self.last_x, self.last_y)
+    self:play()
     self.transition_ID = transition.moveTo(self, options)
   end
 
