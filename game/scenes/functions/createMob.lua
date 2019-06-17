@@ -58,8 +58,8 @@ local function createMob(player, location)
   local name_background = display.newRoundedRect(x, y, w, h, corner)
   name_background:setFillColor(0.15, 0.15, 0.15, 0.65)
 
-  snap.group:insert( 1, name_background )
-  snap.group:insert( 2, name )
+  snap.group:insert(1, name_background)
+  snap.group:insert(2, name)
 
 --[[
       test = display.newSprite(tilesets[image].sheet, tilesets[image])
@@ -75,7 +75,7 @@ local function createMob(player, location)
   end
 
   local body = display.newSprite(tilesets[body_type].sheet, tilesets[body_type])
-  snap.group:insert(body)
+  snap.group:insert(3, body)
 
   location:extend("mob")
 
