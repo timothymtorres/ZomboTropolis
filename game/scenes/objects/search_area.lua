@@ -60,9 +60,16 @@ print('WE FOUND '..name)
 
       transition.to(sprite, shrink_options)
     elseif hidden_player then
+      -- make zombie sound
+      
       local hidden_mob = createMob(hidden_player, search_area.map)
       hidden_mob.x, hidden_mob.y =  search_area.x - 50, search_area.y
       hidden_mob.alpha = 0.3
+      hidden_mob:pauseMotion()
+
+      mob:cancelTimers()
+      mob:cancelAction()
+      mob:pauseMotion()
 
       local reveal_options = {
         time = SEARCH_DELAY,
@@ -70,10 +77,6 @@ print('WE FOUND '..name)
         alpha = 1,
         transition=easing.inOutExpo,
         onComplete=function()
-          -- make zombie sound
-          mob:cancelTimers()
-          mob:cancelAction()
-          hidden_mob:pauseMotion()
           moveMobsToSpawns(search_area.map, main_player:getLocation(), main_player:getStage() )
         end,
       }
@@ -97,8 +100,8 @@ print('WE FOUND '..name)
         delay=TOUCH_DELAY,
         onComplete=function()
           mob:pause()
-          search()
           mob.action_timer = timer.performWithDelay(SEARCH_DELAY, search, 0)
+          search()
         end,
       }
       mob:setTouch('searching')
