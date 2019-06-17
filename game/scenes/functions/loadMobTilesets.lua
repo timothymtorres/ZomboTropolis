@@ -98,10 +98,10 @@ local function loadMobTilesets(directory)
     if is_directory then  -- search sub-directories
 			loadMobTilesets(directory .. '/' .. file)
 		elseif is_image_file then
-			local image = file
+			local image = file_name
 
 			tilesets[image] = buildSequences(default_tileset)
-			tilesets[image].sheet = graphics.newImageSheet(directory .. '/' .. image, 
+			tilesets[image].sheet = graphics.newImageSheet(directory .. '/' .. file, 
                                                      default_options)
 
 --[[
