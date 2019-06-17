@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.2.3" name="darkelf" tilewidth="64" tileheight="64" tilecount="273" columns="13">
- <image source="darkelf.png" width="832" height="1344"/>
+ <image source="body/darkelf.png" width="832" height="1344"/>
  <tile id="104">
   <properties>
    <property name="name" value="walk-north"/>
@@ -63,6 +63,14 @@
    <frame tileid="149" duration="100"/>
    <frame tileid="150" duration="100"/>
    <frame tileid="151" duration="100"/>
+  </animation>
+ </tile>
+ <tile id="265">
+  <properties>
+   <property name="name" value="fall"/>
+  </properties>
+  <animation>
+   <frame tileid="265" duration="100"/>
   </animation>
  </tile>
 </tileset>

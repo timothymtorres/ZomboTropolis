@@ -8,7 +8,7 @@ return {
   spacing = 0,
   margin = 0,
   columns = 13,
-  image = "darkelf.png",
+  image = "body/darkelf.png",
   imagewidth = 832,
   imageheight = 1344,
   tileoffset = {
@@ -196,6 +196,18 @@ return {
         },
         {
           tileid = 151,
+          duration = 100
+        }
+      }
+    },
+    {
+      id = 265,
+      properties = {
+        ["name"] = "fall"
+      },
+      animation = {
+        {
+          tileid = 265,
           duration = 100
         }
       }
