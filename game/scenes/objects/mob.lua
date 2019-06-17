@@ -18,15 +18,15 @@ local function Plugin(mob)
 --]]
 
   function mob:setSequence(animation)
-    self:invalidate()
-    for i=3, self.group.numChildren do
-      self.group[i]:setSequence(animation)
+    --self:invalidate()
+    for i=3, self.numChildren do
+      self[i]:setSequence(animation)
     end
   end
 
   function mob:play()
-    for i=3, self.group.numChildren do
-       self.group[i]:play() 
+    for i=3, self.numChildren do
+       self[i]:play() 
     end
   end
 

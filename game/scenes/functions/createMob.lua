@@ -1,7 +1,9 @@
 local lume = require('code.libs.lume')
 local loadMobTilesets = require('scenes.functions.loadMobTilesets')
+local loadClothing = require('scenes.functions.loadClothing')
 
 local tilesets = loadMobTilesets('graphics/mob')
+local clothing = loadClothing('graphics/mob')
 
 local function createMob(player, location)
   local username = player:getUsername()
@@ -26,7 +28,8 @@ local function createMob(player, location)
   local snap_w = 96
   local snap_h = 96
   local layer = location:getLayer(is_player_standing and "Mob" or "Corpse")
-  local snap = display.newSnapshot(layer, snap_w, snap_h)
+  local snap = display.newGroup()
+  layer:insert(snap)
 
   -- used by berry to extend our snapshot
   snap.name, snap.type = username, 'mob'
@@ -58,15 +61,8 @@ local function createMob(player, location)
   local name_background = display.newRoundedRect(x, y, w, h, corner)
   name_background:setFillColor(0.15, 0.15, 0.15, 0.65)
 
-  snap.group:insert(1, name_background)
-  snap.group:insert(2, name)
-
---[[
-      test = display.newSprite(tilesets[image].sheet, tilesets[image])
-      test.x, test.y = math.random(100, 300), math.random(50, 250)
-      test:setSequence('walk-east')
-      test:play()
---]]
+  snap:insert(1, name_background)
+  snap:insert(2, name)
 
   local body_type
   if player:isMobType("zombie") then body_type = "red_orc"
@@ -75,7 +71,15 @@ local function createMob(player, location)
   end
 
   local body = display.newSprite(tilesets[body_type].sheet, tilesets[body_type])
-  snap.group:insert(3, body)
+  snap:insert(3, body)
+
+  local torso_type = lume.randomchoice(clothing.torso) 
+  local torso = display.newSprite(tilesets[torso_type].sheet, tilesets[torso_type])
+  snap:insert(4, torso)
+
+  local head_type = lume.randomchoice(clothing.head)
+  local head = display.newSprite(tilesets[head_type].sheet, tilesets[head_type])
+  snap:insert(5, head)
 
   location:extend("mob")
 
@@ -110,7 +114,7 @@ local function createMob(player, location)
       end
     end
 
-    snap:addEventListener( "collision", snap )
+    snap:addEventListener("collision", snap)
 
   elseif not snap.player:isStanding() then 
     --consider removing the snap name/background 
