@@ -109,7 +109,8 @@ local function createMob(player, location)
         end
 
         if direction then
-          self:setSequence("walk-"..direction) 
+          self:setSequence("walk-"..direction)
+          self:play()
         end
       end
     end
