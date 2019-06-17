@@ -54,6 +54,9 @@ A lot of free source assets and libraries were used in the making of ZomboTroplo
 * [CoronaSDK](https://coronalabs.com/) used to render the code onto multiple platforms (phone, tablet, etc.)
 * [SS13 Sprites](https://github.com/tgstation/tgstation) used for mobs, items, and locations in game
 * [Berry](https://github.com/ldurniat/Berry) used to manipulate and display the rooms in game
+* [Universal LPC SPritesheet](https://github.com/jrconway3/Universal-LPC-spritesheet) used for the mob and clothing spirtes
+
+Several of these resources are licensed under MIT, CC-BY-SA, or GPL3.
 
 People that helped contribute to this project:
 
