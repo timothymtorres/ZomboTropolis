@@ -109,9 +109,8 @@ local function createMob(player, location)
         elseif vx < 0 then direction = "west"
         end
 
-        if direction then
-          self:setSequence("walk-"..direction)
-          --self:play()
+        if direction then self:setSequence("walk-"..direction) 
+        else self:pause() -- sometimes colliding with wall results in no velocity 
         end
       end
     end
