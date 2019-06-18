@@ -25,13 +25,13 @@ local function Plugin(mob)
     end
   end
 
-  function mob:play()
+  function mob:playAnimation()
     for i=3, self.numChildren do
        self[i]:play() 
     end
   end
 
-  function mob:pause()
+  function mob:pauseAnimation()
     for i=3, self.numChildren do
        self[i]:pause() 
        self[i]:setFrame(1)
@@ -64,7 +64,7 @@ local function Plugin(mob)
 
   function mob:wait() 
     self:setLinearVelocity(0, 0) 
-    self:pause()
+    self:pauseAnimation()
   end
 
   function mob:roam()
@@ -79,7 +79,6 @@ local function Plugin(mob)
 
     self:setLinearVelocity(vx, vy)
     self:setSequence("walk-"..direction)
-    --self:play()
   end
 
   function mob:timer()
@@ -100,14 +99,14 @@ local function Plugin(mob)
     options.onStart = function()
       if self.player:isLocationContested() then self:saveLastPosition() end
       self:updateDirection(target.x, target.y)
-      self:play()
+      self:playAnimation()
       self:pauseMotion()
     end
 
-    -- adds a wrapper function self:pause() to options.onComplete 
+    -- adds a wrapper function self:pauseAnimation() to options.onComplete 
     local onComplete = options.onComplete
     options.onComplete = function()
-      self:pause() 
+      self:pauseAnimation() 
       if onComplete then onComplete() end
     end
 
@@ -126,13 +125,13 @@ local function Plugin(mob)
       x = self.last_x,
       y = self.last_y,
       onComplete=function()
-        self:pause()
+        self:pauseAnimation()
         self:resumeMotion()
         self:resetLastPosition()
       end,
     }
     self:updateDirection(self.last_x, self.last_y)
-    self:play()
+    self:playAnimation()
     self.transition_ID = transition.moveTo(self, options)
   end
 
