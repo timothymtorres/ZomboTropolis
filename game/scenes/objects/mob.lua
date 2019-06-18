@@ -94,8 +94,8 @@ local function Plugin(mob)
     options.onStart = function()
       if self.player:isLocationContested() then self:saveLastPosition() end
       self:updateDirection(target.x, target.y)
-      self:playAnimation()
       self:stopPhysics()
+      self:playAnimation()
     end
 
     -- adds a wrapper function self:pauseAnimation() to options.onComplete 
