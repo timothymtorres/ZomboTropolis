@@ -17,18 +17,12 @@ local function Plugin(mob)
   mob.last_x, mob.last_y -- saves last position before action taken
 --]]
 
-  function mob:setSequence(animation)
-    --self:invalidate()
-    for i=3, self.numChildren do
-      self[i]:setSequence(animation)
-      self[i]:play() 
-    end
+  function mob:setAnimation(animation)
+    for i=3, self.numChildren do self[i]:setSequence(animation) end
   end
 
   function mob:playAnimation()
-    for i=3, self.numChildren do
-       self[i]:play() 
-    end
+    for i=3, self.numChildren do self[i]:play() end
   end
 
   function mob:pauseAnimation()
@@ -52,7 +46,7 @@ local function Plugin(mob)
       dir = "west"
     end
 
-    mob:setSequence("walk-"..dir)  -- changes direction 
+    self:setAnimation("walk-"..dir)  -- changes direction 
   end
 
   function mob:stopPhysics()
@@ -78,7 +72,8 @@ local function Plugin(mob)
     end
 
     self:setLinearVelocity(vx, vy)
-    self:setSequence("walk-"..direction)
+    self:setAnimation("walk-"..direction)
+    self:playAnimation()
   end
 
   function mob:timer()
@@ -107,6 +102,7 @@ local function Plugin(mob)
     local onComplete = options.onComplete
     options.onComplete = function()
       self:pauseAnimation() 
+      self.transition_ID = nil
       if onComplete then onComplete() end
     end
 
@@ -128,6 +124,7 @@ local function Plugin(mob)
         self:pauseAnimation()
         self:resumePhysics()
         self:resetLastPosition()
+        self.transition_ID = nil
       end,
     }
     self:updateDirection(self.last_x, self.last_y)
@@ -147,9 +144,9 @@ local function Plugin(mob)
 
   function mob:setTouch(action) self.current_action = action end
 
-  function mob:cancelAction() self.current_action = nil end
+  function mob:cancelAction()
+    self.current_action = nil
 
-  function mob:cancelTimers()
     if self.action_timer then timer.cancel(self.action_timer) end
     if self.transition_ID then transition.cancel(self.transition_ID) end
     self.transition_ID = nil

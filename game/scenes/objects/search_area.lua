@@ -14,9 +14,8 @@ local function Plugin(search_area)
 
     if not mob.player:canPerform('search') then
       -- make error sound
-      mob:cancelTimers()
       mob:cancelAction() 
-      mob:moveToLastPosition() 
+      mob:moveToLastPosition() -- need this in case tap&hold and run out of ap 
       return       
     end
 
@@ -67,9 +66,7 @@ print('WE FOUND '..name)
       hidden_mob.alpha = 0.3
       hidden_mob:stopPhysics()
 
-      mob:cancelTimers()
-      mob:cancelAction()
-      mob:stopPhysics()
+      mob:cancelAction() 
 
       local reveal_options = {
         time = SEARCH_DELAY,
@@ -116,7 +113,6 @@ print('WE FOUND '..name)
     if mob:isTouch('searching') and ((event.phase == "moved" and 
     distance > TOUCH_CANCEL_DISTANCE) or event.phase == "ended" or 
     event.phase == "cancelled") then
-      mob:cancelTimers()
       mob:cancelAction()
     end
 

@@ -85,8 +85,7 @@ local function createMob(player, location)
 
   if snap.player:isStanding() then
     local starting_direction = "walk-" .. lume.randomchoice({'north', 'east', 'south', 'west'}) 
-    snap:setSequence(starting_direction)
-    snap:pauseAnimation()
+    snap:setAnimation(starting_direction)
 
     local name = snap.player:getUsername()
     local font_size = 9
@@ -109,8 +108,11 @@ local function createMob(player, location)
         elseif vx < 0 then direction = "west"
         end
 
-        if direction then self:setSequence("walk-"..direction) 
-        else self:pauseAnimation() -- sometimes colliding with wall results in no velocity 
+        if direction then 
+          self:setAnimation("walk-"..direction)
+          self:playAnimation() 
+        else -- sometimes colliding with wall results in no velocity 
+          self:pauseAnimation()
         end
       end
     end
@@ -119,8 +121,7 @@ local function createMob(player, location)
 
   elseif not snap.player:isStanding() then 
     --consider removing the snap name/background 
-    snap:setSequence("fall")
-    snap:pauseAnimation()
+    snap:setAnimation("fall")
   end
 
   local total_time = math.random(1250, 1700)
