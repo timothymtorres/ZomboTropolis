@@ -55,7 +55,7 @@ local function Plugin(mob)
     mob:setSequence("walk-"..dir)  -- changes direction 
   end
 
-  function mob:pauseMotion()
+  function mob:pausePhysics()
     self:setLinearVelocity(0, 0) 
     self.isBodyActive = false
   end
@@ -100,7 +100,7 @@ local function Plugin(mob)
       if self.player:isLocationContested() then self:saveLastPosition() end
       self:updateDirection(target.x, target.y)
       self:playAnimation()
-      self:pauseMotion()
+      self:pausePhysics()
     end
 
     -- adds a wrapper function self:pauseAnimation() to options.onComplete 
