@@ -65,11 +65,11 @@ print('WE FOUND '..name)
       local hidden_mob = createMob(hidden_player, search_area.map)
       hidden_mob.x, hidden_mob.y =  search_area.x - 50, search_area.y
       hidden_mob.alpha = 0.3
-      hidden_mob:pausePhysics()
+      hidden_mob:stopPhysics()
 
       mob:cancelTimers()
       mob:cancelAction()
-      mob:pausePhysics()
+      mob:stopPhysics()
 
       local reveal_options = {
         time = SEARCH_DELAY,
