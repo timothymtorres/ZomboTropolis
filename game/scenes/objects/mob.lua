@@ -103,6 +103,13 @@ local function Plugin(mob)
       self:pauseMotion()
     end
 
+  -- adds a wrapper function self:pause() to options.onComplete 
+    local onComplete = options.onComplete
+    options.onComplete = function()
+      self:pause() 
+      if onComplete then onComplete() end
+    end
+
     self.transition_ID = transition.moveTo(self, options)
   end
 

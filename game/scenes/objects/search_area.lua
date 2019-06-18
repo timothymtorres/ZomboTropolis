@@ -61,7 +61,7 @@ print('WE FOUND '..name)
       transition.to(sprite, shrink_options)
     elseif hidden_player then
       -- make zombie sound
-      
+
       local hidden_mob = createMob(hidden_player, search_area.map)
       hidden_mob.x, hidden_mob.y =  search_area.x - 50, search_area.y
       hidden_mob.alpha = 0.3
@@ -99,7 +99,6 @@ print('WE FOUND '..name)
       local touch_options = {
         delay=TOUCH_DELAY,
         onComplete=function()
-          mob:pause()
           mob.action_timer = timer.performWithDelay(SEARCH_DELAY, search, 0)
           search()
         end,
@@ -133,12 +132,7 @@ print('WE FOUND '..name)
     end
 
     if ( event.numTaps == 2 ) and mob.isBodyActive then
-      local tap_options = {
-        onComplete=function()
-          mob:pause()
-          search()
-        end,
-      }
+      local tap_options = {onComplete=search,}
       mob:moveTo(search_area, tap_options)
     end
   end
