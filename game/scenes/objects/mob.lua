@@ -21,6 +21,7 @@ local function Plugin(mob)
     --self:invalidate()
     for i=3, self.numChildren do
       self[i]:setSequence(animation)
+      self[i]:play() 
     end
   end
 
@@ -78,7 +79,7 @@ local function Plugin(mob)
 
     self:setLinearVelocity(vx, vy)
     self:setSequence("walk-"..direction)
-    self:play()
+    --self:play()
   end
 
   function mob:timer()
@@ -103,7 +104,7 @@ local function Plugin(mob)
       self:pauseMotion()
     end
 
-  -- adds a wrapper function self:pause() to options.onComplete 
+    -- adds a wrapper function self:pause() to options.onComplete 
     local onComplete = options.onComplete
     options.onComplete = function()
       self:pause() 
