@@ -109,7 +109,6 @@ local function Plugin(mob)
   function mob:moveToLastPosition()
     if not self:hasLastPosition() then 
       self:resumeMotion()
-      self:resetLastPosition() -- pretty sure this is redundant
       return 
     end
 
