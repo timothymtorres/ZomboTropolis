@@ -35,7 +35,7 @@ function moveMobsToSpawns(map, tile, stage)
       movement_options = {
         delay = MOVEMENT_DELAY,
         onComplete = function() 
-          mob:resumeMotion()
+          mob:resumePhysics()
           mob:resetLastPosition()
         end,
       }

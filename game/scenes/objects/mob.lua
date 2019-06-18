@@ -60,7 +60,7 @@ local function Plugin(mob)
     self.isBodyActive = false
   end
 
-  function mob:resumeMotion() self.isBodyActive = true end
+  function mob:resumePhysics() self.isBodyActive = true end
 
   function mob:wait() 
     self:setLinearVelocity(0, 0) 
@@ -115,7 +115,7 @@ local function Plugin(mob)
 
   function mob:moveToLastPosition()
     if not self:hasLastPosition() then 
-      self:resumeMotion()
+      self:resumePhysics()
       return 
     end
 
@@ -126,7 +126,7 @@ local function Plugin(mob)
       y = self.last_y,
       onComplete=function()
         self:pauseAnimation()
-        self:resumeMotion()
+        self:resumePhysics()
         self:resetLastPosition()
       end,
     }
