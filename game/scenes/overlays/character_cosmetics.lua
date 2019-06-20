@@ -33,7 +33,7 @@ function scene:create( event )
   container:translate( width*0.5, height*0.5 ) -- center the container
 
   local background = display.newRect(0, 0, container_w, container_h)
-  background:setFillColor(0.1, 0.1, 0.1, 0.70)
+  background:setFillColor(0.1, 0.1, 0.1, 0.85)
   container:insert(background)
 
 --[[
@@ -80,7 +80,7 @@ function scene:create( event )
 
       mob.x = container_left  + (i*mob_divider) + ( (i-1)*mob_size) + mob_size/2
 print(mob.x)
-      mob.y = container_top + container_h/5
+      mob.y = container_top + container_h*0.15
       mob.anchorX = 0
 
       container:insert(mob)
@@ -88,9 +88,107 @@ print(mob.x)
   end
 
 
+  -- Listen for segmented control events      
+  local function onSegmentPress( event )
+    local target = event.target
+    print( "Segment Label is:", target.segmentLabel )
+    print( "Segment Number is:", target.segmentNumber )
+  end
 
+  local cosmetic_choices = {"Body", "Hair", "Eyes"} -- Beard
+  local segment_total_width = container_w*0.90
 
-  --composer.hideOverlay('fade', 400)       
+  -- Create a default segmented control
+  local cosmetic_segment = widget.newSegmentedControl(
+    {
+        segmentWidth = segment_total_width/#cosmetic_choices,
+        segments = cosmetic_choices,
+        onPress = onSegmentPress
+    }
+  )
+  cosmetic_segment.x = 0
+  cosmetic_segment.y = container_top + container_h*0.35
+
+  container:insert(cosmetic_segment)
+
+  -- ScrollView listener
+  local function scrollListener( event )
+
+      local phase = event.phase
+      if ( phase == "began" ) then print( "Scroll view was touched" )
+      elseif ( phase == "moved" ) then print( "Scroll view was moved" )
+      elseif ( phase == "ended" ) then print( "Scroll view was released" )
+      end
+
+      -- In the event a scroll limit is reached...
+      if ( event.limitReached ) then
+          if ( event.direction == "up" ) then print( "Reached bottom limit" )
+          elseif ( event.direction == "down" ) then print( "Reached top limit" )
+          elseif ( event.direction == "left" ) then print( "Reached right limit" )
+          elseif ( event.direction == "right" ) then print( "Reached left limit" )
+          end
+      end
+
+      return true
+  end
+
+  -- Create the widget
+  scrollView = widget.newScrollView{
+      width = container_w * 0.64,
+      height = container_h * 0.50,
+      listener = scrollListener,
+      backgroundColor = {0.5, 0.5, 0.5, 1}
+  }
+  scrollView.x = container_left + container_w * 0.36
+  scrollView.y = container_top + container_h * 0.70
+  container:insert(scrollView)
+
+  -- IF CHARACTER CREATION HAPPENING - NO CANCEL BUTTON SHOULD EXIST
+
+  local function cancelOverlay(event)
+    print('button pressed and released')
+    --composer.hideOverlay('fade', 400)       
+  end
+
+  -- Create the widget
+  local cancel = widget.newButton(
+      {
+          label = "Cancel",
+          onRelease = cancelOverlay,
+          shape = "roundedRect",
+          width = container_w*0.25,
+          height = container_h*0.20,
+          cornerRadius = 5, -- this is hardcoded bc I'm lazy
+      }
+  )
+
+  cancel.x = container_left + container_w*0.85
+  cancel.y = container_top + container_h*0.57
+
+  container:insert(cancel)
+
+  local function accept(event)
+    print('button pressed and released')
+  end
+
+  -- Create the widget
+  local accept = widget.newButton(
+      {
+          label = "Accept",
+          onRelease = accept,
+          shape = "roundedRect",
+          width = container_w*0.25,
+          height = container_h*0.20,
+          cornerRadius = 5, -- this is hardcoded bc I'm lazy
+      }
+  )
+
+  accept.x = container_left + container_w*0.85
+  accept.y = container_top + container_h*0.84
+
+  container:insert(accept)
+
+  --sceneGroup:insert(container)  shouldn't this be activated?!
 end
 
 
