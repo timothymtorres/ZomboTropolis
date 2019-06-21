@@ -179,7 +179,7 @@ function scene:create( event )
   scrollView = widget.newScrollView{
     width = container_w * 0.64,
     height = container_h * 0.50,
-    --horizontalScrollDisabled = true,
+    horizontalScrollDisabled = true,
     backgroundColor = {0.5, 0.5, 0.5, 1},
     topPadding = 10,
     bottomPadding = 20,
