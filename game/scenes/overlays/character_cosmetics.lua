@@ -20,7 +20,30 @@ local container_w, container_h = math.floor(width*0.875 + 0.5), math.floor(heigh
 local container_left = -1 * math.floor(container_w*0.5 + 0.5)
 local container_top = -1 * math.floor(container_h*0.5 + 0.5)
 
-print(container_w, container_h)  -- 420, 94
+local function drawMob(options)
+  mob = display.newGroup()
+  options = options or {}
+
+  local body = display.newSprite(tilesets[options.body].sheet, tilesets[options.body])
+  mob:insert(body)
+
+  if options.hair then
+    local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
+    mob:insert(hair)
+  end
+
+  if options.eyes then
+    local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
+    mob:insert(hair)
+  end
+
+-- mob.group_order = {'body', 'hair', etc...}
+-- mob:findGroupPlacement('type')
+
+  -- insert hair
+
+  return mob
+end
 
 -- "scene:create()"
 function scene:create( event )
@@ -55,22 +78,19 @@ function scene:create( event )
   local dir = {'north', 'east', 'south', 'west'} 
 
   if not mob then
-    for i=1, 4 do
-      mob = display.newGroup()
 
-      local body_type
-      if main_player:isMobType("zombie") then body_type = "red_orc"
-      else body_type = "light" -- regular human 
-      end
+    local default_body = {}
+
+    if main_player:isMobType("zombie") then default_body.body = "red_orc"
+    else default_body.body = "light" -- regular human 
+    end
+
+    for i=1, 4 do
+      local mob = drawMob(default_body)
 
       local mob_background = display.newRect(0, 0, mob_size, mob_size)
       mob_background:setFillColor(0.9, 0.9, 0.9, 1)
       mob:insert(1, mob_background)
-
-      local body = display.newSprite(tilesets[body_type].sheet, tilesets[body_type])
-      mob:insert(2, body)
-
-      -- insert hair
 
       local animation = "walk-" ..dir[i]
       for i=2, mob.numChildren do 
@@ -79,7 +99,6 @@ function scene:create( event )
       end 
 
       mob.x = container_left  + (i*mob_divider) + ( (i-1)*mob_size) + mob_size/2
-print(mob.x)
       mob.y = container_top + container_h*0.15
       mob.anchorX = 0
 
@@ -111,6 +130,46 @@ print(mob.x)
 
   container:insert(cosmetic_segment)
 
+
+-------------------------------------------------------
+-- RADIO BUTTONS --
+-------------------------------------------------------
+
+
+  -- Handle press events for the buttons
+  local function onSwitchPress( event )
+      local switch = event.target
+      print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+  end
+
+  -- Create a group for the radio button set
+  local radioGroup = display.newGroup()
+  local nameGroup = display.newGroup()
+  local cosmetic_category = string.lower(cosmetic_segment.segmentLabel)
+
+  for i, cosmetic_option in ipairs(clothing[cosmetic_category]) do
+    local radio_y = math.floor( (i-1)/3) * container_h*0.30 + container_h*0.15
+    local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
+
+    local cosmetic_radio_button = widget.newSwitch{
+      x = radio_x,
+      y = radio_y,
+      style = "radio",
+      id = cosmetic_option,
+      initialSwitchState = i==1 and true or false,
+      onPress = onSwitchPress
+    }
+    radioGroup:insert(cosmetic_radio_button)
+
+    local cosmetic_name = display.newText(cosmetic_option, radio_x, radio_y - 30, native.systemFont, 16 )
+    nameGroup:insert(cosmetic_name)
+  end
+
+-------------------------------------------------------
+-- RADIO BUTTONS --
+-------------------------------------------------------
+
+
   -- ScrollView listener
   local function scrollListener( event )
 
@@ -134,14 +193,22 @@ print(mob.x)
 
   -- Create the widget
   scrollView = widget.newScrollView{
-      width = container_w * 0.64,
-      height = container_h * 0.50,
-      listener = scrollListener,
-      backgroundColor = {0.5, 0.5, 0.5, 1}
+    width = container_w * 0.64,
+    height = container_h * 0.50,
+    listener = scrollListener,
+    backgroundColor = {0.5, 0.5, 0.5, 1},
+    topPadding = 10,
+    bottomPadding = 20,
   }
   scrollView.x = container_left + container_w * 0.36
   scrollView.y = container_top + container_h * 0.70
+
+  scrollView:insert(radioGroup)
+  scrollView:insert(nameGroup)
+
   container:insert(scrollView)
+
+
 
   -- IF CHARACTER CREATION HAPPENING - NO CANCEL BUTTON SHOULD EXIST
 
