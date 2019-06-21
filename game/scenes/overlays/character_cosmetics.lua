@@ -90,15 +90,24 @@ local function drawCosmeticOptions(category)
   local radioGroup = display.newGroup()
   local nameGroup = display.newGroup()
 
-  -- Handle press events for the buttons
-  local function onSwitchPress( event )
-    local switch = event.target
-    print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+  local function handleButtonScrolling( event )
+    local phase = event.phase
 
-    local current_category = string.lower(cosmetic_segment.segmentLabel)
-    mob_cosmetics[current_category] = switch.id ~= 'none' and switch.id or nil
-    mob_cosmetics = drawMob(mob_cosmetics)
-    for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
+    if phase == "moved" then
+      local dy = math.abs( ( event.y - event.yStart ) )
+      -- If the touch on the button has moved more than 10 pixels,
+      -- pass focus back to the scroll view so it can continue scrolling
+      if ( dy > 10 ) then scrollView:takeFocus( event ) end
+    elseif phase == "ended" then
+      local switch = event.target
+      print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+
+      local current_category = string.lower(cosmetic_segment.segmentLabel)
+      mob_cosmetics[current_category] = switch.id ~= 'none' and switch.id or nil
+      mob_cosmetics = drawMob(mob_cosmetics)
+      for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
+    end
+    return true
   end
 
   for i, cosmetic_option in ipairs(clothing[category]) do
@@ -114,7 +123,7 @@ local function drawCosmeticOptions(category)
       style = "radio",
       id = cosmetic_option,
       initialSwitchState = is_cosmetic_selected,
-      onRelease = onSwitchPress
+      onEvent = handleButton,
     }
     radioGroup:insert(cosmetic_radio_button)
 
@@ -157,6 +166,7 @@ function scene:create( event )
 
     scrollView:insert(cosmetic_group)
     scrollView:insert(name_group)
+    scrollView:scrollTo( "top", {time=0} )
   end
 
   local cosmetic_choices = {"Body", "Hair", "Torso"} -- Beard
