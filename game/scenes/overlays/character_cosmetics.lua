@@ -20,29 +20,58 @@ local container_w, container_h = math.floor(width*0.875 + 0.5), math.floor(heigh
 local container_left = -1 * math.floor(container_w*0.5 + 0.5)
 local container_top = -1 * math.floor(container_h*0.5 + 0.5)
 
+local mob_sprites = {}  -- this holds the 4 mob display objects in each direction
+
 local function drawMob(options)
-  mob = display.newGroup()
-  options = options or {}
+  local mob_size = 64
+  -- 4 mobs divided by 5 equal sized gaps
+  local mob_divider = (container_w - (mob_size*4))/5
+  local directions = {'north', 'east', 'south', 'west'} 
 
-  local body = display.newSprite(tilesets[options.body].sheet, tilesets[options.body])
-  mob:insert(body)
+  if not options then
+    options = {}
 
-  if options.hair then
-    local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
-    mob:insert(hair)
+    if main_player:isMobType("zombie") then options.body = "red_orc"
+    else options.body = "light" -- regular human 
+    end
   end
 
-  if options.eyes then
-    local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
-    mob:insert(hair)
+  for i=1, 4 do
+    mob = display.newGroup()
+
+    local mob_background = display.newRect(0, 0, mob_size, mob_size)
+    mob_background:setFillColor(0.9, 0.9, 0.9, 1)
+    mob:insert(mob_background)
+
+    local body = display.newSprite(tilesets[options.body].sheet, tilesets[options.body])
+    mob:insert(body)
+
+    if options.hair then
+      local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
+      mob:insert(hair)
+    end
+
+    if options.eyes then
+      local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
+      mob:insert(hair)
+    end
+
+    local dir = directions[i]
+    local animation = "walk-" ..dir
+    for i=2, mob.numChildren do 
+      mob[i]:setSequence(animation) 
+      mob[i]:play()
+    end 
+
+    mob.x = container_left  + (i*mob_divider) + ( (i-1)*mob_size) + mob_size/2
+    mob.y = container_top + container_h*0.15
+    mob.anchorX = 0
+
+    if mob_sprites[dir] then mob_sprites[dir]:removeSelf() end
+    mob_sprites[dir] = mob
   end
 
--- mob.group_order = {'body', 'hair', etc...}
--- mob:findGroupPlacement('type')
-
-  -- insert hair
-
-  return mob
+  return options
 end
 
 -- "scene:create()"
@@ -59,59 +88,16 @@ function scene:create( event )
   background:setFillColor(0.1, 0.1, 0.1, 0.85)
   container:insert(background)
 
---[[
-  local font_size = 9
-  local name_options = {
-    text = snap.name,
-    font = native.systemFont,
-    fontSize = font_size,
-    align = 'center',
-    x = 0,
-    y = 0 - standing_offset,
-  }
-  local name = display.newText(name_options)
---]]
-
-  local mob_size = 64
-  -- 4 mobs divided by 5 equal sized gaps
-  local mob_divider = (container_w - (mob_size*4))/5
-  local dir = {'north', 'east', 'south', 'west'} 
-
-  if not mob then
-
-    local default_body = {}
-
-    if main_player:isMobType("zombie") then default_body.body = "red_orc"
-    else default_body.body = "light" -- regular human 
-    end
-
-    for i=1, 4 do
-      local mob = drawMob(default_body)
-
-      local mob_background = display.newRect(0, 0, mob_size, mob_size)
-      mob_background:setFillColor(0.9, 0.9, 0.9, 1)
-      mob:insert(1, mob_background)
-
-      local animation = "walk-" ..dir[i]
-      for i=2, mob.numChildren do 
-        mob[i]:setSequence(animation) 
-        mob[i]:play()
-      end 
-
-      mob.x = container_left  + (i*mob_divider) + ( (i-1)*mob_size) + mob_size/2
-      mob.y = container_top + container_h*0.15
-      mob.anchorX = 0
-
-      container:insert(mob)
-    end
-  end
-
+  local cosmetics = drawMob()
+  for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
 
   -- Listen for segmented control events      
   local function onSegmentPress( event )
     local target = event.target
     print( "Segment Label is:", target.segmentLabel )
     print( "Segment Number is:", target.segmentNumber )
+
+    -- redraw radio buttons 
   end
 
   local cosmetic_choices = {"Body", "Hair", "Eyes"} -- Beard
@@ -138,16 +124,25 @@ function scene:create( event )
 
   -- Handle press events for the buttons
   local function onSwitchPress( event )
-      local switch = event.target
-      print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+    local switch = event.target
+    print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+
+    local category = string.lower(cosmetic_segment.segmentLabel)
+    cosmetics[category] = switch.id ~= 'empty' and switch.id or nil
+    drawMob(cosmetics)
+    for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
   end
 
   -- Create a group for the radio button set
   local radioGroup = display.newGroup()
   local nameGroup = display.newGroup()
-  local cosmetic_category = string.lower(cosmetic_segment.segmentLabel)
+  local category = string.lower(cosmetic_segment.segmentLabel)
 
-  for i, cosmetic_option in ipairs(clothing[cosmetic_category]) do
+  if category ~= 'body' then table.insert(clothing[category], 1, 'empty') end
+
+  -- insert blank/default options here (except for body?)
+
+  for i, cosmetic_option in ipairs(clothing[category]) do
     local radio_y = math.floor( (i-1)/3) * container_h*0.30 + container_h*0.15
     local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
 
@@ -170,32 +165,11 @@ function scene:create( event )
 -------------------------------------------------------
 
 
-  -- ScrollView listener
-  local function scrollListener( event )
-
-      local phase = event.phase
-      if ( phase == "began" ) then print( "Scroll view was touched" )
-      elseif ( phase == "moved" ) then print( "Scroll view was moved" )
-      elseif ( phase == "ended" ) then print( "Scroll view was released" )
-      end
-
-      -- In the event a scroll limit is reached...
-      if ( event.limitReached ) then
-          if ( event.direction == "up" ) then print( "Reached bottom limit" )
-          elseif ( event.direction == "down" ) then print( "Reached top limit" )
-          elseif ( event.direction == "left" ) then print( "Reached right limit" )
-          elseif ( event.direction == "right" ) then print( "Reached left limit" )
-          end
-      end
-
-      return true
-  end
-
   -- Create the widget
   scrollView = widget.newScrollView{
     width = container_w * 0.64,
     height = container_h * 0.50,
-    listener = scrollListener,
+    horizontalScrollDisabled = true,
     backgroundColor = {0.5, 0.5, 0.5, 1},
     topPadding = 10,
     bottomPadding = 20,
