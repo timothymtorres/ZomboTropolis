@@ -7,8 +7,7 @@ local MOVEMENT_DELAY = 7
 
 local function Plugin(mob)	
 --[[
-  mob is a snapshot
-  mob.group[1] & mob.group[2] are the name/name_background
+  mob[1] & mob[2] are the name/name_background
 
   mob.movement_timer     -- used to roam around map under a recurring timer
   mob.action_timer       -- used to repeat actions (tap&hold)
