@@ -2,6 +2,7 @@ local composer = require("composer")
 local widget = require("widget")
 local loadMobTilesets = require('scenes.functions.loadMobTilesets')
 local loadClothing = require('scenes.functions.loadClothing')
+local lume = require('code.libs.lume')
 
 local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------------------------------------
@@ -20,7 +21,10 @@ local container_w, container_h = math.floor(width*0.875 + 0.5), math.floor(heigh
 local container_left = -1 * math.floor(container_w*0.5 + 0.5)
 local container_top = -1 * math.floor(container_h*0.5 + 0.5)
 
+local container 
 local mob_sprites = {}  -- this holds the 4 mob display objects in each direction
+local cosmetic_segment, mob_cosmetics
+local scrollView
 
 local function drawMob(options)
   local mob_size = 64
@@ -51,9 +55,11 @@ local function drawMob(options)
       mob:insert(hair)
     end
 
-    if options.eyes then
-      local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
-      mob:insert(hair)
+    -- eyes should just change color.... and be setup default? like body
+
+    if options.torso then
+      local torso = display.newSprite(tilesets[options.torso].sheet, tilesets[options.torso])
+      mob:insert(torso)
     end
 
     local dir = directions[i]
@@ -74,6 +80,52 @@ local function drawMob(options)
   return options
 end
 
+
+local function drawCosmeticOptions(category)
+
+  -- currently there is a bug with the radio button that disables buttons on the
+  -- bottom row when you click on them and click the top row... not sure why?
+
+  -- Create a group for the radio button set
+  local radioGroup = display.newGroup()
+  local nameGroup = display.newGroup()
+
+  -- Handle press events for the buttons
+  local function onSwitchPress( event )
+    local switch = event.target
+    print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
+
+    local current_category = string.lower(cosmetic_segment.segmentLabel)
+    mob_cosmetics[current_category] = switch.id ~= 'none' and switch.id or nil
+    mob_cosmetics = drawMob(mob_cosmetics)
+    for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
+  end
+
+  for i, cosmetic_option in ipairs(clothing[category]) do
+    local radio_y = math.floor( (i-1)/3) * container_h*0.30 + container_h*0.15
+    local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
+
+    local is_cosmetic_selected = (cosmetic_option == mob_cosmetics[category]) or
+                                 (cosmetic_option == 'none' and not mob_cosmetics[category]) 
+
+    local cosmetic_radio_button = widget.newSwitch{
+      x = radio_x,
+      y = radio_y,
+      style = "radio",
+      id = cosmetic_option,
+      initialSwitchState = is_cosmetic_selected,
+      onRelease = onSwitchPress
+    }
+    radioGroup:insert(cosmetic_radio_button)
+
+    local cosmetic_name = display.newText(cosmetic_option, radio_x, radio_y - 30, 
+                                          native.systemFont, 10)
+    nameGroup:insert(cosmetic_name)
+  end
+
+  return radioGroup, nameGroup
+end
+
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
@@ -81,14 +133,14 @@ function scene:create( event )
   
   -- Initialize the scene here.
   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-  local container = display.newContainer( container_w, container_h)  
+  container = display.newContainer( container_w, container_h)  
   container:translate( width*0.5, height*0.5 ) -- center the container
 
   local background = display.newRect(0, 0, container_w, container_h)
   background:setFillColor(0.1, 0.1, 0.1, 0.85)
   container:insert(background)
 
-  local cosmetics = drawMob()
+  mob_cosmetics = drawMob()
   for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
 
   -- Listen for segmented control events      
@@ -97,14 +149,21 @@ function scene:create( event )
     print( "Segment Label is:", target.segmentLabel )
     print( "Segment Number is:", target.segmentNumber )
 
-    -- redraw radio buttons 
+    cosmetic_group:removeSelf()
+    name_group:removeSelf()
+
+    category = string.lower(cosmetic_segment.segmentLabel)
+    cosmetic_group, name_group = drawCosmeticOptions(category)
+
+    scrollView:insert(cosmetic_group)
+    scrollView:insert(name_group)
   end
 
-  local cosmetic_choices = {"Body", "Hair", "Eyes"} -- Beard
+  local cosmetic_choices = {"Body", "Hair", "Torso"} -- Beard
   local segment_total_width = container_w*0.90
 
   -- Create a default segmented control
-  local cosmetic_segment = widget.newSegmentedControl(
+  cosmetic_segment = widget.newSegmentedControl(
     {
         segmentWidth = segment_total_width/#cosmetic_choices,
         segments = cosmetic_choices,
@@ -116,69 +175,37 @@ function scene:create( event )
 
   container:insert(cosmetic_segment)
 
-
--------------------------------------------------------
--- RADIO BUTTONS --
--------------------------------------------------------
-
-
-  -- Handle press events for the buttons
-  local function onSwitchPress( event )
-    local switch = event.target
-    print( "Switch with ID '"..switch.id.."' is on: "..tostring(switch.isOn) )
-
-    local category = string.lower(cosmetic_segment.segmentLabel)
-    cosmetics[category] = switch.id ~= 'empty' and switch.id or nil
-    drawMob(cosmetics)
-    for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
-  end
-
-  -- Create a group for the radio button set
-  local radioGroup = display.newGroup()
-  local nameGroup = display.newGroup()
-  local category = string.lower(cosmetic_segment.segmentLabel)
-
-  if category ~= 'body' then table.insert(clothing[category], 1, 'empty') end
-
-  -- insert blank/default options here (except for body?)
-
-  for i, cosmetic_option in ipairs(clothing[category]) do
-    local radio_y = math.floor( (i-1)/3) * container_h*0.30 + container_h*0.15
-    local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
-
-    local cosmetic_radio_button = widget.newSwitch{
-      x = radio_x,
-      y = radio_y,
-      style = "radio",
-      id = cosmetic_option,
-      initialSwitchState = i==1 and true or false,
-      onPress = onSwitchPress
-    }
-    radioGroup:insert(cosmetic_radio_button)
-
-    local cosmetic_name = display.newText(cosmetic_option, radio_x, radio_y - 30, native.systemFont, 16 )
-    nameGroup:insert(cosmetic_name)
-  end
-
--------------------------------------------------------
--- RADIO BUTTONS --
--------------------------------------------------------
-
-
   -- Create the widget
   scrollView = widget.newScrollView{
     width = container_w * 0.64,
     height = container_h * 0.50,
-    horizontalScrollDisabled = true,
+    --horizontalScrollDisabled = true,
     backgroundColor = {0.5, 0.5, 0.5, 1},
     topPadding = 10,
     bottomPadding = 20,
   }
+
+  --scrollView:setScrollHeight(scrollView._view._scrollHeight + 50)
   scrollView.x = container_left + container_w * 0.36
   scrollView.y = container_top + container_h * 0.70
 
-  scrollView:insert(radioGroup)
-  scrollView:insert(nameGroup)
+  for category in pairs(clothing) do
+    -- inserts bald/blank/naked option for everything but body 
+    if category ~= 'body' and not lume.find(clothing[category], 'none') then
+      table.insert(clothing[category], 1, 'none') 
+    end
+
+    -- whatever the mob is currently wearing becomes the first option 
+    if mob_cosmetics[category] then -- if wearing nothing then skip this
+      local currently_worn = lume.remove(clothing[category], mob_cosmetics[category])
+      table.insert(clothing[category], 1, currently_worn)
+    end
+  end
+
+  local category = string.lower(cosmetic_segment.segmentLabel)
+  cosmetic_group, name_group = drawCosmeticOptions(category)
+  scrollView:insert(cosmetic_group)
+  scrollView:insert(name_group)
 
   container:insert(scrollView)
 
