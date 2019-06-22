@@ -26,41 +26,38 @@ local mob_sprites = {}  -- this holds the 4 mob display objects in each directio
 local cosmetic_segment, mob_cosmetics
 local scrollView
 
-local function drawMob(options)
-  local mob_size = 64
-  -- 4 mobs divided by 5 equal sized gaps
-  local mob_divider = (container_w - (mob_size*4))/5
-  local directions = {'north', 'east', 'south', 'west'} 
+local drawing_order = {"skin", "legs", "feet", "body", "hair", "head"}
 
+local function drawMob(options)
   if not options then
     options = {}
 
-    if main_player:isMobType("zombie") then options.body = "red_orc"
-    else options.body = "light" -- regular human 
+    if main_player:isMobType("zombie") then options.skin = "red_orc"
+    else options.skin = "light" -- regular human 
     end
   end
 
-  for i=1, 4 do
+  local mob_size = 64
+  local mob_divider = (container_w - (mob_size*4))/5 -- divide by 5 gaps
+  local directions = {'north', 'east', 'south', 'west'} 
+
+  for i=1, 4 do 
     mob = display.newGroup()
 
     local mob_background = display.newRect(0, 0, mob_size, mob_size)
     mob_background:setFillColor(0.9, 0.9, 0.9, 1)
     mob:insert(mob_background)
 
-    local body = display.newSprite(tilesets[options.body].sheet, tilesets[options.body])
-    mob:insert(body)
-
-    if options.hair then
-      local hair = display.newSprite(tilesets[options.hair].sheet, tilesets[options.hair])
-      mob:insert(hair)
+    for _, mob_section in ipairs(drawing_order) do
+      local image = options[mob_section]
+      if image then
+        mob:insert( display.newSprite(tilesets[image].sheet, tilesets[image]) )
+      end
+      -- eyes should just change color.... and be setup default? like body
+      -- if image == color then
+        -- change setFillColor of images listed
     end
 
-    -- eyes should just change color.... and be setup default? like body
-
-    if options.torso then
-      local torso = display.newSprite(tilesets[options.torso].sheet, tilesets[options.torso])
-      mob:insert(torso)
-    end
 
     local dir = directions[i]
     local animation = "walk-" ..dir
@@ -86,11 +83,10 @@ local function drawCosmeticOptions(category)
   -- currently there is a bug with the radio button that disables buttons on the
   -- bottom row when you click on them and click the top row... not sure why?
 
-  -- Create a group for the radio button set
   local radioGroup = display.newGroup()
   local nameGroup = display.newGroup()
 
-  local function handleButtonScrolling( event )
+  local function handleButton( event )
     local phase = event.phase
 
     if phase == "moved" then
@@ -169,7 +165,7 @@ function scene:create( event )
     scrollView:scrollTo( "top", {time=0} )
   end
 
-  local cosmetic_choices = {"Body", "Hair", "Torso"} -- Beard
+  local cosmetic_choices = drawing_order
   local segment_total_width = container_w*0.90
 
   -- Create a default segmented control
@@ -201,7 +197,7 @@ function scene:create( event )
 
   for category in pairs(clothing) do
     -- inserts bald/blank/naked option for everything but body 
-    if category ~= 'body' and not lume.find(clothing[category], 'none') then
+    if category ~= 'skin' and not lume.find(clothing[category], 'none') then
       table.insert(clothing[category], 1, 'none') 
     end
 
@@ -223,16 +219,16 @@ function scene:create( event )
 
   -- IF CHARACTER CREATION HAPPENING - NO CANCEL BUTTON SHOULD EXIST
 
-  local function cancelOverlay(event)
-    print('button pressed and released')
-    --composer.hideOverlay('fade', 400)       
+  local function rejectCosmetics(event)
+    print('cancel button pressed and released')
+    composer.hideOverlay('fade', 400)       
   end
 
   -- Create the widget
   local cancel = widget.newButton(
       {
           label = "Cancel",
-          onRelease = cancelOverlay,
+          onRelease = rejectCosmetics,
           shape = "roundedRect",
           width = container_w*0.25,
           height = container_h*0.20,
@@ -245,15 +241,15 @@ function scene:create( event )
 
   container:insert(cancel)
 
-  local function accept(event)
-    print('button pressed and released')
+  local function acceptCosmetics(event)
+    print('accept button pressed and released')
   end
 
   -- Create the widget
   local accept = widget.newButton(
       {
           label = "Accept",
-          onRelease = accept,
+          onRelease = acceptCosmetics,
           shape = "roundedRect",
           width = container_w*0.25,
           height = container_h*0.20,
@@ -265,8 +261,7 @@ function scene:create( event )
   accept.y = container_top + container_h*0.84
 
   container:insert(accept)
-
-  --sceneGroup:insert(container)  shouldn't this be activated?!
+  sceneGroup:insert(container)  --shouldn't this be activated?!
 end
 
 
