@@ -19,9 +19,11 @@ composer.myVolume = 100
 setupEnvironment('basic')
 
 -- load world as a global
-world = berry:new( "graphics/map/world.json", "graphics/map" )
+--world = berry:new( "graphics/map/world.json", "graphics/map" )
 
 -- Use composer to go to our first game scene 
 --composer.gotoScene('scenes.map')
-composer.gotoScene('scenes.location')
+--composer.gotoScene('scenes.location')
 --composer.gotoScene("scenes.status")
+composer.showOverlay( "scenes.overlays.character_cosmetics", options )
+--composer.gotoScene('scenes.overlays.character_cosmetics')

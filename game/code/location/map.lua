@@ -42,6 +42,11 @@ function Map:initialize(size)
       self[y][x] = Tiles[tile_id]:new(self, y, x, '[insert name]')
     end
   end
+
+  -- we can do better than these hacks?  Shouldn't have to load
+  -- the map from berry!  Or at least not initialize it?!
+  world:removeSelf()
+  world = nil
 end
 
 function Map:getInside(y, x) return self[y][x].inside_players or false end 
