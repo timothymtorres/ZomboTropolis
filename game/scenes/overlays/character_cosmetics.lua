@@ -29,13 +29,7 @@ local scrollView
 local drawing_order = {"skin", "legs", "feet", "body", "hair", "head"}
 
 local function drawMob(options)
-  if not options then
-    options = {}
-
-    if main_player:isMobType("zombie") then options.skin = "red_orc"
-    else options.skin = "light" -- regular human 
-    end
-  end
+  if not options then options = { skin=clothing.skin[1] } end
 
   local mob_size = 64
   local mob_divider = (container_w - (mob_size*4))/5 -- divide by 5 gaps
@@ -131,11 +125,28 @@ local function drawCosmeticOptions(category)
   return radioGroup, nameGroup
 end
 
+-- this removes skins from clothing unless the mob_type has access to it
+local function filterSkinTypes(mob_type)
+  -- this could potentially lead to some bugs due to editing the main clothing.skin
+  -- table.  What happens if the player's mob_type changes?  The skin will be perma
+  -- removed from the module.  (pretty sure that's what will happen anyway?)
+  if mob_type == 'zombie' then
+    clothing.skin = {'zombie1', 'zombie2'}
+  elseif mob_type == 'human' then
+    lume.remove(clothing.skin, 'zombie1')
+    lume.remove(clothing.skin, 'zombie2')   
+  end
+end
+
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
+
+  local mob_type = event.params and event.params.mob_type 
   local mob = event.params and event.params.mob -- the mob display object
   
+  filterSkinTypes(mob_type)
+
   -- Initialize the scene here.
   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
   container = display.newContainer( container_w, container_h)  
@@ -243,6 +254,18 @@ function scene:create( event )
 
   local function acceptCosmetics(event)
     print('accept button pressed and released')
+
+    local params = {
+      effect = "fade",
+      time = 400,
+      params = {
+          mob_type = mob_type,
+          mob_cosmetics = mob_cosmetics,
+      }
+    }
+
+    composer.gotoScene('scenes.location', params)
+    composer.hideOverlay( "fade", 400 )
   end
 
   -- Create the widget
