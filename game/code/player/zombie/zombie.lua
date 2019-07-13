@@ -12,8 +12,7 @@ local Zombie = class('Zombie', Player)
 
 Zombie.action_list = zombie_action_list
 
-function Zombie:initialize(username, ...) --add account name
-  self.username = username or names:generateRandom('zombie')  
+function Zombie:initialize(...) --add account name 
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
   self.network = Network:new(self)

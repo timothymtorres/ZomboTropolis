@@ -11,7 +11,7 @@ local scene = composer.newScene()
 -- local forward references should go here
 local width, height = display.contentWidth, display.contentHeight
 
-local sex_type, mob_type = 'male', 'human'
+local gender, mob_type = 'male', 'human'
 local name, name_text
 
 -- -------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ function scene:create( event )
   sceneGroup:insert(title)
 
   local function sexChange(event) 
-    sex_type = event.target.id 
-    name = names:generateRandom((mob_type == 'zombie' and mob_type) or sex_type)
+    gender = event.target.id 
+    name = names:generateRandom((mob_type == 'zombie' and mob_type) or gender)
     name_text.text = "Generated Name: ".. name
   end
 
@@ -78,7 +78,7 @@ function scene:create( event )
 
   local function mobChange(event) 
     mob_type = event.target.id 
-    name = names:generateRandom((mob_type == 'zombie' and mob_type) or sex_type)
+    name = names:generateRandom((mob_type == 'zombie' and mob_type) or gender)
     name_text.text = "Generated Name: ".. name
   end
 
@@ -111,7 +111,7 @@ function scene:create( event )
   sceneGroup:insert(mob_group)
   sceneGroup:insert(mob_options)
 
-  name = names:generateRandom((mob_type == 'zombie' and mob_type) or sex_type)
+  name = names:generateRandom((mob_type == 'zombie' and mob_type) or gender)
   name_text = display.newText("Generated Name: ".. name, 
                                width*0.5, height*0.65, native.systemFont, 20)
   sceneGroup:insert(name_text)
@@ -123,6 +123,8 @@ function scene:create( event )
       time = 400,
       params = {
         mob_type = mob_type,
+        username = name,
+        --gender = gender,   -- no need to pass gender?
       }
     }
     composer.showOverlay( "scenes.overlays.character_cosmetics", options )

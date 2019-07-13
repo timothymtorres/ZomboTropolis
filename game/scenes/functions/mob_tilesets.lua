@@ -1,4 +1,5 @@
 local lfs  = require 'lfs'  -- lfs stands for LuaFileSystem
+local mob_tilesets = {}
 
 local function buildSequences(tileset)
 	local sequences = sequences or {}
@@ -77,7 +78,6 @@ local function loadDefaultTileset(directory)
 	return tileset, options
 end
 
-local tilesets = {}
 local default_tileset, default_options
 
 local function loadMobTilesets(directory)
@@ -95,25 +95,21 @@ local function loadMobTilesets(directory)
 		local attr = lfs.attributes(path..'/'..file)
 		local is_directory = file ~= '.' and file ~= '..' and attr.mode == 'directory'
 
-    if is_directory then  -- search sub-directories
+    	if is_directory then  -- search sub-directories
 			loadMobTilesets(directory .. '/' .. file)
 		elseif is_image_file then
 			local image = file_name
 
-			tilesets[image] = buildSequences(default_tileset)
-			tilesets[image].sheet = graphics.newImageSheet(directory .. '/' .. file, 
+			mob_tilesets[image] = buildSequences(default_tileset)
+			mob_tilesets[image].sheet = graphics.newImageSheet(directory .. '/' .. file, 
                                                      default_options)
 
---[[
-			test = display.newSprite(tilesets[image].sheet, tilesets[image])
-			test.x, test.y = math.random(100, 300), math.random(50, 250)
-			test:setSequence('walk-east')
-			test:play()
---]]
 		end
 	end
-
-	return tilesets
 end
 
-return loadMobTilesets
+do
+	loadMobTilesets('graphics/mob')
+end
+
+return mob_tilesets

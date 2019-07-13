@@ -1,7 +1,4 @@
 local lume = require('code.libs.lume')
-local loadMobTilesets = require('scenes.functions.loadMobTilesets')
-
-local mob_tilesets = loadMobTilesets('graphics/mob')
 
 local MOVEMENT_DELAY = 7
 

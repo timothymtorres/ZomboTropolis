@@ -1,14 +1,12 @@
 local lume = require('code.libs.lume')
-local loadMobTilesets = require('scenes.functions.loadMobTilesets')
-local loadClothing = require('scenes.functions.loadClothing')
-
-local tilesets = loadMobTilesets('graphics/mob')
-local clothing = loadClothing('graphics/mob')
+local tilesets = require('scenes.functions.mob_tilesets')
+local clothing = require('code.player.clothing')
 
 local function createMob(player, location)
   local username = player:getUsername()
-  local animation = player:getMobType() -- swap this out with sprite_name later
   local is_player_standing = player:isStanding()
+
+  local cosmetics = player.cosmetics --clothing:generateRandom(player:getMobType())
 
 --[[
   local mob_data = {
@@ -64,22 +62,19 @@ local function createMob(player, location)
   snap:insert(1, name_background)
   snap:insert(2, name)
 
-  local body_type
-  if player:isMobType("zombie") then body_type = "red_orc"
-  elseif not player:isStanding() then body_type = "darkelf2"
-  else body_type = "light" -- regular human 
+print('CREATING MOB COSMETICS')
+for k,v in pairs(tilesets) do print(k,v) end
+
+  for _, mob_section in ipairs(clothing.draw_order) do
+    local image = cosmetics[mob_section]
+print(image)
+    if image then
+      snap:insert( display.newSprite(tilesets[image].sheet, tilesets[image]) )
+    end
+    -- eyes should just change color.... and be setup default? like body
+    -- if image == color then
+    -- change setFillColor of images listed
   end
-
-  local body = display.newSprite(tilesets[body_type].sheet, tilesets[body_type])
-  snap:insert(3, body)
-
-  local torso_type = lume.randomchoice(clothing.torso) 
-  local torso = display.newSprite(tilesets[torso_type].sheet, tilesets[torso_type])
-  snap:insert(4, torso)
-
-  local head_type = lume.randomchoice(clothing.head)
-  local head = display.newSprite(tilesets[head_type].sheet, tilesets[head_type])
-  snap:insert(5, head)
 
   location:extend("mob")
 

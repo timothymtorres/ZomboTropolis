@@ -1,7 +1,7 @@
 local composer = require("composer")
 local widget = require("widget")
-local loadMobTilesets = require('scenes.functions.loadMobTilesets')
-local loadClothing = require('scenes.functions.loadClothing')
+local tilesets = require('scenes.functions.mob_tilesets')
+local clothing = require('code.player.clothing')
 local lume = require('code.libs.lume')
 
 local scene = composer.newScene()
@@ -13,9 +13,6 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local tilesets = loadMobTilesets('graphics/mob')
-local clothing = loadClothing('graphics/mob')
-
 local width, height = display.contentWidth, display.contentHeight --320, 428
 local container_w, container_h = math.floor(width*0.875 + 0.5), math.floor(height*0.80 + 0.5)
 local container_left = -1 * math.floor(container_w*0.5 + 0.5)
@@ -25,11 +22,10 @@ local container
 local mob_sprites = {}  -- this holds the 4 mob display objects in each direction
 local cosmetic_segment, mob_cosmetics
 local scrollView
-
-local drawing_order = {"skin", "legs", "feet", "body", "hair", "head"}
+local mob_type, username
 
 local function drawMob(options)
-  if not options then options = { skin=clothing.skin[1] } end
+  if not options then options = { skin=clothing.skin[mob_type][1] } end
 
   local mob_size = 64
   local mob_divider = (container_w - (mob_size*4))/5 -- divide by 5 gaps
@@ -42,7 +38,7 @@ local function drawMob(options)
     mob_background:setFillColor(0.9, 0.9, 0.9, 1)
     mob:insert(mob_background)
 
-    for _, mob_section in ipairs(drawing_order) do
+    for _, mob_section in ipairs(clothing.draw_order) do
       local image = options[mob_section]
       if image then
         mob:insert( display.newSprite(tilesets[image].sheet, tilesets[image]) )
@@ -100,7 +96,9 @@ local function drawCosmeticOptions(category)
     return true
   end
 
-  for i, cosmetic_option in ipairs(clothing[category]) do
+  local options = category == 'skin' and clothing.skin[mob_type] or clothing[category]
+
+  for i, cosmetic_option in ipairs(options) do
     local radio_y = math.floor( (i-1)/3) * container_h*0.30 + container_h*0.15
     local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
 
@@ -125,27 +123,13 @@ local function drawCosmeticOptions(category)
   return radioGroup, nameGroup
 end
 
--- this removes skins from clothing unless the mob_type has access to it
-local function filterSkinTypes(mob_type)
-  -- this could potentially lead to some bugs due to editing the main clothing.skin
-  -- table.  What happens if the player's mob_type changes?  The skin will be perma
-  -- removed from the module.  (pretty sure that's what will happen anyway?)
-  if mob_type == 'zombie' then
-    clothing.skin = {'zombie1', 'zombie2'}
-  elseif mob_type == 'human' then
-    lume.remove(clothing.skin, 'zombie1')
-    lume.remove(clothing.skin, 'zombie2')   
-  end
-end
-
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
 
-  local mob_type = event.params and event.params.mob_type 
+  mob_type = event.params and event.params.mob_type 
+  username = event.params and event.params.username 
   local mob = event.params and event.params.mob -- the mob display object
-  
-  filterSkinTypes(mob_type)
 
   -- Initialize the scene here.
   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
@@ -176,7 +160,7 @@ function scene:create( event )
     scrollView:scrollTo( "top", {time=0} )
   end
 
-  local cosmetic_choices = drawing_order
+  local cosmetic_choices = clothing.draw_order
   local segment_total_width = container_w*0.90
 
   -- Create a default segmented control
@@ -206,27 +190,27 @@ function scene:create( event )
   scrollView.x = container_left + container_w * 0.36
   scrollView.y = container_top + container_h * 0.70
 
+  -- this makes whatever the mob is currently wearing the first option
   for category in pairs(clothing) do
-    -- inserts bald/blank/naked option for everything but body 
-    if category ~= 'skin' and not lume.find(clothing[category], 'none') then
-      table.insert(clothing[category], 1, 'none') 
-    end
-
-    -- whatever the mob is currently wearing becomes the first option 
     if mob_cosmetics[category] then -- if wearing nothing then skip this
-      local currently_worn = lume.remove(clothing[category], mob_cosmetics[category])
-      table.insert(clothing[category], 1, currently_worn)
+      local current_worn 
+      if category == 'skin' then
+        currently_worn = lume.remove(clothing.skin[mob_type], mob_cosmetics[category])
+        table.insert(clothing.skin[mob_type], 1, currently_worn)
+      else
+        currently_worn = lume.remove(clothing[category], mob_cosmetics[category])
+        table.insert(clothing[category], 1, currently_worn)
+      end       
     end
   end
 
   local category = string.lower(cosmetic_segment.segmentLabel)
+  --category = category == "skin" and 
   cosmetic_group, name_group = drawCosmeticOptions(category)
   scrollView:insert(cosmetic_group)
   scrollView:insert(name_group)
 
   container:insert(scrollView)
-
-
 
   -- IF CHARACTER CREATION HAPPENING - NO CANCEL BUTTON SHOULD EXIST
 
@@ -256,13 +240,18 @@ function scene:create( event )
     print('accept button pressed and released')
 
     local params = {
-      effect = "fade",
-      time = 400,
-      params = {
-          mob_type = mob_type,
-          mob_cosmetics = mob_cosmetics,
-      }
+      effect = "fade", --"zoomInOut",
+      time = 1000,
+      --params = {
+          --mob_type = mob_type,
+          --mob_cosmetics = mob_cosmetics,
+          --mob_type = mob_type,
+          --username = name,
+          --gender = gender,
+      --}
     }
+
+    main_player = city:spawnPlayer(mob_type, username, mob_cosmetics)
 
     composer.gotoScene('scenes.location', params)
     composer.hideOverlay( "fade", 400 )
@@ -284,7 +273,7 @@ function scene:create( event )
   accept.y = container_top + container_h*0.84
 
   container:insert(accept)
-  sceneGroup:insert(container)  --shouldn't this be activated?!
+  sceneGroup:insert(container)
 end
 
 

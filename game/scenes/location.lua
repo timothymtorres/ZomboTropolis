@@ -32,8 +32,10 @@ function scene:create( event )
 
   -- Load our location
   local y, x = main_player:getPos()
+
+print('world var is?', world)
   local tile_gid = world:getGID('Location Template ID', y, x)
-  local template_name = world.cache.properties[tile_gid].template
+  local template_name = 'default' --world.cache.properties[tile_gid].template
   local filename = "graphics/locations/"..template_name.. ".json"
   location = berry:new( filename, "graphics/locations/")
   location:addTexturePack("graphics/items.png", "graphics.items.lua")
@@ -120,6 +122,8 @@ function scene:create( event )
     end
   end
 
+  sceneGroup:insert(location)
+
   return sceneGroup
 end
 
@@ -153,6 +157,9 @@ end
 
 local function movePlatform(event)
     local platformTouched = event.target
+print(platformTouched, event.phase, platformTouched.startMoveX, platformTouched.startMoveY)
+
+
     if (event.phase == "began") then
         display.getCurrentStage():setFocus( platformTouched )
 
@@ -160,9 +167,12 @@ local function movePlatform(event)
         platformTouched.startMoveX = platformTouched.x
         platformTouched.startMoveY = platformTouched.y 
     elseif (event.phase == "moved") then
+        local startMoveX = platformTouched.startMoveX or platformTouched.x
+        local startMoveY = platformTouched.startMoveY or platformTouched.y
+
         -- here the distance is calculated between the start of the movement and its current position of the drag  
-        local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
-        local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
+        local x_pos = (event.x - event.xStart) + startMoveX
+        local y_pos = (event.y - event.yStart) + startMoveY
 
         platformTouched.x =  x_pos 
         platformTouched.y = y_pos    

@@ -15,7 +15,7 @@ Player.chanceToHit = chanceToHit
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(map_zone, y, x) --add account name
+function Player:initialize(map_zone, y, x, username, cosmetics) --add account name
   self.map_zone = map_zone
   self.y, self.x = y, x
   self.ID = self  
@@ -24,7 +24,8 @@ function Player:initialize(map_zone, y, x) --add account name
   self.status_effect = StatusEffect:new(self)
   self.equipment = Equipment:new(self)
 
-  map_zone[y][x]:insert(self,'inside')  -- remove 'inside' argument later (for testing purposes)
+  self.username = username
+  self.cosmetics = cosmetics -- this should be Equipment:new() idk?
 end
 
 function Player:basicCriteria(action_str, ...)
