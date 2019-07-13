@@ -157,8 +157,6 @@ end
 
 local function movePlatform(event)
     local platformTouched = event.target
-print(platformTouched, event.phase, platformTouched.startMoveX, platformTouched.startMoveY)
-
 
     if (event.phase == "began") then
         display.getCurrentStage():setFocus( platformTouched )
