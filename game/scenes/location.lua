@@ -8,6 +8,7 @@ local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
 local lume = require('code.libs.lume')
 local createMob = require('scenes.functions.createMob')
+local Tiles = require('code.location.tile.tiles')
 
 local location
 
@@ -37,6 +38,7 @@ print('world var is?', world)
   local tile_gid = world:getGID('Location Template ID', y, x)
   local template_name = 'default' --world.cache.properties[tile_gid].template
   local filename = "graphics/locations/"..template_name.. ".json"
+
   location = berry:new( filename, "graphics/locations/")
   location:addTexturePack("graphics/items.png", "graphics.items.lua")
 
@@ -122,7 +124,32 @@ print('world var is?', world)
     end
   end
 
+  local tile_name = tostring(main_player:getLocation())
+
+  local v_border, h_border = 3, 16
+
+  local name_options = {
+    text = tile_name,
+    font = native.systemFont,
+    fontSize = 9,
+    align = 'center',
+    x = display.contentWidth*0.50,
+    y = display.contentHeight*0.12,
+  }
+
+  local location_name = display.newText(name_options)
+  location_name:setFillColor(0.15, 0.15, 0.15, 1)
+
+  local x, y = location_name.x, location_name.y
+  local w, h = location_name.contentWidth + h_border, name_options.fontSize + v_border*2 
+  local corner = h/4
+
+  local location_name_background = display.newRoundedRect(x, y, w, h, corner)
+  location_name_background:setFillColor(0.85, 0.85, 0.85, 1)
+
   sceneGroup:insert(location)
+  sceneGroup:insert(location_name_background)
+  sceneGroup:insert(location_name)
 
   return sceneGroup
 end
