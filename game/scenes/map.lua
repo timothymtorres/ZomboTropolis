@@ -51,20 +51,6 @@ function scene:create( event )
 
   world:setPosition(x, y)
 
---[[
-  local hidden_layer = world:getTileLayer('Hidden')
-  local tile_NW = hidden_layer:getTileFromPosition(-3, 5)
-  local tile_SE = hidden_layer:getTileFromPosition(45, 35)
-  -- not sure why we need this offset but the y axis won't stay centered without it
-  -- even with the offset it's still a few pixels off when changing scale
-  -- but it's close enough to rock and roll!
-  local offset_y = -1 * tile_NW.sprite.height
-  x1, y1 = tile_NW.sprite:localToContent( 0, offset_y)
-  x2, y2 = tile_SE.sprite:localToContent( 0, offset_y)
-
-  x1, x2 = -1*x1 - phone_screen_width*0.5, -1*x2 + phone_screen_width*0.5
-  y1, y2 = -1*y1 + phone_screen_height*0.5, -1*y2 + phone_screen_height*0.5
---]]
   return sceneGroup
 end
 
@@ -93,20 +79,6 @@ local function key( event )
     elseif "down" == name then -- zoom into map if viewing room
     end
 
---[[
-    local hidden_layer = world:getTileLayer('Hidden')
-    local tile_NW = hidden_layer:getTileFromPosition(-3, 5)
-    local tile_SE = hidden_layer:getTileFromPosition(45, 35)
-    -- not sure why we need this offset but the y axis won't stay centered without it
-    -- even with the offset it's still a few pixels off when changing scale
-    -- but it's close enough to rock and roll!
-    local offset_y = -1 * tile_NW.sprite.height
-    x1, y1 = tile_NW.sprite:localToContent( 0, offset_y)
-    x2, y2 = tile_SE.sprite:localToContent( 0, offset_y)
-
-    x1, x2 = -1*x1 - phone_screen_width*0.5, -1*x2 + phone_screen_width*0.5
-    y1, y2 = -1*y1 + phone_screen_height*0.5, -1*y2 + phone_screen_height*0.5
---]]
   end
 
   lastEvent = event
@@ -129,85 +101,6 @@ local function movePlatform(event)
         platformTouched.x = x_pos 
         platformTouched.y = y_pos
 
---[[
-        print(x1, x2, y1, y2)
-
-  --x = -1 * x + phone_screen_width*0.5
-  --y = -1 * y + phone_screen_height*0.5
-
-        local offset_top = scale_y * world.tileheight*0.5*3
-        local offset_bottom = scale_y * world.tileheight*0.5*3
-
-        local offset_left = scale_x * world.tilewidth*3
-        local offset_right = scale_x * world.tilewidth*3
-
-        local left_boundry = 0 - offset_left       --x1 -- -1 * (world_background_offset*world.tilewidth) * scale_x
-        local right_boundry = -1 * world_width + phone_screen_width + offset_right --x2-- -1 * world_width --((world_width - world_background_offset*world.tilewidth) * scale_x) + phone_screen_width
-
-        local top_boundry = 0 - offset_top --y1 ---1 * (world_background_offset*world.tileheight *0.5) * scale_y
-        local bottom_boundry = -1* world_height - phone_screen_height + offset_bottom --y2 -- -1 * world_height --((world_height - world_background_offset*world.tileheight) * scale_y ) + phone_screen_height
-
-        platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
-        platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos
-
-        print(x_pos, y_pos)
---]]
-
---[[
-        local boundry_offset_left = 0.5*world.tilewidth 
-        local boundry_offset_right = -30*world.tilewidth - phone_screen_width
-        local left_boundry = (-2.0 * (y_pos/world.tileheight) * (world.tilewidth/2) ) + boundry_offset_left -- 5000
-        local right_boundry = (-2.0 * (y_pos/world.tileheight)*(world.tilewidth/2) ) + (world.data.height/world.tileheight * world.tilewidth/2) + boundry_offset_right
-
-        local boundry_offset_top = -7* world.tileheight
-        local boundry_offset_bottom = -30* world.tileheight - phone_screen_height
-        local top_boundry = (2 * (x_pos/world.tilewidth) * (world.tileheight/2)) + boundry_offset_top  -- 5000
-        local bottom_boundry = (2 * (x_pos/world.tilewidth) * (world.tileheight/2)) - (world.data.width/world.tilewidth * world.tileheight/2) + boundry_offset_bottom -- -5000
-
-        --  self.sprite.x = (-1 * self.row * self.map.tilewidth / 2) + (self.column * self.map.tilewidth  / 2) + offsetX
-        --  self.sprite.y = (self.column * self.map.tileheight / 2) - (-1 * self.row * self.map.tileheight / 2) + offsetY
-
-print('---NEW INFO---')
-print('x_pos > left_boundry', 'y_pos > top_boundry')
-print('('..x_pos..' > '..left_boundry..')', '('..y_pos..' > '..top_boundry..')')
-print(x_pos > left_boundry, x_pos < right_boundry, y_pos > top_boundry, y_pos < bottom_boundry)
-print(math.min(x_pos, left_boundry), math.min(y_pos, top_boundry))
-print(platformTouched.x, platformTouched.y)
-
-        local NW_boundry = (x_pos > left_boundry) and (y_pos > top_boundry)
-        local NE_boundry = (x_pos < right_boundry) and (y_pos < bottom_boundry)
-        local SW_boundry = (x_pos > left_boundry) and (y_pos < bottom_boundry)
-        local SE_boundry = (x_pos < right_boundry) and (y_pos < bottom_boundry)
-
-        if NW_boundry or NE_boundry or SW_boundry or SE_boundry then
-          -- the x/y pos are hitting a corner boundry  (ie.  NW, NE, SW, SE) and we aren't going to update the x/y
-    
-        elseif x_pos > left_boundry then
-          platformTouched.x = math.min(x_pos, left_boundry)
-          platformTouched.y = y_pos
-        elseif x_pos < right_boundry then
-          platformTouched.x = math.max(x_pos, right_boundry)
-          platformTouched.y = y_pos
-        elseif y_pos > top_boundry then
-          platformTouched.x = x_pos
-          platformTouched.y = math.min(y_pos, top_boundry)
-        elseif y_pos < bottom_boundry then
-          platformTouched.x = x_pos
-          platformTouched.y = math.max(y_pos, bottom_boundry)          
-        elseif x_pos < left_boundry and x_pos > right_boundry and y_pos < top_boundry and y_pos > bottom_boundry then -- not bypassing any boundry 
-          platformTouched.x = x_pos
-          platformTouched.y = y_pos
-        end
-        --platformTouched.x = (x_pos > left_boundry and math.min(x_pos, left_boundry)) or (x_pos < right_boundry and math.max(x_pos, right_boundry)) or x_pos 
-        --platformTouched.y = (y_pos > top_boundry and math.min(y_pos, top_boundry)) or (y_pos < bottom_boundry and math.max(y_pos, bottom_boundry)) or y_pos 
-print(platformTouched.x, platformTouched.y)
-
-        elseif y_pos < bottom_boundry then
-          platformTouched.y = math.max(y_pos, bottom_boundry)
-        else 
-          platformTouched.y = y_pos
-        end
---]]
     elseif event.phase == "ended" or event.phase == "cancelled"  then
         -- here the focus is removed from the last position
         display.getCurrentStage():setFocus( nil )
@@ -248,7 +141,6 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.   
         Runtime:removeEventListener( "key", key )          
-        timer.pause(room_timer)
     end  
 end
 
