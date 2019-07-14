@@ -44,7 +44,7 @@ function Map:initialize(size)
 
 --print(tile_layer.data.data[tile_pos], tileset_gid, tile_id)
 
-      self[y][x] = Tiles[tile_id]:new(self, y, x, '[insert name]')
+      self[y][x] = Tiles[tile_id]:new(self, y, x)
     end
   end
 

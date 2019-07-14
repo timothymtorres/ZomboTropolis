@@ -206,6 +206,8 @@ function Tile:getDefender(setting)
   return (not is_ruined and 'human') or 'zombie'
 end
 
-function Tile:__tostring() return self.name..' '..self.class.name end
+function Tile:__tostring() 
+  return self.name and (self.name..' '..self.class.name) or self.class.name
+end
 
 return Tile
