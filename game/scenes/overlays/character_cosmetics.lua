@@ -253,7 +253,7 @@ function scene:create( event )
 
     main_player = city:spawnPlayer(mob_type, username, mob_cosmetics)
 
-    composer.gotoScene('scenes.location', params)
+    composer.gotoScene('scenes.map', params)
     composer.hideOverlay( "fade", 400 )
   end
 
