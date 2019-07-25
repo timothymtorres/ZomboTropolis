@@ -154,33 +154,33 @@ print('world var is?', world)
   return sceneGroup
 end
 
-local max, acceleration, dy, dx = 375, 5, 0, 0, 0, 0
-local max_scale, min_scale = 1.25, 0.75  -- only applies to zoom in/out
+local MAX_SCALE, MIN_SCALE = 4, 0.5
 
--- this is an event listener function to control zooming
 local function zooming( event )
   local phase = event.phase
   local name = event.keyName
 
+  local SCALE_INCREMENT = 0.50
+
   if phase == "down" then
-    local scale = location:getScale()
-
-    if "up" == name and scale < max_scale then
-      location:scale(0.25)
-     
-    elseif "down" == name and scale > min_scale then
-      location:scale(-0.25)
-
-    elseif "up" == name then -- zoom into location if viewing map
-    elseif "down" == name then -- zoom into map if viewing location
+--[[ if "up" == name and location.xScale < MAX_SCALE then  -- zoom in
+      transition.scaleBy(location, { xScale=1+SCALE_INCREMENT, yScale=1+SCALE_INCREMENT, time=2000 } )
+    elseif "down" == name and location.xScale > MIN_SCALE then -- zoom out
+      transition.scaleBy(location, { xScale=0.25, yScale=0.25, time=2000 } )
+    elseif "up" == name then -- zoom into world if viewing map  
+--]]
+    if "down" == name then -- zoom into map if viewing room
       local scene = composer.getSceneName('current')
       composer.removeScene(scene)      
 
       local options = {effect = "fade", time = 500,}   
-      composer.gotoScene('scenes.map', options)
+      composer.gotoScene('scenes.map', options)   
     end
   end
+
+print("Location Scale: ", location.xScale, location.yScale)
 end
+
 
 local function movePlatform(event)
     local platformTouched = event.target
@@ -252,8 +252,9 @@ end
 -- "scene:destroy()"
 function scene:destroy( event )
 
-    location:destroy()  
-    Runtime:removeEventListener( "key", zooming )     
+    --location:destroy()  
+    Runtime:removeEventListener( "key", zooming ) 
+    physics.stop()    
 
     local sceneGroup = self.view
 

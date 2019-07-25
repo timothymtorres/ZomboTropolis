@@ -15,13 +15,8 @@ local scene = composer.newScene()
 
 -- local forward references should go here
 
-local phone_screen_width, phone_screen_height = display.contentWidth, display.contentHeight -- 320x480
-local widget = require('widget')
-local world
-local world_height, world_width
-local world_background_offset 
+-- display.contentWidth, display.contentHeight -- 320x480
 
-local x1, x2, y1, y2
 -- -------------------------------------------------------------------------------
 
 -- "scene:create()"
@@ -29,63 +24,55 @@ function scene:create( event )
   local sceneGroup = self.view
 
   -- Load our map
-  local filename = "graphics/map/world.json"
-  world = berry.loadMap( filename, "graphics/map" )
-  local visual = berry.createVisual( world )
-  world_height, world_width = visual.contentHeight, visual.contentWidth
-  world_background_offset = world:getPropertyValue('background_tile_offset')
-
-  world:setScale(2.5)
+  --local filename = "graphics/map/world.json"
+  --world = berry.loadMap( filename, "graphics/map" )
+  world.isVisible = true
+  world_height, world_width = world.contentHeight, world.contentWidth
+  world:scale(2, 2)
+  sceneGroup:insert(world)
 
   local player_y, player_x = main_player:getPos()
-  local region_layer = world:getTileLayer('Regions') -- we could pick any layer, I picked Regions randomly
-  local tile = region_layer:getTileFromPosition(player_x, player_y)
-  -- not sure why we need this offset but the y axis won't stay centered without it
-  -- even with the offset it's still a few pixels off when changing scale
-  -- but it's close enough to rock and roll!
-  local offset_y = -1 * tile.sprite.height
-  local x, y = tile.sprite:localToContent( 0, offset_y)
-
-  x = -1 * x + phone_screen_width*0.5
-  y = -1 * y + phone_screen_height*0.5
-
-  world:setPosition(x, y)
 
   return sceneGroup
 end
 
+local scale = world.xScale -- both xScale & yScale should be same
+local MAX_SCALE, MIN_SCALE = 2, 1
 local lastEvent = {}
-local max_scale, min_scale = 3.00, 1.00  -- only applies to zoom in/out
 
 local function key( event )
   local phase = event.phase
   local name = event.keyName
   --if ( phase == lastEvent.phase ) and ( name == lastEvent.keyName ) then return false end  -- Filter repeating keys
 
-  local scale = world:getScale()
-  local scale_amt = 0.50
+  local SCALE_INCREMENT = 0.50
 
   if phase == "down" then
-    if "up" == name and scale < max_scale then
-      world:scale(scale_amt)
-    elseif "down" == name and scale > min_scale then
-      world:scale(-1*scale_amt)
+    if "up" == name and scale < MAX_SCALE then
+      transition.scaleBy(world, { xScale=1+SCALE_INCREMENT, yScale=1+SCALE_INCREMENT, time=2000 } )
+      scale = scale + SCALE_INCREMENT
+    elseif "down" == name and scale > MIN_SCALE then
+      transition.scaleBy(world, { xScale=1-SCALE_INCREMENT, yScale=1-SCALE_INCREMENT, time=2000 } )
+      scale = scale - SCALE_INCREMENT
     elseif "up" == name then -- zoom into world if viewing map
-      local scene = composer.getSceneName('current')
-      composer.removeScene(scene)      
+      --local scene = composer.getSceneName('current')
+      --composer.removeScene(scene)      
 
       local options = {effect = "fade", time = 500,}   
-      composer.gotoScene('scenes.room', options)      
+      composer.gotoScene('scenes.location', options)     
     elseif "down" == name then -- zoom into map if viewing room
     end
 
   end
+
+print(scale)
 
   lastEvent = event
 end
 
 local function movePlatform(event)
     local platformTouched = event.target
+
     if (event.phase == "began") then
         display.getCurrentStage():setFocus( platformTouched )
 
@@ -93,14 +80,15 @@ local function movePlatform(event)
         platformTouched.startMoveX = platformTouched.x
         platformTouched.startMoveY = platformTouched.y 
     elseif (event.phase == "moved") then
+        local startMoveX = platformTouched.startMoveX or platformTouched.x
+        local startMoveY = platformTouched.startMoveY or platformTouched.y
+
         -- here the distance is calculated between the start of the movement and its current position of the drag  
-        local x_pos = (event.x - event.xStart) + platformTouched.startMoveX
-        local y_pos = (event.y - event.yStart) + platformTouched.startMoveY
-        local scale_x, scale_y = world:getScale()
+        local x_pos = (event.x - event.xStart) + startMoveX
+        local y_pos = (event.y - event.yStart) + startMoveY
 
-        platformTouched.x = x_pos 
-        platformTouched.y = y_pos
-
+        platformTouched.x =  x_pos 
+        platformTouched.y = y_pos    
     elseif event.phase == "ended" or event.phase == "cancelled"  then
         -- here the focus is removed from the last position
         display.getCurrentStage():setFocus( nil )
@@ -118,7 +106,7 @@ function scene:show( event )
         -- Called when the scene is still off screen (but is about to come on screen).
     
         Runtime:addEventListener("key", key)  
-        world.world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
+        world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -147,9 +135,7 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
-    world:destroy()   
-    Runtime:removeEventListener( "enterFrame", enterFrame )      
+     
     Runtime:removeEventListener( "key", key )     
 
     local sceneGroup = self.view
