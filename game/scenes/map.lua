@@ -8,6 +8,8 @@ local composer = require( "composer" )
 local berry = require( 'code.libs.berry' )
 local json = require( "json" )
 local scene = composer.newScene()
+local createMob = require('scenes.functions.createMob')
+
 
 -- -----------------------------------------------------------------------------------------------------------------
 -- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
@@ -31,13 +33,34 @@ function scene:create( event )
   world:scale(2, 2)
   sceneGroup:insert(world)
 
+  world:addLayer("Corpse") -- this may not be neccessary
+  world:addLayer("Mob")
+
+  world:setExtension("scenes.objects.")
+
+  local mob = createMob(main_player, world)
+  mob:scale(0.25, 0.25)
+
   local player_y, player_x = main_player:getPos()
+  local y, x = world:convertTileToPixel( player_y-1, player_x-1 )
+
+--[[
+      image.row    = mFloor( 
+                   ( position + layer.size - 1 ) / layer.size 
+                 ) - 1
+      image.column = position - image.row * layer.size - 1
+--]]
+
+-- 16, 32  (y, x)
+print(player_y, player_x, y, x )
+  mob.y, mob.x =  y - 8, x 
 
   return sceneGroup
 end
 
+-- The zooming in/out is still broken as fuck!
 local scale = world.xScale -- both xScale & yScale should be same
-local MAX_SCALE, MIN_SCALE = 2, 1
+local MAX_SCALE, MIN_SCALE = 2, -55 --1
 local lastEvent = {}
 
 local function key( event )
@@ -49,11 +72,9 @@ local function key( event )
 
   if phase == "down" then
     if "up" == name and scale < MAX_SCALE then
-      transition.scaleBy(world, { xScale=1+SCALE_INCREMENT, yScale=1+SCALE_INCREMENT, time=2000 } )
-      scale = scale + SCALE_INCREMENT
+      transition.scaleBy(world, {xScale=SCALE_INCREMENT, yScale=SCALE_INCREMENT, time=2000}) 
     elseif "down" == name and scale > MIN_SCALE then
-      transition.scaleBy(world, { xScale=1-SCALE_INCREMENT, yScale=1-SCALE_INCREMENT, time=2000 } )
-      scale = scale - SCALE_INCREMENT
+      transition.scaleBy(world, {xScale=-1*SCALE_INCREMENT, yScale=-1*SCALE_INCREMENT, time=2000})
     elseif "up" == name then -- zoom into world if viewing map
       --local scene = composer.getSceneName('current')
       --composer.removeScene(scene)      
@@ -63,9 +84,8 @@ local function key( event )
     elseif "down" == name then -- zoom into map if viewing room
     end
 
+    scale = world.xScale
   end
-
-print(scale)
 
   lastEvent = event
 end
