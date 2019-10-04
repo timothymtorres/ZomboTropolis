@@ -1656,4 +1656,110 @@ function Map:getAnimationGID( animation )
 	return gid
 end
 
+--------------------------------------------------------------------------------
+--- Convert tile location to pixel location
+--
+-- @param y The Y axis of the point (in tiles)
+-- @param x The X axis of the point (in tiles)
+-- @return The y, x location in pixels 
+--------------------------------------------------------------------------------
+function Map:convertTileToPixel( y, x )
+
+	local pixel_y, pixel_x
+
+	if self.orientation == 'isometric' then
+
+		pixel_x, pixel_y = isoToScreen( 
+			y, x, self,
+			self.dim.height * self.tile_width * 0.5 
+		)
+
+	elseif self.orientation == 'staggered' then
+
+    	local stagger_offset_y = ( self.tile_height * 0.5 )
+    	local stagger_offset_x = ( self.tile_width * 0.5 )
+
+    	if self.stagger_axis == 'y' then
+
+    		if self.stagger_index == 'odd' then
+
+    			if y % 2 == 1 then
+
+    				pixel_x = ( x * self.tile_width ) + 
+    							stagger_offset_x
+
+    			else
+
+    				pixel_x = ( x * self.tile_width )
+
+    			end
+
+    		else
+
+    			if y % 2 == 1  then
+
+    				pixel_x = ( x * self.tile_width )
+
+				else
+
+    				pixel_x = ( x * self.tile_width ) + 
+    							stagger_offset_x
+
+				end
+
+    		end
+
+    		pixel_y = ( 
+    					y * 
+    				    ( self.tile_height - self.tile_height * 0.5 ) 
+    				  )
+
+    	else
+
+    		if self.stagger_index == 'odd' then
+
+    			if x % 2 == 1  then
+
+    				pixel_y = ( y * self.tile_height ) + 
+    							stagger_offset_y
+
+    			else
+
+    				pixel_y = ( y * self.tile_height )
+
+    			end
+
+    		else
+
+    			if x % 2 == 1  then
+
+    				pixel_y = ( y * self.tile_height )
+
+				else
+
+    				pixel_y = ( y * self.tile_height ) + 
+    							stagger_offset_y
+
+				end
+
+    		end
+
+    		pixel_x = ( 
+    					x * 
+    					( self.tile_width - self.tile_width * 0.5 ) 
+    				  )
+
+    	end
+
+	elseif self.orientation == 'orthogonal' then
+
+		pixel_x = x * self.tile_width
+		pixel_y = ( y + 1 ) * self.tile_height
+
+	end
+
+	return pixel_y, pixel_x
+
+end
+
 return Map
