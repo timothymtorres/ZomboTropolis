@@ -43,17 +43,7 @@ function scene:create( event )
 
   local player_y, player_x = main_player:getPos()
   local y, x = world:convertTileToPixel( player_y-1, player_x-1 )
-
---[[
-      image.row    = mFloor( 
-                   ( position + layer.size - 1 ) / layer.size 
-                 ) - 1
-      image.column = position - image.row * layer.size - 1
---]]
-
--- 16, 32  (y, x)
-print(player_y, player_x, y, x )
-  mob.y, mob.x =  y - 8, x 
+  mob.y, mob.x =  y - 8, x -- centering the mob on the isometric tile
 
   return sceneGroup
 end
