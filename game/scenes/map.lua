@@ -190,7 +190,7 @@ end
 
 -- The zooming in/out is still broken as fuck!
 local scale = world.xScale -- both xScale & yScale should be same
-local MAX_SCALE, MIN_SCALE = 2, 1
+local MAX_SCALE, MIN_SCALE = 4, 1
 local lastEvent = {}
 
 local function key( event )
