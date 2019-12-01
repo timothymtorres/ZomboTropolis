@@ -60,23 +60,10 @@ function scene:create( event )
     strokeWidth = 4      
   } 
 
-  local N_grid_button = widget.newButton{
-    x = grid_x,
-    y = grid_y-grid_square,
-    id = 1,
-    label = "N",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
   local NE_grid_button = widget.newButton{
     x = grid_x+grid_square,
     y = grid_y-grid_square,
-    id = 2,
+    id = 1,
     label = "NE",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -89,7 +76,7 @@ function scene:create( event )
   local E_grid_button = widget.newButton{
     x = grid_x+grid_square,
     y = grid_y,
-    id = 3,
+    id = 2,
     label = "E",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -102,7 +89,7 @@ function scene:create( event )
   local SE_grid_button = widget.newButton{
     x = grid_x+grid_square,
     y = grid_y+grid_square,
-    id = 4,
+    id = 3,
     label = "SE",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -115,7 +102,7 @@ function scene:create( event )
   local S_grid_button = widget.newButton{
     x = grid_x,
     y = grid_y+grid_square,
-    id = 5,
+    id = 4,
     label = "S",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -128,7 +115,7 @@ function scene:create( event )
   local SW_grid_button = widget.newButton{
     x = grid_x-grid_square,
     y = grid_y+grid_square,
-    id = 6,
+    id = 5,
     label = "SW",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -141,7 +128,7 @@ function scene:create( event )
   local W_grid_button = widget.newButton{
     x = grid_x-grid_square,
     y = grid_y,
-    id = 7,
+    id = 6,
     label = "W",
     onEvent = gridButtonEvent,
     shape = 'rect',
@@ -154,8 +141,21 @@ function scene:create( event )
   local NW_grid_button = widget.newButton{
     x = grid_x-grid_square,
     y = grid_y-grid_square,
-    id = 8,
+    id = 7,
     label = "NW",
+    onEvent = gridButtonEvent,
+    shape = 'rect',
+    width = grid_square,
+    height = grid_square,
+    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+    strokeWidth = 4      
+  } 
+  local N_grid_button = widget.newButton{
+    x = grid_x,
+    y = grid_y-grid_square,
+    id = 8,
+    label = "N",
     onEvent = gridButtonEvent,
     shape = 'rect',
     width = grid_square,
@@ -183,7 +183,6 @@ function scene:create( event )
 
   local player_y, player_x = main_player:getPos()
   local y, x = world:convertTileToPixel( player_y-1, player_x-1 )
-print('Player y/x ', player_y, player_x)
   mob.y, mob.x =  y, x -- centering the mob on the isometric tile
 
   return sceneGroup
