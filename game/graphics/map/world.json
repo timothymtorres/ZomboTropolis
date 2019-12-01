@@ -109,11 +109,9 @@
         }],
  "nextlayerid":25,
  "nextobjectid":4,
- "orientation":"staggered",
+ "orientation":"isometric",
  "renderorder":"right-down",
- "staggeraxis":"y",
- "staggerindex":"odd",
- "tiledversion":"1.2.3",
+ "tiledversion":"1.2.5",
  "tileheight":16,
  "tilesets":[
         {
