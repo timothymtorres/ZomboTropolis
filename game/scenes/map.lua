@@ -215,9 +215,7 @@ function scene:create( event )
         strokeWidth = 4      
       } 
       move_buttons:insert(N_grid_button) 
-    end
-    -- add our map to the scene
-    sceneGroup:insert(move_buttons)  
+    end 
   end
 
   -- Load our map
@@ -242,6 +240,7 @@ function scene:create( event )
 
   -- draw our movement buttons for direction
   drawMoveButtons()
+  sceneGroup:insert(move_buttons) 
 
   return sceneGroup
 end
