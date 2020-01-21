@@ -71,6 +71,7 @@ function scene:create( event )
         strokeWidth = 4      
       }
 
+      move_buttons:insert(center_grid_button) 
     end
 
     local NE_grid_button = widget.newButton{
