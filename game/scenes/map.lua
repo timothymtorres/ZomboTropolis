@@ -66,7 +66,7 @@ function scene:create( event )
 
       local center_grid_button = widget.newButton{
         x = grid_x,
-        y = grid_y-grid_square,
+        y = grid_y,
         id = id,
         label = label,
         onEvent = centerButtonEvent,
