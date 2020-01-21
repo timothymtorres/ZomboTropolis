@@ -27,11 +27,13 @@ local grid_x, grid_y = display.contentWidth*0.17, display.contentHeight*0.60
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
+  local move_buttons = display.newGroup()    
 
   local gridButtonEvent = function(event)
     if ("ended" == event.phase ) then
       local dir = event.target.id
       main_player:perform('move', dir)
+      updateMoveButtons()
     end
   end
   
@@ -39,131 +41,153 @@ function scene:create( event )
     if ("ended" == event.phase ) then
       -- event.target.id is one of the following - enter/exit
       main_player:perform(event.target.id)
-      updateMap()
-      updatePlayerBar()
-      updateLocation()
-      print('Button was pressed and released')
+      updateMoveButtons()
     end
   end 
 
-  local center_grid_button = widget.newButton{
-    x = grid_x,
-    y = grid_y-grid_square,
-    id = 7,
-    label = "Enter",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
+  local drawMoveButtons = function()
+    local map = main_player:getMap()
+    local y, x = main_player:getPos()   
 
-  local NE_grid_button = widget.newButton{
-    x = grid_x+grid_square,
-    y = grid_y-grid_square,
-    id = 1,
-    label = "NE",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local E_grid_button = widget.newButton{
-    x = grid_x+grid_square,
-    y = grid_y,
-    id = 2,
-    label = "E",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local SE_grid_button = widget.newButton{
-    x = grid_x+grid_square,
-    y = grid_y+grid_square,
-    id = 3,
-    label = "SE",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local S_grid_button = widget.newButton{
-    x = grid_x,
-    y = grid_y+grid_square,
-    id = 4,
-    label = "S",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local SW_grid_button = widget.newButton{
-    x = grid_x-grid_square,
-    y = grid_y+grid_square,
-    id = 5,
-    label = "SW",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local W_grid_button = widget.newButton{
-    x = grid_x-grid_square,
-    y = grid_y,
-    id = 6,
-    label = "W",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local NW_grid_button = widget.newButton{
-    x = grid_x-grid_square,
-    y = grid_y-grid_square,
-    id = 7,
-    label = "NW",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
-  local N_grid_button = widget.newButton{
-    x = grid_x,
-    y = grid_y-grid_square,
-    id = 8,
-    label = "N",
-    onEvent = gridButtonEvent,
-    shape = 'rect',
-    width = grid_square,
-    height = grid_square,
-    fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
-    strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-    strokeWidth = 4      
-  } 
+    if map[y][x]:isBuilding() then
+      local label, id 
+      
+      -- also this might need to be updated for barricade levels?   
+      if main_player:isStaged('inside') then label, id = 'Exit', 'exit'
+      elseif main_player:isStaged('outside') then label, id = 'Enter', 'enter'
+      end
+
+      local center_grid_button = widget.newButton{
+        x = grid_x,
+        y = grid_y-grid_square,
+        id = id,
+        label = label,
+        onEvent = centerButtonEvent,
+        shape = 'rect',
+        width = grid_square,
+        height = grid_square,
+        fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+        strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 4      
+      }
+
+    end
+
+    local NE_grid_button = widget.newButton{
+      x = grid_x+grid_square,
+      y = grid_y-grid_square,
+      id = 1,
+      label = "NE",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local E_grid_button = widget.newButton{
+      x = grid_x+grid_square,
+      y = grid_y,
+      id = 2,
+      label = "E",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local SE_grid_button = widget.newButton{
+      x = grid_x+grid_square,
+      y = grid_y+grid_square,
+      id = 3,
+      label = "SE",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local S_grid_button = widget.newButton{
+      x = grid_x,
+      y = grid_y+grid_square,
+      id = 4,
+      label = "S",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local SW_grid_button = widget.newButton{
+      x = grid_x-grid_square,
+      y = grid_y+grid_square,
+      id = 5,
+      label = "SW",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local W_grid_button = widget.newButton{
+      x = grid_x-grid_square,
+      y = grid_y,
+      id = 6,
+      label = "W",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local NW_grid_button = widget.newButton{
+      x = grid_x-grid_square,
+      y = grid_y-grid_square,
+      id = 7,
+      label = "NW",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    local N_grid_button = widget.newButton{
+      x = grid_x,
+      y = grid_y-grid_square,
+      id = 8,
+      label = "N",
+      onEvent = gridButtonEvent,
+      shape = 'rect',
+      width = grid_square,
+      height = grid_square,
+      fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+      strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+      strokeWidth = 4      
+    } 
+    -- add our map to the scene
+    sceneGroup:insert(grid_3x3_map)  
+
+  end
+
+  function updateMap()
+    grid_3x3_map:removeSelf()
+    grid_3x3_map = nil
+    drawMap()
+  end
+
 
   -- Load our map
   --local filename = "graphics/map/world.json"
