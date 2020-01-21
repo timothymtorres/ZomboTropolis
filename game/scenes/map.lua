@@ -220,9 +220,6 @@ function scene:create( event )
     sceneGroup:insert(move_buttons)  
   end
 
-  -- draw our movement buttons for direction
-  drawMoveButtons()
-
   -- Load our map
   --local filename = "graphics/map/world.json"
   --world = berry.loadMap( filename, "graphics/map" )
@@ -242,6 +239,9 @@ function scene:create( event )
   local player_y, player_x = main_player:getPos()
   local y, x = world:convertTileToPixel( player_y-1, player_x-1 )
   mob.y, mob.x =  y, x -- centering the mob on the isometric tile
+
+  -- draw our movement buttons for direction
+  drawMoveButtons()
 
   return sceneGroup
 end
