@@ -27,13 +27,14 @@ local grid_x, grid_y = display.contentWidth*0.17, display.contentHeight*0.60
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
-  local move_buttons = display.newGroup()    
+  local move_buttons = display.newGroup()  
+  local drawMoveButtons  
 
   local gridButtonEvent = function(event)
     if ("ended" == event.phase ) then
       local dir = event.target.id
       main_player:perform('move', dir)
-      updateMoveButtons()
+      drawMoveButtons()
     end
   end
   
@@ -41,13 +42,19 @@ function scene:create( event )
     if ("ended" == event.phase ) then
       -- event.target.id is one of the following - enter/exit
       main_player:perform(event.target.id)
-      updateMoveButtons()
+      drawMoveButtons()
     end
   end 
 
-  local drawMoveButtons = function()
+  drawMoveButtons = function()
     local map = main_player:getMap()
     local y, x = main_player:getPos()   
+
+    -- remove all children from group
+    for i=move_buttons.numChildren, 1, -1 do
+      move_buttons[i]:removeSelf()
+      move_buttons[i] = nil
+    end
 
     if map[y][x]:isBuilding() then
       local label, id 
@@ -209,18 +216,12 @@ function scene:create( event )
       } 
       move_buttons:insert(N_grid_button) 
     end
-
     -- add our map to the scene
-    sceneGroup:insert(grid_3x3_map)  
-
+    sceneGroup:insert(move_buttons)  
   end
 
-  function updateMap()
-    grid_3x3_map:removeSelf()
-    grid_3x3_map = nil
-    drawMap()
-  end
-
+  -- draw our movement buttons for direction
+  drawMoveButtons()
 
   -- Load our map
   --local filename = "graphics/map/world.json"
