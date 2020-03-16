@@ -6,7 +6,7 @@ local Fuel, Barricade, Toolbox = unpack(require('code.item.items.tools'))
 local Radio, GPS, Flashlight, Sampler = unpack(require('code.item.items.gadget'))
 local Book, Bottle, Newspaper = unpack(require('code.item.items.junk'))
 local Magazine, Shell, Clip, Quiver = unpack(require('code.item.items.ammo'))
-local Leather, Firesuit = unpack(require('code.item.items.armor'))
+local Leather, Kevlar, Riotsuit, Firesuit, Biosuit = unpack(require('code.item.items.armor'))
 
 local Items = {
   -- MELEE_WEAPONRY
@@ -26,7 +26,7 @@ local Items = {
   -- AMMO
   Magazine, Shell, Clip, Quiver,
   -- ARMOR
-  Leather, Firesuit,
+  Leather, Kevlar, Riotsuit, Firesuit, Biosuit,
 }
 
 for _, Class in ipairs(Items) do 
