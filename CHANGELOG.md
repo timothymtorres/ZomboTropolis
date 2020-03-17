@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased Version
 
+## v0.13.0 - ???
+### Added
+- New human armors: 
+	- Biosuit has special effects when worn *depending on the condition of the armor*.  It grants immunity to infection from bites and hunter zombies are unable to track the player.  It also hides the HP status of the player and conceals their location from being revealed by outside zombies with the scent blood skills.  It offers zero protection, is very fragile, and is light weight.  It can be found in labratory buildings and is classified as a research item.  
+	- Kevlar is the jack of all trades armor.  It offers moderate protection, has average durability, and average weight.  Additionally it is *the only armor* in the game to have bullet protection.  It can be found in police departments and is classified as a military item.
+	- Riotsuit is the king of melee.  It offers high protection from melee attacks, has high durability, but is the heaviest armor available.  It can be found in police departments (very rare) or in the military base and is classified as a military item.
+- Pheromone Spray gadget that masks a players scent from any hunter zombies trying to track.  The condition level of the spray determines how much scent is lost.
+
+### Fixed
+- Antidote not properly removing infection status.
+
+### Changed
+- Leather Jacket armor is considered bare bones armor.  It offers minimal protection, is fragile, and is the lightest armor in the game.  It can be commonly found in lots of different buildings and is classified as a military item.
+- Firesuit armor only protects from acid attacks.  Although acid does no damage to the player, it does destroy their inventory and this armor is the only way to prevent that from happening.  It offers zero protection, has average durability, and weighs average.  It can be found in fire departments and is classified as a engineering item.
+
+
 ## v0.12.0 - 06/14/2019
 ### Added
 - Sprites for all in game items. (some are placeholders)
