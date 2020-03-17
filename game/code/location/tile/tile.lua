@@ -52,7 +52,9 @@ function Tile:countPlayers(mob_type, setting, filter)
   for player in pairs(players) do
     if (mob_type == 'all' or player:isMobType(mob_type) ) and player:isStanding() and not player.status_effect:isActive('hide') then 
       if filter and filter == 'wounded' then -- this filter is for scent_blood to see wounded survivors in buildings from outside
-        if player.stats:get('vitality') ~= 4 then count = count + 1 end
+        local biosuit_resistance = player.armor:isPresent() and player.armor:getProtection('bio') or 0
+        local biosuit_hide_wound = biosuit_resistance >= 1
+        if player.stats:get('vitality') ~= 4 and not biosuit_hide_wound then count = count + 1 end
       else     
         count = count + 1
       end

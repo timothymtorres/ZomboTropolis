@@ -106,6 +106,25 @@ Biosuit.DURABILITY = 2
 Biosuit.CATEGORY = 'research'
 
 Biosuit.armor = {}
-Biosuit.armor.resistance = {}  -- fix this?
+Biosuit.armor.resistance = {
+  {bio=1},
+  {bio=2},
+  {bio=3},
+  {bio=4},
+}
+--[[ Biosuit armor has no resistance but grants special effects. 
+
+1. Hides the player from being detected by outside zombies
+2. Hides the players HP status from other mobs (not yet implemented)
+3. Immune to tracking from hunter zombies
+4. Immune to infections from bite attacks
+
+The biosuit effects are dependent on the condition of the armor.  To have an 
+effect active it must use the following critera:
+
+Biosuit Condition >= Effect Level
+
+Thus a biosuit at condition 4 (pristine) will have all effects active.  Likewise
+a biosuit at condition 2 (worn) will only have effect 1 & 2 active. --]]
 
 return {Leather, Kevlar, Riotsuit, Firesuit, Biosuit}

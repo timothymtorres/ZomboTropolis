@@ -18,6 +18,12 @@ function Track:addScent(target)
   local has_advanced_tracking = self.player.skills:check('track_adv')
   local scent_time = (has_advanced_tracking and TRACKING_ADV_TIME) or TRACKING_TIME
   
+  local biosuit_resistance = target.armor:isPresent() and target.armor:getProtection('bio') or 0
+  local biosuit_block_tracking = biosuit_resistance >= 3
+
+  -- biosuits can block tracking if they have a high enough condition
+  if biosuit_block_tracking then return end
+
   -- check if target is already in our scents
   for i, scent in ipairs(self.scents) do
     if scent.prey == target then -- update target to most recent 
@@ -77,10 +83,15 @@ end
 function Track:getPrey()
   local prey, tracking_range_indexs = {}, {}
   for i, scent in ipairs(self.scents) do
-    local distance = getDistanceApart(self.player, scent.prey)
-    local skill_proficiency = self.player.skills:check('track_adv') and 'advanced' or 'basic'
-    prey[#prey+1] = scent.prey
-    tracking_range_indexs[#tracking_range_indexs+1] = selectTrackingRangeIndex(distance, skill_proficiency)
+    local biosuit_resistance = scent.prey.armor:isPresent() and scent.prey.armor:getProtection('bio') or 0
+    local biosuit_block_tracking = biosuit_resistance >= 3
+
+    if not biosuit_block_tracking then 
+      local distance = getDistanceApart(self.player, scent.prey)
+      local skill_proficiency = self.player.skills:check('track_adv') and 'advanced' or 'basic'
+      prey[#prey+1] = scent.prey
+      tracking_range_indexs[#tracking_range_indexs+1] = selectTrackingRangeIndex(distance, skill_proficiency)
+    end
   end
   return prey, tracking_range_indexs
 end

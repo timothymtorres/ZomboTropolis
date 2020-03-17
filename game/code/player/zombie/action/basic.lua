@@ -198,7 +198,10 @@ function attack.activate(player, target, weapon)
     elseif tostring(weapon) == 'bite' then
       -- infection_adv skill makes bites auto infect, infection skill requires a zombie to be entagled with the target to infect with bite
       if player.skills:check('infection_adv') or (player.skills:check('infection') and player:isTangledTogether(target)) then
-        if not target.status_effect:isActive('infection') or not target.status_effect:isActive('immune') then
+        local biosuit_resistance = target.armor:isPresent() and target.armor:getProtection('bio') or 0
+        local biosuit_block_infection = biosuit_resistance == 4
+
+        if not target.status_effect:isActive('infection') or not target.status_effect:isActive('immune') or not biosuit_block_infection then
           target.status_effect:add('infection') 
           caused_infection = true
         end
