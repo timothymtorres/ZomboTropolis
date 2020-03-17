@@ -30,6 +30,9 @@ function Zombie:killed() -- cause_of_death arg not needed yet?
   self.hp, self.health_state = 0, {basic=4, advanced=8}  -- reset our hp stats to zero
   self.condition = condition:new(self)
   -- Reset other things?  Like tracking?  Armor? etc.
+
+  -- if zombie is at full hunger and dies it should be permadeath
+  -- self:permadeath()
 end
 
 function Zombie:starve()

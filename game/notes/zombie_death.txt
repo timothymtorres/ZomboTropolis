@@ -1,0 +1,5 @@
+--ON ZOMBIE DEATH--
+
+if human kills zombie that has no saturation then it's permadeath
+
+each time a zombie is killed it loses a permanent saturation amount that cannot be regained.  Set amount? 10%  5% of total saturation?
