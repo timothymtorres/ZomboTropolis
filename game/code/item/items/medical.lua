@@ -271,7 +271,9 @@ function Antidote:server_criteria(player, target)
 end
 
 function Antidote:activate(player, target)
-  target.condition.infection:remove()
+  if target.status_effect:isActive('infection') then 
+    target.status_effect.infection:remove()
+  end
   
   --------------------------------------------
   -----------   M E S S A G E   --------------
