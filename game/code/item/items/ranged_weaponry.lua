@@ -101,6 +101,28 @@ Rifle.RELOAD_AMOUNT = 5
 
 -------------------------------------------------------------------
 
+local Bow = class('Bow', Item):include(IsWeapon)
+
+Bow.FULL_NAME = 'bow'
+Bow.WEIGHT = 10
+Bow.DURABILITY = 80
+Bow.CATEGORY = 'military'
+
+Bow.weapon = {
+  ATTACK_STYLE = 'ranged',
+  DAMAGE_TYPE = 'pierce',
+  GROUP = {'bows'},
+  DICE = '1d7+2',
+  ACCURACY = 0.30,
+  CRITICAL = 0.05,
+  MASTER_SKILL = 'archery_adv',
+}
+
+Bow.MAX_AMMO = 8
+Bow.RELOAD_AMOUNT = 8
+
+-------------------------------------------------------------------
+
 local Flare = class('Flare', Item):include(IsWeapon)
 
 Flare.FULL_NAME = 'flare'
@@ -166,7 +188,6 @@ end
 
 -------------------------------------------------------------------
 
-
 local Molotov = class('Molotov', Item):include(IsWeapon)
 
 Molotov.FULL_NAME = 'molotov cocktail'
@@ -211,4 +232,4 @@ weapon.missile.one_use = true
 bow/crossbow
 --]]
 
-return {Pistol, Magnum, Shotgun, Rifle, Flare, Molotov}
+return {Pistol, Magnum, Shotgun, Rifle, Bow, Flare, Molotov}
