@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 	- Kevlar is the jack of all trades armor.  It offers moderate protection, has average durability, and average weight.  Additionally it is *the only armor* in the game to have bullet protection.  It can be found in police departments and is classified as a military item.
 	- Riotsuit is the king of melee.  It offers high protection from melee attacks, has high durability, but is the heaviest armor available.  It can be found in police departments (very rare) or in the military base and is classified as a military item.
 - Pheromone Spray gadget that masks a players scent from any hunter zombies trying to track.  The condition level of the spray determines how much scent is lost.
+- New melee weapons: Wrench, Pipe, Rake, Shovel, Axe, Pickaxe, Pitchfork, and Poolstick.
+- New ranged weapon: Bow.
 
 ### Fixed
 - Antidote not properly removing infection status.
