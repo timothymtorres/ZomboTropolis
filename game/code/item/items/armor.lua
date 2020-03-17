@@ -55,10 +55,10 @@ Kevlar.CATEGORY = 'military'
 
 Kevlar.armor = {}
 Kevlar.armor.resistance = {
-  {bullet=4, brute=2, pierce=2}, -- 8 points (4 points of melee)
-  {bullet=3, brute=2, pierce=1}, -- 6 points (3 points of melee)
-  {bullet=2, brute=1, pierce=1}, -- 4 points (2 points of melee)
   {bullet=1, brute=1},           -- 2 points (1 points of melee)
+  {bullet=2, brute=1, pierce=1}, -- 4 points (2 points of melee)
+  {bullet=3, brute=2, pierce=1}, -- 6 points (3 points of melee)
+  {bullet=4, brute=2, pierce=2}, -- 8 points (4 points of melee)
 }
 
 -------------------------------------------------------------------
@@ -72,10 +72,10 @@ Riotsuit.CATEGORY = 'military'
 
 Riotsuit.armor = {}
 Riotsuit.armor.resistance = {
-  {brute=4, pierce=4},  -- 8 points melee
-  {brute=4, pierce=3},  -- 7 points melee
-  {brute=3, pierce=3},  -- 6 points melee
   {brute=3, pierce=2},  -- 5 points melee
+  {brute=3, pierce=3},  -- 6 points melee
+  {brute=4, pierce=3},  -- 7 points melee
+  {brute=4, pierce=4},  -- 8 points melee
 }
 
 -------------------------------------------------------------------
