@@ -3,7 +3,7 @@ local Pistol, Magnum, Shotgun, Rifle, Flare, Molotov = unpack(require('code.item
 local FAK, Bandage, Syringe, Vaccine, Antidote, Scanner = unpack(require('code.item.items.medical'))
 local Generator, Transmitter, Terminal = unpack(require('code.item.items.machinery'))
 local Fuel, Barricade, Toolbox = unpack(require('code.item.items.tools'))
-local Radio, GPS, Flashlight, Sampler = unpack(require('code.item.items.gadget'))
+local Radio, GPS, Flashlight, Pheromone = unpack(require('code.item.items.gadget'))
 local Book, Bottle, Newspaper = unpack(require('code.item.items.junk'))
 local Magazine, Shell, Clip, Quiver = unpack(require('code.item.items.ammo'))
 local Leather, Kevlar, Riotsuit, Firesuit, Biosuit = unpack(require('code.item.items.armor'))
@@ -20,7 +20,7 @@ local Items = {
   -- TOOLS
   Fuel, Barricade, Toolbox,
   -- GADGET
-  Radio, GPS, Flashlight, --'cellphone', 'sampler'
+  Radio, GPS, Flashlight, Pheromone, --'cellphone', 'sampler'
   -- JUNK
   Book, Bottle, Newspaper,
   -- AMMO

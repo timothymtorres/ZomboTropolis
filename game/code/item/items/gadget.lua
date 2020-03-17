@@ -79,6 +79,45 @@ Flashlight.MASTER_SKILL = 'gadget'
 
 ---------------------------------------------------------------------
 
+local Pheromone = class('Pheromone', Item)
+
+Pheromone.FULL_NAME = 'pheromone spray'
+Pheromone.WEIGHT = 4
+Pheromone.DURABILITY = 0
+Pheromone.CATEGORY = 'research'
+Pheromone.MASTER_SKILL = 'gadget'
+
+function Pheromone:server_criteria(player, target)
+  assert(target:isStanding(), 'Target has been killed')
+  assert(player:isSameLocation(target), 'Target is out of range')
+  assert(target:isMobType('human'), 'Target must be a human')  
+end
+
+function Pheromone:activate(player, setting)
+  if player.status_effect:isActive('track') then
+    player.status_effect.track:scentRemoval(self.condition)
+  end
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  local self_msg =   'You spray {target} with pheromones.'
+  local target_msg = '{player} sprays you with pheromones.'
+  self_msg =     self_msg:replace(target)
+  target_msg = target_msg:replace(player)
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'pheromone', player, target}    
+  player.log:insert(self_msg, event)
+  target.log:insert(target_msg, event) 
+end
+
+---------------------------------------------------------------------
+
 --[[
 gadget.cellphone.full_name = 'cellphone'
 gadget.cellphone.weight = 2
@@ -113,4 +152,4 @@ end
 function check.cellphone(player) end -- check if phone towers functional/need light/need battery
 --]]
 
-return {Radio, GPS, Flashlight}
+return {Radio, GPS, Flashlight, Pheromone}
