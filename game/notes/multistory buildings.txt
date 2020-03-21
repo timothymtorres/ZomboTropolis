@@ -1,0 +1,8 @@
+The larger the building the bigger the search % and the +- integrity it can be.  (integrity has more health and can take more damage)
+
+
+1 tile = base
+2 tile = +5%
+3 tile = +10%
+
+4 tiles and up are special buildings with no bonus rates.  
