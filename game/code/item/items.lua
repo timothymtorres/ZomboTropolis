@@ -6,7 +6,7 @@ local Generator, Transmitter, Terminal = unpack(require('code.item.items.machine
 local Fuel, Barricade, Toolbox = unpack(require('code.item.items.tools'))
 local Radio, GPS, Flashlight, Pheromone = unpack(require('code.item.items.gadget'))
 local Book, Bottle, Newspaper = unpack(require('code.item.items.junk'))
-local Magazine, Shell, Clip, Quiver = unpack(require('code.item.items.ammo'))
+local Ammo_Pistol, Ammo_Shotgun, Ammo_Magnum, Ammo_SMG, Ammo_Bow = unpack(require('code.item.items.ammo'))
 local Leather, Kevlar, Riotsuit, Firesuit, Biosuit = unpack(require('code.item.items.armor'))
 
 local Items = {
@@ -27,7 +27,7 @@ local Items = {
   -- JUNK
   Book, Bottle, Newspaper,
   -- AMMO
-  Magazine, Shell, Clip, Quiver,
+  Ammo_Pistol, Ammo_Shotgun, Ammo_Magnum, Ammo_SMG, Ammo_Bow,
   -- ARMOR
   Leather, Kevlar, Riotsuit, Firesuit, Biosuit,
 }
