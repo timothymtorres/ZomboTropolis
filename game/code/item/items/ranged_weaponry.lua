@@ -79,14 +79,14 @@ Shotgun.RELOAD_AMOUNT = 1
 
 -------------------------------------------------------------------
 
-local Rifle = class('Rifle', Item):include(IsWeapon)
+local SMG = class('SMG', Item):include(IsWeapon)
 
-Rifle.FULL_NAME = 'assualt rifle'
-Rifle.WEIGHT = 15
-Rifle.DURABILITY = 40
-Rifle.CATEGORY = 'military'
+SMG.FULL_NAME = 'submachine gun'
+SMG.WEIGHT = 15
+SMG.DURABILITY = 40
+SMG.CATEGORY = 'military'
 
-Rifle.weapon = {
+SMG.weapon = {
   ATTACK_STYLE = 'ranged',
   DAMAGE_TYPE = 'bullet',
   GROUP = {'heavy_guns'},
@@ -96,8 +96,8 @@ Rifle.weapon = {
   MASTER_SKILL = 'primary',
 }
 
-Rifle.MAX_AMMO = 5
-Rifle.RELOAD_AMOUNT = 5
+SMG.MAX_AMMO = 5
+SMG.RELOAD_AMOUNT = 5
 
 -------------------------------------------------------------------
 
@@ -193,7 +193,6 @@ local Molotov = class('Molotov', Item):include(IsWeapon)
 Molotov.FULL_NAME = 'molotov cocktail'
 Molotov.WEIGHT = 5
 Molotov.DURABILITY = 0
-Molotov.MASTER_SKILL = 'explosives'
 Molotov.CATEGORY = 'military'
 
 Molotov.weapon = {
@@ -232,4 +231,4 @@ weapon.missile.one_use = true
 bow/crossbow
 --]]
 
-return {Pistol, Magnum, Shotgun, Rifle, Bow, Flare, Molotov}
+return {Pistol, Magnum, Shotgun, SMG, Bow, Flare, Molotov}

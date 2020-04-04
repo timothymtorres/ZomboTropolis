@@ -1,6 +1,6 @@
 local Crowbar, Wrench, Pipe, Poolstick, Bat, Rake, Shovel, Sledge = unpack(require('code.item.items.melee_blunt_weaponry'))
 local Knife, Pitchfork, Axe, Pickaxe, Katanna = unpack(require('code.item.items.melee_pierce_weaponry'))
-local Pistol, Magnum, Shotgun, Rifle, Bow, Flare, Molotov = unpack(require('code.item.items.ranged_weaponry'))
+local Pistol, Magnum, Shotgun, SMG, Bow, Flare, Molotov = unpack(require('code.item.items.ranged_weaponry'))
 local FAK, Bandage, Syringe, Vaccine, Antidote, Scanner = unpack(require('code.item.items.medical'))
 local Generator, Transmitter, Terminal = unpack(require('code.item.items.machinery'))
 local Fuel, Barricade, Toolbox = unpack(require('code.item.items.tools'))
@@ -15,7 +15,7 @@ local Items = {
   -- MELEE PIERCE WEAPONRY
   Knife, Pitchfork, Axe, Pickaxe, Katanna,
   -- RANGED WEAPONRY
-  Pistol, Magnum, Shotgun, Rifle, Bow, Flare, Molotov,
+  Pistol, Magnum, Shotgun, SMG, Bow, Flare, Molotov,
   -- MEDICAL
   FAK, Bandage, Syringe, Vaccine, Antidote, Scanner,
   -- MACHINERY
