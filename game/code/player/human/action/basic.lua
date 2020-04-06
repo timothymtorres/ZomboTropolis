@@ -152,7 +152,7 @@ function attack.activate(player, target, weapon, inv_ID)
         -- insert some type of event?
       end
       
-      local degrade_multiplier = 1 -- player.skills:check() some armor breaking skill?
+      local degrade_multiplier = 1 -- change this if we want a special weapon to degrade armor
       armor_condition = armor:updateArmorDurability(degrade_multiplier)
       if armor_condiiton == 0 then target.equipment:remove('armor') end
     end
