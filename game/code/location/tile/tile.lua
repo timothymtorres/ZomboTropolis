@@ -32,20 +32,20 @@ function Tile:insert(player) self.outside_players[player] = true end
 
 function Tile:remove(player) self.outside_players[player] = nil end
 
-function Tile:check(player, setting)
+function Tile:check(player, stage)
   local attendance
-  if setting == 'outside' or setting == nil then attendance = self.outside_players[player]
-  elseif setting == 'inside' and self:isBuilding() then attendance = self.inside_players[player] 
+  if stage == 'outside' or stage == nil then attendance = self.outside_players[player]
+  elseif stage == 'inside' and self:isBuilding() then attendance = self.inside_players[player] 
   end  
   return (attendance and true) or false
 end
 
-function Tile:countPlayers(mob_type, setting, filter)
+function Tile:countPlayers(mob_type, stage, filter)
   local players
   
-  if setting == 'outside' then players = self.outside_players 
-  elseif setting == 'inside' then players = self.inside_players
-  else error('player setting count wrong')
+  if stage == 'outside' then players = self.outside_players 
+  elseif stage == 'inside' then players = self.inside_players
+  else error('player stage count wrong')
   end
   
   local count = 0
@@ -63,11 +63,11 @@ function Tile:countPlayers(mob_type, setting, filter)
   return count
 end
 
-function Tile:countCorpses(setting)
+function Tile:countCorpses(stage)
   local players 
-  if setting == 'outside' then players = self.outside_players
-  elseif setting == 'inside' then players = self.inside_players 
-  else error('player setting count bodies wrong')  
+  if stage == 'outside' then players = self.outside_players
+  elseif stage == 'inside' then players = self.inside_players 
+  else error('player stage count bodies wrong')  
   end
   
   local count = 0
@@ -81,20 +81,20 @@ function Tile:getMap() return self.map_zone end
 
 function Tile:getPos() return self.y, self.x end
 
-function Tile:getIntegrity()
-  if self:isBuilding() then return self.integrity:getState()
+function Tile:getIntegrity(stage)
+  if self:isBuilding() and stage == 'inside' then return self.integrity:getState()
   else return 'intact'
   end
 end
 
-function Tile:getPlayers(setting, filter) 
+function Tile:getPlayers(stage, filter) 
   local players = {}
 
-  if setting == 'inside' then 
+  if stage == 'inside' then 
     for player in pairs(self.inside_players) do players[player] = true end
-  elseif setting == 'outside' then
+  elseif stage == 'outside' then
     for player in pairs(self.outside_players) do players[player] = true end
-  elseif not setting then -- get all players
+  elseif not stage then -- get all players
     if self.inside_players then 
       for player in pairs(self.inside_players) do players[player] = true end
     end
@@ -110,12 +110,12 @@ function Tile:getPlayers(setting, filter)
   return next(players) and players or nil 
 end
 
-function Tile:getCorpses(setting)
+function Tile:getCorpses(stage)
   local corpses, players = {}
 
-  if setting == 'outside' then players = self.outside_players
-  elseif setting == 'inside' then players = self.inside_players 
-  else error('Tile:getCorpses setting arg not present')  
+  if stage == 'outside' then players = self.outside_players
+  elseif stage == 'inside' then players = self.inside_players 
+  else error('Tile:getCorpses stage arg not present')  
   end
   
   for player in pairs(players) do
@@ -125,9 +125,9 @@ function Tile:getCorpses(setting)
   return next(corpses) and corpses or nil 
 end
 
-function Tile:isIntegrity(setting)
-  if self:isBuilding() then return self.integrity:getState() == setting 
-  else return 'intact' == setting 
+function Tile:isIntegrity(setting, stage)
+  if self:isBuilding() and stage == 'inside' then return self.integrity:getState() == setting 
+  else return 'intact' == setting
   end
 end
 
@@ -139,8 +139,8 @@ local modifier = {
   looting_skill = 0.05,
 }
 
-function Tile:getSearchOdds(player, setting, integrity_status, was_flashlight_used)
-  local search_chance = (setting and self.search_odds[setting]) or self.search_odds.outside 
+function Tile:getSearchOdds(player, stage, integrity_status, was_flashlight_used)
+  local search_chance = (stage and self.search_odds[stage]) or self.search_odds.outside 
   
   local condition_bonus = modifier.building_condition[integrity_status]
   local skill_bonus, lighting_bonus = 0, 0 
@@ -167,43 +167,55 @@ local function select_item(list)
   end
 end
 
-function Tile:search(player, setting, was_flashlight_used)
-  local integrity_state = self:getIntegrity()  
+function Tile:search(player, stage, was_flashlight_used)
+  local integrity_state = self:getIntegrity(stage)  
   
-  local odds = self:getSearchOdds(player, setting, integrity_state, was_flashlight_used)
+  local odds = self:getSearchOdds(player, stage, integrity_state, was_flashlight_used)
   local search_success = odds >= math.random()
   
   if not search_success then return false end
 
-  local hidden_players = self:getPlayers(setting, 'hide')
+  local hidden_players = self:getPlayers(stage, 'hide')
 
   if hidden_players then
     return next(hidden_players) -- probably should shuffle and randomly select player instead of using next()
   else
-    local tile_item_list = self.item_chance[setting] 
-    local selected_item_type = select_item(tile_item_list)
+    local tile_item_list = self.item_chance[stage] 
+    local item_type = select_item(tile_item_list)
     
-    local item = Items[selected_item_type]:new(integrity_state) 
+    if stage == 'outside' then -- all items outside are usually ruined
+      integrity_state = 'ruined'
+
+      if item_type == 'Barricade' then -- except barricades
+        integrity_state = 'worn'
+
+        if (self.class.name == 'Junkyard' or self.class.name == 'Carpool') then 
+          integrity_state = 'pristine' -- barricades found in junkyards/carpool get a bonus and are usually pristine
+        end
+      end
+    end
+
+    local item = Items[item_type]:new(integrity_state) 
     return item
   end
 end
 
-function Tile:isContested(setting)
-  local is_zombies_present = self:countPlayers('zombie', setting) > 0
-  local is_humans_present = self:countPlayers('human', setting) > 0
+function Tile:isContested(stage)
+  local is_zombies_present = self:countPlayers('zombie', stage) > 0
+  local is_humans_present = self:countPlayers('human', stage) > 0
   return is_zombies_present and is_humans_present 
 end
 
 -- humans are always attackers unless inside an unruined building
-function Tile:getAttacker(setting)
-  local is_inside_building = self:isBuilding() and setting == 'inside' 
+function Tile:getAttacker(stage)
+  local is_inside_building = self:isBuilding() and stage == 'inside' 
   local is_ruined = is_inside_building and self.integrity:isState('ruined') 
   return (not is_ruined and 'zombie') or 'human' 
 end
 
 -- zombies are usually defending except for unruined buildings
-function Tile:getDefender(setting)
-  local is_inside_building = self:isBuilding() and setting == 'inside' 
+function Tile:getDefender(stage)
+  local is_inside_building = self:isBuilding() and stage == 'inside' 
   local is_ruined = is_inside_building and self.integrity:isState('ruined') 
   return (not is_ruined and 'human') or 'zombie'
 end
