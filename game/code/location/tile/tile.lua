@@ -189,7 +189,7 @@ function Tile:search(player, stage, was_flashlight_used)
       if item_type == 'Barricade' then -- except barricades
         integrity_state = 'worn'
 
-        if (self.class.name == 'Junkyard' or self.class.name == 'Carpool') then 
+        if (self.class.name == 'Junkyard' or self.class.name == 'Carpark') then 
           integrity_state = 'pristine' -- barricades found in junkyards/carpool get a bonus and are usually pristine
         end
       end
