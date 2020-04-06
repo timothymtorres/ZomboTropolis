@@ -43,7 +43,7 @@ local IsWeapon = {}
 
 function IsWeapon:isOrganic(mob_type) return (mob_type and self.weapon.ORGANIC == mob_type) or self.weapon.ORGANIC or false end
 
-function IsWeapon:isHarmless() return self.weapon.NO_DAMAGE or false end
+function IsWeapon:isHarmless() return self.weapon.DAMAGE_TYPE == 'harmless' or false end
 
 --function IsWeapon:isSkillRequired() return (self.weapon.SKILL_REQUIRED and true) or false end
 
@@ -114,10 +114,12 @@ local organic_modifier = {
     dice={'1d4', '2d4'}, 
     included_skills={'claw', 'claw_adv'},
   },
+  --[[-- removed dice damage roll modifiers for bites due to balance
   bite = {
     dice={'1d5+1', '1d5+2'}, 
     included_skills={'bite', 'bite_adv'},
   },
+  --]]
   fist = {
     dice={'1d2'},
     included_skills={'martial_arts'},
