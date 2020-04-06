@@ -178,7 +178,11 @@ function Barricade:didZombiesIntervene(player)  -- make brute zombie count as x2
   return blockade_n >= dice.roll(default_bypass_n + skill_bypass_n + blockade_n)  -- blockade < dice.roll(1d2 / skill / blockade)
 end
 
-local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'} -- Averages [1.1, 1.5, 2, 2.5]
+-- AVERAGES FOR FORTIFYING  
+-- no skills           [1.1, 1.5, 2.0, 2.5]
+-- barricade skill     [1.3, 1.9, 2.5, 3.1]
+-- barricade_adv skill [1.7, 2.5, 3.1, 3.4]
+local cade_dice = {'1d3-1^-1', '1d3^-1', '1d3', '1d3^+1'}
 
 function Barricade:fortify(player, cade_condition)
   local dice_str = cade_dice[cade_condition]
