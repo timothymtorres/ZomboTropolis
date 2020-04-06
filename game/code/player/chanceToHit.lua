@@ -15,11 +15,11 @@ local skill_attack_bonus = {
     explosives = {pyrotech=0.05, pyrotech_adv=0.10},
   },
   zombie = {
-    melee = {muscle_stimulus=0.05},
+    melee = {muscle_stimulus=0.10},
     --ranged = {},
     
-    arm = {hand_stimulus=0.10, claw=0.10, claw_adv=0.15},
-    teeth = {head_stimulus=0.10, bite=0.10, bite_adv=0.15},
+    arm = {hand_stimulus=0.15, claw=0.15},
+    teeth = {head_stimulus=0.15, bite=0.15},
   },
 }
 
