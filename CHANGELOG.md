@@ -22,7 +22,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Leather Jacket armor is considered bare bones armor.  It offers minimal protection, is fragile, and is the lightest armor in the game.  It can be commonly found in lots of different buildings and is classified as a military item.
-- Firesuit armor only protects from acid attacks.  Although acid does no damage to the player, it does destroy their inventory and this armor is the only way to prevent that from happening.  It offers zero protection, has average durability, and weighs average.  It can be found in fire departments and is classified as a engineering item.
+- Firesuit armor only protects from acid attacks.  Although acid does no damage to the player, it does destroy their inventory and this armor is the only way to prevent that from happening.  It offers zero protection, is fragile, and is light weight.  It can be found in fire departments and is classified as a engineering item.
+- Almost all items have had their damage, durability, accuracy, and weight values changed.
+- All the search rates for items.  They now use a google spreadsheet that is exported to a CSV file and loaded into the code from there.  This makes balancing stuff much easier and less of a burden.
+- Zombie bite and claw attacks had their damage, accuracy, and skill modifiers all changed.
+- Ammo names now should easily reflect what weapon they belong too.
+- Renamed the Rifle to be a SMG.
+- All items that are found outside (except barricades) will spawn with a high chance of a ruined state.
+- Barricades found outside will spawn with a high chance of a worn state.  However barricades found in carparks and junkyards will spawn with a high chance of a pristine state.
+
+### Removed
+- Critical hits from all weapons.
 
 
 ## v0.12.0 - 06/14/2019
