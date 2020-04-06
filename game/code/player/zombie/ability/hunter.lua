@@ -83,7 +83,7 @@ local RUIN_BONUS_CHANCE = 0.10
 function hide.activate(player)  
   local base_chance = player.skills:check('hide_adv') and HIDE_ADV_CHANCE or HIDE_CHANCE
   local p_tile = player:getTile()
-  if p_tile:isIntegrity('ruined') then base_chance = base_chance + RUIN_BONUS_CHANCE end
+  if p_tile:isIntegrity('ruined', player:getStage()) then base_chance = base_chance + RUIN_BONUS_CHANCE end
 
   local is_hidden = false
 

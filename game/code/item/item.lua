@@ -12,14 +12,32 @@ local function selectFrom(spawn_list)
   end
 end
 
+
 local condition_spawn_odds = {  -- used when spawning new item
-  ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05},
-  ransacked = {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10},
-  intact =    {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, 
+  ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05}, -- 60% ruin, 25% worn, 10% average,  5% pristine
+  worn =      {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10}, -- 25% ruin, 40% worn, 25% average, 10% pristine
+  average =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, -- 10% ruin, 25% worn, 40% average, 25% pristine
+  pristine =  {[1] = 0.05, [2] = 0.10, [3] = 0.25, [4] = 0.60}, --  5% ruin, 10% worn, 25% average, 60% pristine
+}
+
+local integrity_to_condition = {
+  ruined =    'ruined', 
+  ransacked = 'worn', 
+  intact =    'average',
 }
 
 function Item:initialize(condition_setting) 
-  if type(condition_setting) == 'string' then self.condition = selectFrom(condition_spawn_odds[condition_setting])
+  if type(condition_setting) == 'string' then
+    local is_setting_integrity_state = integrity_to_condition[condition_setting]
+    local conditions 
+
+    if is_setting_integrity_state then 
+      conditions = condition_spawn_odds[integrity_to_condition]
+    else -- we are using the condition name
+      conditions = condition_spawn_odds[condition_setting]
+    end
+
+    self.condition = selectFrom(conditions)  
   elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
   else error('Item initialization has a malformed condition setting')
   end
