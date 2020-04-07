@@ -1,43 +1,26 @@
 local class = require('code.libs.middleclass')
 local dice = require('code.libs.dice')
+local lume = require('code.libs.lume')
 
 local Item = class('Item')
 
-local function selectFrom(spawn_list)
-  local chance, total = math.random(), 0
-
-  for condition_level, odds in ipairs(spawn_list) do
-    total = total + odds
-    if chance <= total then return condition_level end
-  end
-end
-
-
 local condition_spawn_odds = {  -- used when spawning new item
-  ruined =    {[1] = 0.60, [2] = 0.25, [3] = 0.10, [4] = 0.05}, -- 60% ruin, 25% worn, 10% average,  5% pristine
-  worn =      {[1] = 0.25, [2] = 0.40, [3] = 0.25, [4] = 0.10}, -- 25% ruin, 40% worn, 25% average, 10% pristine
-  average =   {[1] = 0.10, [2] = 0.25, [3] = 0.40, [4] = 0.25}, -- 10% ruin, 25% worn, 40% average, 25% pristine
-  pristine =  {[1] = 0.05, [2] = 0.10, [3] = 0.25, [4] = 0.60}, --  5% ruin, 10% worn, 25% average, 60% pristine
+  ruined =    {10,  5,  3,  2}, -- 50% ruin, 25% worn, 15% average, 10% pristine
+  worn =      { 4, 10,  4,  2}, -- 20% ruin, 50% worn, 20% average, 10% pristine
+  average =   { 2,  4, 10,  4}, -- 10% ruin, 20% worn, 50% average, 20% pristine
+  pristine =  { 2,  3,  5, 10}, -- 10% ruin, 15% worn, 25% average, 50% pristine
 }
 
 local integrity_to_condition = {
-  ruined =    'ruined', 
-  ransacked = 'worn', 
-  intact =    'average',
+  ruined =    'ruined', -- ruined buildings (and outside locations) generate ruined items
+  ransacked = 'worn',   -- ransacked buildings generate worn items
+  intact =    'average',-- intact buildings generate average items
 }
 
 function Item:initialize(condition_setting) 
   if type(condition_setting) == 'string' then
-    local is_setting_integrity_state = integrity_to_condition[condition_setting]
-    local conditions 
-
-    if is_setting_integrity_state then 
-      conditions = condition_spawn_odds[integrity_to_condition]
-    else -- we are using the condition name
-      conditions = condition_spawn_odds[condition_setting]
-    end
-
-    self.condition = selectFrom(conditions)  
+    condition_setting = integrity_to_condition[condition_setting] or condition_setting
+    self.condition = lume.weightedchoice(condition_spawn_odds[condition_setting])
   elseif type(condition_setting) == 'number' and condition_setting > 0 and condition_setting <= 4 then self.condition = condition_setting
   else error('Item initialization has a malformed condition setting')
   end

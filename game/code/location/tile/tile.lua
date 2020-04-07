@@ -1,23 +1,9 @@
 local class = require('code.libs.middleclass')
 local Items = require('code.item.items')
 local broadcastEvent = require('code.server.event')
+local lume = require('code.libs.lume')
 
 local Tile = class('Tile')
-
-local OUTSIDE_SEARCH_ODDS = .50
-
-Tile.search_chance = {outside=OUTSIDE_SEARCH_ODDS}
-Tile.item_chance = {}
-Tile.item_chance.outside = {
-  -- WEAPONS =  00.1%
-  Knife = .001,
-
-  -- MISC   =  09.9%
-  Newspaper = .099,
-
-  -- EQUIPMENT =  90%
-  Barricade = .90,
-}
 
 function Tile:initialize(map, y, x, name)
   self.y, self.x = y, x
@@ -158,15 +144,6 @@ function Tile:getSearchOdds(player, stage, integrity_status, was_flashlight_used
   return search_chance + (search_chance * modifier_sum)
 end
 
-local function select_item(list)
-  local chance, total = math.random(), 0
-
-  for item_str, odds in pairs(list) do
-    total = total + odds
-    if chance <= total then return item_str end
-  end
-end
-
 function Tile:search(player, stage, was_flashlight_used)
   local integrity_state = self:getIntegrity(stage)  
   
@@ -180,8 +157,8 @@ function Tile:search(player, stage, was_flashlight_used)
   if hidden_players then
     return next(hidden_players) -- probably should shuffle and randomly select player instead of using next()
   else
-    local tile_item_list = self.item_chance[stage] 
-    local item_type = select_item(tile_item_list)
+    local item_list = self.item_chance[stage] 
+    local item_type = lume.weightedchoice(item_list)
     
     if stage == 'outside' then -- all items outside are usually ruined
       integrity_state = 'ruined'
