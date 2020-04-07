@@ -1,0 +1,15 @@
+CLAW HIT RATES
+50% at maxxed out basic zombie
+65% at maxxed out brute zombie
+
+50 ap dumped into cades
+@12.5% =  6.25 damage  (0.125 dmg/ap) no skills
+@17.5% =  8.75 damage  (0.175 dmg/ap) claw lvl 1  +30%
+@25%   = 12.50 damage  (0.250 dmg/ap) claw lvl 2  +50%
+-------------------
+@32.5% = 16.25 damage  (0.325 dmg/ap) claw lvl 3 (brute zombie)  +30%
+
+@40%   = 20.00 damage  (0.400 dmg/ap) claw lvl 4 ( +15% tohit)
+@45%   = 22.50 damage  (0.450 dmg/ap) claw lvl 4 ( +25% tohit)  
+@50%   = 25.00 damage  (0.500 dmg/ap) claw lvl 4 ( +35% tohit)  +50%
+@65%   = 32.50 damage  (0.650 dmg/ap) claw lvl 4 (x2 damage brute zombie)

@@ -1,0 +1,43 @@
+search rates for barricade
+
+21hp is regular
+40hp is very strong
+63hp is extremely heavy
+
+2.5 ap to find 1 cade
+1 ap to fortify per cade  
++1 ap to enter 
++1 ap to exit
+
+-- AVERAGES FOR FORTIFYING  
+-- no skills           [1.1, 1.5, 2.0, 2.5]
+-- barricade skill     [1.3, 2.0, 2.5, 3.1]
+-- barricade_adv skill [1.7, 2.5, 3.1, 3.4]
+
+CONDITION FOR BARRICADES OUTSIDE AVERAGE HP RATE BASED ON SKILLS [none, barricade, barricade_adv]
+------------
+@ruined    condition-1   [1.1 hp, 1.3 hp, 1.7 hp]
+@ransacked condition-2   [1.5 hp, 2.0 hp, 2.5 hp]
+@intact    condition-3   [2.0 hp, 2.5 hp, 3.1 hp]
+@junkyard  condition-4   [2.5 hp, 3.1 hp, 3.4 hp]
+
+25 AP WORTH OF SEARCHING/CARRYING BARRICADES AND FORIFYING
+-------------
+1 ap to exit                              [49ap]
+17.5 ap to find 7 barricades found        [31ap]
+1 ap to enter                             [30ap]
+7 ap to fortify                           [23ap]
+
+Result:  This should fill an inventory with 49/50 of cades
+
+---- 25 ap x 7 cades -----
+@ruined    condition-1   [ 7.7 hp, 10.5 hp, 11.9 hp]
+@ransacked condition-2   [10.5 hp, 14.0 hp, 17.5 hp]
+@intact    condition-3   [14.0 hp, 17.5 hp, 21.7 hp]
+@junkyard  condition-4   [17.5 hp, 21.7 hp, 23.8 hp]
+
+---- Average health of cade for 1 ap  -----
+@ruined    condition-1   [0.31 hp, 0.42 hp, 0.48 hp]
+@ransacked condition-2   [0.42 hp, 0.56 hp, 0.70 hp]
+@intact    condition-3   [0.56 hp, 0.70 hp, 0.87 hp]
+@junkyard  condition-4   [0.70 hp, 0.87 hp, 0.95 hp]
