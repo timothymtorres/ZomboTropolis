@@ -1,0 +1,28 @@
+----BUILDING INTEGRITY NOTES----
+
+3 ap to repair one ruined integrity (assuming maxxed out skills)
+
+Integrity Repair x AP Cost & Toolbox 
+4 --  12 ap  1.00 Toolbox
+5 --  15 ap  1.25 Toolbox
+10 -- 30 ap  2.50 Toolbox
+15 -- 45 ap  3.75 Toolbox
+
+3 integrity should be the min for only small locations/unimportant
+10 integrity should be max and only for super important locations
+
+----MULTISTORY BUILDINGS INTEGRITY BONUS----
+            
+1 tile    Default
+2 tiles   +3 Integrity
+3 tiles   +4 Integrity
+4 tiles   +5 Integrity
+
+----MULTISTORY BUILDINGS SEARCH BONUS----
+
+This bonus is applied to the base search rate directly.
+
+1 tile    Default
+2 tiles   + 2.5%
+3 tiles   + 5.0%
+4 tiles   +10.0%
