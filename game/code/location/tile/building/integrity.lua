@@ -2,13 +2,15 @@ local class = require('code.libs.middleclass')
 
 local Integrity = class('Integrity')
 
+local multiblock_integrity_bonus = {0, 3, 4, 5}
+
 function Integrity:initialize(building)
   self.building = building
-  self.hp = building.MAX_INTEGRITY
+  self.hp = building.INTEGRITY -- update when multistory buildings are added
 end
 
-function Integrity:updateHP(num)
-  local max_hp, max_decay = self.building.MAX_INTEGRITY, -1*self.building.MAX_INTEGRITY 
+function Integrity:updateHP(num) -- update when multistory buildings are added
+  local max_hp, max_decay = self.building.INTEGRITY, -1*self.building.INTEGRITY 
 
   self.hp = math.min(math.max(self.hp+num, max_decay), max_hp)
   
@@ -50,7 +52,7 @@ end
 function Integrity:isState(setting) return self:getState() == setting end
 
 function Integrity:getState() 
-  local integrity_is_full = self.hp == self.building.MAX_INTEGRITY
+  local integrity_is_full = self.hp == self.building.INTEGRITY -- update when multistory buildings are added
   local integrity_is_ransacked = self.hp > 0 
   return (integrity_is_full and 'intact') or (integrity_is_ransacked and 'ransacked') or 'ruined' 
 end
