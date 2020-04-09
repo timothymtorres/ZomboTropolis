@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Renamed the Rifle to be a SMG.
 - All items that are found outside (except barricades) will spawn with a high chance of a ruined state.
 - Barricades found outside will spawn with a high chance of a worn state.  However barricades found in carparks and junkyards will spawn with a high chance of a pristine state.
+- Building integrity values.  Before it was hardcoded at 5 for all buildings.  Now each type of building has it's own value from 3-10 depending on how many resources the building provides. This value represents how much damage a building can sustain and the max length it can be ruined for.  Later when multiblock buildings are added the integrity value will receive a bonus depending on the size. 
 
 ### Removed
 - Critical hits from all weapons.
