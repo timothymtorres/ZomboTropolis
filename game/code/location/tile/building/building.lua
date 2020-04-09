@@ -15,54 +15,6 @@ local Building = class('Building', Tile)
   item_chance = {item = .00 chance}
 --]]
 
---[[-----------  SEARCH ODDS  ------------ 
-
-mall = 60%
-PD, FD, hospital = 50%
-factory = 30-40%
-library/school = 20%
-home = 10%
-
---]]-----------  SEARCH ODDS  ------------
-
-local OUTSIDE_SEARCH_ODDS, INSIDE_SEARCH_ODDS = .50, .15
-
-Building.BUILDING_TYPE = 'generic'
-Building.MAX_INTEGRITY = 5 -- this needs to be set based on type of building (resource == more, and size of building)
-Building.search_odds = {outside = OUTSIDE_SEARCH_ODDS, inside = INSIDE_SEARCH_ODDS}
-Building.item_chance = {
-  outside = {
-    -- WEAPONS =  00.1%
-    Knife = .001,
-
-    -- MISC   =  09.9%
-    Newspaper = .099,
-
-    -- EQUIPMENT =  90%
-    Barricade = .90,  
-  },  
-  inside =  {
-   -- MEDICAL =  15%
-          FAK = .05,
-      Bandage = .10,
-
-   -- WEAPONS =  30%
-       Pistol = .03,
-      Shotgun = .02,
-          Bat = .15,
-        Knife = .10,
-
-      -- MISC =  40%
-    Newspaper = .10,
-         Book = .15,
-       Bottle = .15,
-
-      -- GEAR =  15%
-        Radio = .05,
-        Phone = .10, 
-  }
-}
-
 function Building:initialize(map, y, x, name)
   Tile.initialize(self, map, y, x, name)  
   self.inside_players = {}
