@@ -31,9 +31,7 @@ end
 function Player:basicCriteria(action_str, ...)
   assert(self.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later
   local required_skill = self.class.action_list[action_str].REQUIRED_SKILL
-  if required_skill then
-    assert(player.skills:check(required_skill), 'Must have required skill to use action')
-  end
+  if required_skill then assert(player.skills:check(required_skill), 'Must have required skill to use action') end
   local ap = self.stats:get('ap')
   local AP_cost = self:getCost('ap', action_str, ...)
   assert(AP_cost, 'action has no ap_cost?')  -- remove this assertion once all actions have been added (will be unneccsary)
@@ -136,8 +134,8 @@ function Player:getCost(stat, action_str, ID)  -- remove stat from this (it was 
   else                                    action_data = self.class.action_list[action_str] 
   end
 
-  local cost = action_data[stat].AP_COST
-  local modifiers = action_data[stat].AP_SKILL_MODIFIER
+  local cost = action_data.AP_COST
+  local modifiers = action_data.AP_SKILL_MODIFIER
   
   if modifiers then -- Modifies cost of action based off of skills
     for skill, modifier in pairs(modifiers) do cost = (self.skills:check(skill) and cost + modifier) or cost end
