@@ -73,7 +73,7 @@ function csv_helpers.convertItemDrops(path)
     for item_i=3, #items do
       local item = string.gsub(items[item_i][1], '%s+', '_') -- replace spaces in strings with _
       local item_weight = tonumber(items[item_i][location_i])
-      locations[location].item_chance[item] = item_weight
+      locations[location].item_chance[stage][item] = item_weight
     end
   end
 
