@@ -299,7 +299,7 @@ local Scanner = class('Scanner', Item)
 
 Scanner.FULL_NAME = 'scanner'
 Scanner.WEIGHT = 5
-Scanner.DURABILITY = 100
+Scanner.DURABILITY = 25
 Scanner.CATEGORY = 'research'
 Scanner.MASTER_SKILL = 'scanner'
 Scanner.ap = {cost = 1}

@@ -38,7 +38,7 @@ local Leather = class('Leather', Armor)
 
 Leather.FULL_NAME = 'leather jacket'
 Leather.WEIGHT = 5
-Leather.DURABILITY = 4
+Leather.DURABILITY = 5
 Leather.CATEGORY = 'military'
 
 Leather.armor = {}
@@ -50,7 +50,7 @@ local Kevlar = class('Kevlar', Armor)
 
 Kevlar.FULL_NAME = 'kevlar armor'
 Kevlar.WEIGHT = 12
-Kevlar.DURABILITY = 8
+Kevlar.DURABILITY = 10
 Kevlar.CATEGORY = 'military'
 
 Kevlar.armor = {}
@@ -67,15 +67,17 @@ local Riotsuit = class('Riotsuit', Armor)
 
 Riotsuit.FULL_NAME = 'riotsuit'
 Riotsuit.WEIGHT = 25
-Riotsuit.DURABILITY = 16
+Riotsuit.DURABILITY = 15
 Riotsuit.CATEGORY = 'military'
+
+-- riotsuit should also possibly prevent grappling?
 
 Riotsuit.armor = {}
 Riotsuit.armor.resistance = {
+  {brute=2, pierce=1},  -- 3 points melee
+  {brute=2, pierce=2},  -- 4 points melee
   {brute=3, pierce=2},  -- 5 points melee
   {brute=3, pierce=3},  -- 6 points melee
-  {brute=4, pierce=3},  -- 7 points melee
-  {brute=4, pierce=4},  -- 8 points melee
 }
 
 -------------------------------------------------------------------
@@ -83,8 +85,8 @@ Riotsuit.armor.resistance = {
 local Firesuit = class('Firesuit', Armor)
 
 Firesuit.FULL_NAME = 'firesuit'
-Firesuit.WEIGHT = 10
-Firesuit.DURABILITY = 12
+Firesuit.WEIGHT = 7
+Firesuit.DURABILITY = 4
 Firesuit.CATEGORY = 'engineering'
 
 -- need to make this resistant to molotov attacks
@@ -101,7 +103,7 @@ Firesuit.armor.resistance = {
 local Biosuit = class('Biosuit', Armor)
 
 Biosuit.FULL_NAME = 'biosuit'
-Biosuit.WEIGHT = 7
+Biosuit.WEIGHT = 6
 Biosuit.DURABILITY = 2
 Biosuit.CATEGORY = 'research'
 
