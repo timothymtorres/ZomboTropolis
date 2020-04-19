@@ -3,19 +3,7 @@ local broadcastEvent = require('code.server.event')
 
 -------------------------------------------------------------------
 
-local mark_prey = {name='mark_prey', ap={cost=1}}
-
-function mark_prey.client_criteria(player)
-  
-end
-
-function mark_prey.server_criteria(player)
-  
-end
-
--------------------------------------------------------------------
-
-local track = {name='track', ap={cost=1}}
+local track = {}
 
 function track.client_criteria(player)
    assert(player:isStaged('outside'), 'Must be outside to track prey')   
@@ -61,7 +49,7 @@ end
 
 -------------------------------------------------------------------
 
-local hide = {name='hide', ap={cost=3, modifier={hide_adv = -2}}}
+local hide = {}
 
 function hide.client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to hide')
@@ -116,4 +104,4 @@ end
 
 -------------------------------------------------------------------
 
-return {mark_prey, track, hide}
+return {track, hide}
