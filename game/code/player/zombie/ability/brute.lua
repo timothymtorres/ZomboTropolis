@@ -4,7 +4,7 @@ local organic_armor = require('code.player.zombie.organic_armor')
 
 -------------------------------------------------------------------
 
-local drag_prey = {name='drag_prey', ap={cost=1}}
+local drag_prey = {}
 
 function drag_prey.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -72,7 +72,7 @@ end
 
 -------------------------------------------------------------------
 
-local armor = {name='armor', ap={cost=5, modifier={armor_adv = -2}}}
+local armor = {}
 
 function armor:client_criteria(player)
   assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')

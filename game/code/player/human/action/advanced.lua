@@ -1,9 +1,12 @@
 local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
 
+local human_advanced_actions = {}
+
 -------------------------------------------------------------------
 
-local search = {name='search', ap={cost=1}}
+human_advanced_actions.search = {}
+local search = human_advanced_actions.search 
 
 function search.activate(player)
   local p_tile = player:getTile()
@@ -86,7 +89,8 @@ end
 
 -------------------------------------------------------------------
 
-local discard = {name='discard', ap={cost=0}}
+human_advanced_actions.discard = {}
+local discard = human_advanced_actions.discard
 
 function discard.activate(player, inv_pos)
   local item = player.inventory:getItem(inv_pos)
@@ -109,7 +113,8 @@ end
 
 -------------------------------------------------------------------
 
-local speak = {name='speak', ap={cost=0}}
+human_advanced_actions.speak = {}
+local speak = human_advanced_actions.speak
 
 function speak.client_criteria(player) 
   local p_tile = player:getTile()
@@ -177,7 +182,8 @@ end
 
 -------------------------------------------------------------------
 
-local reinforce = {name='reinforce', ap={cost=1}}
+human_advanced_actions.reinforce = {}
+local reinforce = human_advanced_actions.reinforce
 
 function reinforce.client_criteria(player)
   local p_tile = player:getTile()
@@ -230,7 +236,8 @@ end
 
 -------------------------------------------------------------------
 
-local item = {name='item'}
+human_advanced_actions.item = {}
+local item = human_advanced_actions.item
 
 function item.server_criteria(player, inv_pos, ...)
   assert(inv_pos, 'Missing inventory position for item')
@@ -257,7 +264,8 @@ end
 
 -------------------------------------------------------------------
 
-local equipment = {name='equipment'}
+human_advanced_actions.equipment = {}
+local equipment = human_advanced_actions.equipment
 
 function equipment.client_criteria(player) --, machine, operation)
   local p_tile = player:getTile()  
@@ -283,4 +291,4 @@ function equipment.activate(player, machine, operation, ...)
   machine:activate(operation, ...)
 end
 
-return {search, discard, speak, reinforce, item, equipment}
+return human_advanced_actions

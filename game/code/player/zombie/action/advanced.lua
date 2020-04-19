@@ -3,14 +3,16 @@ local broadcastEvent = require('code.server.event')
 local abilities = require('code.player.zombie.ability.abilities')
 string.replace = require('code.libs.replace')
 
+local zombie_advanced_actions = {}
 -------------------------------------------------------------------
 
-local respawn = {name='respawn', ap={cost=0}} -- ap cost varies
+zombie_advanced_actions.respawn = {}
+local respawn = zombie_advanced_actions.respawn
 
 local respawn_settings = {
   MIN_HP = 20,
   MAX_HP = 50,
-  ap_to_hp = {default = 5, resurrection = 10,}
+  ap_to_hp = {default = 5, resurrection = 10} -- ap cost varies
 }
 
 function respawn.client_criteria(player) 
@@ -64,7 +66,8 @@ end
 
 -------------------------------------------------------------------
 
-local feed = {name='feed', ap={cost=1}}
+zombie_advanced_actions.feed = {}
+local feed = zombie_advanced_actions.feed 
 
 function feed.client_criteria(player)
   local p_tile = player:getTile()
@@ -150,7 +153,8 @@ end
 
 -------------------------------------------------------------------
 
-local ability = {name='ability'}
+zombie_advanced_actions.ability = {}
+local ability = zombie_advanced_actions.ability
 
 -- I'm pretty sure we can skip having ability client_critera here?  Client_critera will be called via composer scenes in UI code.
 function ability.client_criteria(name, player) --, target)
@@ -187,4 +191,4 @@ function ability.activate(name, player, target)
   abilities[name].activate(player, target)
 end
 
-return {respawn, feed, ability}
+return zombie_advanced_actions

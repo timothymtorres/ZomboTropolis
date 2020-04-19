@@ -5,13 +5,13 @@ local Fist = require('code.player.human.organic_weaponry')
 local Carcass = require('code.player.human.carcass')
 local Network = require('code.player.human.network')
 local human_skill_list = require('code.player.human.skill_list')
-local human_action_list = require('code.player.human.action.actions')
+local action_list = require('code.player.actions')
 local Player = require('code.player.player')
 local names = require('code.player.names.names')
 
 local Human = class('Human', Player)
 
-Human.action_list = human_action_list
+Human.action_list = action_list.human
 
 local default_IP= 0
 

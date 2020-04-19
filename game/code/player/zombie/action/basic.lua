@@ -3,6 +3,7 @@ local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
 
+local zombie_basic_actions = {}
 -------------------------------------------------------------------
 
 local function getNewPos(y, x, dir)
@@ -27,7 +28,8 @@ local function getNewPos(y, x, dir)
   return dir_y, dir_x
 end
 
-local move = {name='move', ap={cost=2, modifier={sprint = -1}}}
+zombie_basic_actions.move = {}
+local move = zombie_basic_actions.move
 
 function move.server_criteria(player, dir)
   assert(dir, 'Cannot move without direction')  
@@ -84,7 +86,8 @@ end
 
 -------------------------------------------------------------------
 
-local attack = {name='attack', ap={cost=1}}
+zombie_basic_actions.attack = {}
+local attack = zombie_basic_actions.attack
 
 function attack.client_criteria(player)
   local player_targets, building_targets  
@@ -260,7 +263,8 @@ end
 
 -------------------------------------------------------------------
 
-local enter = {name='enter', ap={cost=1}}
+zombie_basic_actions.enter = {}
+local enter = zombie_basic_actions.enter
 
 function enter.server_criteria(player)
   local p_tile = player:getTile()
@@ -321,4 +325,4 @@ function exit.activate(player)
   player.log:insert(msg, event)  
 end
 
-return {move, attack, enter, exit}
+return zombie_basic_actions

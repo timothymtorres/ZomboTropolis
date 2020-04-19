@@ -3,7 +3,7 @@ local broadcastEvent = require('code.server.event')
 
 -------------------------------------------------------------------
 
-local groan = {name='groan', ap={cost=1}}
+local groan = {}
 
 function groan.client_criteria(player)
   local p_tile = player:getTile()
@@ -82,7 +82,7 @@ end
 
 -------------------------------------------------------------------
 
-local gesture = {name='gesture', ap={cost=1}}
+local gesture = {}
 
 function gesture.client_criteria(player)
   local p_tile = player:getTile()
@@ -125,7 +125,7 @@ end
 
 -------------------------------------------------------------------
 
-local hivemind = {name='hivemind', ap={cost=1}}
+local hivemind = {}
 
 function hivemind.server_criteria(player, setting)
   assert(setting, 'Must have selected a setting')
