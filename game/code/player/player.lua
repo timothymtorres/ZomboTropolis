@@ -29,7 +29,11 @@ function Player:initialize(map_zone, y, x, username, cosmetics) --add account na
 end
 
 function Player:basicCriteria(action_str, ...)
-  assert(self.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later   
+  assert(self.class.action_list[action_str], 'Action cannot be performed by mob')  -- possibly remove this later
+  local required_skill = self.class.action_list[action_str].REQUIRED_SKILL
+  if required_skill then
+    assert(player.skills:check(required_skill), 'Must have required skill to use action')
+  end
   local ap = self.stats:get('ap')
   local AP_cost = self:getCost('ap', action_str, ...)
   assert(AP_cost, 'action has no ap_cost?')  -- remove this assertion once all actions have been added (will be unneccsary)
@@ -132,10 +136,11 @@ function Player:getCost(stat, action_str, ID)  -- remove stat from this (it was 
   else                                    action_data = self.class.action_list[action_str] 
   end
 
-  local cost = action_data[stat].cost
+  local cost = action_data[stat].AP_COST
+  local modifiers = action_data[stat].AP_SKILL_MODIFIER
   
-  if action_data[stat].modifier then -- Modifies cost of action based off of skills
-    for skill, modifier in pairs(action_data[stat].modifier) do cost = (self.skills:check(skill) and cost + modifier) or cost end
+  if modifiers then -- Modifies cost of action based off of skills
+    for skill, modifier in pairs(modifiers) do cost = (self.skills:check(skill) and cost + modifier) or cost end
   end  
   return cost
 end
