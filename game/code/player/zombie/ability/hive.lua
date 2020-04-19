@@ -3,7 +3,7 @@ local broadcastEvent = require('code.server.event')
 
 -------------------------------------------------------------------
 
-local ruin = {name='ruin', ap={cost=5, modifier={ruin = -1, ruin_adv = -2}}}
+local ruin = {}
 
 function ruin.client_criteria(player)
   local p_tile = player:getTile()
@@ -11,16 +11,6 @@ function ruin.client_criteria(player)
   assert(player:isStaged('inside'), 'Player must be inside building to ransack')
 
   assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
-
-
-  -- integrity code
-  assert(p_building.integrity:isState('intact'), 'Cannot repair building that has full integrity')  
-  if p_building.integrity:isState('ruined') then
-    local n_zombies = p_building:countPlayers('zombie', 'inside')    
-    assert(player.skills:check('renovate'), 'Must have "renovate" skill to repair ruins')
-    assert(n_zombies == 0, 'Cannot repair building with zombies present')     
-  end
-
   local n_humans = p_tile:countPlayers('human', 'inside')
 
   local integrity_hp = p_tile.integrity:getHP()
@@ -57,7 +47,7 @@ end
 
 -------------------------------------------------------------------
 
-local acid = {name='acid', ap={cost=1}}
+local acid = {}
 
 function acid.client_criteria(player)
   local p_tile = player:getTile()
@@ -77,6 +67,7 @@ local ACID = {
   ACID_ADV =  {CHANCE = 0.30, DICE = '1d4'},
 }
 
+-- later make using this ability damage the player
 function acid.activate(player, target) 
   local n_items = #target.inventory
   local acid_resistance = target.armor:isPresent() and target.armor:getProtection('acid') or 0
