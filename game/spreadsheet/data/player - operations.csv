@@ -1,0 +1,4 @@
+NAME,ID,FULL_NAME,MACHINE,AP_COST,AP_SKILL_MODIFIER
+retune,1,retune,Transmitter,3,{tech=-1/tech_adv=-1}
+broadcast,2,broadcast,Transmitter,3,{tech=-1/tech_adv=-1}
+survey,3,survey,Terminal,5,{tech=-1/tech_adv=-2}

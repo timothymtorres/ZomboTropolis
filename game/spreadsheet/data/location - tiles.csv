@@ -1,0 +1,36 @@
+NAME,ID,FULL_NAME,BUILDING_TYPE,INTEGRITY,ALTERNATE_NAME
+Apartment,1,apartment,residential,3,{home/house/hotel/inn/hostel}
+Library,2,library,public,5,{college/school/university}
+News,3,newsroom,public,3,{courthouse}
+Warehouse,4,warehouse,industrial,7,
+Factory,5,factory,industrial,7,
+PD,6,police department,government,8,{sheriff office}
+FD,7,fire department,government,8,
+Hospital,8,hopstial,government,8,{medical center/pharmacy}
+Lab,9,research lab,government,8,{laboratory}
+Power,10,power plant,industrial,10,
+Control,11,control tower,industrial,9,
+Sport,12,sporting store,commercial,5,{gym}
+Bar,13,bar,commercial,4,{pub/saloon/restaurant}
+Church,14,church,public,5,
+Museum,15,museum,public,5,
+Gas,16,gas station,commercial,6,
+Shop,17,shop,commercial,6,{store/pawn shop}
+Mall,18,mall,commercial,10,
+Gatehouse,19,gatehouse,military,10,
+Infirmary,20,infirmary,military,10,{medbay}
+Armory,21,armory,military,10,
+Supply,22,supply station,military,10,
+Barracks,23,barracks,military,10,
+Land,24,land,,,{field}
+Street,25,street,,,{road}
+Cemetary,26,cemetary,,,{graveyard}
+Wasteland,27,wasteland,,,
+Runway,28,runway,,,
+Forest,29,forest,,,{woods}
+Carpark,30,carpark,,,
+Junkyard,31,junkyard,,,{scrapyard}
+Monument,32,monument,,,{memorial}
+Park,33,park,,,{playground}
+Stadium,34,stadium,,,
+Obstical,35,obstical,,,

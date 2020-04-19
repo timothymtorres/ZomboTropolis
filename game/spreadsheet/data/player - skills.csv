@@ -1,0 +1,75 @@
+NAME,ID,FULL_NAME,MOB_TYPE,CATEGORY,ICON,REQUIRED_SKILL,DESCRIPTION
+brute,1,brute,zombie,class,lizardman,,Unlock Brute zombie skills
+hunter,2,hunter,zombie,class,tear-tracks,,Unlock Hunter zombie skills
+hive,3,hive,zombie,class,frontal-lobe,,Unlock Hive zombie skills
+hp_bonus,1,hp bonus,zombie,general,heart-organ,,Bonus +10 to max HP
+hand_stimulus,2,hand stimulus,zombie,general,evil-hand,,Claw attacks gain +15% to-hit
+head stimulus,3,head stimulus,zombie,general,totem-head,,Bite attacks gain +15% to-hit
+grapple,4,grapple,zombie,general,grab,,Melee attacks gain +10% to-hit for a selected target after a successful claw attack
+hivemind,5,hivemind,zombie,general,conversation,,Allows global communication with other zombies
+rejuvenation,6,rejuvenation,zombie,general,neck-bite,,Bite attacks now replenish HP on a successful attack
+smell_blood,7,smell blood,zombie,general,cut-palm,,Vague health status of visible humans and the number of standing zombies both inside and outside a location is displayed
+muscle_stimulus,8,muscle stimulus,zombie,general,embrassed-energy,,Melee attacks gain a +10% to-hit
+hunger_bonus,9,hunger bonus,zombie,general,fat,,Bonus for max satiation
+resurrection,10,resurrection,zombie,general,raise-zombie,,Lowered AP cost to revive after being killed
+claw,1,claw,zombie,brute,claw-slashes,,Claw attacks gain +15% to-hit and damage is increased
+claw_adv,2,claw advanced,zombie,brute,wolverine-claws,claw,Claw attacks damage is increased
+power_claw,3,power claw,zombie,brute,slashed-shield,claw,Claw damage against doors/equipment/armor is doubled. Claws attacks against barricades gain +15% to-hit.
+grapple_adv,4,grapple advanced,zombie,brute,swallow,grapple,Allows severely wounded humans to be dragged outside of a building
+armor,5,armor,zombie,brute,layered-armor,,After feeding on a corpse a random organic armor is equipped
+armor_adv,6,armor advanced,zombie,brute,shieldcomb,armor,After feeding on a corpse a selected organic armor is equipped
+maim,7,maim,zombie,brute,amputation,,Claw attacks do a fraction of permanent damage and have a chance to delimb a weakened human
+maim_adv,8,maim advanced,zombie,brute,decapitation,maim,Increased permanent damage and chance to delimb rates
+sprint,1,sprint,zombie,hunter,run,,Lowered AP cost to move
+leap,2,leap,zombie,hunter,sprint,run,Can now leap from ruined buildings
+leap_adv,3,leap advanced,zombie,hunter,fire-dash,leap,Can now leap from ruined buildings into unruined buildings
+track,4,track,zombie,hunter,eyeball,,Allows tracking of human scents that come into nearby contact
+track_adv,5,track advanced,zombie,hunter,brass-eye,track,Increased tracking range/accuracy/duration/number of scents
+hide,6,hide,zombie,hunter,worried-eyes,,Allows hiding inside unoccupied and unpowered buildings
+hide_adv,7,hide advanced,zombie,hunter,hidden,hide,Increased chance and lowered AP cost to hide
+smell_blood_adv,8,smell blood advanced,zombie,hunter,chewed-heart,smell_blood,Shows the HP of nearby humans and can detect wounded humans inside a building from the outside
+bite,1,bite,zombie,hive,carnivore-mouth,,Bite attacks gain +15% to-hit
+bite_adv,2,bite advanced,zombie,hive,gluttonous-smile,bite,Bite attacks damage is increased
+acid,3,acid,zombie,hive,lizard-tongue,,Allows acid spitting that ruins and destroys items in a targets inventory
+acid_adv,4,acid advanced,zombie,hive,fire-breath,acid,Increased chance and improved item destruction for acid spitting
+ruin,5,ruin,zombie,hive,groundbreaker,,Allows a building that is empty of humans and unpowered to be ruined
+ruin_adv,6,ruin advanced,zombie,hive,cogsplosion,ruin,Lowered AP cost to ruin
+infection,7,infection,zombie,hive,drop,,Successful bite attack causes infection when a human is grappled
+infection_adv,8,infection advanced,zombie,hive,vile-fluid,infection,Any successful bite attack causes infection
+military,1,military,human,class,crossed-swords,,Unlock Military skills
+research,2,research,human,class,biohazard,,Unlock Research skills
+engineer,3,engineer,human,class,tinker,,Unlock Engineering skills
+hp_bonus,1,hp bonus,human,general,muscle-up,,Bonus +10 to max HP
+blunt,2,blunt,human,general,large-slash,melee,Blunt weapons gain +15% to-hit
+blade,3,blade,human,general,serrated-slash,melee,Blade weapons gain +15% to-hit
+martial_arts,4,martial arts,human,general,punch,melee,Fist attacks gain +15% to-hit
+ranged,5,ranged,human,general,targeting,,Ranged weapon attacks gain +10% to-hit
+roof_travel,6,roof travel,human,general,jump-across,,Allows travel through adjacent buildings
+melee,7,melee,human,general,quick-slash,,Melee weapon attacks gain +10% to-hit
+ip_bonus,8,ip bonus,human,general,bindle,,Bonus +10 to max IP
+looting,9,looting,human,general,snatch,,Search chance is increased +5%
+diagnosis,10,diagnosis,human,general,coma,,Vague health status of humans and zombies is now visible
+ranged_adv,1,ranged advanced,human,military,reticule,ranged,Ranged weapon attacks gain +15% to-hit
+sidearm,2,sidearm,human,military,pistol-gun,ranged_adv,Pistols and Magnums attacks gain +15% to-hit.  Damage and durability is increased
+primary,3,primary,human,military,mp5,ranged_adv,Shotguns and SMG attacks gain +15% to-hit.  Damage and durability is increased
+melee_adv,4,melee advanced,human,military,crossed-slashes,melee,Melee weapon attacks gain +15% to-hit
+blade_adv,5,blade advanced,human,military,fire-axe,melee_adv,Blade weapons gain +15% to-hit.  Damage and durability is increased
+blunt_adv,6,blunt advanced,human,military,gavel,melee_adv,Blunt weapons gain +15% to-hit.  Damage and durability is increased
+pryotech,7,pryotech,human,military,lighter,,Scorch weapons gain +10% to-hit
+pyrotech_adv,8,pyrotech advanced,human,military,molotov,pyrotech,Scorch weapons gain +15% to-hit and damage is increased
+healing,1,healing,human,research,sticking-plaster,,Medical items healing increased
+major_healing,2,major healing,human,research,medical-pack-alt,healing,First Aid Kits healing increased
+minor_healing,3,minor healing,human,research,bandage-roll,healing,Bandage healing increased
+diagnosis_adv,4,diagnosis advanced,human,research,anatomy,diagnosis,Shows the HP of nearby humans and zombies
+gadgets,5,gadgets,human,research,batteries,,Research items gain +20% durability
+scanner,6,scanner,human,research,dna1,,Scanners use gains increased chance on a zombie and durability increased
+syringe,7,syringe,human,research,syringe,,Syringe use gains an increased chance on a zombie and chance to recover broken syringes
+terminal,8,terminal,human,research,keyboard,,Terminals cost less AP and give more accurate data
+repair,1,repair,human,engineer,spanner,,Repairs cost less AP and can be improved to higher conditions
+repair_adv,2,repair advanced,human,engineer,auto-repair,repair,Repairs cost less AP and can be improved to higher conditions
+barricade,3,barricade,human,engineer,wooden-door,,Allows barricading past regular and increases the barricade strength
+barricade_adv,4,barricade advanced,human,engineer,closed-doors,barricade,Allows barricading past very strongly and increases the barricade strength
+reinforce,5,reinforce,human,engineer,push,,Allows barricades to be reinforced for more available room
+renovate,6,renovate,human,engineer,brick-pile,repair,Allows ruins and ransacked buildings to be repaired
+tech,7,tech,human,engineer,processor,,Installing equipment costs less AP
+tech_adv,8,tech advanced,human,engineer,power-generator,tech,Installing equipment costs less AP

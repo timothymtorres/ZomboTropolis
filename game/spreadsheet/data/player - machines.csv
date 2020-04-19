@@ -1,0 +1,4 @@
+NAME,ID,FULL_NAME,DURABILITY,CATEGORY
+Generator,1,generator,100,engineer
+Terminal,2,terminal,100,engineer
+Transmitter,3,transmitter,100,engineer

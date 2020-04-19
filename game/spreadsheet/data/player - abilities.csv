@@ -1,0 +1,7 @@
+NAME,ID,FULL_NAME,CATEGORY,REQUIRED_SKILL,AP_COST,AP_SKILL_MODIFIER
+armor,1,armor,brute,armor,5,{armor_adv=-2}
+drag_prey,2,drag prey,brute,drag_prey,1,
+ruin,3,ruin,hive,ruin,5,{ruin=-1/ruin_adv=-2}
+acid,4,acid,hive,acid,1,
+hide,5,hide,hunter,hide,3,{hide_adv=-2}
+track,6,track,hunter,track,1,
