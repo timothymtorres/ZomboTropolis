@@ -243,52 +243,64 @@ function item.server_criteria(player, inv_pos, ...)
   assert(inv_pos, 'Missing inventory position for item')
   assert(player.inventory:isPresent(inv_pos), 'Item not in inventory')  
   
-  local itemObj = player.inventory:getItem(inv_pos)
-  if itemObj.server_criteria then itemObj.server_criteria(player, ...) end
+  local inventory_item = player.inventory:getItem(inv_pos)
+  if inventory_item.server_criteria then inventory_item.server_criteria(player, ...) end
 end
 
 function item.activate(player, inv_pos, target)
-  local itemObj = player.inventory:getItem(inv_pos)
-  local is_durability_skipped = itemObj:activate(player, target)
+  local inventory_item = player.inventory:getItem(inv_pos)
+  local is_durability_skipped = inventory_item:activate(player, target)
 
   if not is_durability_skipped then 
-    local condition = player.inventory:updateDurability(itemObj) 
+    local condition = player.inventory:updateDurability(inventory_item) 
 
     if condition == 0 then 
-      player.log:append('Your '..tostring(itemObj)..' is destroyed!')
-    elseif condition and itemObj:isConditionVisible(player) then 
-      player.log:append('Your '..tostring(itemObj)..' degrades to a '..itemObj:getConditionState()..' state.')
+      player.log:append('Your '..tostring(inventory_item)..' is destroyed!')
+    elseif condition and inventory_item:isConditionVisible(player) then 
+      player.log:append('Your '..tostring(inventory_item)..' degrades to a '..inventory_item:getConditionState()..' state.')
     end
   end
 end
 
 -------------------------------------------------------------------
 
-human_advanced_actions.equipment = {}
-local equipment = human_advanced_actions.equipment
-
-function equipment.client_criteria(player) --, machine, operation)
+--[[
+local function machine_criteria(player, machine)
   local p_tile = player:getTile()  
   assert(p_tile:isBuilding(), 'No building near player')
   assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
   assert(p_tile:isPowered(), 'Building must be powered to use equipment')
-  assert(p_tile:isPresent('transmitter') or p_tile:isPresent('terminal'), 'There is no building equipment to use')
+  assert(p_tile:isPresent(machine), 'That machine is not present in building')
+end
+
+human_advanced_actions.equipment = {}
+local equipment = human_advanced_actions.equipment
+
+function equipment.client_criteria(player, machine)
+  local p_tile = player:getTile()  
+  assert(p_tile:isBuilding(), 'No building near player')
+  assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
+  assert(p_tile:isPowered(), 'Building must be powered to use equipment')
+  assert(p_tile:isPresent(machine), 'That machine is not present in building')
 end
 
 function equipment.server_criteria(player, machine, operation)
-  --assert(operation, 'Missing equipment operation for action')  The terminal requires no operation arg?
-  
   local p_tile = player:getTile()  
   assert(p_tile:isBuilding(), 'No building near player to use equipment')
   assert(player:isStaged('inside'), 'Player is not inside building to use equipment')
   assert(p_tile:isPowered(), 'Building must be powered to use equipment')
+  assert(p_tile:isPresent(machine), 'That machine is not present in building')
+  local machine = p_tile:getMachine(machine)
+  assert(machine[operation], 'Machine is not able to perform that operation')
 end
 
 function equipment.activate(player, machine, operation, ...)  
   -- condition degrade code goes here
   local building = player:getTile()
   local machine = building:getMachine(machine)
-  machine:activate(operation, ...)
+  machine[operation].activate(machine, player, ...)
 end
+
+--]]
 
 return human_advanced_actions
