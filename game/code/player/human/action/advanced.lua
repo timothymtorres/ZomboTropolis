@@ -5,8 +5,8 @@ local human_advanced_actions = {}
 
 -------------------------------------------------------------------
 
-human_advanced_actions.search = {}
-local search = human_advanced_actions.search 
+local search = {}
+human_advanced_actions.search = search
 
 function search.activate(player)
   local p_tile = player:getTile()
@@ -89,8 +89,8 @@ end
 
 -------------------------------------------------------------------
 
-human_advanced_actions.discard = {}
-local discard = human_advanced_actions.discard
+local discard = {}
+human_advanced_actions.discard = discard
 
 function discard.activate(player, inv_pos)
   local item = player.inventory:getItem(inv_pos)
@@ -113,8 +113,8 @@ end
 
 -------------------------------------------------------------------
 
-human_advanced_actions.speak = {}
-local speak = human_advanced_actions.speak
+local speak = {}
+human_advanced_actions.speak = speak
 
 function speak.client_criteria(player) 
   local p_tile = player:getTile()
@@ -182,8 +182,8 @@ end
 
 -------------------------------------------------------------------
 
-human_advanced_actions.reinforce = {}
-local reinforce = human_advanced_actions.reinforce
+local reinforce = {}
+human_advanced_actions.reinforce = reinforce
 
 function reinforce.client_criteria(player)
   local p_tile = player:getTile()
@@ -236,8 +236,8 @@ end
 
 -------------------------------------------------------------------
 
-human_advanced_actions.item = {}
-local item = human_advanced_actions.item
+local item = {}
+human_advanced_actions.item = item
 
 function item.server_criteria(player, inv_pos, ...)
   assert(inv_pos, 'Missing inventory position for item')

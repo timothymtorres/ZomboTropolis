@@ -15,8 +15,8 @@ end
 
 -------------------------------------------------------------------
 
-human_machine_actions.survey = {}
-local survey = human_machine_actions.survey
+local survey = {}
+human_machine_actions.survey = survey
 
 function survey.client_criteria(player) machine_criteria(player, 'terminal') end
 
@@ -31,8 +31,8 @@ end
 
 ------------------------------------------------------
 
-human_machine_actions.broadcast = {}
-local broadcast = human_machine_actions.broadcast
+local broadcast = {}
+human_machine_actions.broadcast = broadcast
 
 function broadcast.client_criteria(player) machine_criteria(player, 'transmitter') end
 
@@ -47,8 +47,8 @@ end
 
 ------------------------------------------------------
 
-human_machine_actions.retune = {}
-local retune = human_machine_actions.retune
+local retune = {}
+human_machine_actions.retune = retune
 
 function retune.client_criteria(player) machine_criteria(player, 'transmitter') end
 

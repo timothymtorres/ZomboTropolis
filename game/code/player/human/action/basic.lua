@@ -28,8 +28,8 @@ local function getNewPos(y, x, dir)
   return dir_y, dir_x
 end
 
-human_basic_actions.move = {}
-local move = human_basic_actions.move
+local move = {}
+human_basic_actions.move = move
 
 function move.server_criteria(player, dir)
   assert(dir, 'Cannot move without direction')  
@@ -98,8 +98,8 @@ end
 
 -------------------------------------------------------------------
 
-human_basic_actions.attack = {}
-local attack = human_basic_actions.attack
+local attack = {}
+human_basic_actions.attack = attack
 
 function attack.client_criteria(player)
   local player_targets, building_targets  
@@ -227,8 +227,8 @@ end
 
 -------------------------------------------------------------------
 
-human_basic_actions.enter = {}
-local enter = human_basic_actions.enter
+local enter = {}
+human_basic_actions.enter = enter
 
 function enter.server_criteria(player)
   local p_tile = player:getTile()
@@ -259,8 +259,8 @@ end
 
 -------------------------------------------------------------------
 
-human_basic_actions.exit = {}
-local exit = human_basic_actions.exit
+local exit = {}
+human_basic_actions.exit = exit
 
 function exit.server_criteria(player)
   local p_tile = player:getTile()

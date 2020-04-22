@@ -5,8 +5,8 @@ string.replace = require('code.libs.replace')
 local zombie_advanced_actions = {}
 -------------------------------------------------------------------
 
-zombie_advanced_actions.respawn = {}
-local respawn = zombie_advanced_actions.respawn
+local respawn = {}
+zombie_advanced_actions.respawn = respawn
 
 local respawn_settings = {
   MIN_HP = 20,
@@ -65,8 +65,8 @@ end
 
 -------------------------------------------------------------------
 
-zombie_advanced_actions.feed = {}
-local feed = zombie_advanced_actions.feed 
+local feed = {}
+zombie_advanced_actions.feed = feed
 
 function feed.client_criteria(player)
   local p_tile = player:getTile()
