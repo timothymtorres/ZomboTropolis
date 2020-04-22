@@ -1,9 +1,11 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 
+local hunter_actions = {}
 -------------------------------------------------------------------
 
 local track = {}
+hunter_actions.track = track
 
 function track.client_criteria(player)
    assert(player:isStaged('outside'), 'Must be outside to track prey')   
@@ -50,6 +52,7 @@ end
 -------------------------------------------------------------------
 
 local hide = {}
+hunter_actions.hide = hide
 
 function hide.client_criteria(player)
   assert(player:isStaged('inside'), 'Must be inside building to hide')
@@ -104,4 +107,4 @@ end
 
 -------------------------------------------------------------------
 
-return {track, hide}
+return hunter_actions

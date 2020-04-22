@@ -1,6 +1,5 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
-local abilities = require('code.player.zombie.ability.abilities')
 string.replace = require('code.libs.replace')
 
 local zombie_advanced_actions = {}
@@ -152,43 +151,5 @@ function feed.activate(player)
 end
 
 -------------------------------------------------------------------
-
-zombie_advanced_actions.ability = {}
-local ability = zombie_advanced_actions.ability
-
--- I'm pretty sure we can skip having ability client_critera here?  Client_critera will be called via composer scenes in UI code.
-function ability.client_criteria(name, player) --, target)
-  local skill = abilities[name].REQUIRED_SKILL
-  assert(player.skills:check(skill), 'Must have required skill to use ability')
-  --[[  Decide if we want enzyme code later...
-  if enzyme_list[name] then
-    local cost, ep = player:getCost('ep', name), player.stats:get('ep')
-    assert(ep >= cost, 'Not enough enzyme points to use skill')
-  end
-  --]]
-  if abilities[name].client_criteria then abilities[name].client_criteria(player) end
-end
-
-function ability.server_criteria(name, player, ...)
-  local skill = abilities[name].REQUIRED_SKILL
-  assert(player.skills:check(skill), 'Must have required skill to use ability')
-  --[[  Decide if we want enzyme code later...
-  if enzyme_list[name] then
-    local cost, ep = player:getCost('ep', name), player.stats:get('ep')
-    assert(ep >= cost, 'Not enough enzyme points to use skill')
-  end
-  --]]
-  if abilities[name].server_criteria then abilities[name].server_criteria(player, ...) end
-end
-
-function ability.activate(name, player, target)
-  --[[
-  if enzyme_list[name] then
-    local cost = player:getCost('ep', name)
-    player.stats:update('ep', cost)
-  end 
-  --]]   
-  abilities[name].activate(player, target)
-end
 
 return zombie_advanced_actions

@@ -1,16 +1,18 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 
+local hive_actions = {}
 -------------------------------------------------------------------
 
 local ruin = {}
+hive_actions.ruin = ruin
 
 function ruin.client_criteria(player)
   local p_tile = player:getTile()
   assert(p_tile:isBuilding(), 'No building nearby to ransack')
   assert(player:isStaged('inside'), 'Player must be inside building to ransack')
 
-  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when abilities implement required_skill
+  assert(player.skills:check('ruin'), 'Must have "ruin" skill to use ability')  -- remove this later when actions implement required_skill
   local n_humans = p_tile:countPlayers('human', 'inside')
 
   local integrity_hp = p_tile.integrity:getHP()
@@ -48,6 +50,7 @@ end
 -------------------------------------------------------------------
 
 local acid = {}
+hive_actions.acid = acid
 
 function acid.client_criteria(player)
   local p_tile = player:getTile()
@@ -146,4 +149,4 @@ end
 
 -------------------------------------------------------------------
 
-return {ruin, acid}
+return hive_actions

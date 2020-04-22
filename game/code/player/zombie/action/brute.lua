@@ -2,9 +2,11 @@ local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 local organic_armor = require('code.player.zombie.organic_armor')
 
+local brute_actions = {}
 -------------------------------------------------------------------
 
 local drag_prey = {}
+brute_actions.drag_prey = drag_prey
 
 function drag_prey.client_criteria(player)
   local p_tile, setting = player:getTile(), player:getStage()
@@ -73,6 +75,7 @@ end
 -------------------------------------------------------------------
 
 local armor = {}
+brute_actions.armor = armor
 
 function armor:client_criteria(player)
   assert(player.skills:check('armor'), 'Must have "armor" skill to create armor')
@@ -167,4 +170,4 @@ end
 
 -------------------------------------------------------------------
 
-return {drag_prey, armor}
+return brute_actions

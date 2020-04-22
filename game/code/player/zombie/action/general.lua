@@ -1,9 +1,11 @@
 local dice = require('code.libs.dice')
 local broadcastEvent = require('code.server.event')
 
+local general_actions = {}
 -------------------------------------------------------------------
 
 local groan = {}
+general_actions.groan = groan
 
 function groan.client_criteria(player)
   local p_tile = player:getTile()
@@ -83,6 +85,7 @@ end
 -------------------------------------------------------------------
 
 local gesture = {}
+general_actions.gesture = gesture
 
 function gesture.client_criteria(player)
   local p_tile = player:getTile()
@@ -126,6 +129,7 @@ end
 -------------------------------------------------------------------
 
 local hivemind = {}
+general_actions.hivemind = himemind
 
 function hivemind.server_criteria(player, setting)
   assert(setting, 'Must have selected a setting')
@@ -167,4 +171,4 @@ end
 
 -------------------------------------------------------------------
 
-return {groan, gesture, hivemind}
+return general_actions
