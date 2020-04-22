@@ -16,7 +16,9 @@ function Transmitter:initialize(buiilding)
   Machine.initialize(self, building)  
 end
 
-function Transmitter:broadcast(player, message, condition) channel:transmit(self.freq, player, message, condition) end
+function Transmitter:broadcast(player, message) 
+  channel:transmit(self.freq, player, message, self.condition) 
+end
 
 function Transmitter:retune(player, new_freq)  
   local receiver = self:getBuilding()
@@ -25,21 +27,7 @@ function Transmitter:retune(player, new_freq)
   self.freq = freq  
 end
 
-function Transmitter:getOperations() return operations end 
-
-function Transmitter:hasOperations() return true end
-
-------------------------------------------------------
-
---function Transmitter:client_criteria() end
-
---function Transmitter:server_criteria() end
-
-function Transmitter:activate(player, operation, ...)
-  self[operation](player, ...)
-
-  --local building = player:getTile()  
-  --building.transmitter[operation](building.transmitter, player, unpack({...}))
-end
+--function Transmitter:getOperations() return operations end 
+--function Transmitter:hasOperations() return true end
 
 return Transmitter

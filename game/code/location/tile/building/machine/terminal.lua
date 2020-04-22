@@ -17,11 +17,7 @@ end
 
 ------------------------------------------------------
 
---function Terminal:client_criteria() end
-
---function Terminal:server_criteria() end
-
-function Terminal:activate(player)
+function Terminal:survey(player)
 	local map = player:getMap()
   local zombies_num, zombies_levels, zombies_pos = map.terminal_network:access(self, player)
 
