@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Pheromone Spray gadget that masks a players scent from any hunter zombies trying to track.  The condition level of the spray determines how much scent is lost.
 - New melee weapons: Wrench, Pipe, Rake, Shovel, Axe, Pickaxe, Pitchfork, and Poolstick.
 - New ranged weapon: Bow.
+- Building machineary now updates durability when used.
 
 ### Fixed
 - Antidote not properly removing infection status.
