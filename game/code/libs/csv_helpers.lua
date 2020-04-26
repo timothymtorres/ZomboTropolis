@@ -42,16 +42,40 @@ function csv_helpers.convertToLua(path)
   return classes
 end
 
+function csv_helpers.convertArmor(path)
+  local armor_csv, headers = csv.parse(path)
+  local armors = {}
+
+  local num_conditions = 4 -- we have 4 different conditions so skip by this amount
+  for i=1, #armor_tables, num_conditions do
+    local name, ID = armor_csv[i].NAME, armor_csv[i].ID
+    local armor = {RESISTANCE={}}
+
+    for ii=1, header in ipairs(headers) do
+      if ii <= 4 then -- copy the first 4 default fields of data (name/id/durability/organic)
+        local value = armor_csv[i][header] 
+        armor[header] = tonumber(value) or value
+      elseif header ~= 'CONDITION' then -- copy the rest of the data to the resistance table (except condition)
+        armor.RESISTANCE[header] = tonumber(value)
+      end
+    end
+
+    armors[name] = armor
+    armors[ID] = armor
+
+    return armors 
+end
+
 function csv_helpers.convertItemDrops(path) 
   local locations = {}
 
-  local items = csv.parse(path, {headers=false})
-  local total_locations = #items[2]
+  local items_csv = csv.parse(path, {headers=false})
+  local total_locations = #items_csv[2]
 
   for location_i=2, total_locations do
-    local location = items[2][location_i]
+    local location = items_csv[2][location_i]
 
-    local chance = items[1][location_i] 
+    local chance = items_csv[1][location_i] 
     chance = string.match(chance, '%d+') -- remove the % from the string
     chance = tonumber(chance) * 0.01 -- convert str to num and move the decimal to correct position 
 
@@ -70,9 +94,9 @@ function csv_helpers.convertItemDrops(path)
     locations[location].search_odds[stage] = chance
     locations[location].item_chance[stage] = {}
 
-    for item_i=3, #items do
-      local item = string.gsub(items[item_i][1], '%s+', '_') -- replace spaces in strings with _
-      local item_weight = tonumber(items[item_i][location_i])
+    for item_i=3, #items_csv do
+      local item = string.gsub(items_csv[item_i][1], '%s+', '_') -- replace spaces in strings with _
+      local item_weight = tonumber(items_csv[item_i][location_i])
       locations[location].item_chance[stage][item] = item_weight
     end
   end
