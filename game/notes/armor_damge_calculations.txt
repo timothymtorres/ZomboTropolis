@@ -1,0 +1,17 @@
+--- DAMAGE PER HIT ---
+
+[33 hits] punch = 1 - 1.5 damage
+[25 hits] blunt weapons = 1.5 - 2.5 damage (3.25 for sledge)
+[25 hits] blade weapons = 1.5 - 2.5 (3 for katanna/pickaxe, 4.25 for bow)
+[5-10 hits] bullet weapons = 5, 10, 10, 
+
+
+
+bone = average durability
+gel = high durability
+scale = average duability
+blubber = low durability
+
+
+
+
