@@ -1,16 +1,10 @@
-local class = require('code.libs.middleclass')
-local Item = require('code.item.item')
-local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
-local dice = require('code.libs.dice')
 
-local Generator = class('Generator', Item)
+local Machinery = {}
+-------------------------------------------------------------------
 
-Generator.FULL_NAME = 'generator'
-Generator.WEIGHT = 25
-Generator.DURABILITY = 0
-Generator.CATEGORY = 'engineering'
-Generator.ap = {cost = 10, modifier = {tech = -3, tech_adv = -4}}
+local Generator = {}
+Machinery.Generator = Generator
 
 function Generator:client_criteria(player)
   local p_tile = player:getTile()
@@ -42,13 +36,8 @@ end
 
 -------------------------------------------------------------------
 
-local Transmitter = class('Transmitter', Item)
-
-Transmitter.FULL_NAME = 'transmitter'
-Transmitter.WEIGHT = 25
-Transmitter.DURABILITY = 0
-Transmitter.CATEGORY = 'engineering'
-Transmitter.ap = {cost = 10, modifier = {tech = -3, tech_adv = -4}}
+local Transmitter = {}
+Machinery.Transmitter = Transmitter
 
 function Transmitter:client_criteria(player)
   local p_tile = player:getTile()  
@@ -80,13 +69,8 @@ end
 
 -------------------------------------------------------------------
 
-local Terminal = class('Terminal', Item)
-
-Terminal.FULL_NAME = 'terminal'
-Terminal.WEIGHT = 25
-Terminal.DURABILITY = 0
-Terminal.CATEGORY = 'engineering'
-Terminal.ap = {cost = 10, modifier = {tech = -3, tech_adv = -4}} 
+local Terminal = {}
+Machinery.Terminal = Terminal
 
 function Terminal:client_criteria(player)
   local p_tile = player:getTile()
@@ -118,4 +102,4 @@ end
 
 -------------------------------------------------------------------
 
-return {Generator, Transmitter, Terminal}
+return Machinery

@@ -1,27 +1,26 @@
-local class = require('code.libs.middleclass')
-local Item = require('code.item.item')
+local Ammo = {}
 
-local Ammo_Pistol = class('Ammo_Pistol', Item)
-Ammo_Pistol.ap = {cost = 1}
-
--------------------------------------------------------------------
-
-local Ammo_Shotgun = class('Ammo_Shotgun', Item)
-Ammo_Shotgun.ap = {cost = 1}
+local Ammo_Pistol = {}
+Ammo.Ammo_Pistol = Ammo_Pistol
 
 -------------------------------------------------------------------
 
-local Ammo_Magnum = class('Ammo_Magnum', Item)
-Ammo_Magnum.ap = {cost = 1}
+local Ammo_Shotgun = {}
+Ammo.Ammo_Shotgun = Ammo_Shotgun
 
 -------------------------------------------------------------------
 
-local Ammo_SMG = class('Ammo_SMG', Item)
-Ammo_SMG.ap = {cost = 1}
+local Ammo_Magnum = {}
+Ammo.Ammo_Magnum = Ammo_Magnum
 
 -------------------------------------------------------------------
 
-local Ammo_Bow = class('Ammo_Bow', Item)
-Ammo_Bow.ap = {cost = 1}
+local Ammo_SMG = {}
+Ammo.Ammo_SMG = Ammo_SMG
 
-return {Ammo_Pistol, Ammo_Shotgun, Ammo_Magnum, Ammo_SMG, Ammo_Bow}
+-------------------------------------------------------------------
+
+local Ammo_Bow = {}
+Ammo.Ammo_Bow = Ammo_Bow
+
+return Ammo

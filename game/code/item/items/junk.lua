@@ -1,17 +1,12 @@
-local class = require('code.libs.middleclass')
-local Item = require('code.item.item')
 local dice = require('code.libs.dice')
-local broadcastEvent = require('code.server.event')
-local isWeapon = require('code.item.mixin.is_weapon')
 string.replace = require('code.libs.replace')
 
-local Book = class('Book', Item)
+local Junk = {}
 
-Book.FULL_NAME = 'book'
-Book.WEIGHT = 2
-Book.CATEGORY = 'research'
-Book.DURABILITY = 0
-Book.ap = {cost = 5}
+-------------------------------------------------------------------
+
+local Book = {}
+Junk.Book = Book
 
 local book_xp_dice = {'1d3', '1d5', '1d7', '1d10'}
 
@@ -41,12 +36,8 @@ end
 
 -------------------------------------------------------------------
 
-local Bottle = class('Bottle', Item)
-
-Bottle.FULL_NAME = 'bottle'
-Bottle.WEIGHT = 1
-Bottle.DURABILITY = 0
-Bottle.ap = {cost = 1}
+local Bottle = {}
+Junk.Bottle = Bottle
 
 function Bottle:activate(player)
   player:updateHP(self.condition)
@@ -67,18 +58,9 @@ end
 
 -------------------------------------------------------------------
 
-local Newspaper = class('Newspaper', Item):include(isWeapon)
-
-Newspaper.FULL_NAME = 'newspaper'
-Newspaper.WEIGHT = 1
-Newspaper.DURABILITY = 0
-Newspaper.ap = {cost = 0}
-
-Newspaper.weapon = {
-  ACCURACY = 1.00,
-  NO_DAMAGE = true,
-}
+local Newspaper = {}
+Junk.Newspaper = Newspaper
 
 --function Newspaper.activate(player, condition) end
 
-return {Book, Bottle, Newspaper}
+return Junk

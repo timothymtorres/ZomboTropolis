@@ -1,18 +1,10 @@
-local class = require('code.libs.middleclass')
-local Item = require('code.item.item')
-local broadcastEvent = require('code.server.event')
 string.replace = require('code.libs.replace')
-local dice = require('code.libs.dice')
 
+local Tool = {}
 -------------------------------------------------------------------
 
-local Fuel = class('Fuel', Item)
-
-Fuel.FULL_NAME = 'fuel tank'
-Fuel.WEIGHT = 10
-Fuel.DURABILITY = 0
-Fuel.CATEGORY = 'engineering'
-Fuel.ap = {cost = 1}
+local Fuel = {}
+Tool.Fuel = Fuel
 
 function Fuel:client_criteria(player)
   local p_tile = player:getTile()
@@ -44,13 +36,8 @@ end
 
 -------------------------------------------------------------------
 
-local Barricade = class('Barricade', Item)
-
-Barricade.FULL_NAME = 'barricade'
-Barricade.WEIGHT = 7
-Barricade.DURABILITY = 0
-Barricade.CATEGORY = 'engineering'
-Barricade.ap = {cost = 1}
+local Barricade = {}
+Tool.Barricade = Barricade
 
 function Barricade:client_criteria(player)
   local p_tile = player:getTile()
@@ -86,13 +73,8 @@ end
 
 -------------------------------------------------------------------
 
-local Toolbox = class('Toolbox', Item)
-
-Toolbox.FULL_NAME = 'toolbox'
-Toolbox.WEIGHT = 15
-Toolbox.DURABILITY = 1
-Toolbox.CATEGORY = 'engineering'
-Toolbox.ap = {cost = 5, modifier = {repair = -1, repair_adv = -2}}
+local Toolbox = {}
+Tool.Toolbox = Toolbox
 
 function Toolbox:client_criteria(player)
   local p_building = player:getTile()  
@@ -156,4 +138,4 @@ end
 
 -------------------------------------------------------------------
 
-return {Fuel, Barricade, Toolbox}
+return Tool

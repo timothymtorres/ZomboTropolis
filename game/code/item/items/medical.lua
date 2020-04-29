@@ -1,18 +1,11 @@
-local class = require('code.libs.middleclass')
-local Item = require('code.item.item')
-local broadcastEvent = require('code.server.event')
 local dice = require('code.libs.dice')
 string.replace = require('code.libs.replace')
 
+local Medical = {}
 -------------------------------------------------------------------
 
-local FAK = class('FAK', Item)
-
-FAK.FULL_NAME = 'first aid kit'
-FAK.WEIGHT = 8
-FAK.DURABILITY = 0
-FAK.CATEGORY = 'research'
-FAK.ap = {cost = 1}
+local FAK = {}
+Medical.FAK = FAK
 
 FAK.medical = {DICE = '1d5'}
 
@@ -65,13 +58,8 @@ end
 
 -------------------------------------------------------------------
 
-local Bandage = class('Bandage', Item)
-
-Bandage.FULL_NAME = 'bandage'
-Bandage.WEIGHT = 3
-Bandage.DURABILITY = 0
-Bandage.CATEGORY = 'research'
-Bandage.ap = {cost = 1}
+local Bandage = {}
+Medical.Bandage = Bandage
 
 Bandage.medical = {DICE = '1d3'}
 
@@ -119,13 +107,8 @@ end
 
 -------------------------------------------------------------------
 
-local Syringe = class('Syringe', Item)
-
-Syringe.FULL_NAME = 'syringe'
-Syringe.WEIGHT = 5
-Syringe.DURABILITY = 0
-Syringe.CATEGORY = 'research'
-Syringe.ap = {cost = 1}
+local Syringe = {}
+Medical.Syringe = Syringe
 
 Syringe.medical = {ACCURACY = 0.99999} --0.05
 
@@ -207,13 +190,8 @@ end
 
 -------------------------------------------------------------------
 
-local Vaccine = class('Vaccine', Item)
-
-Vaccine.FULL_NAME = 'vaccine'
-Vaccine.WEIGHT = 5
-Vaccine.DURABILITY = 0
-Vaccine.CATEGORY = 'research'
-Vaccine.ap = {cost = 1}
+local Vaccine = {}
+Medical.Vaccine = Vaccine
 
 Vaccine.medical = {DICE = '10d10'}
 
@@ -256,13 +234,8 @@ end
 
 -------------------------------------------------------------------
 
-local Antidote = class('Antidote', Item)
-
-Antidote.FULL_NAME = 'antidote'
-Antidote.WEIGHT = 5
-Antidote.DURABILITY = 1
-Antidote.CATEGORY = 'research'
-Antidote.ap = {cost = 1}
+local Antidote = {}
+Medical.Antidote = Antidote
 
 function Antidote:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -295,14 +268,8 @@ end
 
 -------------------------------------------------------------------
 
-local Scanner = class('Scanner', Item)
-
-Scanner.FULL_NAME = 'scanner'
-Scanner.WEIGHT = 5
-Scanner.DURABILITY = 25
-Scanner.CATEGORY = 'research'
-Scanner.MASTER_SKILL = 'scanner'
-Scanner.ap = {cost = 1}
+local Scanner = {}
+Medical.Scanner = Scanner
 
 Scanner.medical = {ACCURACY = 0.10}
 
@@ -354,12 +321,4 @@ function Scanner:activate(player, target)
   target.log:insert(target_msg, event)  
 end
 
---[[
-medical.herb = {}
-medical.herb.full_name = 'herb'
-medical.herb.group = {'healing', 'herb'}
-medical.herb.dice = '1d2'
-medical.herb.durability = 0
---]]
-
-return {FAK, Bandage, Syringe, Vaccine, Antidote, Scanner}
+return Medical

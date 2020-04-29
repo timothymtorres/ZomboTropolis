@@ -1,16 +1,10 @@
-local class = require('code.libs.middleclass')
+local Gadget = {}
 local Item = require('code.item.item')
 
 -------------------------------------------------------------------
 
-local Radio = class('Radio', Item)
-
-Radio.FULL_NAME = 'portable radio'
-Radio.WEIGHT = 3
-Radio.DURABILITY = 100
-Radio.CATEGORY = 'research'
-Radio.MASTER_SKILL = 'gadget'
-Radio.ap = {cost = 1}
+local Radio = {}
+Gadget.Radio = Radio 
 
 function Radio:initialize(condition_setting)
   Item.initialize(self, condition_setting)
@@ -58,34 +52,18 @@ end
 
 -------------------------------------------------------------------
 
-local GPS = class('GPS', Item)
-
-GPS.FULL_NAME = 'global position system'
-GPS.WEIGHT = 2
-GPS.DURABILITY = 50
-GPS.CATEGORY = 'research'
-GPS.MASTER_SKILL = 'gadget'
-
+local GPS = {}
+Gadget.GPS = GPS
 
 ---------------------------------------------------------------------
 
-local Flashlight = class('Flashlight', Item)
-
-Flashlight.FULL_NAME = 'flashlight'
-Flashlight.WEIGHT = 4
-Flashlight.DURABILITY = 100
-Flashlight.CATEGORY = 'research'
-Flashlight.MASTER_SKILL = 'gadget'
+local Flashlight = {}
+Gadget.Flashlight = Flashlight
 
 ---------------------------------------------------------------------
 
-local Pheromone = class('Pheromone', Item)
-
-Pheromone.FULL_NAME = 'pheromone spray'
-Pheromone.WEIGHT = 4
-Pheromone.DURABILITY = 0
-Pheromone.CATEGORY = 'research'
-Pheromone.MASTER_SKILL = 'gadget'
+local Pheromone = {}
+Gadget.Pheromone = Pheromone
 
 function Pheromone:server_criteria(player, target)
   assert(target:isStanding(), 'Target has been killed')
@@ -117,6 +95,55 @@ function Pheromone:activate(player, setting)
 end
 
 ---------------------------------------------------------------------
+
+local Flare = {}
+Gadget.Flare = Flare
+
+function Flare:client_criteria(player)
+  assert(player:isStaged('outside'), 'Player must be outside to use flare')  
+end
+
+function Flare:server_criteria(player)
+  assert(player:isStaged('outside'), 'Player must be outside to use flare')  
+end
+
+local flare_ranges = {6, 9, 12, 15}
+
+function Flare:activate(player)
+  local y, x = player:getPos()
+  local tile = player:getTile()
+  
+  --------------------------------------------
+  -----------   M E S S A G E   --------------
+  --------------------------------------------
+  
+  -- Groan point of orgin
+  local self_msg =   'You fire a flare into the sky.'
+  local nearby_msg = '{player} fires a flare into the sky.'
+  local msg =        'A flare was fired {pos}.'
+  
+  local words = {player=player, pos='{'..y..', '..x..'}'}
+  nearby_msg = nearby_msg:replace(words)
+  msg =               msg:replace(words)
+  
+  --------------------------------------------
+  ---------   B R O A D C A S T   ------------
+  --------------------------------------------  
+  
+  local event = {'flare', player} -- (y, x, range) include this later?  We can use sound effects when this event is triggered based on distances
+
+  player:broadcastEvent(nearby_msg, self_msg, event)
+  
+  local settings = {stage='inside', exclude={}} -- broadcast to players on the same tile that are inside  
+  tile:broadcastEvent(msg, event, settings) 
+  
+  settings.stage = nil
+  settings.range = flare_ranges[self.condition]
+  settings.exclude[tile] = true
+  tile:broadcastEvent(msg, event, settings)     -- broadcast using a range and exclude the tile
+end
+
+-------------------------------------------------------------------
 
 --[[
 gadget.cellphone.full_name = 'cellphone'
@@ -152,4 +179,4 @@ end
 function check.cellphone(player) end -- check if phone towers functional/need light/need battery
 --]]
 
-return {Radio, GPS, Flashlight, Pheromone}
+return Gadget
