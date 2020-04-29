@@ -47,23 +47,39 @@ function csv_helpers.convertArmor(path)
   local armors = {}
 
   local num_conditions = 4 -- we have 4 different conditions so skip by this amount
-  for i=1, #armor_tables, num_conditions do
+  for i=1, #armor_csv, num_conditions do
     local name, ID = armor_csv[i].NAME, armor_csv[i].ID
-    local armor = {RESISTANCE={}}
+    local armor = {}
 
-    for ii=1, header in ipairs(headers) do
-      if ii <= 4 then -- copy the first 4 default fields of data (name/id/durability/organic)
+    for header_i, header in ipairs(headers) do
+      if header_i <= 4 then -- copy the first 4 default fields of data (name/id/durability/organic)
         local value = armor_csv[i][header] 
         armor[header] = tonumber(value) or value
-      elseif header ~= 'CONDITION' then -- copy the rest of the data to the resistance table (except condition)
-        armor.RESISTANCE[header] = tonumber(value)
       end
+    end
+
+    armor.RESISTANCE = {} -- time to add resistance values now
+
+    -- loop through the 4 rows of each armor and get resistance based on condition
+    for condition_i=i, i+num_conditions-1 do 
+      local condition = {}
+
+      for resistance_i, resistance in ipairs(headers) do
+        if resistance_i > 5 then -- copy the rest of the data to the resistance table (except condition)
+          local value = armor_csv[condition_i][resistance]
+
+          condition[resistance] = tonumber(value)
+        end
+      end
+
+      table.insert(armor.RESISTANCE, 1, condition) -- use table.insert so the worst conditions are ordered first
     end
 
     armors[name] = armor
     armors[ID] = armor
+  end
 
-    return armors 
+  return armors 
 end
 
 function csv_helpers.convertItemDrops(path) 
