@@ -120,24 +120,4 @@ function csv_helpers.convertItemDrops(path)
   return locations
 end
 
---[[
--- import outside items into location
-local outside_items_path = system.pathForFile("spreadsheet/outside-items.csv", system.ResourceDirectory) 
-local outside_items = csv_helpers.convertItemDrops(outside_items_path)
-
-for location, item_drop in pairs(outside_items) do
-  Tiles[location].search_odds.outside = item_drop.search_odds
-  Tiles[location].item_chance.outside = item_drop.item_chance
-end
-
--- import inside items into location
-local inside_items_path = system.pathForFile("spreadsheet/inside-items.csv", system.ResourceDirectory) 
-local inside_items = csv_helpers.convertItemDrops(inside_items_path)
-
-for location, item_drop in pairs(inside_items) do
-  Tiles[location].search_odds.inside = item_drop.search_odds
-  Tiles[location].item_chance.inside = item_drop.item_chance
-end
---]]
-
 return csv_helpers
