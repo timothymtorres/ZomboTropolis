@@ -26,14 +26,10 @@ for i=1, 1 do
   human_dummies[i].stats:update('hp', -100)
 end
 
-local csv = require('code.libs.csv')
-local path = system.pathForFile( "environment/inside_items.csv" )
-local t, headers = csv.parse(path)
-
 --[[
 print(t, headers)
 for k,v in pairs(headers) do print(k,v) end
-for k,v in pairs(t) do 
+for k,v in pairs(t) do
 	for kk,vv in pairs(v) do print(k, kk, vv) end
 end
 --]]
@@ -59,7 +55,7 @@ end
 --[[
 p_tile = alt_player:getTile()
 
-p_tile.barricade.potential_hp = 28 
+p_tile.barricade.potential_hp = 28
 p_tile.barricade.hp = 20
 p_tile.barricade:updateHP(1)
 
