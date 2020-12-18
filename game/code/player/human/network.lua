@@ -5,20 +5,20 @@ local Network = class('Network')
 
 function Network:initialize(player)
   self.player = player
-  self.channel = setmetatable({}, {__mode='v'})
+  self.channels = setmetatable({}, {__mode='v'})
 end
 
-function Network:add(channel, radio) 
+function Network:add(channel, radio)
 	self.channels[channel] = radio
-	ServerNetwork:insert(self.player, channel) 
+	ServerNetwork:insert(self.player, channel)
 end
 
 function Network:remove(channel) 
 	self.channels[channel] = nil
-	ServerNetwork:remove(self.player, channel) 
+	ServerNetwork:remove(self.player, channel)
 end
 
-function Network:check(channel) return self.channel[channel] end
+function Network:check(channel) return self.channels[channel] end
 
 function Network:getRadio(channel) return self.channels[channel] end
 
