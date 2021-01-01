@@ -25,21 +25,20 @@ function Map:initialize(size)
   self.dead = 0
   self.terminal_network = TerminalNetwork:new(size)
   self.size = size
+  size = size or 1
 
-  local size = size or 1
-  
   for y=1, size do
     self[y] = {}
     for x=1, size do
       local tile_pos = x + ((y - 1) * world_width)
       local tile_gid = layer.data[tile_pos] + 1  -- need to add a + 1 to count from 1 instead of zero
-      local tile_not_exist = tile_gid == 1 
+      local tile_not_exist = tile_gid == 1
       local tile_id
 
-      if tile_not_exist then 
+      if tile_not_exist then
         tile_id = 1  -- default to first id (which is land right now)
-      else 
-        tile_id = tile_gid - tileset_gid 
+      else
+        tile_id = tile_gid - tileset_gid
       end
 
 --print(tile_layer.data.data[tile_pos], tileset_gid, tile_id)
@@ -55,8 +54,8 @@ function Map:initialize(size)
   --world = nil
 end
 
-function Map:getInside(y, x) return self[y][x].inside_players or false end 
- 
+function Map:getInside(y, x) return self[y][x].inside_players or false end
+
 function Map:getOutside(y, x) return self[y][x].outside_players end
 
 function Map:getTile(y, x) return self[y][x] end
@@ -67,7 +66,7 @@ function Map:get3x3(y, x)
   local list = {}
   list[#list+1] = self[y][x]
   list[#list+1] = self[y][x+1]
-  list[#list+1] = self[y][x-1]  
+  list[#list+1] = self[y][x-1]
   list[#list+1] = self[y+1] and self[y+1][x] or nil
   list[#list+1] = self[y+1] and self[y+1][x+1] or nil
   list[#list+1] = self[y+1] and self[y+1][x-1] or nil
@@ -89,8 +88,8 @@ function Map:spawnPlayer(mob_type, username, cosmetics)
   -- for human = findUnruinedBuilding(no zeds outside)
   -- for zombie = findAvailableCorpse(must be fully eaten) (if not available spawn somewhere outside)
 
-  if mob_type == 'zombie' then 
-    username = username or names:generateRandom('zombie') 
+  if mob_type == 'zombie' then
+    username = username or names:generateRandom('zombie')
     cosmetics = cosmetics or clothing:generateRandom(mob_type)
     player = Zombie:new(self, y, x, username, cosmetics)
   elseif mob_type == 'human' or mob_type == 'male' or mob_type == 'female' then
