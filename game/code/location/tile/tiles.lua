@@ -17,11 +17,11 @@ for i, location in ipairs(locations) do
   for k, v in pairs(location) do Location[k] = v end
 
   Tiles[i] = Location
-  Tiles[location.NAME] = Location 
+  Tiles[location.NAME] = Location
 end
 
 -- import item drops and search odds into location
-local location_items_path = system.pathForFile("spreadsheet/data/location - items.csv", system.ResourceDirectory) 
+local location_items_path = system.pathForFile("spreadsheet/data/location - items.csv", system.ResourceDirectory)
 local location_items = csv_helpers.convertItemDrops(location_items_path)
 
 for location, items in pairs(location_items) do
