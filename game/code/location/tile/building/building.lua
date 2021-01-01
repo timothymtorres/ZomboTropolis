@@ -4,41 +4,75 @@ local Machines = require('code.location.tile.building.machine.machines')
 local Door = require('code.location.tile.building.door')
 local Barricade = require('code.location.tile.building.barricade')
 local Integrity = require('code.location.tile.building.integrity')
+local sqlite3 = require( "sqlite3" )
 
 local Building = class('Building', Tile)
 
---[[
-  FULL_NAME = 'insert name'
-  BUILDING_TYPE = residential/government/industrial/commercial/generic
-  door_missing = true/nil
-  search_odds = {outside = num, inside = num}/nil  
-  item_chance = {item = .00 chance}
---]]
-
-function Building:initialize(map, y, x, name)
-  Tile.initialize(self, map, y, x, name)  
+function Building:initialize(map_zone, y, x, name)
+  Tile.initialize(self, map_zone, y, x, name)
   self.inside_players = {}
-  
+
   self.door        = Door:new(self)
   self.barricade   = Barricade:new(self)
   self.integrity   = Integrity:new(self)
 
   self.equipment   = {}
+
+  -- initialize our sqlite data
+  local path = system.pathForFile("code/server/data.db")
+  local db = sqlite3.open( path )
+
+  local building_sql = db:prepare[[
+    UPDATE location SET
+      door_hp = ($door_hp),
+      door_is_open = ($door_is_open),
+      barricade_hp = ($barricade_hp),
+      barricade_potential_hp = ($barricade_potential_hp),
+      integrity_hp = ($integrity_hp)
+    WHERE
+      x = ($x) AND
+      y = ($y) AND
+      map_zone = ($map_zone);
+  ]]
+
+  local building_sql_data = {
+    door_hp = self.door.hp,
+    door_is_open = self.door.is_open,
+    barricade_hp = self.barricade.hp,
+    barricade_potential_hp = self.barricade.potential_hp,
+    integrity_hp = self.integrity.hp,
+    y = y,
+    x = x,
+    map_zone = map_zone,
+  --[[
+    generator_hp = (:generator_hp)
+    generator_condition = (:generator_condition),
+    generator_fuel = (:generator_fuel),
+    terminal_hp = (:terminal_hp),
+    terminal_condition = (:terminal_condition),
+    transmitter_hp = (:transmitter_hp),
+    transmitter_condition = (:transmitter_condition),
+  --]]
+  }
+
+  building_sql:bind_names(building_sql_data)
+  building_sql:step()
+  building_sql:finalize()
 end
 
-function Building:insert(player, setting) 
-  if setting == 'inside' then self.inside_players[player] = true 
+function Building:insert(player, setting)
+  if setting == 'inside' then self.inside_players[player] = true
   elseif setting == 'outside' or setting == nil then self.outside_players[player] = true
   end
 end
 
-function Building:remove(player, setting) 
-  if setting == 'inside' then self.inside_players[player] = nil  
-  elseif setting == 'outside' or setting == nil then self.outside_players[player] = nil 
+function Building:remove(player, setting)
+  if setting == 'inside' then self.inside_players[player] = nil
+  elseif setting == 'outside' or setting == nil then self.outside_players[player] = nil
   end
 end
 
-function Building:install(machine, condition) 
+function Building:install(machine, condition)
   self.equipment[machine] = Machines[machine]:new(self, condition)
 end
 
@@ -56,7 +90,7 @@ function Building:getMachine(machine) return self.equipment[machine] end
 
 function Building:isPresent(setting)
   if setting == 'machines' then
-    if next(self.equipment) then return true else return false end    
+    if next(self.equipment) then return true else return false end
   elseif setting == 'door' then
     return self.door and self.door:isPresent() or false
   elseif setting == 'damaged door' then -- pretty sure this is redundant
@@ -73,7 +107,7 @@ function Building:isPresent(setting)
   elseif setting == 'powered machines' then return self:isPresent('machines') and self:isPowered()
   elseif setting == 'damaged machines' then
     for _, machine in pairs(self.equipment) do if machine:isDamaged() then return true end end
-    return false  
+    return false
 --]]
 end
 
@@ -85,11 +119,11 @@ function Building:isPowered() return self.equipment.generator and self.equipment
 
 function Building:isOpen() return self.barricade:isDestroyed() and (self.door:isOpen() or self.door:isDestroyed()) end
 
-function Building:updateHP(num) 
-  if self:getBarrier() == 'barricade' then 
-    self.barricade:updateHP(num) 
+function Building:updateHP(num)
+  if self:getBarrier() == 'barricade' then
+    self.barricade:updateHP(num)
   else -- self:getBarrier() == 'door'
-    self.door:updateHP(num) 
+    self.door:updateHP(num)
   end
 end
 
