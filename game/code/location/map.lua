@@ -113,7 +113,7 @@ function Map:spawnPlayer(mob_type, username, cosmetics)
   if mob_type == 'zombie' then
     username = username or names:generateRandom('zombie')
     cosmetics = cosmetics or clothing:generateRandom(mob_type)
-    player = Zombie:new(self, x, y, z, username, cosmetics)
+    player = Zombie:new(self.name, x, y, z, username, cosmetics)
   elseif mob_type == 'human' or mob_type == 'male' or mob_type == 'female' then
     local choices = {'male', 'female'}
     local gender
@@ -126,7 +126,7 @@ function Map:spawnPlayer(mob_type, username, cosmetics)
 
     username = username or names:generateRandom(gender)
     cosmetics = cosmetics or clothing:generateRandom('human')
-    player =  Human:new(self, z, y, z, username, cosmetics)
+    player =  Human:new(self.name, x, y, z, username, cosmetics)
   --elseif mob_type == 'corpse'  ???
   end
 
