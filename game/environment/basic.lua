@@ -1,3 +1,4 @@
+local Server = require('code.server.server')
 local Map = require('code.location.map')
 local Items = require('code.item.items')  -- for testing item generation in main.lua
 local Zombie = require('code.player.zombie.zombie')
@@ -7,7 +8,8 @@ local zombie_dummies = {}
 local human_dummies = {}
 
 -- make map init size based on map size from json? instead of hardcoded value
-city = Map:new(7)
+local city = Map:new('ZomboTropolis', 7)
+Server:add(city)
 --local y, x = 20, 5   --19,34
 
 --main_player = city:spawnPlayer('human') --Human:new(nil, city, y, x)
