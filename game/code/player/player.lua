@@ -1,4 +1,5 @@
 local class = require('code.libs.middleclass')
+local Server = require('code.server.server')
 local Log = require('code.player.log')
 local StatusEffect = require('code.player.status_effect.status_effect')
 local broadcastEvent = require('code.server.event')
@@ -15,8 +16,8 @@ Player.chanceToHit = chanceToHit
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(map_zone, x, y, z, username, cosmetics) --add account name
-  self.map_zone = map_zone
+function Player:initialize(map, x, y, z, username, cosmetics) --add account name
+  self.map = map
   self.x, self.y, self.z = x, y, z or 1
   self.ID = self
   self.stats = Stats:new(self)
@@ -89,9 +90,9 @@ function Player:isMobType(mob) return string.lower(self.class.name) == mob end
 function Player:isStanding() return self.stats:get('hp') > 0 end
 
 function Player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside')
-  local map_zone = self:getMap()
+  local map = self:getMap()
   local x, y, z = self:getPos()
-  local tile = map_zone[z][y][x]
+  local tile = map[z][y][x]
   return tile:check(self, setting)
 end
 
@@ -120,9 +121,12 @@ end
 
 function Player:getPos()  return self.x, self.y, self.z end
 
-function Player:getMap() return self.map_zone end
+function Player:getMap() return Server:getMap(self.map) end
 
-function Player:getLocation() return self.map_zone[self.z][self.y][self.x] end
+function Player:getLocation()
+  local map = self:getMap()
+  return map[self.z][self.y][self.x]
+end
 
 function Player:getMobType() return string.lower(self.class.name) end
 
@@ -149,15 +153,15 @@ function Player:getUsername() return self.username end
 function Player:getStage() return (self:isStaged('inside') and 'inside') or (self:isStaged('outside') and 'outside') end
 
 function Player:getTile()
-  local map_zone = self:getMap()
+  local map = Server:getMap(self.map)
   local x, y, z = self:getPos()
-  return map_zone:getTile(x, y, z)
+  return map:getTile(x, y, z)
 end
 
 -- this function is used to count zombies, humans, and corpses inside/outside a 3x3 range
 -- zombies with the smell_blood/smell_blood_adv skills get bonus data
 function Player:count3x3()
-  local map = self.map_zone
+  local map = self:getMap()
   local x, y, z = self.x, self.y, self.z
   local tile_list = map:get3x3(x, y, z)
   local tile_counts = {}

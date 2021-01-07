@@ -1,4 +1,5 @@
 local class = require('code.libs.middleclass')
+local Server = require('code.server.server')
 local Items = require('code.item.items')
 local broadcastEvent = require('code.server.event')
 local lume = require('code.libs.lume')
@@ -10,14 +11,14 @@ function Tile:initialize(map, x, y, z, name)
   self.x, self.y, self.z = x, y, z
   self.outside_players = {}
   self.name = name
-  self.map_zone = map
+  self.map = map
 
   -- initialize our sqlite data
   local path = system.pathForFile("code/server/data.db")
   local db = sqlite3.open(path)
   local tile_sql = db:prepare[[
-    INSERT INTO location(tile_id, map_zone, x, y, z, name)
-    VALUES ($tile_id, $map_zone, $x, $y, $z, $name);
+    INSERT INTO location(tile_id, map, x, y, z, name)
+    VALUES ($tile_id, $map, $x, $y, $z, $name);
   ]]
 
   tile_sql:bind_values(self.ID, map, x, y, z, name)
@@ -76,7 +77,7 @@ function Tile:countCorpses(stage)
   return count
 end
 
-function Tile:getMap() return self.map_zone end
+function Tile:getMap() return Server:getMap(self.map) end
 
 function Tile:getPos() return self.x, self.y, self.z end
 
