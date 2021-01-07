@@ -68,9 +68,9 @@ function Zombie:getTargets(mode)
   end
 
   if mode == 'gesture' then
-    local map_zone = self:getMap()
+    local map = self:getMap()
     local x, y, z = self:getPos()
-    for _,tile in ipairs(map_zone:get3x3(x, y, z)) do targets[#targets+1] = tile end
+    for _,tile in ipairs(map:get3x3(x, y, z)) do targets[#targets+1] = tile end
     local dir = {1, 2, 3, 4, 5, 6, 7, 8}
     for _, direction in ipairs(dir) do targets[#targets+1] = direction end
   end

@@ -8,8 +8,8 @@ local sqlite3 = require( "sqlite3" )
 
 local Building = class('Building', Tile)
 
-function Building:initialize(map_zone, x, y, z, name)
-  Tile.initialize(self, map_zone, x, y, z, name)
+function Building:initialize(map, x, y, z, name)
+  Tile.initialize(self, map, x, y, z, name)
   self.inside_players = {}
 
   self.door        = Door:new(self)
@@ -33,7 +33,7 @@ function Building:initialize(map_zone, x, y, z, name)
       x = ($x) AND
       y = ($y) AND
       z = ($z) AND
-      map_zone = ($map_zone);
+      map = ($map);
   ]]
 
   local building_sql_data = {
@@ -45,7 +45,7 @@ function Building:initialize(map_zone, x, y, z, name)
     x = x,
     y = y,
     z = z,
-    map_zone = map_zone,
+    map = map,
   --[[
     generator_hp = (:generator_hp)
     generator_condition = (:generator_condition),
