@@ -9,7 +9,7 @@ local human_dummies = {}
 
 -- make map init size based on map size from json? instead of hardcoded value
 local city = Map:new('ZomboTropolis', 7)
-Server:add(city)
+Server:addMap(city)
 --local y, x = 20, 5   --19,34
 
 --main_player = city:spawnPlayer('human') --Human:new(nil, city, y, x)
