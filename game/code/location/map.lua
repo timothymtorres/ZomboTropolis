@@ -24,12 +24,13 @@ function Map:initialize(name, size, z_levels)
   self.humans = 0
   self.zombies = 0
   self.dead = 0
-  self.terminal_network = TerminalNetwork:new(size)
   self.z_levels = z_levels or 1
   self.size = size
 
   size = size or 1
   z_levels = z_levels or 1
+
+  self.terminal_network = TerminalNetwork:new(size, z_levels)
 
   -- we need to import the z_level from the Tiled map data in the future
   for z=1, z_levels do
