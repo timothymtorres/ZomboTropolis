@@ -6,7 +6,7 @@ string.replace = require('code.libs.replace')
 local zombie_basic_actions = {}
 -------------------------------------------------------------------
 
-local function getNewPos(y, x, dir)
+local function getNewPos(x, y, dir)
 --[[
   +-------+
   ||8|1|2||
@@ -32,42 +32,42 @@ zombie_basic_actions.move = {}
 local move = zombie_basic_actions.move
 
 function move.server_criteria(player, dir)
-  assert(dir, 'Cannot move without direction')  
-  local y, x = player:getPos()
+  assert(dir, 'Cannot move without direction')
+  local x, y, z = player:getPos()
   local map = player:getMap()
-  local dir_y, dir_x = getNewPos(y, x, dir)
+  local dir_x, dir_y = getNewPos(x, y, dir)
   local outside_map = dir_y > #map or dir_y < 1 or dir_x > #map or dir_x < 1
   assert(not outside_map, 'Cannot move outside the quarantine')
 end
 
 local compass = {'North', 'NorthEast', 'East', 'SouthEast', 'South', 'SouthWest', 'West', 'NorthWest'}
 -- possibly add a high ap cost to leap from ruined to unruined
--- default ap cost (or zero?) to leap from ruined to ruined 
+-- default ap cost (or zero?) to leap from ruined to ruined
 
 function move.activate(player, dir)
-  local y, x = player:getPos()
+  local x, y, z = player:getPos()
   local map = player:getMap()
-  local dir_y, dir_x = getNewPos(y, x, dir)
+  local dir_y, dir_x = getNewPos(x, y, dir)
 
   if player:isStaged('inside') then
-    map[y][x]:remove(player, 'inside')
+    map[z][y][x]:remove(player, 'inside')
 
-    local current_building_ruined = map[y][x].integrity:isState('ruined')
-    local target_building_ruined = map[dir_y][dir_x].integrity:isState('ruined')
+    local current_building_ruined = map[z][y][x].integrity:isState('ruined')
+    local target_building_ruined = map[z][dir_y][dir_x].integrity:isState('ruined')
 
     if current_building_ruined and player.skills:check('leap') then
-      if target_building_ruined or player.skills:check('leap_adv') then map[dir_y][dir_x]:insert(player, 'inside')
-      else map[dir_y][dir_x]:insert(player, 'outside')
+      if target_building_ruined or player.skills:check('leap_adv') then map[z][dir_y][dir_x]:insert(player, 'inside')
+      else map[z][dir_y][dir_x]:insert(player, 'outside')
       end
-    else map[dir_y][dir_x]:insert(player, 'outside')
+    else map[z][dir_y][dir_x]:insert(player, 'outside')
     end
-  else  -- player is outside  
-    map[y][x]:remove(player)
-    map[dir_y][dir_x]:insert(player)
+  else  -- player is outside
+    map[z][y][x]:remove(player)
+    map[z][dir_y][dir_x]:insert(player)
   end
-  
-  player:updatePos(dir_y, dir_x)  
- 
+
+  player:updatePos(dir_x, dir_y, z)
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
@@ -75,13 +75,13 @@ function move.activate(player, dir)
   local self_msg = 'You travel {dir}.'
   local names = {dir=compass[dir]}
   self_msg = self_msg:replace(names)
-  
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
-  --------------------------------------------  
-  
-  local event = {'move', player, dir}    
-  player.log:insert(self_msg, event)  
+  --------------------------------------------
+
+  local event = {'move', player, dir}
+  player.log:insert(self_msg, event)
 end
 
 -------------------------------------------------------------------
@@ -90,10 +90,10 @@ zombie_basic_actions.attack = {}
 local attack = zombie_basic_actions.attack
 
 function attack.client_criteria(player)
-  local player_targets, building_targets  
+  local player_targets, building_targets
   local p_tile = player:getTile()
   local player_n = p_tile:countPlayers('all', player:getStage()) - 1  -- subtract one from total b/c player on tile (filter out other zombies)
-  
+
   if player_n > 0 then player_targets = true end
   if p_tile:isBuilding() then
     if p_tile:isFortified() then building_targets = true end
@@ -103,13 +103,13 @@ function attack.client_criteria(player)
 end
 
 function attack.server_criteria(player, target, weapon)
---[[ this code is unused (I may possibly add acid/special attacks for zombies later that requires a skill to unlock) 
+--[[ this code is unused (I may possibly add acid/special attacks for zombies later that requires a skill to unlock)
   if weapon:isSkillRequired() then
     local weapon_skill_present = player.skills:check(weapon:getSkillRequired())
     assert(weapon_skill_present, 'Cannot use this attack without required skill')
-  end 
---]] 
-  
+  end
+--]]
+
   local p_tile = player:getTile()
   local target_class = target:getName()
 --print('target_class', target_class, target)
@@ -122,7 +122,7 @@ function attack.server_criteria(player, target, weapon)
     assert(p_tile:isBuilding(), 'No building present to target equipment for attack')
     assert(player:isStaged('inside'), 'Player must be inside building to attack equipment')
     assert(weapon:getObjectDamage('equipment'), 'Selected weapon unable to attack equipment')
-    assert(p_tile[target_class]:isPresent(), 'Equipment target does not exist in building')     
+    assert(p_tile[target_class]:isPresent(), 'Equipment target does not exist in building')
   elseif target_class == 'building' then
     assert(p_tile:isBuilding(), 'No building near player to attack')
     assert(weapon:getObjectDamage('barricade'), 'Selected weapon cannot attack barricade') -- fix this later (check for door too!)
@@ -133,18 +133,18 @@ end
 function attack.activate(player, target, weapon)
   local target_class = target:getClassName()
   local attack, damage, critical = combat(player, target, weapon)
-  local caused_infection  
+  local caused_infection
   local armor_condition, armor
   local maimed_limb
-  
-  if attack then 
+
+  if attack then
     if target_class == 'player' then
       if target.armor:isPresent() and not weapon:isHarmless() then
         local damage_type = weapon:getDamageType()
         local resistance = target.armor:getProtection(damage_type)
-        damage = damage - resistance    
+        damage = damage - resistance
         -- do we need to add a desc if resistance is working?  (ie absorbing damage in battle log?)
-        
+
         local retailation_damage = target.armor:getProtection('damage_melee_attacker')
         local is_melee_attack = weapon:getStyle() == 'melee'
         if is_melee_attack and retailation_damage > 0 then
@@ -152,12 +152,12 @@ function attack.activate(player, target, weapon)
           player.stats:update('hp', retailation_hp_loss)
           -- insert some type of event?
         end
-        
+
         local degrade_multiplier = player.skills:check('power_claw') and 2 or 1
         armor_condition = armor:updateArmorDurability(degrade_multiplier)
         if armor_condiiton == 0 then target.equipment:remove('armor') end
       end
-      
+
       if player.skills:check('track') then
         player.status_effect.tracking:addScent(target)
       end
@@ -165,21 +165,21 @@ function attack.activate(player, target, weapon)
     --elseif target_class == 'barricade' then
     --elseif target_class == equipment?
     end
-    
+
     local hp_loss = -1*damage
     target.stats:update('hp', hp_loss)
-  
+
     if tostring(weapon) == 'claw' then
-      if not player:isTangledTogether(target) then 
+      if not player:isTangledTogether(target) then
         if player.status_effect:isActive('entagle') then player.status_effect.entagle:remove() end
         if target.status_effect:isActive('entagle') then target.status_effect.entagle:remove() end
 
-        player.status_effect:add('entangle', target) 
+        player.status_effect:add('entangle', target)
         target.status_effect:add('entangle', player)
       end
 
       if player.skills:check('maim') then
-        local expertise = player.skills:check('maim_adv') and 'advanced' or 'basic'        
+        local expertise = player.skills:check('maim_adv') and 'advanced' or 'basic'
         local maim = {}
         maim.basic =    {POTENTIAL_HP_MOD = 1/3, DELIMB_HP_THRESHOLD = 30}
         maim.advanced = {POTENTIAL_HP_MOD = 1/2, DELIMB_HP_THRESHOLD = 20}
@@ -205,32 +205,32 @@ function attack.activate(player, target, weapon)
         local biosuit_block_infection = biosuit_resistance == 4
 
         if not target.status_effect:isActive('infection') or not target.status_effect:isActive('immune') or not biosuit_block_infection then
-          target.status_effect:add('infection') 
+          target.status_effect:add('infection')
           caused_infection = true
         end
-      end      
+      end
 
       local hp_gain = -1*hp_loss
-      if player.skills:check('rejuvenate') then player.stats:update('hp', hp_gain) end   
-    end     
+      if player.skills:check('rejuvenate') then player.stats:update('hp', hp_gain) end
+    end
   else -- attack missed
     if player.skills:check('grapple') and player.status_effect:isActive('entangle') then player.status_effect.entagle:remove() end
   end
-  
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
-      
+
   local self_msg = 'You attack {target} with your {weapon}' ..(
-                                       (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or 
+                                       (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or
                                           (not attack and ' and miss.') or '.')
   local target_msg = 'You are attacked by {player} with their {weapon}'..(
-                                                   (maimed_limb and   ', and your '..maimed_limb..' sails off in an arc!') or  
+                                                   (maimed_limb and   ', and your '..maimed_limb..' sails off in an arc!') or
                                                       (not attack and ' and they miss.') or '.')
   local msg = '{player} attacks {target} with their {weapon}'..(
-                                         (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or 
-                                            (not attack and ' and they miss.') or '.')                                                             
-                                                            
+                                         (maimed_limb and   ', and their '..maimed_limb..' sails off in an arc!') or
+                                            (not attack and ' and they miss.') or '.')
+
   local names = {player=player, target=target, weapon=weapon}
   self_msg =     self_msg:replace(names)
   target_msg = target_msg:replace(names)
@@ -238,27 +238,27 @@ function attack.activate(player, target, weapon)
 
   if caused_infection then self_msg = self_msg .. '  They become infected.' end
 
-  if armor_condition == 0 then 
-    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!'  
+  if armor_condition == 0 then
+    self_msg = self_msg..'Their '..tostring(armor)..' is destroyed!'
     target_msg = target_msg..'Your '..tostring(armor)..' is destroyed!'
-  elseif armor_condition and armor:isConditionVisible(target) then 
+  elseif armor_condition and armor:isConditionVisible(target) then
     target_msg = target_msg..'Your '..tostring(armor)..' degrades to a '..armor:getConditionState()..' state.'
   end
 
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
-  -------------------------------------------- 
+  --------------------------------------------
 
-  local event = {'attack', player, target, weapon, attack, damage, maimed_limb or caused_infection}  -- maybe remove damage from event list? 
+  local event = {'attack', player, target, weapon, attack, damage, maimed_limb or caused_infection}  -- maybe remove damage from event list?
 
   local settings = {stage=player:getStage(), exclude={}}
   settings.exclude[player], settings.exclude[target] = true, true
 
   player.log:insert(self_msg, event)
   target.log:insert(target_msg, event)
-  
+
   local tile = player:getTile()
-  tile:broadcastEvent(msg, event, settings) 
+  tile:broadcastEvent(msg, event, settings)
 end
 
 -------------------------------------------------------------------
@@ -273,24 +273,24 @@ function enter.server_criteria(player)
 end
 
 function enter.activate(player)
-  local y, x = player:getPos()
+  local x, y, z = player:getPos()
   local map = player:getMap()
   -- make sure there are no fortifications and buildings door is open
-  map[y][x]:remove(player, 'outside')
-  map[y][x]:insert(player, 'inside')
-  
+  map[z][y][x]:remove(player, 'outside')
+  map[z][y][x]:insert(player, 'inside')
+
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
-  
+
   local msg = 'You enter the {building}.'
-  msg = msg:replace(map[y][x])
-  
+  msg = msg:replace(map[z][y][x])
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
-  
-  local event = {'enter', player, map[y][x]}  
+
+  local event = {'enter', player, map[z][y][x]}
   player.log:insert(msg, event)
 end
 
@@ -305,24 +305,24 @@ function exit.server_criteria(player)
 end
 
 function exit.activate(player)
-  local y, x = player:getPos()
+  local x, y, z = player:getPos()
   local map = player:getMap()
-  map[y][x]:remove(player, 'inside')
-  map[y][x]:insert(player, 'outside')
+  map[z][y][x]:remove(player, 'inside')
+  map[z][y][x]:insert(player, 'outside')
 
   --------------------------------------------
   -----------   M E S S A G E   --------------
   --------------------------------------------
-  
+
   local msg = 'You exit the {building}.'
-  msg = msg:replace(map[y][x])
-  
+  msg = msg:replace(map[z][y][x])
+
   --------------------------------------------
   ---------   B R O A D C A S T   ------------
   --------------------------------------------
-  
-  local event = {'exit', player, map[y][x]}  
-  player.log:insert(msg, event)  
+
+  local event = {'exit', player, map[z][y][x]}
+  player.log:insert(msg, event)
 end
 
 return zombie_basic_actions

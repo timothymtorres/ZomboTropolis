@@ -12,7 +12,7 @@ This should narrow down the data being sent as a lot of tiles won't have scanned
 Then send the zombie #'s.
 --]]
 
-function TerminalNetwork:initialize(size)
+function TerminalNetwork:initialize(size, z_levels)
   --[[  Do something like this for suburbs?
   for i=1, #suburbs do
     self[suburb] = {scanned_zombies = 0, total_xp_levels = 0}
@@ -21,32 +21,35 @@ function TerminalNetwork:initialize(size)
   self.scanned_zombies = 0
   self.total_xp_levels = 0
 
-  for y=1, size do
-    self[y] = {}
-    for x=1, size do
-      self[y][x] = {scanned_zombies = 0, total_xp_levels = 0}
+  for z=1, z_levels do
+    self[z] = {}
+    for y=1, size do
+      self[z][y] = {}
+      for x=1, size do
+        self[z][y][x] = {scanned_zombies = 0, total_xp_levels = 0}
+      end
     end
   end
 end
 
 function TerminalNetwork:add(zombie)
-  local y, x = zombie:getPos()
+  local x, y, z = zombie:getPos()
   local xp_level = zombie.skills:countFlags('skills')
-  self[y][x].scanned_zombies = self[y][x].scanned_zombies + 1
-  self[y][x].total_xp_levels = self[y][x].total_xp_levels + xp_level
+  self[z][y][x].scanned_zombies = self[z][y][x].scanned_zombies + 1
+  self[z][y][x].total_xp_levels = self[z][y][x].total_xp_levels + xp_level
 
   self.scanned_zombies = self.scanned_zombies + 1
   self.total_xp_levels = self.total_xp_levels + xp_level
 end
 
 function TerminalNetwork:remove(zombie)
-  local y, x = zombie:getPos()
+  local x, y, z = zombie:getPos()
   local xp_level = zombie.skills:countFlags('skills')
-  self[y][x].scanned_zombies = self[y][x].scanned_zombies - 1
-  self[y][x].total_xp_levels = self[y][x].total_xp_levels - xp_level
+  self[z][y][x].scanned_zombies = self[z][y][x].scanned_zombies - 1
+  self[z][y][x].total_xp_levels = self[z][y][x].total_xp_levels - xp_level
 
   self.scanned_zombies = self.scanned_zombies - 1
-  self.total_xp_levels = self.total_xp_levels - xp_level  
+  self.total_xp_levels = self.total_xp_levels - xp_level
 end
 
 local GADGET_SKILL_REDUCTION = 0.25
@@ -61,19 +64,19 @@ Ruined =   error of margin  0% - 200%  (100%)
 --]]
 
 function TerminalNetwork:access(terminal, human)
-  local zombies_num, zombies_levels, zombies_pos 
+  local zombies_num, zombies_levels, zombies_pos
   local skill_reduction = (human.skills:check('gadget') and GADGET_SKILL_REDUCTION or 0) +
                           (human.skills:check('terminal') and TERMINAL_SKILL_REDUCTION or 0)
-  local error_of_margin = terminal_condition_mod[terminal:getCondition()] 
+  local error_of_margin = terminal_condition_mod[terminal:getCondition()]
   error_of_margin = error_of_margin - error_of_margin*skill_reduction
   local margin = 1 + (math.random(-1*error_of_margin*100, error_of_margin*100)*0.01)
 
   -- if ISP for suburb is powered then
   zombies_num = math.floor(margin*self.scanned_zombies) --{suburb_1 = 27, suburb_2 = 37, etc. etc.}
 
-  if human.skills:check('gadget') then 
+  if human.skills:check('gadget') then
     zombies_levels = math.floor(margin*self.total_xp_levels)
-    if human.skills:check('terminal') then 
+    if human.skills:check('terminal') then
       zombies_pos = {} -- should only send Suburb maps
     end
   end

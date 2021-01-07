@@ -27,8 +27,8 @@ local grid_x, grid_y = display.contentWidth*0.17, display.contentHeight*0.60
 -- "scene:create()"
 function scene:create( event )
   local sceneGroup = self.view
-  local move_buttons = display.newGroup()  
-  local drawMoveButtons  
+  local move_buttons = display.newGroup()
+  local drawMoveButtons
 
   local gridButtonEvent = function(event)
     if ("ended" == event.phase ) then
@@ -37,18 +37,18 @@ function scene:create( event )
       drawMoveButtons()
     end
   end
-  
+
   local centerButtonEvent = function(event)
     if ("ended" == event.phase ) then
       -- event.target.id is one of the following - enter/exit
       main_player:perform(event.target.id)
       drawMoveButtons()
     end
-  end 
+  end
 
   drawMoveButtons = function()
     local map = main_player:getMap()
-    local y, x = main_player:getPos()   
+    local x, y, z = main_player:getPos()
 
     -- remove all children from group
     for i=move_buttons.numChildren, 1, -1 do
@@ -56,10 +56,10 @@ function scene:create( event )
       move_buttons[i] = nil
     end
 
-    if map[y][x]:isBuilding() then
-      local label, id 
-      
-      -- also this might need to be updated for barricade levels?   
+    if map[z][y][x]:isBuilding() then
+      local label, id
+
+      -- also this might need to be updated for barricade levels?
       if main_player:isStaged('inside') then label, id = 'Exit', 'exit'
       elseif main_player:isStaged('outside') then label, id = 'Enter', 'enter'
       end
@@ -75,13 +75,13 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
+        strokeWidth = 4
       }
 
-      move_buttons:insert(center_grid_button) 
+      move_buttons:insert(center_grid_button)
     end
 
-    if map[y-1] and map[y-1][x] then
+    if map[z][y-1] and map[z][y-1][x] then
       local NE_grid_button = widget.newButton{
         x = grid_x+grid_square,
         y = grid_y-grid_square,
@@ -93,12 +93,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
+        strokeWidth = 4
       }
-      move_buttons:insert(NE_grid_button) 
+      move_buttons:insert(NE_grid_button)
     end
 
-    if map[y-1] and map[y-1][x+1] then
+    if map[z][y-1] and map[z][y-1][x+1] then
       local E_grid_button = widget.newButton{
         x = grid_x+grid_square,
         y = grid_y,
@@ -110,12 +110,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
+        strokeWidth = 4
       }
-      move_buttons:insert(E_grid_button) 
+      move_buttons:insert(E_grid_button)
     end
 
-    if map[y] and map[y][x+1] then
+    if map[z][y] and map[z][y][x+1] then
       local SE_grid_button = widget.newButton{
         x = grid_x+grid_square,
         y = grid_y+grid_square,
@@ -127,12 +127,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
-      } 
-      move_buttons:insert(SE_grid_button) 
+        strokeWidth = 4
+      }
+      move_buttons:insert(SE_grid_button)
     end
 
-    if map[y+1] and map[y+1][x+1] then
+    if map[z][y+1] and map[z][y+1][x+1] then
       local S_grid_button = widget.newButton{
         x = grid_x,
         y = grid_y+grid_square,
@@ -144,12 +144,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
-      } 
-      move_buttons:insert(S_grid_button) 
+        strokeWidth = 4
+      }
+      move_buttons:insert(S_grid_button)
     end
 
-    if map[y+1] and map[y+1][x] then
+    if map[z][y+1] and map[z][y+1][x] then
       local SW_grid_button = widget.newButton{
         x = grid_x-grid_square,
         y = grid_y+grid_square,
@@ -161,12 +161,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
+        strokeWidth = 4
       }
-      move_buttons:insert(SW_grid_button) 
+      move_buttons:insert(SW_grid_button)
     end
 
-    if map[y+1] and map[y+1][x-1] then
+    if map[z][y+1] and map[z][y+1][x-1] then
       local W_grid_button = widget.newButton{
         x = grid_x-grid_square,
         y = grid_y,
@@ -178,12 +178,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
-      } 
-      move_buttons:insert(W_grid_button) 
+        strokeWidth = 4
+      }
+      move_buttons:insert(W_grid_button)
     end
 
-    if map[y] and map[y][x-1] then
+    if map[z][y] and map[z][y][x-1] then
       local NW_grid_button = widget.newButton{
         x = grid_x-grid_square,
         y = grid_y-grid_square,
@@ -195,12 +195,12 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
-      } 
-      move_buttons:insert(NW_grid_button) 
+        strokeWidth = 4
+      }
+      move_buttons:insert(NW_grid_button)
     end
 
-    if map[y-1] and map[y-1][x-1] then
+    if map[z][y-1] and map[z][y-1][x-1] then
       local N_grid_button = widget.newButton{
         x = grid_x,
         y = grid_y-grid_square,
@@ -212,10 +212,10 @@ function scene:create( event )
         height = grid_square,
         fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
         strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
-        strokeWidth = 4      
-      } 
-      move_buttons:insert(N_grid_button) 
-    end 
+        strokeWidth = 4
+      }
+      move_buttons:insert(N_grid_button)
+    end
   end
 
   -- Load our map
@@ -240,7 +240,7 @@ function scene:create( event )
 
   -- draw our movement buttons for direction
   drawMoveButtons()
-  sceneGroup:insert(move_buttons) 
+  sceneGroup:insert(move_buttons)
 
   return sceneGroup
 end
@@ -259,15 +259,15 @@ local function key( event )
 
   if phase == "down" then
     if "up" == name and scale < MAX_SCALE then
-      transition.scaleBy(world, {xScale=SCALE_INCREMENT, yScale=SCALE_INCREMENT, time=2000}) 
+      transition.scaleBy(world, {xScale=SCALE_INCREMENT, yScale=SCALE_INCREMENT, time=2000})
     elseif "down" == name and scale > MIN_SCALE then
       transition.scaleBy(world, {xScale=-1*SCALE_INCREMENT, yScale=-1*SCALE_INCREMENT, time=2000})
     elseif "up" == name then -- zoom into world if viewing map
       --local scene = composer.getSceneName('current')
-      --composer.removeScene(scene)      
+      --composer.removeScene(scene)
 
-      local options = {effect = "fade", time = 500,}   
-      composer.gotoScene('scenes.location', options)     
+      local options = {effect = "fade", time = 500,}
+      composer.gotoScene('scenes.location', options)
     elseif "down" == name then -- zoom into map if viewing room
     end
 
@@ -283,19 +283,19 @@ local function movePlatform(event)
     if (event.phase == "began") then
         display.getCurrentStage():setFocus( platformTouched )
 
-        -- here the first position is stored in x and y         
+        -- here the first position is stored in x and y
         platformTouched.startMoveX = platformTouched.x
-        platformTouched.startMoveY = platformTouched.y 
+        platformTouched.startMoveY = platformTouched.y
     elseif (event.phase == "moved") then
         local startMoveX = platformTouched.startMoveX or platformTouched.x
         local startMoveY = platformTouched.startMoveY or platformTouched.y
 
-        -- here the distance is calculated between the start of the movement and its current position of the drag  
+        -- here the distance is calculated between the start of the movement and its current position of the drag
         local x_pos = (event.x - event.xStart) + startMoveX
         local y_pos = (event.y - event.yStart) + startMoveY
 
-        platformTouched.x =  x_pos 
-        platformTouched.y = y_pos    
+        platformTouched.x =  x_pos
+        platformTouched.y = y_pos
     elseif event.phase == "ended" or event.phase == "cancelled"  then
         -- here the focus is removed from the last position
         display.getCurrentStage():setFocus( nil )
@@ -311,9 +311,9 @@ function scene:show( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
-    
-        Runtime:addEventListener("key", key)  
-        world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object        
+
+        Runtime:addEventListener("key", key)
+        world:addEventListener( "touch", movePlatform )  -- Add a "touch" listener to the object
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
@@ -334,16 +334,16 @@ function scene:hide( event )
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.   
-        Runtime:removeEventListener( "key", key )          
-    end  
+        -- Called immediately after scene goes off screen.
+        Runtime:removeEventListener( "key", key )
+    end
 end
 
 
 -- "scene:destroy()"
 function scene:destroy( event )
-     
-    Runtime:removeEventListener( "key", key )     
+
+    Runtime:removeEventListener( "key", key )
 
     local sceneGroup = self.view
 

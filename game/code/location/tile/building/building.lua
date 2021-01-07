@@ -8,8 +8,8 @@ local sqlite3 = require( "sqlite3" )
 
 local Building = class('Building', Tile)
 
-function Building:initialize(map_zone, y, x, name)
-  Tile.initialize(self, map_zone, y, x, name)
+function Building:initialize(map_zone, x, y, z, name)
+  Tile.initialize(self, map_zone, x, y, z, name)
   self.inside_players = {}
 
   self.door        = Door:new(self)
@@ -32,6 +32,7 @@ function Building:initialize(map_zone, y, x, name)
     WHERE
       x = ($x) AND
       y = ($y) AND
+      z = ($z) AND
       map_zone = ($map_zone);
   ]]
 
@@ -41,8 +42,9 @@ function Building:initialize(map_zone, y, x, name)
     barricade_hp = self.barricade.hp,
     barricade_potential_hp = self.barricade.potential_hp,
     integrity_hp = self.integrity.hp,
-    y = y,
     x = x,
+    y = y,
+    z = z,
     map_zone = map_zone,
   --[[
     generator_hp = (:generator_hp)
@@ -85,8 +87,6 @@ function Building:getBarrier() return (self.barricade:getHP() > 0 and 'barricade
 function Building:getEquipment() return self.equipment end
 
 function Building:getMachine(machine) return self.equipment[machine] end
-
--- function Building:getPos() return (NO NEED?)
 
 function Building:isPresent(setting)
   if setting == 'machines' then

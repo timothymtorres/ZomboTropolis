@@ -15,9 +15,9 @@ Player.chanceToHit = chanceToHit
 
 --Accounts[new_ID] = Player:new(n, t)
 
-function Player:initialize(map_zone, y, x, username, cosmetics) --add account name
+function Player:initialize(map_zone, x, y, z, username, cosmetics) --add account name
   self.map_zone = map_zone
-  self.y, self.x = y, x
+  self.x, self.y, self.z = x, y, z or 1
   self.ID = self
   self.stats = Stats:new(self)
   self.log = Log:new()
@@ -90,8 +90,8 @@ function Player:isStanding() return self.stats:get('hp') > 0 end
 
 function Player:isStaged(setting)  --  isStaged('inside')  or isStaged('outside')
   local map_zone = self:getMap()
-  local y, x = self:getPos()  
-  local tile = map_zone[y][x]
+  local x, y, z = self:getPos()
+  local tile = map_zone[z][y][x]
   return tile:check(self, setting)
 end
 
@@ -118,11 +118,11 @@ end
 --  GET [X]
 --]]
 
-function Player:getPos()  return self.y, self.x end
+function Player:getPos()  return self.x, self.y, self.z end
 
 function Player:getMap() return self.map_zone end
 
-function Player:getLocation() return self.map_zone[self.y][self.x] end
+function Player:getLocation() return self.map_zone[self.z][self.y][self.x] end
 
 function Player:getMobType() return string.lower(self.class.name) end
 
@@ -150,16 +150,16 @@ function Player:getStage() return (self:isStaged('inside') and 'inside') or (sel
 
 function Player:getTile()
   local map_zone = self:getMap()
-  local y, x = self:getPos()
-  return map_zone:getTile(y, x)
+  local x, y, z = self:getPos()
+  return map_zone:getTile(x, y, z)
 end
 
 -- this function is used to count zombies, humans, and corpses inside/outside a 3x3 range
 -- zombies with the smell_blood/smell_blood_adv skills get bonus data
 function Player:count3x3()
   local map = self.map_zone
-  local y,x = self.y, self.x
-  local tile_list = map:get3x3(y, x)
+  local x, y, z = self.x, self.y, self.z
+  local tile_list = map:get3x3(x, y, z)
   local tile_counts = {}
   local is_staged_outside = self:isStaged('outside')
 
@@ -215,7 +215,7 @@ end
 -- UPDATE [X]
 --]]
 
-function Player:updatePos(y, x) self.y, self.x = y, x end
+function Player:updatePos(x, y, z) self.x, self.y, self.z = x, y, z or 1 end
 
 --[[
 -- METAMETHODS

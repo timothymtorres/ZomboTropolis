@@ -6,8 +6,8 @@ local sqlite3 = require('sqlite3')
 
 local Tile = class('Tile')
 
-function Tile:initialize(map, y, x, name)
-  self.y, self.x = y, x
+function Tile:initialize(map, x, y, z, name)
+  self.x, self.y, self.z = x, y, z
   self.outside_players = {}
   self.name = name
   self.map_zone = map
@@ -16,11 +16,11 @@ function Tile:initialize(map, y, x, name)
   local path = system.pathForFile("code/server/data.db")
   local db = sqlite3.open(path)
   local tile_sql = db:prepare[[
-    INSERT INTO location(tile_id, map_zone, y, x, name)
-    VALUES ($tile_id, $map_zone, $y, $x, $name);
+    INSERT INTO location(tile_id, map_zone, x, y, z, name)
+    VALUES ($tile_id, $map_zone, $x, $y, $z, $name);
   ]]
 
-  tile_sql:bind_values(self.ID, map, y, x, name)
+  tile_sql:bind_values(self.ID, map, x, y, z, name)
   tile_sql:step()
   tile_sql:finalize()
 end
@@ -78,7 +78,7 @@ end
 
 function Tile:getMap() return self.map_zone end
 
-function Tile:getPos() return self.y, self.x end
+function Tile:getPos() return self.x, self.y, self.z end
 
 function Tile:getIntegrity(stage)
   if self:isBuilding() and stage == 'inside' then return self.integrity:getState()

@@ -12,15 +12,15 @@ local Zombie = class('Zombie', Player)
 
 Zombie.action_list = action_list.zombie
 
-function Zombie:initialize(...) --add account name 
+function Zombie:initialize(...) --add account name
   self.skills = Skills:new(zombie_skill_list)
   self.hunger = Hunger:new(self)
   self.network = Network:new(self)
 
-  Player.initialize(self, ...)  
+  Player.initialize(self, ...)
 end
 
-function Zombie:perform(action_str, ...) 
+function Zombie:perform(action_str, ...)
   local AP_cost = Player.perform(self, action_str, ...)
   self.hunger:elapse(AP_cost)
   if self.status_effect:isActive('scanned') then self.status_effect:remove('scanned') end
@@ -46,35 +46,35 @@ end
 --]]
 
 -- client-side functions
-function Zombie:getWeapons() return {{weapon=Claw}, {weapon=Bite}} end  
+function Zombie:getWeapons() return {{weapon=Claw}, {weapon=Bite}} end
 
 function Zombie:getTargets(mode)
   local targets = {}
-  
+
   local p_tile, setting = self:getTile(), self:getStage()
   local all_players = p_tile:getPlayers(setting) -- we need to filter so that it's only humans
-  
-  for player in pairs(all_players) do 
+
+  for player in pairs(all_players) do
     if player:isStanding() and player ~= self then targets[#targets+1] = player end
-  end 
-  
+  end
+
   if p_tile:isBuilding() then
     --[[  Add this at a later time
     if p_tile:isFortified() then targets[#targets+1] = p_tile:getBarrier() end  -- is this right?  (do I need a class instead?)
     if p_tile:isPresent('equipment') then
       for _, machine in ipairs(p_tile:getEquipment()) do targets[#targets+1] = machine end
-    end 
+    end
     --]]
   end
-  
+
   if mode == 'gesture' then
     local map_zone = self:getMap()
-    local y, x = self:getPos()
-    for _,tile in ipairs(map_zone:get3x3(y, x)) do targets[#targets+1] = tile end
+    local x, y, z = self:getPos()
+    for _,tile in ipairs(map_zone:get3x3(x, y, z)) do targets[#targets+1] = tile end
     local dir = {1, 2, 3, 4, 5, 6, 7, 8}
     for _, direction in ipairs(dir) do targets[#targets+1] = direction end
   end
-  
+
   return targets
 end
 
