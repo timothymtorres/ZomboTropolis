@@ -1,5 +1,6 @@
 local composer = require("composer")
 local widget = require("widget")
+local Server = require('code.server.server')
 local tilesets = require('scenes.functions.mob_tilesets')
 local clothing = require('code.player.clothing')
 local lume = require('code.libs.lume')
@@ -18,7 +19,7 @@ local container_w, container_h = math.floor(width*0.875 + 0.5), math.floor(heigh
 local container_left = -1 * math.floor(container_w*0.5 + 0.5)
 local container_top = -1 * math.floor(container_h*0.5 + 0.5)
 
-local container 
+local container
 local mob_sprites = {}  -- this holds the 4 mob display objects in each direction
 local cosmetic_segment, mob_cosmetics
 local scrollView
@@ -29,9 +30,9 @@ local function drawMob(options)
 
   local mob_size = 64
   local mob_divider = (container_w - (mob_size*4))/5 -- divide by 5 gaps
-  local directions = {'north', 'east', 'south', 'west'} 
+  local directions = {'north', 'east', 'south', 'west'}
 
-  for i=1, 4 do 
+  for i=1, 4 do
     mob = display.newGroup()
 
     local mob_background = display.newRect(0, 0, mob_size, mob_size)
@@ -51,10 +52,10 @@ local function drawMob(options)
 
     local dir = directions[i]
     local animation = "walk-" ..dir
-    for i=2, mob.numChildren do 
-      mob[i]:setSequence(animation) 
+    for i=2, mob.numChildren do
+      mob[i]:setSequence(animation)
       mob[i]:play()
-    end 
+    end
 
     mob.x = container_left  + (i*mob_divider) + ( (i-1)*mob_size) + mob_size/2
     mob.y = container_top + container_h*0.15
@@ -103,7 +104,7 @@ local function drawCosmeticOptions(category)
     local radio_x = ( (i-1)%3) * container_w*0.20 + container_w*0.12
 
     local is_cosmetic_selected = (cosmetic_option == mob_cosmetics[category]) or
-                                 (cosmetic_option == 'none' and not mob_cosmetics[category]) 
+                                 (cosmetic_option == 'none' and not mob_cosmetics[category])
 
     local cosmetic_radio_button = widget.newSwitch{
       x = radio_x,
@@ -115,7 +116,7 @@ local function drawCosmeticOptions(category)
     }
     radioGroup:insert(cosmetic_radio_button)
 
-    local cosmetic_name = display.newText(cosmetic_option, radio_x, radio_y - 30, 
+    local cosmetic_name = display.newText(cosmetic_option, radio_x, radio_y - 30,
                                           native.systemFont, 10)
     nameGroup:insert(cosmetic_name)
   end
@@ -127,13 +128,13 @@ end
 function scene:create( event )
   local sceneGroup = self.view
 
-  mob_type = event.params and event.params.mob_type 
-  username = event.params and event.params.username 
+  mob_type = event.params and event.params.mob_type
+  username = event.params and event.params.username
   local mob = event.params and event.params.mob -- the mob display object
 
   -- Initialize the scene here.
   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-  container = display.newContainer( container_w, container_h)  
+  container = display.newContainer( container_w, container_h)
   container:translate( width*0.5, height*0.5 ) -- center the container
 
   local background = display.newRect(0, 0, container_w, container_h)
@@ -143,7 +144,7 @@ function scene:create( event )
   mob_cosmetics = drawMob()
   for _, sprite in pairs(mob_sprites) do container:insert(sprite) end
 
-  -- Listen for segmented control events      
+  -- Listen for segmented control events
   local function onSegmentPress( event )
     local target = event.target
     print( "Segment Label is:", target.segmentLabel )
@@ -193,19 +194,19 @@ function scene:create( event )
   -- this makes whatever the mob is currently wearing the first option
   for category in pairs(clothing) do
     if mob_cosmetics[category] then -- if wearing nothing then skip this
-      local current_worn 
+      local current_worn
       if category == 'skin' then
         currently_worn = lume.remove(clothing.skin[mob_type], mob_cosmetics[category])
         table.insert(clothing.skin[mob_type], 1, currently_worn)
       else
         currently_worn = lume.remove(clothing[category], mob_cosmetics[category])
         table.insert(clothing[category], 1, currently_worn)
-      end       
+      end
     end
   end
 
   local category = string.lower(cosmetic_segment.segmentLabel)
-  --category = category == "skin" and 
+  --category = category == "skin" and
   cosmetic_group, name_group = drawCosmeticOptions(category)
   scrollView:insert(cosmetic_group)
   scrollView:insert(name_group)
@@ -216,7 +217,7 @@ function scene:create( event )
 
   local function rejectCosmetics(event)
     print('cancel button pressed and released')
-    composer.hideOverlay('fade', 400)       
+    composer.hideOverlay('fade', 400)
   end
 
   -- Create the widget
@@ -251,9 +252,11 @@ function scene:create( event )
       --}
     }
 
+    local city = Server:getMap('ZomboTropolis')
     main_player = city:spawnPlayer(mob_type, username, mob_cosmetics)
 
-    composer.gotoScene('scenes.map', params)
+    --composer.gotoScene('scenes.map', params)
+    composer.gotoScene('scenes.location', params)
     composer.hideOverlay( "fade", 400 )
   end
 
